@@ -1,2 +1,2 @@
-# JBlock2D
+# jblockmain
 Recreation of the 2DBlockCreator project in Java.
