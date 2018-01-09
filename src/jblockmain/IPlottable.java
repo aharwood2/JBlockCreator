@@ -9,4 +9,5 @@ public interface IPlottable
     ArrayList<Double> getXPoints(int blockNumber) throws Exception;
     ArrayList<Double> getYPoints(int blockNumber) throws Exception;
     int getNumberOfBlocksToPlot();
+    void writeToDXF(String path);
 }

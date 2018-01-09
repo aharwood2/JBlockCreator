@@ -14,10 +14,8 @@ public class Main
     public static void main(String[] args)
     {
         // Create a pattern
-        Pattern bb_skirt = new SkirtPattern(new Measurements("ScanData.out"));
-
-        // TODO Plot the pattern...
-
+        SkirtPattern bb_skirt = new SkirtPattern(new Measurements("ScanData.out"));
+        bb_skirt.writeToDXF("./");
     }
 
 }

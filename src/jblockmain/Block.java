@@ -377,5 +377,12 @@ public class Block
         return tmp;
     }
 
-
+    /**
+     * Getter for name of block
+     * @return name of block
+     */
+    public String getName()
+    {
+        return name;
+    }
 }

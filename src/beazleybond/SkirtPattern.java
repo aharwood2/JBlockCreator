@@ -1,5 +1,6 @@
 package beazleybond;
 
+import dxfwriter.DxfFile;
 import jblockmain.*;
 import mathcontainers.Vector2D;
 
@@ -167,16 +168,16 @@ public class SkirtPattern
 
     /* Interface implementation */
     @Override
-    public ArrayList<Double> getXPoints(int blockNumber) throws Exception
+    public ArrayList<Double> getXPoints(int blockNumber) throws IndexOutOfBoundsException
     {
-        if (blockNumber > blocks.size()) throw new Exception("Accessing out of range of number of blocks!");
+        if (blockNumber > blocks.size()) throw new IndexOutOfBoundsException("Accessing out of range of number of blocks!");
         return blocks.get(blockNumber).getPlottableKeypointsX();
     }
 
     @Override
-    public ArrayList<Double> getYPoints(int blockNumber) throws Exception
+    public ArrayList<Double> getYPoints(int blockNumber) throws IndexOutOfBoundsException
     {
-        if (blockNumber > blocks.size()) throw new Exception("Accessing out of range of number of blocks!");
+        if (blockNumber > blocks.size()) throw new IndexOutOfBoundsException("Accessing out of range of number of blocks!");
         return blocks.get(blockNumber).getPlottableKeypointsY();
     }
 
@@ -184,5 +185,24 @@ public class SkirtPattern
     public int getNumberOfBlocksToPlot()
     {
         return blocks.size();
+    }
+
+    @Override
+    public void writeToDXF(String path)
+    {
+        for (int i = 0; i < getNumberOfBlocksToPlot(); i++)
+        {
+            DxfFile file = new DxfFile(path + blocks.get(i).getName());
+            try
+            {
+                file.addLines(getXPoints(i), getYPoints(i));
+            }
+            catch (IndexOutOfBoundsException e)
+            {
+                e.printStackTrace();
+            }
+            file.writeFile();
+        }
+
     }
 }
