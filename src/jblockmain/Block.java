@@ -31,22 +31,25 @@ public class Block
 
     /**
      * Constructor.
+     * @param newName   name of new block.
      */
     public Block(String newName)
     {
+        keypointsX = new ArrayList<Double>();
+        keypointsY = new ArrayList<Double>();
         this.name = newName;
     }
 
     /**
      * Copy constructor.
      * @param otherBlock    block to be copied.
-     * @param newName       name of new block
+     * @param newName       name of new block.
      */
     public Block(Block otherBlock, String newName)
     {
-        this.name = newName;
-        this.keypointsX = otherBlock.keypointsX;
-        this.keypointsY = otherBlock.keypointsY;
+        this(newName);
+        this.keypointsX = new ArrayList<>(otherBlock.keypointsX);
+        this.keypointsY = new ArrayList<>(otherBlock.keypointsY);
     }
 
     /**
@@ -140,8 +143,8 @@ public class Block
         Vector2D normal = new Vector2D(-direction.getY(), direction.getX());
 
         // Normalise the direction vectors
-        direction.divide(direction.norm());
-        normal.divide(normal.norm());
+        direction.divideBy(direction.norm());
+        normal.divideBy(normal.norm());
 
         // Find dart point
         double side_length = lineEnd.subtract(lineStart).norm();
@@ -149,7 +152,7 @@ public class Block
 
         // Add the keypoints associated with the darts
         Vector2D pt1 = new Vector2D(point.subtract(direction.multiply(width / 2.0)));
-        Vector2D pt2 = new Vector2D(point.subtract(normal.multiply(length)));
+        Vector2D pt2 = new Vector2D(point.add(normal.multiply(length)));
         Vector2D pt3 = new Vector2D(point.add(direction.multiply(width / 2.0)));
         addKeypointNextTo(pt1, lineStart, EPosition.AFTER);
         addKeypointNextTo(pt2, pt1, EPosition.AFTER);
@@ -259,25 +262,22 @@ public class Block
         PolyCoeffs coeffs = new PolyCoeffs(inverse.postMultiply(constants));
 
         // Discretise by specified amount
-        int numPts = (int)Math.ceil(refEnd.subtract(refDirStart).norm() * Main.res);
+        int numPts = (int)Math.ceil(refEnd.subtract(refStart).norm() * Main.res);
 
         // Find points on the curve by seeding x
         // might not always be robust -- should use a local curvilinear coordinate system really.
         double spacing = (refEnd.getX() - refStart.getX()) / (numPts - 1);
         Vector2D tmp;
-        Vector2D tmp2 = new Vector2D(refStart);
-        for (int i = 0; i < numPts; i++)
+        Vector2D tmp2 = new Vector2D(startPoint);
+        for (int i = 1; i < numPts - 1; i++)
         {
             double x = refStart.getX() + spacing * i;
             double y = coeffs.a * x * x * x + coeffs.b * x * x + coeffs.c * x + coeffs.d;
 
             // Add point reversing rotation and shift (exc. first and last)
-            if (i > 0 && i < numPts - 1)
-            {
-                tmp = new Vector2D(Ri.postMultiply(new Vector2D(x, y)).add(startPoint));
-                addKeypointNextTo(tmp, tmp2, EPosition.AFTER);
-                tmp2 = new Vector2D(tmp);
-            }
+            tmp = new Vector2D(Ri.postMultiply(new Vector2D(x, y)).add(startPoint));
+            addKeypointNextTo(tmp, tmp2, EPosition.AFTER);
+            tmp2 = new Vector2D(tmp);
         }
 
     }
@@ -315,7 +315,7 @@ public class Block
 
         // Solve for coefficients
         double lam1 = -Math.pow(startPoint.getX(), 2) - Math.pow(startPoint.getY(), 2);
-        double lam2 = -Math.pow(startPoint.getX(), 2) - Math.pow(startPoint.getY(), 2);
+        double lam2 = -Math.pow(endPoint.getX(), 2) - Math.pow(endPoint.getY(), 2);
         double lam3 = -Math.pow(crestpt.getX(), 2) - Math.pow(crestpt.getY(), 2);
         double lam23 = lam2 - lam3;
         double lam13 = lam1 - lam3;
@@ -343,10 +343,10 @@ public class Block
         Vector2D tmp2 = new Vector2D(startPoint);
         double spacing = (th2 - th1) / (numPts - 1);
         double th;
-        for (int i = 0; i < numPts; i++)
+        for (int i = 1; i < numPts - 1; i++)
         {
             th = th1 + i * spacing;
-            tmp = new Vector2D(radius * Math.cos(th), radius * Math.sin(th));
+            tmp = new Vector2D(radius * Math.cos(th) + centrex, radius * Math.sin(th) + centrey);
             addKeypointNextTo(tmp, tmp2, EPosition.AFTER);
             tmp2 = new Vector2D(tmp);
         }

@@ -17,7 +17,7 @@ public class VectorND
 
     public VectorND(int size, double[] data)
     {
-        this.size = size;
+        this(size);
         val = new double[size];
         for (int i = 0; i < size; i++)
             val[i] = data[i];
@@ -25,6 +25,7 @@ public class VectorND
 
     public VectorND(VectorND otherVec)
     {
+        this(otherVec.size);
         for (int i = 0; i < size; i++)
             val[i] = otherVec.val[i];
     }
