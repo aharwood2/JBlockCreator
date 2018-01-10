@@ -1,14 +1,11 @@
 package dxfwriter;
 
-import mathcontainers.Vector2D;
-import sun.java2d.pipe.SpanShapeRenderer;
-
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.lang.reflect.Array;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 
 /**
@@ -28,10 +25,14 @@ public class DxfFile
     private String cDate;
 
     // Extremes of the drawing
-    double minX;
-    double maxX;
-    double minY;
-    double maxY;
+    private double minX;
+    private double maxX;
+    private double minY;
+    private double maxY;
+
+    // Line coordinates
+    private ArrayList<Double> linesX;
+    private ArrayList<Double> linesY;
 
 
     /**
@@ -64,17 +65,14 @@ public class DxfFile
      */
     public void addLines(ArrayList<Double> xPts, ArrayList<Double> yPts)
     {
-        // TODO: import the list using the addLine method
-    }
+        this.linesX = xPts;
+        this.linesY = yPts;
 
-    /**
-     * Adds a line to the DXF drawing given the coordinates of the end points.
-     * @param startPoint    start 2D coordinate
-     * @param endPoint      end 2D coordinate
-     */
-    public void addLine(Vector2D startPoint, Vector2D endPoint)
-    {
-        // TODO: implement the addition of a line with auto update of the extreme values
+        // Set the min and max
+        minX = Collections.min(linesX);
+        maxX = Collections.max(linesX);
+        minY = Collections.min(linesY);
+        maxY = Collections.max(linesY);
     }
 
     /**
@@ -84,8 +82,6 @@ public class DxfFile
     {
         if (bIsOpen)
         {
-            // TODO write file based on DXF spec
-
             /* DXF format:
              * 4 sections minimum -- header, tables, blocks, entities.
              * Each section contains a set of groups which occupy 2 lines each. First line is the group code (int) and
@@ -184,21 +180,38 @@ public class DxfFile
 
 
             /* Write Entities section */
+            writeDxfLine("0", "SECTION");
+            writeDxfLine("2", "ENTITIES");
 
+            // Add line entities one at a time
+            for (int i = 0; i < linesX.size() - 1; i++)
+            {
+                writeDxfLine("0", "LINE");
+                writeDxfLine("8", "1");     // Layer on which to draw line
+                writeDxfLine("62", "4");    // Colour of line using index colour
+                writeDxfLine("10", Double.toString(linesX.get(i))); // X coordinate start
+                writeDxfLine("20", Double.toString(linesY.get(i))); // Y coordinate start
+                writeDxfLine("11", Double.toString(linesX.get(i + 1))); // X coordinate end
+                writeDxfLine("21", Double.toString(linesY.get(i + 1))); // Y coordinate end
+            }
 
-            // TODO add the line entities
+            // End section
+            writeDxfLine("0", "ENDSEC");
 
-
-
-
-
-
-
-
+            // End of file
+            writeDxfLine("0", "EOF");
 
             // Close off file
             bIsOpen = false;
             printer.close();
+            try
+            {
+                file.close();
+            }
+            catch (IOException e)
+            {
+                e.printStackTrace();
+            }
         }
     }
 
