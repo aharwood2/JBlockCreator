@@ -157,4 +157,15 @@ public class VectorND
             tmp.val[i] = val[i] / otherVec.val[i];
         return tmp;
     }
+
+    /**
+     * Gets the direction vector given a start and end point
+     * @param fromPoint point from which direction vector points
+     * @param toPoint point to which direction vector points
+     * @return direction vector
+     */
+    public static VectorND getDirectionVector(VectorND fromPoint, VectorND toPoint)
+    {
+        return new VectorND(toPoint.subtract(fromPoint));
+    }
 }

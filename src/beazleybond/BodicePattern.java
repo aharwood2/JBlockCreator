@@ -1,54 +1,55 @@
 package beazleybond;
 
-import dxfwriter.DxfFile;
 import jblockmain.*;
-import mathcontainers.Vector2D;
-
-import java.util.ArrayList;
 
 /** Class to construct a fitted bodice using the Beazley and Bond drafting method. */
 public class BodicePattern
     extends Pattern
-    implements IPlottable
 {
 
     /* Pattern-specific Measurements */
     // In future will be simply extracted from the Measurements object.
-    private double a_Waist                     = 70.0;
-    private double b_UpperHip                  = 90.0;
-    private double c_Hip                       = 96.0;
-    private double d_CentreBack                = 60.0;
-    private double e_SideSeam                  = 61.0;
-    private double f_CentreFront               = 60.0;
+    private double a_Bust           = 88.0;
+    private double b_Waist          = 70.0;
+    private double c_Neck           = 38.0;
+    private double d_BackNeckRise   = 2.0;
+    private double e_NapeToWaist    = 41.0;
+    private double f_ArmholeDepth   = 21.0;
+    private double g_FrNeckToBust   = 27.0;
+    private double h_FrNeckToWaist  = 44.0;
+    private double i_AcrossBack     = 35.0;
+    private double j_AcrossFront    = 32.0;
+    private double k_Shoulder       = 13.0;
+    private double l_WidthBustProm  = 19.0;
+    private double m_WidthArmhole   = 10.0;
 
     /* Arbitrary Measurements */
-    // Some of the following can be inferred from body scan information but for now assume that these follow the
-    // empirically driven values.
 
-    // Ensures the waistline drops by 1cm to allow it to curve round the body. This can be informed from the body scan.
-    private double Arb_WaistLevel = 1.0;
+    // This relates to the height of the basic rectangle which includes this amount for suppression of back waist dart
+    // and the side seam.
+    private double Arb_BackWaistDartSuppression = 1.5;
 
-    // Generic assumption that can in future be informed from the body scan.
-    private double Arb_UpperHipLevel = 10.0;
+    // Level corresponding to the across back measurement is chosen as halfway between the armhole level and the neck
+    private double Arb_AcrossBackLevel = f_ArmholeDepth / 2.0;
 
-    // Generic assumption that can in future be informed from the body scan.
-    private double Arb_HipLevel = 20.0;
+    // Setting of side seam position from the centre back (CB) at base of rectangle plus arbitrary 1.5cm
+    private double Arb_SideSeamFromCentreBack = (a_Bust / 4.0) + 1.5;
 
-    // Waist suppression process required calculation of a front and back dart by dividing up the circumference of the
-    // waist. For now we assume a fixed percentage is assigned to each although this could be adjusted in future.
-    double Arb_BackDartPercent = 0.35;
-    double Arb_FrontDartPercent = 0.20;
-    double Arb_SideSeamPercent = 0.45;
+    // Neck width and depth derived from the neck measurement
+    private double Arb_HalfFrontNeckWidth = (c_Neck / 5.0) - 1.5;
+    private double Arb_FrontNeckDepth = c_Neck / 5.0;
+    private double Arb_HalfBackNeckWidth = (c_Neck / 5.0) - 0.5;
+    private double Arb_BackNeckRise = 2.0;
 
-    // Dart length is arbitrary but can be inferred from body scan data.
-    double Arb_BackDartLength = 14.0;
-    double Arb_FrontDartLength = 8.0;
-
-    // Dart placement is also arbitrary and is specified as a percentage of quarter waist as measured from the start
-    // point of the waist (using strict connectivity order)
-    double Arb_BackDartPlacement = 0.5;
-    double Arb_FrontDartPlacement = 1.0 / 3.0;
-
+    // Shoulder Level parameters. Shoulder slant measured in degrees.
+    private double Arb_ShoulderSlant = 22.0;
+    private double Arb_ShoulderLevel = 6.0;
+    private double Arb_ShoulderLine = 17.5;
+    private double Arb_BackShoulderLevel = 4.0;
+    private double Arb_FrontShoulderDartWidth = 4.5;
+    private double Arb_BackShoulderDartWidth = 1.5;
+    private double Arb_BackShoulderDartPositionOnArmholeLevel = 9.25;
+    private double Arb_BackShoulderDartLength = 8.0;
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     /* Methods */
@@ -64,11 +65,14 @@ public class BodicePattern
     @Override
     protected void addEasement()
     {
-        // Size 12 skirt for now but should be computed by this class in the future.
-        // TODO: Redo
-        a_Waist += 4.0;
-        b_UpperHip += 4.0;
-        c_Hip += 4.0;
+        // Size 12 for now
+        a_Bust += 6.0;
+        b_Waist += 4.0;
+        c_Neck += 2.0;
+        f_ArmholeDepth += 3.0;
+        i_AcrossBack += 2.0;
+        j_AcrossFront += 1.0;
+        m_WidthArmhole += 1.5;
     }
 
     @Override

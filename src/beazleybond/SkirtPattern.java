@@ -1,15 +1,14 @@
 package beazleybond;
 
-import dxfwriter.DxfFile;
 import jblockmain.*;
 import mathcontainers.Vector2D;
+import mathcontainers.VectorND;
 
 import java.util.ArrayList;
 
 /** Class to construct a skirt using the Beazley and Bond drafting method. */
 public class SkirtPattern
     extends Pattern
-    implements IPlottable
 {
 
     /* Pattern-specific Measurements */
@@ -36,18 +35,18 @@ public class SkirtPattern
 
     // Waist suppression process required calculation of a front and back dart by dividing up the circumference of the
     // waist. For now we assume a fixed percentage is assigned to each although this could be adjusted in future.
-    double Arb_BackDartPercent = 0.35;
-    double Arb_FrontDartPercent = 0.20;
-    double Arb_SideSeamPercent = 0.45;
+    private double Arb_BackDartPercent = 0.35;
+    private double Arb_FrontDartPercent = 0.20;
+    private double Arb_SideSeamPercent = 0.45;
 
     // Dart length is arbitrary but can be inferred from body scan data.
-    double Arb_BackDartLength = 14.0;
-    double Arb_FrontDartLength = 8.0;
+    private double Arb_BackDartLength = 14.0;
+    private double Arb_FrontDartLength = 8.0;
 
     // Dart placement is also arbitrary and is specified as a percentage of quarter waist as measured from the start
     // point of the waist (using strict connectivity order)
-    double Arb_BackDartPlacement = 0.5;
-    double Arb_FrontDartPlacement = 1.0 / 3.0;
+    private double Arb_BackDartPlacement = 0.5;
+    private double Arb_FrontDartPlacement = 1.0 / 3.0;
 
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -132,14 +131,26 @@ public class SkirtPattern
         // Add curves either side of dart ensuring the curve intersects the joining edges at a right angle.
         backBlock.addRightAngleCurve(new Vector2D(0.0, Int_SuppressedSS),
                                      dartEdges.get(0),
-                                     new Vector2D(new Vector2D(Arb_UpperHipLevel, Int_SuppressedUpHip).subtract(new Vector2D(0.0, Int_SuppressedSS))),
-                                     new Vector2D(dartEdges.get(1).subtract(dartEdges.get(0))),
+                                     new Vector2D(VectorND.getDirectionVector(
+                                             new Vector2D(0.0, Int_SuppressedSS),
+                                             new Vector2D(Arb_UpperHipLevel, Int_SuppressedUpHip))
+                                     ),
+                                     new Vector2D(VectorND.getDirectionVector(
+                                             dartEdges.get(0),
+                                             dartEdges.get(1))
+                                     ),
                                      new boolean[]{true, true});
 
         backBlock.addRightAngleCurve(dartEdges.get(2),
                                      new Vector2D(Arb_WaistLevel, 0.0),
-                                     new Vector2D(dartEdges.get(1).subtract(dartEdges.get(2))),
-                                     new Vector2D(new Vector2D(d_CentreBack, 0.0).subtract(new Vector2D(Arb_WaistLevel, 0.0))),
+                                     new Vector2D(VectorND.getDirectionVector(
+                                             dartEdges.get(2),
+                                             dartEdges.get(1))
+                                     ),
+                                     new Vector2D(VectorND.getDirectionVector(
+                                             new Vector2D(Arb_WaistLevel, 0.0),
+                                             new Vector2D(d_CentreBack, 0.0))
+                                     ),
                                      new boolean[]{true, true});
 
         // Add front dart
@@ -152,14 +163,26 @@ public class SkirtPattern
         // Add curves
         frontBlock.addRightAngleCurve(new Vector2D(0.0, Int_SuppressedSS),
                                       dartEdges.get(0),
-                                      new Vector2D(new Vector2D(Arb_UpperHipLevel, Int_SuppressedUpHip).subtract(new Vector2D(0.0, Int_SuppressedSS))),
-                                      new Vector2D(dartEdges.get(1).subtract(dartEdges.get(0))),
+                                      new Vector2D(VectorND.getDirectionVector(
+                                              new Vector2D(0.0, Int_SuppressedSS),
+                                              new Vector2D(Arb_UpperHipLevel, Int_SuppressedUpHip))
+                                      ),
+                                      new Vector2D(VectorND.getDirectionVector(
+                                              dartEdges.get(0),
+                                              dartEdges.get(1))
+                                      ),
                                       new boolean[]{true, true});
 
         frontBlock.addRightAngleCurve(dartEdges.get(2),
                                       new Vector2D(Arb_WaistLevel, 0.0),
-                                      new Vector2D(dartEdges.get(1).subtract(dartEdges.get(2))),
-                                      new Vector2D(new Vector2D(d_CentreBack, 0.0).subtract(new Vector2D(Arb_WaistLevel, 0.0))),
+                                      new Vector2D(VectorND.getDirectionVector(
+                                              dartEdges.get(2),
+                                              dartEdges.get(1))
+                                      ),
+                                      new Vector2D(VectorND.getDirectionVector(
+                                              new Vector2D(Arb_WaistLevel, 0.0),
+                                              new Vector2D(d_CentreBack, 0.0))
+                                      ),
                                       new boolean[]{true, true});
     }
 }

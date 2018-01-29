@@ -6,6 +6,7 @@ import mathcontainers.Vector2D;
 import mathcontainers.VectorND;
 
 import java.util.ArrayList;
+import java.util.Vector;
 
 /**
  * Class that represents a block as a series of connected keypoints.
@@ -138,8 +139,8 @@ public class Block
     public ArrayList<Vector2D> addDart(Vector2D lineStart, Vector2D lineEnd, double position,
                                      double width, double length)
     {
-        // Find the equation of the line
-        Vector2D direction = new Vector2D(lineEnd.subtract(lineStart));
+        // Find the equation of the line to find normal
+        Vector2D direction = new Vector2D(VectorND.getDirectionVector(lineStart, lineEnd));
         Vector2D normal = new Vector2D(-direction.getY(), direction.getX());
 
         // Normalise the direction vectors
@@ -161,6 +162,46 @@ public class Block
         ArrayList<Vector2D> dartEdges = new ArrayList<Vector2D>();
         dartEdges.add(pt1);
         dartEdges.add(pt2);
+        dartEdges.add(pt3);
+        return dartEdges;
+    }
+
+    /**
+     * Method to add a dart given the end points of the line segment on which to add the dart, position along the
+     * segment and the apex of the dart. Start and end points must be specified in the strict anti-clockwise order
+     * for connectivity to be correct for plotting.
+     * @param lineStart     position of start of segment
+     * @param lineEnd       position of end of segment
+     * @param position      position of dart centre
+     * @param width         width of dart at base.
+     * @param apex          position of the dart apex
+     * @return              list of points of the dart edges
+     */
+    public ArrayList<Vector2D> addDart(Vector2D lineStart, Vector2D lineEnd, double position,
+                                       double width, Vector2D apex)
+    {
+        // Find the equation of the line
+        Vector2D direction = new Vector2D(lineEnd.subtract(lineStart));
+        Vector2D normal = new Vector2D(-direction.getY(), direction.getX());
+
+        // Normalise the direction vectors
+        direction.divideBy(direction.norm());
+        normal.divideBy(normal.norm());
+
+        // Find dart point
+        double side_length = lineEnd.subtract(lineStart).norm();
+        Vector2D point = new Vector2D(lineStart.add(direction.multiply(position * side_length)));
+
+        // Add the keypoints associated with the darts
+        Vector2D pt1 = new Vector2D(point.subtract(direction.multiply(width / 2.0)));
+        Vector2D pt3 = new Vector2D(point.add(direction.multiply(width / 2.0)));
+        addKeypointNextTo(pt1, lineStart, EPosition.AFTER);
+        addKeypointNextTo(apex, pt1, EPosition.AFTER);
+        addKeypointNextTo(pt3, apex, EPosition.AFTER);
+
+        ArrayList<Vector2D> dartEdges = new ArrayList<Vector2D>();
+        dartEdges.add(pt1);
+        dartEdges.add(apex);
         dartEdges.add(pt3);
         return dartEdges;
     }
@@ -381,5 +422,27 @@ public class Block
     public String getName()
     {
         return name;
+    }
+
+    /**
+     * Get the hypotenuse of a right-angled triangle given the other two sides
+     * @param side1 adjacent side
+     * @param side2 other adjacent side
+     * @return hypotenuse
+     */
+    public static double triangleGetHypotenuse(double side1, double side2)
+    {
+        return Math.sqrt(side1 * side1 + side2 * side2);
+    }
+
+    /**
+     * Get the adjacent side of a right-angled triangle given the hypotenuse and the other side
+     * @param side1 adjacent side
+     * @param hypotenuse hypotenuse
+     * @return other adjacent side
+     */
+    public static double triangleGetAdjacentSide(double side1, double hypotenuse)
+    {
+        return Math.sqrt(hypotenuse * hypotenuse - side1 * side1);
     }
 }
