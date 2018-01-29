@@ -76,7 +76,7 @@ public class Block
         }
 
         // If point is outside, point not found so return -1;
-        if (i > keypointsX.size()) throw new Exception("Cannot find the point in the keypoints list!");
+        if (i > keypointsX.size()) throw new Exception("Cannot find the point: (" + xy.getX() + ", " + xy.getY() + ") in the keypoints list!");
         else return i;
     }
 
@@ -350,9 +350,6 @@ public class Block
             addKeypointNextTo(tmp, tmp2, EPosition.AFTER);
             tmp2 = new Vector2D(tmp);
         }
-
-
-        // Add Key Points
     }
 
     /**

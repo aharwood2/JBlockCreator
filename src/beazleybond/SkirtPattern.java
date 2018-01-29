@@ -82,7 +82,7 @@ public class SkirtPattern
     @Override
     protected void createBlocks()
     {
-        // Points that make up the shape are listed in a strict anti-clokwise order to maintain correct connectivity for
+        // Points that make up the shape are listed in a strict anti-clockwise order to maintain correct connectivity for
         // plotting. The bottom left corner of the space to be the origin.
 
         // Create component representing half back of skirt folded in half.
@@ -109,15 +109,13 @@ public class SkirtPattern
         backBlock.addKeypointNextTo(new Vector2D(0.0, Int_SuppressedSS),
                                     new Vector2D(Arb_WaistLevel, 0), EPosition.BEFORE);
 
-        // Add the suppressed Upper Hip Level point.
+        // Compute the suppressed Upper Hip Level point.
         // Can be computed from the difference between Hip and Upper Hip
         double Int_SuppressedUpHip = (c_Hip / 4.0) - (c_Hip - b_UpperHip) / 4.0;
-        backBlock.addKeypointNextTo(new Vector2D(Arb_UpperHipLevel, Int_SuppressedUpHip),
-                                    new Vector2D(0.0, Int_SuppressedSS),  EPosition.BEFORE);
 
-        // Add curve between waist point and upper hip point as per BB method.
+        // Add curve between waist point and hip point (rather than upper-hip as stipulated in BB).
         // Assume for now, in the absence of vary form curve that this is a curve defined by a circle.
-        backBlock.addCircularCurve(new Vector2D(Arb_UpperHipLevel, Int_SuppressedUpHip),
+        backBlock.addCircularCurve(new Vector2D(Arb_HipLevel, c_Hip / 4.0),
                                    new Vector2D(0.0, Int_SuppressedSS), 0.5, true);
 
         // Trace off block
@@ -163,46 +161,5 @@ public class SkirtPattern
                                       new Vector2D(dartEdges.get(1).subtract(dartEdges.get(2))),
                                       new Vector2D(new Vector2D(d_CentreBack, 0.0).subtract(new Vector2D(Arb_WaistLevel, 0.0))),
                                       new boolean[]{true, true});
-    }
-
-
-    /* Interface implementation */
-    @Override
-    public ArrayList<Double> getXPoints(int blockNumber) throws IndexOutOfBoundsException
-    {
-        if (blockNumber > blocks.size()) throw new IndexOutOfBoundsException("Accessing out of range of number of blocks!");
-        return blocks.get(blockNumber).getPlottableKeypointsX();
-    }
-
-    @Override
-    public ArrayList<Double> getYPoints(int blockNumber) throws IndexOutOfBoundsException
-    {
-        if (blockNumber > blocks.size()) throw new IndexOutOfBoundsException("Accessing out of range of number of blocks!");
-        return blocks.get(blockNumber).getPlottableKeypointsY();
-    }
-
-    @Override
-    public int getNumberOfBlocksToPlot()
-    {
-        return blocks.size();
-    }
-
-    @Override
-    public void writeToDXF(String path)
-    {
-        for (int i = 0; i < getNumberOfBlocksToPlot(); i++)
-        {
-            DxfFile file = new DxfFile(path + blocks.get(i).getName());
-            try
-            {
-                file.addLines(getXPoints(i), getYPoints(i));
-            }
-            catch (IndexOutOfBoundsException e)
-            {
-                e.printStackTrace();
-            }
-            file.writeFile();
-        }
-
     }
 }
