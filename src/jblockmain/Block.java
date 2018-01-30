@@ -126,6 +126,54 @@ public class Block
     }
 
     /**
+     * Moves a keypoint from one location to another
+     * @param existingPosition  existing position of the keypoint
+     * @param newPosition       desired new position of the keypoint
+     * @return  index of the keypoint in the list
+     */
+    public int moveKeypoint(Vector2D existingPosition, Vector2D newPosition)
+    {
+        // Get the point number of the adjacent point
+        int i = 0;
+        try
+        {
+            i = getKeypointNumber(existingPosition);
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+
+        // Update position
+        keypointsX.set(i, newPosition.getX());
+        keypointsY.set(i, newPosition.getY());
+
+        return i;
+    }
+
+    /**
+     * Method to remove a keypoint from the list.
+     * @param location  location of the keypoint to be deleted
+     */
+    public void deleteKeypoint(Vector2D location)
+    {
+        // Get the point number of the adjacent point
+        int i = 0;
+        try
+        {
+            i = getKeypointNumber(location);
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+
+        // Delete position
+        keypointsX.remove(i);
+        keypointsY.remove(i);
+    }
+
+    /**
      * Method to add a dart given the end points of the line segment on which to add the dart, position along the
      * segment and the dimensions of the dart. Start and end points must be specified in the strict anti-clockwise order
      * for connectivity to be correct for plotting.
@@ -207,123 +255,6 @@ public class Block
     }
 
     /**
-     * Add a curve between the start and end points which meets each bounding line at 90 degrees. Direction of both
-     * bounding lines must be given as well as whether normal should be to the right or left for each bounding edge.
-     * This is indicated as a true or false 'dirNorm' flag. Note: the normals need to have a magnitude that makes sense
-     * in the context of the start and end point specification order as well as the world space as this is the system
-     * used to specify the equation of the curve. More often than not, the normals will be pointing in the same
-     * direction so the flags are usually set to the same value.
-     * @param startPoint    start position of curve
-     * @param endPoint      end position of curve
-     * @param dirStart      direction of the start bounding line
-     * @param dirEnd        direction of the end bounding line
-     * @param dirNorm       direction of the normal of the bounding lines
-     */
-    public void addRightAngleCurve(Vector2D startPoint, Vector2D endPoint,
-                                   Vector2D dirStart, Vector2D dirEnd, boolean[] dirNorm)
-    {
-        // To ensure the process is more robust we first map the two end points and their side directions onto a
-        // reference X axis. This is done by first shifting the start point to the reference origin then rotating the
-        // points and directions such that the start bounding line is coincident with the reference Y axis.
-
-        // Shift the start and end points
-        Vector2D refStart = new Vector2D(startPoint.subtract(startPoint));
-        Vector2D refEnd = new Vector2D(endPoint.subtract(startPoint));
-
-        // Find rotation angle
-        double rotang = Math.acos(dirStart.getY() / dirStart.norm());
-
-        // Construct rotation matrix
-        Matrix2D R = new Matrix2D(2, 2,
-                                  new double[][]{
-                                          {Math.cos(rotang), -Math.sin(rotang)},
-                                          {Math.sin(rotang), Math.cos(rotang)}
-                                  }
-        );
-
-        // And reverse for later
-        Matrix2D Ri = new Matrix2D(2, 2,
-                                   new double[][]{
-                                           {Math.cos(-rotang), -Math.sin(-rotang)},
-                                           {Math.sin(-rotang), Math.cos(-rotang)}
-                                   }
-        );
-
-        // Rotate direction and positions vectors
-        Vector2D refDirStart = new Vector2D(R.postMultiply(dirStart));
-        Vector2D refDirEnd = new Vector2D(R.postMultiply(dirEnd));
-        refStart = new Vector2D(R.postMultiply(refStart));
-        refEnd = new Vector2D(R.postMultiply(refEnd));
-
-        // Compute normal vectors in reference system
-        Vector2D refNormStart;
-        Vector2D refNormEnd;
-        double refDxDyStart;
-        double refDxDyEnd;
-        if (dirNorm[0])
-        {
-            // RH normal
-            refNormStart = new Vector2D(refDirStart.getY(), -refDirStart.getX());
-        }
-        else
-        {
-            // LH normal
-            refNormStart = new Vector2D(-refDirStart.getY(), refDirStart.getX());
-        }
-
-        if (dirNorm[1])
-        {
-            refNormEnd = new Vector2D(refDirEnd.getY(), -refDirEnd.getX());
-        }
-        else
-        {
-            refNormEnd = new Vector2D(-refDirEnd.getY(), refDirEnd.getX());
-        }
-
-        // Compute the required gradients of the curve
-        refDxDyStart = refNormStart.getY() / refNormStart.getX();
-        refDxDyEnd = refNormEnd.getY() / refNormEnd.getX();
-
-        // Find coefficients for the cubic spline:
-        // ax^3 + bx^2 + cx + d
-        // By using two end point conditions and two gradient conditions to define a set of simultaneous equations.
-        final VectorND constants =
-                new VectorND(4, new double[] {refStart.getY(), refEnd.getY(), refDxDyStart, refDxDyEnd});
-        final Matrix2D mat = new Matrix2D(4, 4,
-                                          new double[][] {
-                                                  {Math.pow(refStart.getX(),3), Math.pow(refStart.getX(),2), refStart.getX(), 1.0},
-                                                  {Math.pow(refEnd.getX(),3), Math.pow(refEnd.getX(),2), refEnd.getX(), 1.0},
-                                                  {3.0 * Math.pow(refStart.getX(),2), 2.0 * refStart.getX(), 1.0, 0.0},
-                                                  {3.0 * Math.pow(refEnd.getX(),2), 2.0 * refEnd.getX(), 1.0, 0.0}
-                                          }
-        );
-
-        // Solve to get coefficients
-        final Matrix2D inverse = mat.invert();
-        PolyCoeffs coeffs = new PolyCoeffs(inverse.postMultiply(constants));
-
-        // Discretise by specified amount
-        int numPts = (int)Math.ceil(refEnd.subtract(refStart).norm() * Main.res);
-
-        // Find points on the curve by seeding x
-        // might not always be robust -- should use a local curvilinear coordinate system really.
-        double spacing = (refEnd.getX() - refStart.getX()) / (numPts - 1);
-        Vector2D tmp;
-        Vector2D tmp2 = new Vector2D(startPoint);
-        for (int i = 1; i < numPts - 1; i++)
-        {
-            double x = refStart.getX() + spacing * i;
-            double y = coeffs.a * x * x * x + coeffs.b * x * x + coeffs.c * x + coeffs.d;
-
-            // Add point reversing rotation and shift (exc. first and last)
-            tmp = new Vector2D(Ri.postMultiply(new Vector2D(x, y)).add(startPoint));
-            addKeypointNextTo(tmp, tmp2, EPosition.AFTER);
-            tmp2 = new Vector2D(tmp);
-        }
-
-    }
-
-    /**
      * Add a curve given the height of curve above the centre of a line joining the two points. Assumes the curve is
      * cut from a circle and hence given points are on the circle circumference. Direction of normal is indicated by
      * boolean value -- true for right hand normal and false for left hand normal -- which tells the method which way
@@ -391,6 +322,167 @@ public class Block
             addKeypointNextTo(tmp, tmp2, EPosition.AFTER);
             tmp2 = new Vector2D(tmp);
         }
+    }
+
+    /**
+     * Add a curve between the start and end points which meets each bounding line at the specified angles in degrees.
+     * Direction of both bounding lines must be given.
+     * @param startPoint    start position of curve
+     * @param endPoint      end position of curve
+     * @param dirStart      direction of the start bounding line
+     * @param dirEnd        direction of the end bounding line
+     * @param angleAtEnds   desired angle at each end of the curve
+     */
+    public void addDirectedCurve(Vector2D startPoint, Vector2D endPoint,
+                                 Vector2D dirStart, Vector2D dirEnd,
+                                 double[] angleAtEnds)
+    {
+        // To ensure the process is more robust we first map the two end points and their side directions onto a
+        // reference X axis. This is done by first shifting the start point to the reference origin then rotating the
+        // points and directions such that the start bounding line is coincident with the reference Y axis.
+
+        // Shift the start and end points
+        Vector2D refStart = new Vector2D(startPoint.subtract(startPoint));
+        Vector2D refEnd = new Vector2D(endPoint.subtract(startPoint));
+
+        // Find rotation angle such that curve will start parallel to X axis:
+        double rotang = Math.acos(dirStart.getY() / dirStart.norm()) - (Math.PI * (90.0 - angleAtEnds[0]) / 180.0);
+
+        // Construct rotation matrix
+        Matrix2D R = new Matrix2D(2, 2,
+                                  new double[][]{
+                                          {Math.cos(rotang), -Math.sin(rotang)},
+                                          {Math.sin(rotang), Math.cos(rotang)}
+                                  }
+        );
+
+        // And reverse for later
+        Matrix2D Ri = new Matrix2D(2, 2,
+                                   new double[][]{
+                                           {Math.cos(-rotang), -Math.sin(-rotang)},
+                                           {Math.sin(-rotang), Math.cos(-rotang)}
+                                   }
+        );
+
+        // Rotate direction and position vectors
+        Vector2D refDirStart = new Vector2D(R.postMultiply(dirStart));
+        Vector2D refDirEnd = new Vector2D(R.postMultiply(dirEnd));
+        refStart = new Vector2D(R.postMultiply(refStart));
+        refEnd = new Vector2D(R.postMultiply(refEnd));
+
+        // Compute curve start and end direction vectors and hence gradients in reference system
+        Vector2D refCurveStart;
+        Vector2D refCurveEnd;
+        double refDxDyStart;
+        double refDxDyEnd;
+
+        // Rotate the directions given by the amount given
+        double startAngle = angleAtEnds[0] * Math.PI / 180.0;
+        Matrix2D RCurveStart = new Matrix2D(2, 2,
+                                  new double[][]{
+                                          {Math.cos(startAngle), -Math.sin(startAngle)},
+                                          {Math.sin(startAngle), Math.cos(startAngle)}
+                                  }
+        );
+        double endAngle = angleAtEnds[1] * Math.PI / 180.0;
+        Matrix2D RCurveEnd = new Matrix2D(2, 2,
+                                            new double[][]{
+                                                    {Math.cos(endAngle), -Math.sin(endAngle)},
+                                                    {Math.sin(endAngle), Math.cos(endAngle)}
+                                            }
+        );
+        refCurveStart = new Vector2D(RCurveStart.postMultiply(refDirStart));
+        refCurveEnd = new Vector2D(RCurveEnd.postMultiply(refDirEnd));
+
+        // Compute the required gradients of the curve
+        refDxDyStart = refCurveStart.getY() / refCurveStart.getX();
+        refDxDyEnd = refCurveEnd.getY() / refCurveEnd.getX();
+
+
+
+        // Find coefficients for the cubic spline:
+        // ax^3 + bx^2 + cx + d
+        // By using two end point conditions and two gradient conditions to define a set of simultaneous equations.
+        final VectorND constants =
+                new VectorND(4, new double[] {refStart.getY(), refEnd.getY(), refDxDyStart, refDxDyEnd});
+        final Matrix2D mat = new Matrix2D(4, 4,
+                                          new double[][] {
+                                                  {Math.pow(refStart.getX(),3), Math.pow(refStart.getX(),2), refStart.getX(), 1.0},
+                                                  {Math.pow(refEnd.getX(),3), Math.pow(refEnd.getX(),2), refEnd.getX(), 1.0},
+                                                  {3.0 * Math.pow(refStart.getX(),2), 2.0 * refStart.getX(), 1.0, 0.0},
+                                                  {3.0 * Math.pow(refEnd.getX(),2), 2.0 * refEnd.getX(), 1.0, 0.0}
+                                          }
+        );
+
+        // Solve to get coefficients
+        final Matrix2D inverse = mat.invert();
+        PolyCoeffs coeffs = new PolyCoeffs(inverse.postMultiply(constants));
+
+        // Discretise by specified amount
+        int numPts = (int)Math.ceil(refEnd.subtract(refStart).norm() * Main.res);
+
+        // Find points on the curve by seeding x
+        // might not always be robust -- should use a local curvilinear coordinate system really.
+        double spacing = (refEnd.getX() - refStart.getX()) / (numPts - 1);
+        Vector2D tmp;
+        Vector2D tmp2 = new Vector2D(startPoint);
+        for (int i = 1; i < numPts - 1; i++)
+        {
+            double x = refStart.getX() + spacing * i;
+            double y = coeffs.a * x * x * x + coeffs.b * x * x + coeffs.c * x + coeffs.d;
+
+            // Add point reversing rotation and shift (exc. first and last)
+            tmp = new Vector2D(Ri.postMultiply(new Vector2D(x, y)).add(startPoint));
+            addKeypointNextTo(tmp, tmp2, EPosition.AFTER);
+            tmp2 = new Vector2D(tmp);
+        }
+
+    }
+
+    /**
+     * Method to construct a curve which meets a specified line at the end points at 90 degrees.
+     * @param startPoint    start position of curve
+     * @param endPoint      end position of curve
+     * @param dirStart      direction of the start bounding line
+     * @param dirEnd        direction of the end bounding line
+     * @param dirNorm       direction of the normal of the bounding lines
+     */
+    public void addRightAngleCurve(Vector2D startPoint, Vector2D endPoint,
+                                   Vector2D dirStart, Vector2D dirEnd, boolean[] dirNorm)
+
+    {
+        // Use the dirNorm flags to determine the correct angle and pass on arguments
+        double[] angles = new double[2];
+        if (dirNorm[0])
+        {
+            angles[0] = 90.0;
+        }
+        else
+        {
+            angles[0] = -90.0;
+        }
+        if (dirNorm[1])
+        {
+            angles[1] = 90.0;
+        }
+        else
+        {
+            angles[1] = -90.0;
+        }
+        addDirectedCurve(startPoint, endPoint, dirStart, dirEnd, angles);
+    }
+
+    /**
+     * Method which constructs a curve which meets a specified line at the end points at 0 degrees (i.e. aligned)
+     * @param startPoint    position of the start of the curve
+     * @param endPoint      position of the end of the curve
+     * @param dirStart      desired direction of the start of the line
+     * @param dirEnd        desired direction of the end of the line
+     */
+    public void addBlendedCurve(Vector2D startPoint, Vector2D endPoint,
+                                 Vector2D dirStart, Vector2D dirEnd)
+    {
+        addDirectedCurve(startPoint, endPoint, dirStart, dirEnd, new double[] {0.0, 0.0});
     }
 
     /**

@@ -1,5 +1,6 @@
 package beazleybond;
 
+import jblockmain.Block;
 import jblockmain.Measurements;
 import jblockmain.Pattern;
 
@@ -27,6 +28,19 @@ public class TrouserPattern
 
     /* Arbitrary Measurements */
 
+    // Width of starting rectangle (quarter hip - 1cm + front crutch fork)
+    private double Arb_FrontCrutchFork = (c_Hip / 20.0) + 0.5;
+    private double Arb_WidthOfBlock = (c_Hip / 4.0) - 1.0 + Arb_FrontCrutchFork;
+
+    // Centre front line
+    private double Arb_CentreFrontFromInsideLeg = (c_Hip / 4.0) - 1.0;
+
+    // Trouser crease line
+    private double Arb_CreaseLineFromInsideLeg = Arb_CentreFrontFromInsideLeg + (c_Hip / 10.0);
+
+    // Crutch shaping
+    private double Arb_CrutchCentreFrontOffset = 0.5;
+    private double Arb_CrutchCurveBisect = 2.5;
 
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -71,7 +85,10 @@ public class TrouserPattern
         // Points that make up the shape are listed in a strict anti-clockwise order to maintain correct connectivity
         // for plotting. The bottom left corner of the space to be the origin.
 
-        // TODO: Redo
+        // Create front block first
+        blocks.add(new Block("Front Block"));
+
+        //
     }
 
 
