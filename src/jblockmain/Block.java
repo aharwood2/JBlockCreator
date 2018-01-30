@@ -181,14 +181,16 @@ public class Block
      * @param position      position of dart centre
      * @param width         width of dart at base.
      * @param length        depth of dart assuming it is symmetrical
+     * @param dirNorm       flag indicating the direction of the dart (left or right)
      * @return              list of points of the dart edges
      */
     public ArrayList<Vector2D> addDart(Vector2D lineStart, Vector2D lineEnd, double position,
-                                     double width, double length)
+                                     double width, double length, boolean dirNorm)
     {
         // Find the equation of the line to find normal
         Vector2D direction = new Vector2D(VectorND.getDirectionVector(lineStart, lineEnd));
-        Vector2D normal = new Vector2D(-direction.getY(), direction.getX());
+        Vector2D normal = new Vector2D(direction.getY(), -direction.getX());
+        if (dirNorm) normal.multiplyBy(-1.0);
 
         // Normalise the direction vectors
         direction.divideBy(direction.norm());

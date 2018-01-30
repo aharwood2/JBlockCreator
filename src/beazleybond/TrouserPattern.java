@@ -1,10 +1,11 @@
 package beazleybond;
 
 import jblockmain.Block;
-import jblockmain.EPosition;
 import jblockmain.Measurements;
 import jblockmain.Pattern;
 import mathcontainers.Vector2D;
+
+import java.util.ArrayList;
 
 
 /** Class to construct a trouser pattern using the Beazley and Bond drafting method. */
@@ -146,8 +147,11 @@ public class TrouserPattern
         // Add keypoint at outside leg and waist level
         frontBlock.addKeypoint(new Vector2D(0.0, Arb_CentreFrontFromInsideLeg + (a_Waist / 4.0) + Arb_DartSuppression));
 
-        // Insert the inside leg curve
-        // TODO: Add this bit...
+        // Insert the inside leg curve -- circular curve will do the job rather than something more complicated
+        frontBlock.addCircularCurve(new Vector2D(i_Crutch, 0.0),
+                                    new Vector2D(j_Knee, Arb_CreaseLineFromInsideLeg - Arb_HalfKneeWidth),
+                                    0.5,
+                                    false);
 
         // Insert crutch curve
         frontBlock.addDirectedCurveWithApexTangent(
@@ -159,8 +163,25 @@ public class TrouserPattern
         );
 
 
-        // Insert darts
-        // TODO: Add this bit...
+        // Insert darts in anti-clockwise order
+        Vector2D startSegment = new Vector2D(0.0, Arb_CentreFrontFromInsideLeg + (a_Waist / 4.0) + Arb_DartSuppression);
+        Vector2D endSegment = new Vector2D(0.0,Arb_CentreFrontFromInsideLeg + Arb_CrutchCentreFrontOffset);
+        double positionTopDart = (0.5 * (startSegment.getY() - Arb_CreaseLineFromInsideLeg))  /
+                (startSegment.getY() - endSegment.getY());
+        ArrayList<Vector2D> dartPoints = frontBlock.addDart(startSegment,
+                                                            endSegment,
+                                                            positionTopDart,
+                                                            Arb_DartWidth,
+                                                            Arb_DartLength, true);
+
+        startSegment = dartPoints.get(2);
+        double positionBottomDart = (startSegment.getY() - Arb_CreaseLineFromInsideLeg) /
+                (startSegment.getY() - endSegment.getY());
+        frontBlock.addDart(startSegment,
+                           endSegment,
+                           positionBottomDart,
+                           Arb_DartWidth,
+                           Arb_DartLength, true);
 
 
         // Back block...

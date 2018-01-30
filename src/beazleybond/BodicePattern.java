@@ -90,7 +90,7 @@ public class BodicePattern
         // Points that make up the shape are listed in a strict anti-clockwise order to maintain correct connectivity
         // for plotting. The bottom left corner of the space to be the origin.
 
-        // TODO: Redo
+        // TODO: Implement this using the latest block API here
     }
 
 
