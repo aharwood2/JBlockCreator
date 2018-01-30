@@ -325,6 +325,23 @@ public class Block
 
     /**
      * Add a curve between the start and end points which meets each bounding line at the specified angles in degrees.
+     * Direction of both bounding lines are derived based on adjacent keypoints.
+     * @param startPoint    start position of curve
+     * @param endPoint      end position of curve
+     * @param angleAtEnds   desired angle at each end of the curve
+     */
+    public void addDirectedCurve(Vector2D startPoint, Vector2D endPoint, double[] angleAtEnds)
+    {
+        // Get directions
+        Vector2D dirStart = getDirectionAtKeypoint(startPoint, EPosition.BEFORE);
+        Vector2D dirEnd = getDirectionAtKeypoint(endPoint, EPosition.AFTER);
+
+        // Pass on arguments
+        addDirectedCurve(startPoint, endPoint, dirStart, dirEnd, angleAtEnds);
+    }
+
+    /**
+     * Add a curve between the start and end points which meets each bounding line at the specified angles in degrees.
      * Direction of both bounding lines must be given.
      * @param startPoint    start position of curve
      * @param endPoint      end position of curve
@@ -442,46 +459,23 @@ public class Block
      * Method to construct a curve which meets a specified line at the end points at 90 degrees.
      * @param startPoint    start position of curve
      * @param endPoint      end position of curve
-     * @param dirStart      direction of the start bounding line
-     * @param dirEnd        direction of the end bounding line
-     * @param dirNorm       direction of the normal of the bounding lines
      */
-    public void addRightAngleCurve(Vector2D startPoint, Vector2D endPoint,
-                                   Vector2D dirStart, Vector2D dirEnd, boolean[] dirNorm)
+    public void addRightAngleCurve(Vector2D startPoint, Vector2D endPoint)
 
     {
-        // Use the dirNorm flags to determine the correct angle and pass on arguments
-        double[] angles = new double[2];
-        if (dirNorm[0])
-        {
-            angles[0] = 90.0;
-        }
-        else
-        {
-            angles[0] = -90.0;
-        }
-        if (dirNorm[1])
-        {
-            angles[1] = 90.0;
-        }
-        else
-        {
-            angles[1] = -90.0;
-        }
-        addDirectedCurve(startPoint, endPoint, dirStart, dirEnd, angles);
+        double[] angles = new double[] {90.0, 90.0};
+        addDirectedCurve(startPoint, endPoint, angles);
     }
 
     /**
      * Method which constructs a curve which meets a specified line at the end points at 0 degrees (i.e. aligned)
      * @param startPoint    position of the start of the curve
      * @param endPoint      position of the end of the curve
-     * @param dirStart      desired direction of the start of the line
-     * @param dirEnd        desired direction of the end of the line
      */
-    public void addBlendedCurve(Vector2D startPoint, Vector2D endPoint,
-                                Vector2D dirStart, Vector2D dirEnd)
+    public void addBlendedCurve(Vector2D startPoint, Vector2D endPoint)
     {
-        addDirectedCurve(startPoint, endPoint, dirStart, dirEnd, new double[] {0.0, 0.0});
+        double[] angles = new double[] {0.0, 0.0};
+        addDirectedCurve(startPoint, endPoint, angles);
     }
 
     /**
@@ -551,9 +545,12 @@ public class Block
 
             // Approximate direction using linear connection to the adjacent point in the list
             int j = i;
-            if (adjacency == EPosition.BEFORE) i--;
-            else i++;
-            if (j < 0) j  = keypointsX.size() - 1;  // Periodic connection
+            if (adjacency == EPosition.BEFORE) j--;
+            else j++;
+
+            // Periodic connection
+            if (j < 0) j  = keypointsX.size() - 1;
+            else if (j == keypointsX.size()) j = 0;
             Vector2D directionVector = new Vector2D(keypointsX.get(i) - keypointsX.get(j), keypointsY.get(i) - keypointsY.get(j));
 
             // Normalise and return
