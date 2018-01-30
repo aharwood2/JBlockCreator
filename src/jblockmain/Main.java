@@ -1,6 +1,7 @@
 package jblockmain;
 
 import beazleybond.SkirtPattern;
+import beazleybond.TrouserPattern;
 
 public class Main
 {
@@ -13,9 +14,12 @@ public class Main
     // Entry point
     public static void main(String[] args)
     {
-        // Create a pattern
+        // Create a patterns
         SkirtPattern bb_skirt = new SkirtPattern(new Measurements("ScanData.out"));
         bb_skirt.writeToDXF("./");
+
+        TrouserPattern bb_trouser = new TrouserPattern(new Measurements("ScanData.out"));
+        bb_trouser.writeToDXF("./");
     }
 
 }

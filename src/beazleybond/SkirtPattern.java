@@ -81,11 +81,13 @@ public class SkirtPattern
     @Override
     protected void createBlocks()
     {
+        // TODO: API for creating patterns has updated -- this need to be improved now
+
         // Points that make up the shape are listed in a strict anti-clockwise order to maintain correct connectivity for
         // plotting. The bottom left corner of the space to be the origin.
 
         // Create component representing half back of skirt folded in half.
-        blocks.add(new Block("Back Block"));
+        blocks.add(new Block("Skirt_Back_Block"));
         Block backBlock = blocks.get(0);
 
         // Add all the fixed points to the block that coincide with the basic rectangle. These points do not move
@@ -118,7 +120,7 @@ public class SkirtPattern
                                    new Vector2D(0.0, Int_SuppressedSS), 0.5, true);
 
         // Trace off block
-        blocks.add(new Block(backBlock, "Front Block"));
+        blocks.add(new Block(backBlock, "Skirt_Front_Block"));
         Block frontBlock = blocks.get(blocks.size()- 1);
 
         // Add back dart.

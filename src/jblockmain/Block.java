@@ -6,7 +6,6 @@ import mathcontainers.Vector2D;
 import mathcontainers.VectorND;
 
 import java.util.ArrayList;
-import java.util.Vector;
 
 /**
  * Class that represents a block as a series of connected keypoints.
@@ -104,25 +103,25 @@ public class Block
     public int addKeypointNextTo(Vector2D xy, Vector2D adjacent, EPosition position)
     {
         // Get the point number of the adjacent point
-        int i = 0;
         try
         {
-            i = getKeypointNumber(adjacent);
+            int i = getKeypointNumber(adjacent);
+
+            // Correct position if placing after
+            if (position == EPosition.AFTER) i++;
+
+            // Insert the point at the location
+            keypointsX.add(i, xy.getX());
+            keypointsY.add(i, xy.getY());
+
+            return i;
         }
         catch (Exception e)
         {
             e.printStackTrace();
         }
 
-        // Correct position if placing after
-        if (position == EPosition.AFTER) i++;
-
-        // Insert the point at the location
-        keypointsX.add(i, xy.getX());
-        keypointsY.add(i, xy.getY());
-
-        return i;
-
+        return -1;
     }
 
     /**
@@ -134,21 +133,22 @@ public class Block
     public int moveKeypoint(Vector2D existingPosition, Vector2D newPosition)
     {
         // Get the point number of the adjacent point
-        int i = 0;
         try
         {
-            i = getKeypointNumber(existingPosition);
+            int i = getKeypointNumber(existingPosition);
+
+            // Update position
+            keypointsX.set(i, newPosition.getX());
+            keypointsY.set(i, newPosition.getY());
+
+            return i;
         }
         catch (Exception e)
         {
             e.printStackTrace();
         }
 
-        // Update position
-        keypointsX.set(i, newPosition.getX());
-        keypointsY.set(i, newPosition.getY());
-
-        return i;
+        return -1;
     }
 
     /**
@@ -158,19 +158,18 @@ public class Block
     public void deleteKeypoint(Vector2D location)
     {
         // Get the point number of the adjacent point
-        int i = 0;
         try
         {
-            i = getKeypointNumber(location);
+            int i = getKeypointNumber(location);
+
+            // Delete position
+            keypointsX.remove(i);
+            keypointsY.remove(i);
         }
         catch (Exception e)
         {
             e.printStackTrace();
         }
-
-        // Delete position
-        keypointsX.remove(i);
-        keypointsY.remove(i);
     }
 
     /**
@@ -480,7 +479,7 @@ public class Block
      * @param dirEnd        desired direction of the end of the line
      */
     public void addBlendedCurve(Vector2D startPoint, Vector2D endPoint,
-                                 Vector2D dirStart, Vector2D dirEnd)
+                                Vector2D dirStart, Vector2D dirEnd)
     {
         addDirectedCurve(startPoint, endPoint, dirStart, dirEnd, new double[] {0.0, 0.0});
     }
@@ -536,5 +535,88 @@ public class Block
     public static double triangleGetAdjacentSide(double side1, double hypotenuse)
     {
         return Math.sqrt(hypotenuse * hypotenuse - side1 * side1);
+    }
+
+    /**
+     * Method to get a direction vector at a given point on the curve based on an adjacent keypoint.
+     * @param keypoint  point at which direction vector is required.
+     * @param adjacency connecting point from which to infer direction.
+     * @return  normalised direction vector.
+     */
+    public Vector2D getDirectionAtKeypoint(Vector2D keypoint, EPosition adjacency)
+    {
+        try
+        {
+            int i = getKeypointNumber(keypoint);
+
+            // Approximate direction using linear connection to the adjacent point in the list
+            int j = i;
+            if (adjacency == EPosition.BEFORE) i--;
+            else i++;
+            if (j < 0) j  = keypointsX.size() - 1;  // Periodic connection
+            Vector2D directionVector = new Vector2D(keypointsX.get(i) - keypointsX.get(j), keypointsY.get(i) - keypointsY.get(j));
+
+            // Normalise and return
+            directionVector.divideBy(directionVector.norm());
+            return directionVector;
+
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+
+        return new Vector2D(-1.0, -1.0);
+    }
+
+
+    /**
+     * Method to add a curve which has specified start and end point gradients as well as an apex at which the curve
+     * must have a stationary point. Directions are approximated from adjacent keypoints and hence are not specified.
+     * @param startPoint            start point of the curve
+     * @param endPoint              end point of the curve
+     * @param tangentCorner         squared out corner of the apex of the curve
+     * @param tangentPointOffset    offset from the apex corner to the curve itself
+     * @param anglesAtEnds          angles required at the start and end points of the curve
+     */
+    public void addDirectedCurveWithApexTangent(Vector2D startPoint, Vector2D endPoint,
+                                                Vector2D tangentCorner, double tangentPointOffset,
+                                                double[] anglesAtEnds)
+    {
+        // Specify the tangent point using corner and offset
+        Vector2D tangentPoint = new Vector2D(
+                tangentCorner.subtract(
+                        new Vector2D(
+                                tangentPointOffset * Math.cos(Math.PI / 4.0),
+                                tangentPointOffset * Math.sin(Math.PI / 4.0)
+                        )
+                )
+        );
+
+        // Add guide point as a keypoint
+        addKeypointNextTo(tangentPoint,
+                             startPoint,
+                             EPosition.AFTER);
+
+        // Get direction of the bisect line (which will be normal to the curve)
+        Vector2D cornerToTangentLine = new Vector2D(tangentCorner.subtract(tangentPoint));
+
+        // Get normal to this (which will be tangent to curve)
+        Vector2D tangentDirection = new Vector2D(cornerToTangentLine.getY(), -cornerToTangentLine.getX());
+
+        // Now we can construct the first part of the curve
+        addDirectedCurve(startPoint,
+                               tangentPoint,
+                               getDirectionAtKeypoint(startPoint, EPosition.BEFORE),
+                               tangentDirection, new double[] {anglesAtEnds[0], 0.0}
+        );
+
+        // Construct the second part of the curve (intersect at end is 90 degrees)
+        addDirectedCurve(tangentPoint,
+                                endPoint,
+                                tangentDirection,
+                                getDirectionAtKeypoint(endPoint, EPosition.AFTER),
+                                new double[] {0.0, anglesAtEnds[1]}
+        );
     }
 }

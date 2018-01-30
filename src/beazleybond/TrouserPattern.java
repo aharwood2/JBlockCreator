@@ -1,8 +1,11 @@
 package beazleybond;
 
 import jblockmain.Block;
+import jblockmain.EPosition;
 import jblockmain.Measurements;
 import jblockmain.Pattern;
+import mathcontainers.Vector2D;
+
 
 /** Class to construct a trouser pattern using the Beazley and Bond drafting method. */
 public class TrouserPattern
@@ -27,20 +30,32 @@ public class TrouserPattern
     private double l_InsideLegToAnkle   = 72.0;
 
     /* Arbitrary Measurements */
-
-    // Width of starting rectangle (quarter hip - 1cm + front crutch fork)
-    private double Arb_FrontCrutchFork = (c_Hip / 20.0) + 0.5;
-    private double Arb_WidthOfBlock = (c_Hip / 4.0) - 1.0 + Arb_FrontCrutchFork;
-
-    // Centre front line
-    private double Arb_CentreFrontFromInsideLeg = (c_Hip / 4.0) - 1.0;
-
-    // Trouser crease line
-    private double Arb_CreaseLineFromInsideLeg = Arb_CentreFrontFromInsideLeg + (c_Hip / 10.0);
+    // Some initialised after ease has been applied
 
     // Crutch shaping
     private double Arb_CrutchCentreFrontOffset = 0.5;
     private double Arb_CrutchCurveBisect = 2.5;
+
+    // Waist Shaping
+    private double Arb_DartSuppression = 4.0;
+    private double Arb_DartLength = 10.0;
+    private double Arb_DartWidth = 2.0;
+
+
+    // Width of starting rectangle (quarter hip - 1cm + front crutch fork)
+    private double Arb_FrontCrutchFork;
+    private double Arb_WidthOfBlock;
+
+    // Centre front line
+    private double Arb_CentreFrontFromInsideLeg;
+
+    // Trouser crease line
+    private double Arb_CreaseLineFromInsideLeg;
+
+    // Knee
+    private double Arb_HalfKneeWidth;
+
+
 
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -50,6 +65,15 @@ public class TrouserPattern
     {
         readMeasurements(dataStore);
         addEasement();
+
+        // Initialise dependent quantities
+        Arb_FrontCrutchFork = (c_Hip / 20.0) + 0.5;
+        Arb_WidthOfBlock = (c_Hip / 4.0) - 1.0 + Arb_FrontCrutchFork;
+        Arb_CentreFrontFromInsideLeg = Arb_WidthOfBlock - ((c_Hip / 4.0) - 1.0);
+        Arb_CreaseLineFromInsideLeg = Arb_CentreFrontFromInsideLeg + (c_Hip / 10.0);
+        Arb_HalfKneeWidth = (e_KneeStraight / 4.0) - 1.0;
+
+        // Create the blocks
         createBlocks();
     }
 
@@ -86,9 +110,62 @@ public class TrouserPattern
         // for plotting. The bottom left corner of the space to be the origin.
 
         // Create front block first
-        blocks.add(new Block("Front Block"));
+        blocks.add(new Block("Trouser_Front_Block"));
+        Block frontBlock = blocks.get(blocks.size() - 1);
 
-        //
+        // Start keypoint placement from bottom left
+        frontBlock.addKeypoint(new Vector2D(0.0,Arb_CentreFrontFromInsideLeg + Arb_CrutchCentreFrontOffset));
+
+        // Next keypoint is hip level
+        frontBlock.addKeypoint(new Vector2D(h_Hip, Arb_CentreFrontFromInsideLeg));
+
+        // Add keypoint at inside leg and crutch
+        frontBlock.addKeypoint(new Vector2D(i_Crutch, 0.0));
+
+        // Add keypoint at inside leg and knee
+        frontBlock.addKeypoint(new Vector2D(j_Knee, Arb_CreaseLineFromInsideLeg - Arb_HalfKneeWidth));
+
+        // Add keypoint at inside leg and ankle intersection
+        frontBlock.addKeypoint(new Vector2D(k_OutsideLegToAnkle, Arb_CreaseLineFromInsideLeg - Arb_HalfKneeWidth));
+
+        // Add keypoint at outside leg and ankle intersection
+        frontBlock.addKeypoint(new Vector2D(k_OutsideLegToAnkle, Arb_CreaseLineFromInsideLeg + Arb_HalfKneeWidth));
+
+        // Add keypoint at outside leg and knee
+        frontBlock.addKeypoint(new Vector2D(j_Knee, Arb_CreaseLineFromInsideLeg + Arb_HalfKneeWidth));
+
+        // Add keypoint at outside leg at the crutch level
+        frontBlock.addKeypoint(new Vector2D(i_Crutch, Arb_WidthOfBlock));
+
+        // Add keypoint at outside leg at the hip level
+        frontBlock.addKeypoint(new Vector2D(h_Hip, Arb_WidthOfBlock));
+
+        // Add keypoint at outside leg and upper hip level
+        frontBlock.addKeypoint(new Vector2D(g_UpperHip, Arb_CentreFrontFromInsideLeg + (b_UpperHip / 4.0)));
+
+        // Add keypoint at outside leg and waist level
+        frontBlock.addKeypoint(new Vector2D(0.0, Arb_CentreFrontFromInsideLeg + (a_Waist / 4.0) + Arb_DartSuppression));
+
+        // Insert the inside leg curve
+        // TODO: Add this bit...
+
+        // Insert crutch curve
+        frontBlock.addDirectedCurveWithApexTangent(
+                new Vector2D(h_Hip, Arb_CentreFrontFromInsideLeg),
+                new Vector2D(i_Crutch, 0.0),
+                new Vector2D(i_Crutch, Arb_CentreFrontFromInsideLeg),
+                Arb_CrutchCurveBisect,
+                new double[] {0.0, 90.0}
+        );
+
+
+        // Insert darts
+        // TODO: Add this bit...
+
+
+        // Back block...
+        // TODO: Add this bit...
+
     }
 
 
