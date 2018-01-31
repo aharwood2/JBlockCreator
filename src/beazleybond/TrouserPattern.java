@@ -35,26 +35,35 @@ public class TrouserPattern
 
     // Crutch shaping
     private double Arb_CrutchCentreFrontOffset = 0.5;
-    private double Arb_CrutchCurveBisect = 2.5;
+    private double Arb_FrontCrutchCurveBisect = 2.5;
+    private double Arb_BackCrutchCurveBisect = 3.0;
 
     // Waist Shaping
-    private double Arb_DartSuppression = 4.0;
-    private double Arb_DartLength = 10.0;
-    private double Arb_DartWidth = 2.0;
+    private double Arb_FrontDartSuppression = 4.0;
+    private double Arb_FrontDartLength = 10.0;
+    private double Arb_FrontDartWidth = Arb_FrontDartSuppression / 2.0;
+    private double Arb_BackDartSuppression = 5.0;
+    private double Arb_BackDartWidth = Arb_BackDartSuppression / 2.0;
+    private double Arb_BackDartLengthShort = 13.0;
+    private double Arb_BackDartLengthLong = 15.0;
 
-
-    // Width of starting rectangle (quarter hip - 1cm + front crutch fork)
+    // Width of starting rectangle
     private double Arb_FrontCrutchFork;
-    private double Arb_WidthOfBlock;
+    private double Arb_BackCrutchFork;
+    private double Arb_FrontWidthOfBlock;
+    private double Arb_BackWidthOfBlock;
 
-    // Centre front line
+    // Centre front and back lines
     private double Arb_CentreFrontFromInsideLeg;
+    private double Arb_CentreBackFromInsideLeg;
 
     // Trouser crease line
-    private double Arb_CreaseLineFromInsideLeg;
+    private double Arb_FrontCreaseLineFromInsideLeg;
+    private double Arb_BackCreaseLineFromInsideLeg;
 
     // Knee
-    private double Arb_HalfKneeWidth;
+    private double Arb_FrontHalfKneeWidth;
+    private double Arb_BackHalfKneeWidth;
 
 
 
@@ -69,10 +78,15 @@ public class TrouserPattern
 
         // Initialise dependent quantities
         Arb_FrontCrutchFork = (c_Hip / 20.0) + 0.5;
-        Arb_WidthOfBlock = (c_Hip / 4.0) - 1.0 + Arb_FrontCrutchFork;
-        Arb_CentreFrontFromInsideLeg = Arb_WidthOfBlock - ((c_Hip / 4.0) - 1.0);
-        Arb_CreaseLineFromInsideLeg = Arb_CentreFrontFromInsideLeg + (c_Hip / 10.0);
-        Arb_HalfKneeWidth = (e_KneeStraight / 4.0) - 1.0;
+        Arb_BackCrutchFork = (c_Hip / 10.0) + 1.5;
+        Arb_FrontWidthOfBlock = (c_Hip / 4.0) - 1.0 + Arb_FrontCrutchFork;
+        Arb_BackWidthOfBlock = (c_Hip / 4.0) + 1.0 + Arb_BackCrutchFork;
+        Arb_CentreFrontFromInsideLeg = Arb_FrontWidthOfBlock - ((c_Hip / 4.0) - 1.0);
+        Arb_CentreBackFromInsideLeg = Arb_BackWidthOfBlock - ((c_Hip / 4.0) + 1.0);
+        Arb_FrontCreaseLineFromInsideLeg = Arb_CentreFrontFromInsideLeg + (c_Hip / 10.0);
+        Arb_BackCreaseLineFromInsideLeg = Arb_CentreBackFromInsideLeg + (c_Hip / 10.0) - 1.0;
+        Arb_FrontHalfKneeWidth = (e_KneeStraight / 4.0) - 1.0;
+        Arb_BackHalfKneeWidth = (e_KneeStraight / 4.0) + 1.0;
 
         // Create the blocks
         createBlocks();
@@ -111,7 +125,7 @@ public class TrouserPattern
         // for plotting. The bottom left corner of the space to be the origin.
 
         // Create front block first
-        blocks.add(new Block("Trouser_Front_Block"));
+        blocks.add(new Block("Trousers_Front_Block"));
         Block frontBlock = blocks.get(blocks.size() - 1);
 
         // Start keypoint placement from bottom left
@@ -124,32 +138,32 @@ public class TrouserPattern
         frontBlock.addKeypoint(new Vector2D(i_Crutch, 0.0));
 
         // Add keypoint at inside leg and knee
-        frontBlock.addKeypoint(new Vector2D(j_Knee, Arb_CreaseLineFromInsideLeg - Arb_HalfKneeWidth));
+        frontBlock.addKeypoint(new Vector2D(j_Knee, Arb_FrontCreaseLineFromInsideLeg - Arb_FrontHalfKneeWidth));
 
         // Add keypoint at inside leg and ankle intersection
-        frontBlock.addKeypoint(new Vector2D(k_OutsideLegToAnkle, Arb_CreaseLineFromInsideLeg - Arb_HalfKneeWidth));
+        frontBlock.addKeypoint(new Vector2D(k_OutsideLegToAnkle, Arb_FrontCreaseLineFromInsideLeg - Arb_FrontHalfKneeWidth));
 
         // Add keypoint at outside leg and ankle intersection
-        frontBlock.addKeypoint(new Vector2D(k_OutsideLegToAnkle, Arb_CreaseLineFromInsideLeg + Arb_HalfKneeWidth));
+        frontBlock.addKeypoint(new Vector2D(k_OutsideLegToAnkle, Arb_FrontCreaseLineFromInsideLeg + Arb_FrontHalfKneeWidth));
 
         // Add keypoint at outside leg and knee
-        frontBlock.addKeypoint(new Vector2D(j_Knee, Arb_CreaseLineFromInsideLeg + Arb_HalfKneeWidth));
+        frontBlock.addKeypoint(new Vector2D(j_Knee, Arb_FrontCreaseLineFromInsideLeg + Arb_FrontHalfKneeWidth));
 
         // Add keypoint at outside leg at the crutch level
-        frontBlock.addKeypoint(new Vector2D(i_Crutch, Arb_WidthOfBlock));
+        frontBlock.addKeypoint(new Vector2D(i_Crutch, Arb_FrontWidthOfBlock));
 
         // Add keypoint at outside leg at the hip level
-        frontBlock.addKeypoint(new Vector2D(h_Hip, Arb_WidthOfBlock));
+        frontBlock.addKeypoint(new Vector2D(h_Hip, Arb_FrontWidthOfBlock));
 
         // Add keypoint at outside leg and upper hip level
         frontBlock.addKeypoint(new Vector2D(g_UpperHip, Arb_CentreFrontFromInsideLeg + (b_UpperHip / 4.0)));
 
         // Add keypoint at outside leg and waist level
-        frontBlock.addKeypoint(new Vector2D(0.0, Arb_CentreFrontFromInsideLeg + (a_Waist / 4.0) + Arb_DartSuppression));
+        frontBlock.addKeypoint(new Vector2D(0.0, Arb_CentreFrontFromInsideLeg + (a_Waist / 4.0) + Arb_FrontDartSuppression));
 
         // Insert the inside leg curve -- circular curve will do the job rather than something more complicated
         frontBlock.addCircularCurve(new Vector2D(i_Crutch, 0.0),
-                                    new Vector2D(j_Knee, Arb_CreaseLineFromInsideLeg - Arb_HalfKneeWidth),
+                                    new Vector2D(j_Knee, Arb_FrontCreaseLineFromInsideLeg - Arb_FrontHalfKneeWidth),
                                     0.5,
                                     false);
 
@@ -158,37 +172,115 @@ public class TrouserPattern
                 new Vector2D(h_Hip, Arb_CentreFrontFromInsideLeg),
                 new Vector2D(i_Crutch, 0.0),
                 new Vector2D(i_Crutch, Arb_CentreFrontFromInsideLeg),
-                Arb_CrutchCurveBisect,
+                Arb_FrontCrutchCurveBisect,
                 new double[] {0.0, 90.0}
         );
 
 
         // Insert darts in anti-clockwise order
-        Vector2D startSegment = new Vector2D(0.0, Arb_CentreFrontFromInsideLeg + (a_Waist / 4.0) + Arb_DartSuppression);
+        Vector2D startSegment = new Vector2D(0.0, Arb_CentreFrontFromInsideLeg + (a_Waist / 4.0) + Arb_FrontDartSuppression);
         Vector2D endSegment = new Vector2D(0.0,Arb_CentreFrontFromInsideLeg + Arb_CrutchCentreFrontOffset);
-        double positionTopDart = (0.5 * (startSegment.getY() - Arb_CreaseLineFromInsideLeg))  /
+        double positionTopDart = (0.5 * (startSegment.getY() - Arb_FrontCreaseLineFromInsideLeg))  /
                 (startSegment.getY() - endSegment.getY());
         ArrayList<Vector2D> dartPoints = frontBlock.addDart(startSegment,
                                                             endSegment,
                                                             positionTopDart,
-                                                            Arb_DartWidth,
-                                                            Arb_DartLength, true);
+                                                            Arb_FrontDartWidth,
+                                                            Arb_FrontDartLength, true);
 
         startSegment = dartPoints.get(2);
-        double positionBottomDart = (startSegment.getY() - Arb_CreaseLineFromInsideLeg) /
+        double positionBottomDart = (startSegment.getY() - Arb_FrontCreaseLineFromInsideLeg) /
                 (startSegment.getY() - endSegment.getY());
         frontBlock.addDart(startSegment,
                            endSegment,
                            positionBottomDart,
-                           Arb_DartWidth,
-                           Arb_DartLength, true);
+                           Arb_FrontDartWidth,
+                           Arb_FrontDartLength, true);
 
 
-        // Back block...
-        // TODO: Add this bit...
+        // Back block //
 
+        // Create block
+        blocks.add(new Block("Trousers_Back_Block"));
+        Block backBlock = blocks.get(blocks.size() - 1);
+
+        // Add first keypoint (bottom left)
+        backBlock.addKeypoint(new Vector2D(-1.0, Arb_CentreBackFromInsideLeg + 2.0));
+
+        // Add keypoint at inside leg and hip level
+        backBlock.addKeypoint(new Vector2D (h_Hip, Arb_CentreBackFromInsideLeg));
+
+        // Add keypoint at inside leg and crutch
+        backBlock.addKeypoint(new Vector2D(i_Crutch + 1.0, 0.0));
+
+        // Add keypoint at inside leg and knee level
+        backBlock.addKeypoint(new Vector2D(j_Knee, Arb_BackCreaseLineFromInsideLeg - Arb_BackHalfKneeWidth));
+
+        // Add keypoint at inside leg and ankle
+        backBlock.addKeypoint(new Vector2D(k_OutsideLegToAnkle, Arb_BackCreaseLineFromInsideLeg - Arb_BackHalfKneeWidth));
+
+        // Add keypoint at outside leg and ankle
+        backBlock.addKeypoint(new Vector2D(k_OutsideLegToAnkle, Arb_BackCreaseLineFromInsideLeg + Arb_BackHalfKneeWidth));
+
+        // Add keypoint at outside leg and knee
+        backBlock.addKeypoint(new Vector2D(j_Knee, Arb_BackCreaseLineFromInsideLeg + Arb_BackHalfKneeWidth));
+
+        // Add keypoint at outside leg and crutch
+        backBlock.addKeypoint(new Vector2D(i_Crutch, Arb_BackWidthOfBlock));
+
+        // Add keypoint at outside leg and hip
+        backBlock.addKeypoint(new Vector2D(h_Hip, Arb_BackWidthOfBlock));
+
+        // Add keypoint at outside leg and waist
+        double xOffset = 1.0;
+        double yOffset = Block.triangleGetAdjacentSide(xOffset, (a_Waist / 4.0) + Arb_BackDartSuppression);
+        backBlock.addKeypoint(new Vector2D(0.0, Arb_CentreBackFromInsideLeg + 2.0 + yOffset));
+
+        // Add waist darts
+        startSegment = new Vector2D(0.0, Arb_CentreBackFromInsideLeg + 2.0 + yOffset);
+        endSegment = new Vector2D(-1.0,Arb_CentreBackFromInsideLeg + 2.0);
+
+        // Assumes the apex of the dart is reference for its position not the base.
+        // Need to therefore compute where the base of the dart would be given the angle of the waistline.
+        double angleOfWaist = Math.atan((endSegment.getX() - startSegment.getX()) / (endSegment.getY() - startSegment.getY()));
+        double apexYPosition = 0.5 * (startSegment.getY() + Arb_BackCreaseLineFromInsideLeg);
+        double baseYShiftFromApex = Arb_BackDartLengthShort * Math.sin(angleOfWaist);
+        double baseYShiftFromStartSeg = startSegment.getY() - (apexYPosition + baseYShiftFromApex);
+        positionTopDart = (baseYShiftFromStartSeg / Math.cos(angleOfWaist)) / (startSegment.subtract(endSegment).norm());
+        dartPoints.clear();
+        dartPoints = backBlock.addDart(startSegment,
+                                       endSegment,
+                                       positionTopDart,
+                                       Arb_BackDartWidth,
+                                       Arb_BackDartLengthShort, true);
+
+        // Lower dart -- use same method to get position as previously
+        startSegment = dartPoints.get(2);
+        apexYPosition = Arb_BackCreaseLineFromInsideLeg;
+        baseYShiftFromApex = Arb_BackDartLengthLong * Math.sin(angleOfWaist);
+        baseYShiftFromStartSeg = startSegment.getY() - (apexYPosition + baseYShiftFromApex);
+        positionBottomDart = (baseYShiftFromStartSeg / Math.cos(angleOfWaist)) / (startSegment.subtract(endSegment).norm());
+        backBlock.addDart(startSegment,
+                          endSegment,
+                          positionBottomDart,
+                          Arb_BackDartWidth,
+                          Arb_BackDartLengthLong, true);
+
+        // Add inside leg curve -- again as we don't really have much information try a circular curve for now
+        backBlock.addCircularCurve(new Vector2D(i_Crutch + 1.0, 0.0),
+                                   new Vector2D(j_Knee, Arb_BackCreaseLineFromInsideLeg - Arb_BackHalfKneeWidth),
+                                   1.5,
+                                   false);
+
+
+        // Add crutch curve -- approximate angle between inside leg curve as it looks less than 90 degrees.
+        backBlock.addDirectedCurveWithApexTangent(
+                new Vector2D(h_Hip, Arb_CentreBackFromInsideLeg),
+                new Vector2D(i_Crutch + 1.0, 0.0),
+                new Vector2D(i_Crutch, Arb_CentreBackFromInsideLeg),
+                Arb_BackCrutchCurveBisect,
+                new double[] {0.0, 75.0}
+        );
     }
-
-
 
 }

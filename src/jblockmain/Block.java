@@ -326,6 +326,56 @@ public class Block
     }
 
     /**
+     * Method to add a curve which has specified start and end point gradients as well as an apex at which the curve
+     * must have a stationary point. Directions are approximated from adjacent keypoints and hence are not specified.
+     * @param startPoint            start point of the curve
+     * @param endPoint              end point of the curve
+     * @param tangentCorner         squared out corner of the apex of the curve
+     * @param tangentPointOffset    offset from the apex corner to the curve itself
+     * @param anglesAtEnds          angles required at the start and end points of the curve
+     */
+    public void addDirectedCurveWithApexTangent(Vector2D startPoint, Vector2D endPoint,
+                                                Vector2D tangentCorner, double tangentPointOffset,
+                                                double[] anglesAtEnds)
+    {
+        // Specify the tangent point using corner and offset
+        Vector2D tangentPoint = new Vector2D(
+                tangentCorner.subtract(
+                        new Vector2D(
+                                tangentPointOffset * Math.cos(Math.PI / 4.0),
+                                tangentPointOffset * Math.sin(Math.PI / 4.0)
+                        )
+                )
+        );
+
+        // Add guide point as a keypoint
+        addKeypointNextTo(tangentPoint,
+                          startPoint,
+                          EPosition.AFTER);
+
+        // Get direction of the bisect line (which will be normal to the curve)
+        Vector2D cornerToTangentLine = new Vector2D(tangentCorner.subtract(tangentPoint));
+
+        // Get normal to this (which will be tangent to curve)
+        Vector2D tangentDirection = new Vector2D(cornerToTangentLine.getY(), -cornerToTangentLine.getX());
+
+        // Now we can construct the first part of the curve
+        addDirectedCurve(startPoint,
+                         tangentPoint,
+                         getDirectionAtKeypoint(startPoint, EPosition.BEFORE),
+                         tangentDirection, new double[] {anglesAtEnds[0], 0.0}
+        );
+
+        // Construct the second part of the curve (intersect at end is 90 degrees)
+        addDirectedCurve(tangentPoint,
+                         endPoint,
+                         tangentDirection,
+                         getDirectionAtKeypoint(endPoint, EPosition.AFTER),
+                         new double[] {0.0, anglesAtEnds[1]}
+        );
+    }
+
+    /**
      * Add a curve between the start and end points which meets each bounding line at the specified angles in degrees.
      * Direction of both bounding lines are derived based on adjacent keypoints.
      * @param startPoint    start position of curve
@@ -566,56 +616,5 @@ public class Block
         }
 
         return new Vector2D(-1.0, -1.0);
-    }
-
-
-    /**
-     * Method to add a curve which has specified start and end point gradients as well as an apex at which the curve
-     * must have a stationary point. Directions are approximated from adjacent keypoints and hence are not specified.
-     * @param startPoint            start point of the curve
-     * @param endPoint              end point of the curve
-     * @param tangentCorner         squared out corner of the apex of the curve
-     * @param tangentPointOffset    offset from the apex corner to the curve itself
-     * @param anglesAtEnds          angles required at the start and end points of the curve
-     */
-    public void addDirectedCurveWithApexTangent(Vector2D startPoint, Vector2D endPoint,
-                                                Vector2D tangentCorner, double tangentPointOffset,
-                                                double[] anglesAtEnds)
-    {
-        // Specify the tangent point using corner and offset
-        Vector2D tangentPoint = new Vector2D(
-                tangentCorner.subtract(
-                        new Vector2D(
-                                tangentPointOffset * Math.cos(Math.PI / 4.0),
-                                tangentPointOffset * Math.sin(Math.PI / 4.0)
-                        )
-                )
-        );
-
-        // Add guide point as a keypoint
-        addKeypointNextTo(tangentPoint,
-                             startPoint,
-                             EPosition.AFTER);
-
-        // Get direction of the bisect line (which will be normal to the curve)
-        Vector2D cornerToTangentLine = new Vector2D(tangentCorner.subtract(tangentPoint));
-
-        // Get normal to this (which will be tangent to curve)
-        Vector2D tangentDirection = new Vector2D(cornerToTangentLine.getY(), -cornerToTangentLine.getX());
-
-        // Now we can construct the first part of the curve
-        addDirectedCurve(startPoint,
-                               tangentPoint,
-                               getDirectionAtKeypoint(startPoint, EPosition.BEFORE),
-                               tangentDirection, new double[] {anglesAtEnds[0], 0.0}
-        );
-
-        // Construct the second part of the curve (intersect at end is 90 degrees)
-        addDirectedCurve(tangentPoint,
-                                endPoint,
-                                tangentDirection,
-                                getDirectionAtKeypoint(endPoint, EPosition.AFTER),
-                                new double[] {0.0, anglesAtEnds[1]}
-        );
     }
 }
