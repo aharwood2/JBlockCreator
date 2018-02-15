@@ -1,5 +1,6 @@
 package jblockmain;
 
+import beazleybond.BodicePattern;
 import beazleybond.SkirtPattern;
 import beazleybond.TrouserPattern;
 
@@ -20,6 +21,9 @@ public class Main
 
         TrouserPattern bb_trouser = new TrouserPattern(new Measurements("ScanData.out"));
         bb_trouser.writeToDXF("./");
+
+        BodicePattern bb_bodice = new BodicePattern(new Measurements("ScanData.out"));
+        bb_bodice.writeToDXF("./");
     }
 
 }

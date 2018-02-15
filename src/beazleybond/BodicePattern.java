@@ -1,6 +1,7 @@
 package beazleybond;
 
 import jblockmain.*;
+import mathcontainers.Vector2D;
 
 /** Class to construct a fitted bodice using the Beazley and Bond drafting method. */
 public class BodicePattern
@@ -43,11 +44,11 @@ public class BodicePattern
 
     // Shoulder Level parameters. Shoulder slant measured in degrees.
     private double Arb_ShoulderSlant = 22.0;
-    private double Arb_ShoulderLevel = 6.0;
-    private double Arb_ShoulderLine = 17.5;
-    private double Arb_BackShoulderLevel = 4.0;
     private double Arb_FrontShoulderDartWidth = 4.5;
+    private double Arb_FrontShoulderLine = k_Shoulder + Arb_FrontShoulderDartWidth;
     private double Arb_BackShoulderDartWidth = 1.5;
+    private double Arb_BackShoulderLine = k_Shoulder + Arb_BackShoulderDartWidth;
+    private double Arb_BackShoulderLevel = 4.0;
     private double Arb_BackShoulderDartPositionOnArmholeLevel = 9.25;
     private double Arb_BackShoulderDartLength = 8.0;
 
@@ -90,7 +91,50 @@ public class BodicePattern
         // Points that make up the shape are listed in a strict anti-clockwise order to maintain correct connectivity
         // for plotting. The bottom left corner of the space to be the origin.
 
-        // TODO: Implement this using the latest block API here
+        // Create a block
+        Block mainBlock = new Block("Bodice_Main_Block");
+        blocks.add(mainBlock);
+
+        // Add basic rectangle points for reference
+        Vector2D refBottomLeft = new Vector2D(0.0, 0.0);             // Bottom left (nape and CB)
+        Vector2D refBottomRight = new Vector2D(e_NapeToWaist, 0.0);     // Bottom right (waist and CB)
+        Vector2D refTopRight = new Vector2D(e_NapeToWaist,
+                                            (a_Bust / 2.0) + Arb_BackWaistDartSuppression);     // Top right (waist and CF)
+        Vector2D refTopLeft = new Vector2D(0.0,
+                                           (a_Bust / 2.0) + Arb_BackWaistDartSuppression);      // Top left (nape and CF)
+
+        // Add keypoints for start and end of the front neck curve
+        mainBlock.addKeypoint(new Vector2D(Arb_HalfFrontNeckWidth, refTopLeft.getY()));
+        mainBlock.addKeypoint(new Vector2D(0.0, refTopLeft.getY() - Arb_FrontNeckDepth));
+
+        // Add the front shoulder line end point
+        double frontShoulderLineX = Arb_FrontShoulderLine * Math.sin(Math.PI * Arb_ShoulderSlant / 180.0);
+        double frontShoulderLineY = Arb_FrontShoulderLine * Math.cos(Math.PI * Arb_ShoulderSlant / 180.0);
+        mainBlock.addKeypoint(new Vector2D(frontShoulderLineX,
+                                           refTopLeft.getY() - Arb_FrontNeckDepth - frontShoulderLineY)
+        );
+
+        // Add keypoint for the back should line start point
+        double backShoulderLineY = Block.triangleGetAdjacentSide(Arb_BackShoulderLevel, Arb_BackShoulderLine);
+        mainBlock.addKeypoint(new Vector2D(Arb_BackShoulderLevel, Arb_HalfBackNeckWidth + backShoulderLineY));
+
+        // Add keypoints for back neck rise
+        mainBlock.addKeypoint(new Vector2D(-Arb_BackNeckRise, Arb_HalfBackNeckWidth));
+        mainBlock.addKeypoint(refBottomLeft);
+
+        // Compute the bust point (BP)
+        double BPTriangleY = (l_WidthBustProm / 2.0) - Arb_FrontNeckDepth;
+        double BPTriangleX = Block.triangleGetAdjacentSide(BPTriangleY, g_FrNeckToBust);
+        Vector2D refBustPoint = new Vector2D(BPTriangleX, refTopLeft.getY() - (l_WidthBustProm / 2.0));
+
+        // Add the bottom right point (waist and CB)
+        mainBlock.addKeypoint(refBottomRight);
+
+        // Compute the new top left point
+        mainBlock.addKeypoint(new Vector2D(refBustPoint.getX() + (h_FrNeckToWaist - g_FrNeckToBust), refTopRight.getY()));
+
+
+
     }
 
 

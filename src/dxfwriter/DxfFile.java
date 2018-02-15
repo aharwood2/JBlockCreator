@@ -198,6 +198,8 @@ public class DxfFile
             // End section
             writeDxfLine("0", "ENDSEC");
 
+            // TODO: Add a layer which writes the points as circles
+
             // End of file
             writeDxfLine("0", "EOF");
 
