@@ -17,13 +17,13 @@ public class Main
     {
         // Create a patterns
         SkirtPattern bb_skirt = new SkirtPattern(new Measurements("ScanData.out"));
-        bb_skirt.writeToDXF("./");
+        bb_skirt.writeToDXF("./output/");
 
         TrouserPattern bb_trouser = new TrouserPattern(new Measurements("ScanData.out"));
-        bb_trouser.writeToDXF("./");
+        bb_trouser.writeToDXF("./output/");
 
         BodicePattern bb_bodice = new BodicePattern(new Measurements("ScanData.out"));
-        bb_bodice.writeToDXF("./");
+        bb_bodice.writeToDXF("./output/");
     }
 
 }
