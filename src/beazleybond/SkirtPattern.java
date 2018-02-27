@@ -11,7 +11,6 @@ public class SkirtPattern
 {
 
     /* Pattern-specific Measurements */
-    // In future will be simply extracted from the Measurements object.
     private double a_Waist                     = 70.0;
     private double b_UpperHip                  = 90.0;
     private double c_Hip                       = 96.0;
@@ -62,16 +61,33 @@ public class SkirtPattern
     @Override
     protected void addEasement()
     {
-        // Size 12 skirt for now but should be computed by this class in the future.
-        a_Waist += 4.0;
+        // Size 12 skirt.
+//        a_Waist += 4.0;
+//        b_UpperHip += 4.0;
+//        c_Hip += 4.0;
+
+        // Should make this easier to adjust
+        a_Waist += 2.0;
         b_UpperHip += 4.0;
         c_Hip += 4.0;
+        e_SideSeam += 6.8;
+
     }
 
     @Override
     protected void readMeasurements(Measurements dataStore)
     {
-        // TODO: Implement when we couple to scan data
+        // Based on measurements for this pattern we can read the following from the scan:
+        a_Waist = dataStore.OptSmallofBackWaistTapeMeasure.value;
+        // b_UpperHip = ???
+        c_Hip = dataStore.HipCircumTapeMeasure.value;
+        d_CentreBack = dataStore.OptSmallWaistRightHeight.value;
+        e_SideSeam = dataStore.OptSmallWaistRightHeight.value;
+        f_CentreFront = dataStore.OptSmallWaistRightHeight.value;
+
+        // Others Arb and Int???? Check this
+
+
     }
 
     /**

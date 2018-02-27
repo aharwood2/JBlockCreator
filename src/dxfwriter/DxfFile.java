@@ -102,6 +102,10 @@ public class DxfFile
             writeDxfLine("0", "SECTION");
             writeDxfLine("2", "HEADER");
 
+            // Write the version number
+            writeDxfLine("9", "$ACADVER");
+            writeDxfLine("1", "AC1009");
+
             // Write the insertion base (I assume this is some kind of origin offset for x,y,z equiv 10,20,30)
             writeDxfLine("9", "$INSBASE");
             writeDxfLine("10", "0.0");

@@ -112,7 +112,19 @@ public class TrouserPattern
     @Override
     protected void readMeasurements(Measurements dataStore)
     {
-        // TODO: Implement when we couple to scan data
+        // Get measurements from the scan data store
+        a_Waist = dataStore.OptSmallofBackWaistTapeMeasure.value;
+        // b_UpperHip = ???
+        c_Hip = dataStore.HipCircumTapeMeasure.value;
+        d_Thigh = dataStore.ThighCircumferenceRight.value;
+        e_KneeStraight = dataStore.ActualKneeCircumferenceRight.value;
+        f_Ankle = dataStore.ActualAnkleCircumferenceRight.value;
+        // g_UpperHip = ???
+        // h_Hip = ???
+        // i_Crutch = ???
+        j_Knee = dataStore.OptSmallWaistBackHeight.value;
+        k_OutsideLegToAnkle = dataStore.OutsideLegLengthRight.value;
+        l_InsideLegToAnkle = dataStore.InseamRight.value;
     }
 
     /**

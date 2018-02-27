@@ -16,13 +16,13 @@ public class Main
     public static void main(String[] args)
     {
         // Create a patterns
-        SkirtPattern bb_skirt = new SkirtPattern(new Measurements("ScanData.out"));
+        SkirtPattern bb_skirt = new SkirtPattern(new Measurements("./input/ScanData.out"));
         bb_skirt.writeToDXF("./output/");
 
-        TrouserPattern bb_trouser = new TrouserPattern(new Measurements("ScanData.out"));
+        TrouserPattern bb_trouser = new TrouserPattern(new Measurements("./input/ScanData.out"));
         bb_trouser.writeToDXF("./output/");
 
-        BodicePattern bb_bodice = new BodicePattern(new Measurements("ScanData.out"));
+        BodicePattern bb_bodice = new BodicePattern(new Measurements("./input/ScanData.out"));
         bb_bodice.writeToDXF("./output/");
     }
 
