@@ -1,189 +1,265 @@
 #SizeStream Measurements
-#Stored on Tuesday, April 04, 2017 22:45:12
+#Stored on Friday, March 09, 2018 11:02:42
 #SizeStream Core Measurements
 #format - Measurement Valid (1 = valid), Measurement Name, Measurement
 #
-1  Collar Circumference: 32.595
-1  Neck Circumference: 35.799
-1  Back Shoulder Width Horizontal: 38.294
-1  Shoulder Length Left: 10.918
-1  Shoulder Length Right: 10.512
-1  Side Neck to Bust length Left: 25.37
-1  Side Neck to Bust length Right: 25.728
-1  Arm Hole Circumference Left: 43.96
-1  Arm Hole Circumference Right: 46.798
-1  Outer Arm Hole Circumference Left: 43.24
-1  Outer Arm Hole Circumference Right: 45.986
-1  Arm Length Left: 53.688
-1  Arm Length Right: 52.353
-1  Arm Under Length Left: 40.515
-1  Arm Under Length Right: 40.166
-1  Sleeve Length Left: 68.735
-1  Sleeve Length Right: 69.488
-1  Abdomen Height: 92.241
-1  Abdomen Rise: 19.215
-1  Crotch Height: 73.026
-1  Crotch Length Full: 80.847
-1  Front Vertical Rise: 30.268
-1  Seat Fold Height: 74.523
-1  Inseam Left: 73.741
-1  Inseam Right: 73.644
-1  Outside Leg Length Left: 104.82
-1  Outside Leg Length Right: 104.37
-1  Thigh Circumference Left: 59.304
-1  Thigh Circumference Right: 60.621
-1  UnderKnee Circumference Left: 35.372
-1  UnderKnee Circumference Right: 34.979
-1  UnderKnee Height Left: 40.896
-1  UnderKnee Height Right: 40.579
-1  Calf Circumference Left: 38.914
-1  Calf Circumference Right: 39.268
-1  Min Lower Leg Girth Left: 25.753
-1  Min Lower Leg Girth Right: 26.456
-1  Min lower leg Height Left: 9.4111
-1  Min lower leg Height Right: 11.637
-1  Chest / Bust Circum Tape Measure: 100.47
-1  Over Arm Circum Tape Measure: 112.59
-1  Bust Girth With Drop Tape Measure: 99.04
-1  Underbust Circum Tape Measure: 84.462
-1  Waist Circum Tape Measure: 91.83
-1  Elbow Height Waist Tape Measure: 76.585
-1  Elbow Height Waist: 76.774
-1  Stomach FP Circum Tape Measure: 96.826
-1  Abdomen Circum Tape Measure: 97.139
-1  Hip Circum Tape Measure: 107.54
-1  Seat Circum Tape Measure: 105.22
-1  Across Back Tape Measurement: 31.633
-1  Bicep Circumference Left: 31.252
-1  Bicep Circumference Right: 30.042
-1  Wrist Circumference Left: 16.367
-1  Wrist Circumference Right: 16.533
-1  Half Back Center Tape Measure: 37.279
-1  Back Neck to Back Chest Contour Length: 22.097
-1  Subject Height: 169.41
-1  Back Neck to Shoulder Blade Tape Measure: 18.743
-1  Opt Small of Back Waist Tape Measure: 74.916
-1  Opt Small Waist Back Height: 103.29
-1  Opt Small Waist Front Height: 103.29
-1  Opt Small Waist Left Height: 103.29
-1  Opt Small Waist Right Height: 103.29
-1  Forearm Circumference Left: 26.133
-1  Forearm Circumference Right: 25.839
-1  Front Hip Tape Measure: 52.587
-1  Front Waist Tape Measure: 38.15
-1  Elbow Circumference Tape Measure Left: 26.65
-1  Elbow Circumference Tape Measure Right: 26.747
-1  Chin Height: 139.53
-1  Axilla Chest Circumference Tape Measure: 98.231
-1  Hinged Upper Bust Circumference: 93.697
-1  High Hip: 99.711
-1  High Hip to Small Of Back Optimized Waist: 12.764
-1  Low Hip: 107.54
+1  Abdomen Circum Tape Measure: 86.638
+1  Abdomen Circum Tape Measure Back Left: 22.839
+1  Abdomen Circum Tape Measure Back Right: 22.202
+1  Abdomen Circum Tape Measure Front Left: 20.275
+1  Abdomen Circum Tape Measure Front Right: 21.155
+1  Abdomen Circumference: 86.64
+1  Abdomen Height: 97.45
+1  Abdomen Rise: 20.194
+1  Across Axilla Chest Back Length: 39.23
+1  Across Axilla Chest Front Length: 49.522
+1  Across Back Tape Measurement: 32.013
+1  Across Chest Arm to Arm Length: 30.897
+1  Across Chest Tape Measurement: 45.016
+1  Actual Ankle Circumference Left: 25.446
+1  Actual Ankle Circumference Right: 25.734
+1  Actual Knee Circumference Left: 35.986
+1  Actual Knee Circumference Right: 35.986
+1  Actual Mid-Thigh Circumference Left: 46.986
+1  Actual Mid-Thigh Circumference Right: 47.342
+1  Ankle Circumference Left: 25.244
+1  Ankle Circumference Right: 25.734
+1  Arm Hole Circumference Left: 47.387
+1  Arm Hole Circumference Right: 45.882
+1  Arm Length Left: 54.682
+1  Arm Length Right: 56.605
+1  Arm Under Length Left: 40.821
+1  Arm Under Length Right: 42.129
+1  Arm Volume Left: 2768.1
+1  Arm Volume Right: 2633.
+1  Axilla Chest Circumference Tape Measure: 89.02
+1  Back Crotch Length: 38.357
+1  Back Neck to Back Chest Contour Length: 24.428
+1  Back Neck to Back Chest Vertical Length: 23.751
+1  Back Neck to Shoulder Blade Tape Measure: 18.78
+1  Back Shoulder Width at 45 Degree Angle: 42.351
+1  Back Shoulder Width Horizontal: 44.41
+1  Back Shoulder Width Through Back Of Neck: 42.621
+1  Back Vertical Rise: 30.909
+1  Bicep Circumference Left: 27.972
+1  Bicep Circumference Right: 27.325
+1  Bust Girth With Drop: 86.589
+1  Bust Girth With Drop Back Left: 19.037
+1  Bust Girth With Drop Back Right: 17.76
+1  Bust Girth With Drop Front Left: 23.475
+1  Bust Girth With Drop Front Right: 25.676
+1  Bust Girth With Drop Tape Measure: 86.027
+1  Bust Prominence Left: 21.191
+1  Bust Prominence Right: 20.961
+1  Bust Surface Area Left: 297.08
+1  Bust Surface Area Right: 295.54
+1  Bust To Bust Length: 15.766
+1  Bust Volume Left: 485.13
+1  Bust Volume Right: 475.62
+1  Calf Circumference Left: 35.916
+1  Calf Circumference Right: 36.829
+1  Center Trunk Length: 147.72
+1  Center Trunk Length Tape Measure: 145.05
+1  Cervicale to Bust Length Left: 36.352
+1  Cervicale to Bust Length Right: 35.728
+1  Chest / Bust Circum Tape Measure: 88.52
+1  Chest / Bust Circumference: 89.695
+1  Chest/Bust Circum Back Left: 20.308
+1  Chest/Bust Circum Back Right: 18.407
+1  Chest/Bust Circum Front Left: 23.471
+1  Chest/Bust Circum Front Right: 26.272
+1  Chin Height: 147.07
+1  Collar Circumference: 33.332
+1  Crotch Height: 77.255
+1  Crotch Length Full: 76.085
+1  Elbow Circumference Tape Measure Left: 25.784
+1  Elbow Circumference Tape Measure Right: 24.2
+1  Elbow Height Left: 103.86
+1  Elbow Height Right: 101.55
+1  Elbow Height Waist: 77.04
+1  Elbow Height Waist Tape Measure: 77.032
+1  Foot Length Left: 19.994
+1  Foot Length Right: 21.139
+1  Forearm Circumference Left: 24.849
+1  Forearm Circumference Right: 23.43
+1  Front Crotch Length: 37.728
+1  Front Hip Tape Measure: 44.942
+1  Front Jacket Tape Measure: 72.096
+1  Front Shoulder Width: 45.1
+1  Front Vertical Rise: 30.909
+1  Front Waist Tape Measure: 35.863
+1  Half Back Center Tape Measure: 38.098
+1  Halter: 86.458
+1  Head Circumference: 53.514
+1  High Hip: 89.724
+1  High Hip to Small Of Back Optimized Waist: 12.802
+1  Hinged Bust Circumference: 92.387
+1  Hinged Upper Bust Circumference: 86.269
+1  Hip Circum Tape Measure: 97.842
+1  Hip Circum Tape Measure Back Left: 26.027
+1  Hip Circum Tape Measure Back Right: 25.392
+1  Hip Circum Tape Measure Front Left: 23.48
+1  Hip Circum Tape Measure Front Right: 22.898
+1  Hip Circumference: 97.842
+1  Hip Widest Circum Tape Measure  Back Right: 25.391
+1  Hip Widest Circum Tape Measure Back Left: 27.295
+1  Hip Widest Circum Tape Measure Front Left: 22.212
+1  Hip Widest Circum Tape Measure Front Right: 22.79
+1  Hip Widest Tape Circumference: 97.741
+1  Hips Eight Inches Down from Small of Back: 96.458
+1  Hips Two Inches Above Crotch: 97.833
+1  Horizontal Waist: 80.042
+1  Horizontal Waist Height: 101.3
+1  Horizontal Waist Tape Measure: 80.04
+1  Inseam Left: 77.488
+1  Inseam Right: 77.382
+1  Knee Circumference Left: 34.095
+1  Knee Circumference Right: 34.391
+1  Leg Volume Left: 9033.7
+1  Leg Volume Right: 9280.
+1  Low Hip: 97.842
 1  Low Hip to Small Of Back Optimized Waist: 25.5
-1  Hips Eight Inches Down from Small of Back: 104.68
-1  Hips Two Inches Above Crotch: 107.5
-1  Back Vertical Rise: 30.268
-1  Upper Bust Front Length: 43.264
-1  Shoulder Circumference: 101.88
-1  Shoulder Circumference Height: 129.14
-1  Actual Ankle Circumference Left: 25.499
-1  Actual Ankle Circumference Right: 26.699
-1  Actual Knee Circumference Left: 59.388
-1  Actual Knee Circumference Right: 37.759
-1  Actual Mid-Thigh Circumference Left: 59.293
-1  Actual Mid-Thigh Circumference Right: 48.105
-1  Across Chest Arm to Arm Length: 32.585
+1  Mid Shoulder Height Left: 142.09
+1  Mid Shoulder Height Right: 142.02
+1  Mid Shoulder To Bust Length Left: 26.464
+1  Mid Shoulder To Bust Length Right: 26.148
+1  Mid Shoulder to Waist Length Left: 41.018
+1  Mid Shoulder to Waist Length Right: 40.698
+1  MidThigh Circumference Left: 45.555
+1  MidThigh Circumference Right: 46.235
+1  Min Lower Leg Girth Left: 25.5
+1  Min Lower Leg Girth Right: 25.708
+1  Min lower leg Height Left: 8.2846
+1  Min lower leg Height Right: 8.3275
+1  Narrow Waist: 71.196
+1  Narrow Waist Tape Measure: 71.194
+1  Neck Circum Back Left: 8.8933
+1  Neck Circum Back Right: 8.9235
+1  Neck Circum Front Left: 10.169
+1  Neck Circum Front Right: 10.842
+1  Neck Circumference: 38.828
+1  Opt Formula Waist Back Height: 103.08
+1  Opt Formula Waist Front Height: 103.37
+1  Opt Formula Waist Left Height: 103.37
+1  Opt Formula Waist Right Height: 103.33
+1  Opt Formula Waist Tape Measure: 75.887
+1  Opt Formula Waist Tape Measure Back Left: 19.668
+1  Opt Formula Waist Tape Measure Back Right: 19.039
+1  Opt Formula Waist Tape Measure Front Left: 15.861
+1  Opt Formula Waist Tape Measure Front Right: 21.264
+1  Opt Small of Back Waist Tape Measure: 71.375
+1  Opt Small of Back Waist Tape Measure Back Left: 16.498
+1  Opt Small of Back Waist Tape Measure Back Right: 19.029
+1  Opt Small of Back Waist Tape Measure Front Left: 16.709
+1  Opt Small of Back Waist Tape Measure Front Right: 19.08
+1  Opt Small Waist Back Height: 108.16
+1  Opt Small Waist Front Height: 108.16
+1  Opt Small Waist Left Height: 108.16
+1  Opt Small Waist Right Height: 108.16
+1  Outer Arm Hole Circumference Left: 40.916
+1  Outer Arm Hole Circumference Right: 42.542
+1  Outside Leg Length Left: 108.91
+1  Outside Leg Length Right: 108.84
+1  Over Arm Circum Tape Measure: 108.31
+1  OverArm Circumference: 111.35
+1  Pants Waist: 87.845
+1  Pants Waist Tape Measure: 87.819
+1  Seat Circum Tape Measure: 96.581
+1  Seat Circum Tape Measure Back Left: 27.294
+1  Seat Circum Tape Measure Back Right: 25.391
+1  Seat Circum Tape Measure Front Left: 21.58
+1  Seat Circum Tape Measure Front Right: 22.269
+1  Seat Circumference: 96.936
+1  Seat Fold Height: 78.931
+1  Shoulder Arc Left: 55.605
+1  Shoulder Arc Right: 54.849
+1  Shoulder Circumference: 100.33
+1  Shoulder Circumference Height: 133.72
+1  Shoulder Length Left: 15.211
+1  Shoulder Length Right: 13.672
+1  Shoulder Slope Left: 27.899
+1  Shoulder Slope Right: 28.179
+1  Side Back Waist to Floor Left: 102.13
+1  Side Back Waist to Floor Right: 102.05
+1  Side Neck to Bust length Left: 27.333
+1  Side Neck to Bust length Right: 26.864
+1  Side Neck Trunk Length: 159.11
+1  Side Neck Trunk Length Tape Measure: 158.18
+1  Sleeve Length Left: 75.848
+1  Sleeve Length Right: 76.114
+1  Stomach FP Circum Tape Measure: 86.331
+1  Stomach FP Circum Tape Measure Back Left: 22.839
+1  Stomach FP Circum Tape Measure Back Right: 22.202
+1  Stomach FP Circum Tape Measure Front Left: 20.274
+1  Stomach FP Circum Tape Measure Front Right: 20.872
+1  Stomach FP Circumference: 86.333
+1  Stomach Max Circum Tape Measure: 79.727
+1  Stomach Max Circum Tape Measure Back Left: 20.938
+1  Stomach Max Circum Tape Measure Back Right: 19.659
+1  Stomach Max Circum Tape Measure Front Left: 19.018
+1  Stomach Max Circum Tape Measure Front Right: 19.97
+1  Stomach Max Circumference: 79.727
+1  Subject Height: 167.49
+1  Surface Area Arm Left: 1499.1
+1  Surface Area Arm Right: 1437.7
+1  Surface Area Leg Left: 4034.9
+1  Surface Area Leg Right: 4223.2
+1  Surface Area Torso: 5438.2
+1  Surface Area Total: 16633
+1  Thigh Circumference Left: 56.098
+1  Thigh Circumference Right: 56.55
+1  Thigh Height Left: 72.175
+1  Thigh Height Right: 72.175
+1  Torso Volume: 38200
+1  Underbust Circum Tape Measure: 75.622
+1  Underbust Circum Tape Measure Back Left: 18.404
+1  Underbust Circum Tape Measure Back Right: 17.77
+1  Underbust Circum Tape Measure Front Left: 19.038
+1  Underbust Circum Tape Measure Front Right: 20.367
+1  Underbust Circumference: 75.627
+1  UnderKnee Circumference Left: 33.423
+1  UnderKnee Circumference Right: 33.868
+1  UnderKnee Height Left: 40.772
+1  UnderKnee Height Right: 40.843
+1  Upper Bust Front Length: 41.042
+1  Vertical Trunk Circumference Left: 155.09
+1  Vertical Trunk Circumference Right: 156.42
+1  Volume: 61915
+1  Waist at 50%: 73.153
+1  Waist Circum Tape Measure: 83.051
+1  Waist Circum Tape Measure Back Left: 22.213
+1  Waist Circum Tape Measure Back Right: 22.21
+1  Waist Circum Tape Measure Front Left: 19.671
+1  Waist Circum Tape Measure Front Right: 18.895
+1  Waist Circumference: 83.052
+1  Waist Height: 108.16
+1  Wrist Circumference Left: 16.222
+1  Wrist Circumference Right: 15.363
+1  Upper Arm Circumference Left: 29.882
+1  Upper Arm Circumference Right: 30.659
 #SizeStream Custom Measurements
 #format - Measurement Valid (1 = valid), Measurement Name, Measurement
 #
-1  [0] Collar/Mid Neck Circ: 32.595
-1  [1] Neck Base Circ: 35.799
-1  [72] Chest/Bust Circ [Tape]: 100.47
-1  [74] Bust Circ with Drop [Tape]: 99.04
-1  [75] Underbust Circ [Tape]: 84.462
-1  [76] Low Waist Circ Pitched [Tape]: 91.83
-1  [23] Low Waist Pitched [76] Height: 103.29
-1  [77] Waist Circ SOB+4 Horz [Tape]: 89.334
-1  [119] Waist Circ SOB+4 Horz Height: 96.614
-1  [78] Pants Waist Circ [SOB+4 pitched] [Tape]: 94.441
-1  [105] Opt WAIST SOB [Tape]: 74.916
-1  [107] Opt Waist SOB [Tape] CB Height: 103.29
-1  [86] Seat Circ [Tape]: 105.22
-1  [86h] Seat Circ Height: 82.26
-1  [85] Hip Circ [Tape]: 107.54
-1  [85h] Hip Circ Height: 77.757
-1  [36] Crotch Height: 73.026
-1  [37] Crotch Length Full: 80.847
-1  [41] Inseam Lenght R: 73.644
-1  [40] Inseam Lenght L: 73.741
-1  [83] Stomach Girth [Tape]: 89.043
-1  [93] Wrist Circ R: 16.533
-1  [94] Wrist Circ L: 16.367
-1  [84] Abdomen Circ [Tape]: 97.139
-1  [32] Abdomen Circ Height: 92.241
-1  [149] High Hip Circ [Tape]: 99.711
-1  [4] Shoulder Length R: 10.512
-1  [3] Shoulder Length L: 10.918
-1  [14] Armhole Circ L [Vert]: 43.96
-1  [15] Armhole Circ R [Vert]: 46.798
-1  [170] Armhole Circ Outer R [Pitch]: 45.986
-1  [171] Armhole Circ Outer L [Pitch]: 43.24
-1  [17] Arm Length R: 52.353
-1  [16] Arm Length R: 53.688
-1  [13] SideNeck to Bust R [Tape]: 25.728
-1  [12] SideNeck to Bust L [Tape]: 25.37
-1  [38]  Fr Vertical Rise: 30.268
-1  [45] Thigh Circ R [2in down]: 60.621
-1  [44] Thigh Circ L [2in down]: 59.304
-1  [2] Bk Shoulder Horz: 38.294
-1  [177] Mid Thigh Circ R: 48.105
-1  [176] Mid Thigh Circ L: 59.293
-1  [175] Knee Circ R: 37.759
-1  [174] Knee Circ L: 59.388
-1  [55] Calf Circ R: 39.268
-1  [54] Calf Circ L: 38.914
-1  [121] Min Low Leg Circ R: 26.456
-1  [120] Min Low Leg Circ L: 25.753
-1  [88] X Bk Pit-to-Pit [Tape]: 31.633
-1  [87] X Fr Pit-to-Pit [Tape]: 51.462
-1  [89] Bicep Circ L: 31.252
-1  [90] Bicep Circ R: 30.042
-1  [162] Bk Vert Rise: 30.268
-1  [173] Ankle Circ R: 26.699
-1  [172] Ankle Circ L: 25.499
-1  [95] CB Length [Tape]: 37.279
-1  [97] CB Neck to CB Chest [Tape]: 22.097
-1  [115] Forearm Circ L: 26.133
-1  [116] Forearm Circ R: 25.839
-1  [123] Elbow Circ R [Tape]: 26.747
-1  [122] Elbow Circ L [Tape]: 26.65
-1  [128] Chin Height: 139.53
-1  Bust/Chest C to Waist C Ratio: 1.1086
-1  Waist C to Hip C Ratio: 0.6966
-1  Bust/Chest C to Hip C Ratio: 0.92092
-1  Seat C to Hip C Ratio: 0.97842
-1  Bust/Chest C to Hip C Drop: -8.505
-1  Waist C to Hip C Drop: -32.629
-1  Bust/Chest C to Waist C Drop: 24.124
-1  Hip C to Seat C Drop: 2.321
-1  Torso Length to Leg Length Ratio: 0.91295
-1  Waist Length to Torso Length Ratio: 0.45415
-1  Waist to Hip Length to Torso Length Ratio: 0.38304
-1  R Arm Length to Leg Length Ratio: 0.7169
-1  R Bicep C - Hip C Ratio: 0.27934
-1  R Thigh C - Hip C Ratio: 0.56368
-1  R Calf C - Hip C Ratio: 0.36513
-1  Waist to Hip Length: 25.537
-1  Bust to Waist Length: 15.137
-1  CB Neck to Bust Length: 21.254
-1  Hip Depth: 25.71
-1  Hip Depth to Hip C Ratio: 0.23907
-1  Hip Width: 40.363
-1  Hip Width to Hip C Ratio: 0.37532
-1  Hip Depth to Width Ratio: 0.63698
-1  Bust Pitch: 0.
-1  Neck Base Width: 10.654
-1  R Shoulder Drop: 4.3823
-1  L Shoulder Drop: 3.3104
-1  Bust Width: 22.8
-1  Scye Depth: 19.39
+1  [001] Chect/Bust Circum Tape Measure: 88.52
+1  [002] Opt Small of back Waist Tape Measure: 71.375
+1  [005] Neck Circumference: 38.828
+1  [004] Half Back Centre Tape Measure: 38.098
+1  [006] Scye Depth (Vertical): 21.565
+1  [007] Side Neck to Bust Length Right: 26.864
+1  [008] Side Neck to Bust to Waist R: 39.912
+1  [009] Across Back Tape Measurement: 32.013
+1  [010] Across Chest Arm to Arm Length: 30.897
+1  [011] Shoulder Length Right: 13.672
+1  [012] Bust Width: 20.5
+1  [013] Upper Hip SOB -10cm: 85.887
+1  [014] Waist to Knee Length: 64.946
+1  [015] Waist to Hip Length: 25.604
+1  [016] Skirt Length: 71.746
+1  [017] Thigh Circ R: 56.55
+1  [018] Knee Circ R: 34.391
+1  [019] Ankle Circ R: 25.734
+1  [020] Waist to Crotch Length (Body Rise): 30.909
+1  [021] Waist to Ankle (Outside Leg): 102.58
+1  [022] Crotch to Ankle (Inside Leg): 71.673
+1  [023] Sleeve Lenght R: 56.605
+1  [024] Bicep Circ: 27.325

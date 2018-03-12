@@ -113,18 +113,18 @@ public class TrouserPattern
     protected void readMeasurements(Measurements dataStore)
     {
         // Get measurements from the scan data store
-        a_Waist = dataStore.OptSmallofBackWaistTapeMeasure.value;
-        // b_UpperHip = ???
-        c_Hip = dataStore.HipCircumTapeMeasure.value;
-        d_Thigh = dataStore.ThighCircumferenceRight.value;
-        e_KneeStraight = dataStore.ActualKneeCircumferenceRight.value;
-        f_Ankle = dataStore.ActualAnkleCircumferenceRight.value;
+        a_Waist = dataStore.getId(2).value;
+        b_UpperHip = dataStore.getId(13).value;
+        c_Hip = dataStore.getId(3).value;
+        d_Thigh = dataStore.getId(17).value;
+        e_KneeStraight = dataStore.getId(18).value;
+        f_Ankle = dataStore.getId(19).value;
         // g_UpperHip = ???
-        // h_Hip = ???
-        // i_Crutch = ???
-        j_Knee = dataStore.OptSmallWaistBackHeight.value;
-        k_OutsideLegToAnkle = dataStore.OutsideLegLengthRight.value;
-        l_InsideLegToAnkle = dataStore.InseamRight.value;
+        h_Hip = dataStore.getId(15).value;
+        i_Crutch = dataStore.getId(20).value;
+        j_Knee = dataStore.getId(14).value;
+        k_OutsideLegToAnkle = dataStore.getId(21).value;
+        l_InsideLegToAnkle = dataStore.getId(22).value;
     }
 
     /**

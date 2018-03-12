@@ -66,7 +66,7 @@ public class SkirtPattern
 //        b_UpperHip += 4.0;
 //        c_Hip += 4.0;
 
-        // Should make this easier to adjust
+        // Should make this easier to adjust -- use a custom measurement?
         a_Waist += 2.0;
         b_UpperHip += 4.0;
         c_Hip += 4.0;
@@ -78,15 +78,17 @@ public class SkirtPattern
     protected void readMeasurements(Measurements dataStore)
     {
         // Based on measurements for this pattern we can read the following from the scan:
-        a_Waist = dataStore.OptSmallofBackWaistTapeMeasure.value;
-        // b_UpperHip = ???
-        c_Hip = dataStore.HipCircumTapeMeasure.value;
-        d_CentreBack = dataStore.OptSmallWaistRightHeight.value;
-        e_SideSeam = dataStore.OptSmallWaistRightHeight.value;
-        f_CentreFront = dataStore.OptSmallWaistRightHeight.value;
+        a_Waist = dataStore.getId(2).value;
+        b_UpperHip = dataStore.getId(13).value;
+        c_Hip = dataStore.getId(3).value;
+        d_CentreBack = dataStore.getId(14).value;
+        e_SideSeam = dataStore.getId(14).value;
+        f_CentreFront = dataStore.getId(14).value;
 
-        // Others Arb and Int???? Check this
+        // Others
+        Arb_HipLevel = dataStore.getId(15).value;
 
+        // TODO: Double check these assignments with drafting method -- also, how to incorporate measurement 16
 
     }
 
