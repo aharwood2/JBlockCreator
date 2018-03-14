@@ -119,7 +119,6 @@ public class TrouserPattern
         d_Thigh = dataStore.getId(17).value;
         e_KneeStraight = dataStore.getId(18).value;
         f_Ankle = dataStore.getId(19).value;
-        // g_UpperHip = ???
         h_Hip = dataStore.getId(15).value;
         i_Crutch = dataStore.getId(20).value;
         j_Knee = dataStore.getId(14).value;

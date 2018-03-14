@@ -192,7 +192,7 @@ public class DxfFile
             {
                 writeDxfLine("0", "LINE");
                 writeDxfLine("8", "1");     // Layer on which to draw line
-                writeDxfLine("62", "4");    // Colour of line using index colour
+                writeDxfLine("62", "255");  // Colour of line using index colour (255 = black)
                 writeDxfLine("10", Double.toString(linesX.get(i))); // X coordinate start
                 writeDxfLine("20", Double.toString(linesY.get(i))); // Y coordinate start
                 writeDxfLine("11", Double.toString(linesX.get(i + 1))); // X coordinate end

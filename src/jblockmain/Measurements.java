@@ -6,7 +6,6 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.Vector;
 
 /** Class to hold the measurements used by the block packages.
  * For now this essentially encapsulates the sizestream scan data file. */

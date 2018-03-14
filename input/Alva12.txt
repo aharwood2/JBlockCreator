@@ -1,5 +1,5 @@
 #SizeStream Measurements
-#Stored on Friday, March 09, 2018 11:02:42
+#Stored on Monday, March 12, 2018 16:09:44
 #SizeStream Core Measurements
 #format - Measurement Valid (1 = valid), Measurement Name, Measurement
 #
@@ -242,8 +242,9 @@
 #
 1  [001] Chect/Bust Circum Tape Measure: 88.52
 1  [002] Opt Small of back Waist Tape Measure: 71.375
-1  [005] Neck Circumference: 38.828
+1  [003] Hip Circum Tape Measure: 97.842
 1  [004] Half Back Centre Tape Measure: 38.098
+1  [005] Neck Circumference: 38.828
 1  [006] Scye Depth (Vertical): 21.565
 1  [007] Side Neck to Bust Length Right: 26.864
 1  [008] Side Neck to Bust to Waist R: 39.912
@@ -263,3 +264,12 @@
 1  [022] Crotch to Ankle (Inside Leg): 71.673
 1  [023] Sleeve Lenght R: 56.605
 1  [024] Bicep Circ: 27.325
+1  [026] Fr Waist Arc: 38.566
+1  [027] Bk Waist Arc: 44.423
+1  [028] Fr Abdomen Arc: 41.43
+1  [029] Bk Abdomen Arc: 45.042
+1  [030] Bk Seat Arc: 52.685
+1  [031] Fr Hip Arc: 46.378
+1  [032] Bk Hip Arc: 51.418
+1  [033] Waist to Abdomen: 10.715
+1  [034] Waist to Seat: 20.59
