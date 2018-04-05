@@ -77,8 +77,9 @@ public class DxfFile
 
     /**
      * Writes the contents of the DXF file.
+     * @param blockName     name of the block to be overlaid on the DXF drawing
      */
-    public void writeFile()
+    public void writeFile(String blockName)
     {
         if (bIsOpen)
         {
@@ -145,6 +146,14 @@ public class DxfFile
             writeDxfLine("73", "0");            // Number of line type elements???
             writeDxfLine("40", "0.0");          // Total pattern length (I assume things like dashes etc.)
 
+            writeDxfLine("2", "DASHED");
+            writeDxfLine("70", "64");           // Bit code again???
+            writeDxfLine("3", "Dashed Line");   // Description of line
+            writeDxfLine("72", "65");           // Alignment code -- always 65
+            writeDxfLine("73", "1");            // Number of line type elements???
+            writeDxfLine("40", "1.0");          // Total pattern length (I assume things like dashes etc.)
+            writeDxfLine("49", "1.0");          // Dot, dash or space length
+
             // End the table
             writeDxfLine("0","ENDTAB");
 
@@ -156,11 +165,17 @@ public class DxfFile
             writeDxfLine("70", "6");            // Some bit code for the layer???
             writeDxfLine("0", "LAYER");
 
-            // Spec of layer
+            // Spec of layer 1
             writeDxfLine("2", "1");             // Layer name
             writeDxfLine("70", "64");
             writeDxfLine("62", "7");            // Colour number?
             writeDxfLine("6", "CONTINUOUS");    // Linetype name (as specified above?)
+
+            // Spec of layer 2
+            writeDxfLine("2", "2");             // Layer name
+            writeDxfLine("70", "64");
+            writeDxfLine("62", "8");            // Colour number?
+            writeDxfLine("6", "DASHED");        // Linetype name (as specified above?)
 
             // End table
             writeDxfLine("0", "ENDTAB");
@@ -191,7 +206,7 @@ public class DxfFile
             for (int i = 0; i < linesX.size() - 1; i++)
             {
                 writeDxfLine("0", "LINE");
-                writeDxfLine("8", "1");     // Layer on which to draw line
+                writeDxfLine("8", "1");     // Layer on which to draw line (layer 1)
                 writeDxfLine("62", "255");  // Colour of line using index colour (255 = black)
                 writeDxfLine("10", Double.toString(linesX.get(i))); // X coordinate start
                 writeDxfLine("20", Double.toString(linesY.get(i))); // Y coordinate start
@@ -199,10 +214,34 @@ public class DxfFile
                 writeDxfLine("21", Double.toString(linesY.get(i + 1))); // Y coordinate end
             }
 
+            // Write lines to create a 10 x 10 cm square off to bottom left of pattern
+            float[] scaleSqX = {-5.0f, -5.0f, 5.0f, 5.0f};
+            float[] scaleSqY = {-5.0f, 5.0f, 5.0f, -5.0f};
+            for (int i = 0; i < 4; i++)
+            {
+                int j = i + 1;
+                if (j > 3) j = 0;
+                writeDxfLine("0", "LINE");
+                writeDxfLine("8", "2");     // Layer on which to draw line (layer 1)
+                writeDxfLine("62", "1");  // Colour of line using index colour (1 = red)
+                writeDxfLine("10", Double.toString(scaleSqX[i])); // X coordinate start
+                writeDxfLine("20", Double.toString(scaleSqY[i])); // Y coordinate start
+                writeDxfLine("11", Double.toString(scaleSqX[j])); // X coordinate end
+                writeDxfLine("21", Double.toString(scaleSqY[j])); // Y coordinate end
+            }
+
+            // Add text
+            writeDxfLine("0", "TEXT");
+            writeDxfLine("8", "2");     // Layer
+            writeDxfLine("62", "140");  // Colour of line using index colour (100 = ?)
+            writeDxfLine("39", "1.0");
+            writeDxfLine("10", Float.toString(scaleSqX[2] + 1.0f));
+            writeDxfLine("20", Float.toString(scaleSqY[0]));
+            writeDxfLine("40", Float.toString((scaleSqY[1] - scaleSqY[0]) * 0.1f));
+            writeDxfLine("1", blockName);
+
             // End section
             writeDxfLine("0", "ENDSEC");
-
-            // TODO: Add a layer which writes the points as circles
 
             // End of file
             writeDxfLine("0", "EOF");

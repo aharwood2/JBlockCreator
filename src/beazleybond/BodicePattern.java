@@ -7,6 +7,8 @@ import mathcontainers.Vector2D;
 public class BodicePattern
     extends Pattern
 {
+    /* Measurement file name */
+    String inputFileName;
 
     /* Pattern-specific Measurements */
     // In future will be simply extracted from the Measurements object.
@@ -80,6 +82,9 @@ public class BodicePattern
     protected void readMeasurements(Measurements dataStore)
     {
         // TODO: Implement when we couple to scan data
+
+        // Get name
+        inputFileName = dataStore.getName();
     }
 
     /**
@@ -92,7 +97,7 @@ public class BodicePattern
         // for plotting. The bottom left corner of the space to be the origin.
 
         // Create a block
-        Block mainBlock = new Block("Bodice_Main_Block");
+        Block mainBlock = new Block(inputFileName + "_Bodice_Main_Block");
         blocks.add(mainBlock);
 
         // Add basic rectangle points for reference

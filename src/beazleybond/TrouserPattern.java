@@ -13,6 +13,9 @@ public class TrouserPattern
     extends Pattern
 {
 
+    /* Measurement file name */
+    String inputFileName;
+
     /* Pattern-specific Measurements */
     // In future will be simply extracted from the Measurements object.
     private double a_Waist              = 70.0;
@@ -124,6 +127,9 @@ public class TrouserPattern
         j_Knee = dataStore.getId(14).value;
         k_OutsideLegToAnkle = dataStore.getId(21).value;
         l_InsideLegToAnkle = dataStore.getId(22).value;
+
+        // Get name
+        inputFileName = dataStore.getName();
     }
 
     /**
@@ -136,7 +142,7 @@ public class TrouserPattern
         // for plotting. The bottom left corner of the space to be the origin.
 
         // Create front block first
-        blocks.add(new Block("Trousers_Front_Block"));
+        blocks.add(new Block(inputFileName + "_Trousers_Front_Block"));
         Block frontBlock = blocks.get(blocks.size() - 1);
 
         // Start keypoint placement from bottom left
@@ -212,7 +218,7 @@ public class TrouserPattern
         // Back block //
 
         // Create block
-        blocks.add(new Block("Trousers_Back_Block"));
+        blocks.add(new Block(inputFileName + "_Trousers_Back_Block"));
         Block backBlock = blocks.get(blocks.size() - 1);
 
         // Add first keypoint (bottom left)

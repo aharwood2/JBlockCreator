@@ -60,7 +60,7 @@ public abstract class Pattern implements IPlottable
             {
                 e.printStackTrace();
             }
-            file.writeFile();
+            file.writeFile(blocks.get(i).getName());
         }
 
     }

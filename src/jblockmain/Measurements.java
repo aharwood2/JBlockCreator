@@ -7,11 +7,15 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.HashMap;
 
+// TODO: Complete javadoc
+
 /** Class to hold the measurements used by the block packages.
  * For now this essentially encapsulates the sizestream scan data file. */
 public class Measurements
 {
-    
+    // Name of the input file
+    private String scanDataFileName;
+
     // Nested structure
     public class Store
     {
@@ -33,6 +37,12 @@ public class Measurements
     // Mapper to map measurement ID to value store
     private HashMap<Integer, Store> storeMap;
 
+    // Getter for name of file
+    public String getName()
+    {
+        return scanDataFileName.substring(0, scanDataFileName.length() - 4);
+    }
+
     // Getter for measurements
     public Store getId(int id) throws MeasurementNotFoundException
     {
@@ -48,13 +58,16 @@ public class Measurements
     // Constructor
     public Measurements(String scanDataFileName)
     {
+        // Assign name
+        this.scanDataFileName = scanDataFileName;
+
         // Initialise HashMap
         storeMap = new HashMap<>();
 
         try
         {
             // Open file and get an input stream
-            FileReader file = new FileReader(scanDataFileName);
+            FileReader file = new FileReader("./input/" + scanDataFileName);
             BufferedReader fileStream = new BufferedReader(file);
 
             assignMeasurements(fileStream);
