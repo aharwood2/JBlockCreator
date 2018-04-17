@@ -158,14 +158,14 @@ public class VectorND
         return tmp;
     }
 
-    /**
-     * Gets the direction vector given a start and end point
-     * @param fromPoint point from which direction vector points
-     * @param toPoint point to which direction vector points
-     * @return direction vector
-     */
-    public static VectorND getDirectionVector(VectorND fromPoint, VectorND toPoint)
+    public int size()
     {
-        return new VectorND(toPoint.subtract(fromPoint));
+        return size;
+    }
+
+    public double get(int i) throws IndexOutOfBoundsException
+    {
+        if (i >= size) throw new IndexOutOfBoundsException();
+        else return val[i];
     }
 }

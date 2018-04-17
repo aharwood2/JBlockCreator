@@ -108,36 +108,129 @@ public class BodicePattern
         Vector2D refTopLeft = new Vector2D(0.0,
                                            (a_Bust / 2.0) + Arb_BackWaistDartSuppression);      // Top left (nape and CF)
 
-        // Add keypoints for start and end of the front neck curve
+        // 1. Add keypoints for start and end of the front neck curve
         mainBlock.addKeypoint(new Vector2D(Arb_HalfFrontNeckWidth, refTopLeft.getY()));
         mainBlock.addKeypoint(new Vector2D(0.0, refTopLeft.getY() - Arb_FrontNeckDepth));
 
-        // Add the front shoulder line end point
-        double frontShoulderLineX = Arb_FrontShoulderLine * Math.sin(Math.PI * Arb_ShoulderSlant / 180.0);
-        double frontShoulderLineY = Arb_FrontShoulderLine * Math.cos(Math.PI * Arb_ShoulderSlant / 180.0);
+        // 2. Add the front shoulder line end point
+        double frontShoulderLineX = Block.triangleGetOppositeFromAngle(Arb_FrontShoulderLine, Arb_ShoulderSlant);
+        double frontShoulderLineY = Block.triangleGetAdjacentFromAngle(Arb_FrontShoulderLine, Arb_ShoulderSlant);
         mainBlock.addKeypoint(new Vector2D(frontShoulderLineX,
                                            refTopLeft.getY() - Arb_FrontNeckDepth - frontShoulderLineY)
         );
 
-        // Add keypoint for the back should line start point
-        double backShoulderLineY = Block.triangleGetAdjacentSide(Arb_BackShoulderLevel, Arb_BackShoulderLine);
+        // 3. Add keypoint for the back shoulder line start point
+        double backShoulderLineY = Block.triangleGetAdjacentFromSide(Arb_BackShoulderLevel + Arb_BackNeckRise, Arb_BackShoulderLine);
         mainBlock.addKeypoint(new Vector2D(Arb_BackShoulderLevel, Arb_HalfBackNeckWidth + backShoulderLineY));
 
-        // Add keypoints for back neck rise
+        // 4. Add keypoints for back neck rise
         mainBlock.addKeypoint(new Vector2D(-Arb_BackNeckRise, Arb_HalfBackNeckWidth));
         mainBlock.addKeypoint(refBottomLeft);
 
         // Compute the bust point (BP)
         double BPTriangleY = (l_WidthBustProm / 2.0) - Arb_FrontNeckDepth;
-        double BPTriangleX = Block.triangleGetAdjacentSide(BPTriangleY, g_FrNeckToBust);
+        double BPTriangleX = Block.triangleGetAdjacentFromSide(BPTriangleY, g_FrNeckToBust);
         Vector2D refBustPoint = new Vector2D(BPTriangleX, refTopLeft.getY() - (l_WidthBustProm / 2.0));
 
-        // Add the bottom right point (waist and CB)
+        // 5. Add the bottom right point (waist and CB)
         mainBlock.addKeypoint(refBottomRight);
 
-        // Compute the new top left point
+        // 6. Compute the new top left point (knowing that measurement h is made up of two parts)
         mainBlock.addKeypoint(new Vector2D(refBustPoint.getX() + (h_FrNeckToWaist - g_FrNeckToBust), refTopRight.getY()));
 
+        // 7. Add front neck curve
+        mainBlock.addDirectedCurveWithApexTangent(new Vector2D(Arb_HalfFrontNeckWidth, refTopLeft.getY()),
+                                                  new Vector2D(0.0, refTopLeft.getY() - Arb_FrontNeckDepth),
+                                                  new Vector2D(Arb_HalfFrontNeckWidth, refTopLeft.getY() - Arb_FrontNeckDepth),
+                                                  2.0,
+                                                  new double[] {90.0, 90.0},
+                                                  new int[] {-1, 1});
+
+        // 8. Add back neck curve
+        mainBlock.addDirectedCurveWithApexTangent(new Vector2D(-Arb_BackNeckRise, Arb_HalfBackNeckWidth),
+                                                  refBottomLeft,
+                                                  new Vector2D(0.0, Arb_HalfBackNeckWidth),
+                                                  1.75,
+                                                  new double[] {90.0, 90.0},
+                                                  new int[] {-1, -1});
+
+        // 9. Add front shoulder dart
+        mainBlock.addDart(new Vector2D(0.0, refTopLeft.getY() - Arb_FrontNeckDepth),
+                          new Vector2D(frontShoulderLineX, refTopLeft.getY() - Arb_FrontNeckDepth - frontShoulderLineY),
+                          0.5,
+                          Arb_FrontShoulderDartWidth,
+                          refBustPoint);
+
+        // 10. Add back shoulder dart computing the apex point manually
+        // Use similar triangles with the backShoulderTriangle constructed earlier
+        Vector2D midCBArmHolePoint = new Vector2D(f_ArmholeDepth, Arb_BackShoulderDartPositionOnArmholeLevel);
+        double midBackShoulderLineTriangleY = backShoulderLineY / 2.0;
+        double midBackShoulderLineTriangleX = (Arb_BackShoulderLevel + Arb_BackNeckRise) / 2.0;
+        Vector2D midBackShoulderLine =
+                new Vector2D(midBackShoulderLineTriangleX - Arb_BackNeckRise,
+                             midBackShoulderLineTriangleY + Arb_HalfBackNeckWidth);
+        Vector2D dirDart = new Vector2D(midCBArmHolePoint.subtract(midBackShoulderLine));
+        Vector2D dartApex = new Vector2D(
+                midBackShoulderLine.add(
+                        dirDart.multiply(Arb_BackShoulderDartLength / dirDart.norm())
+                )
+        );
+        mainBlock.addDart(new Vector2D(Arb_BackShoulderLevel, Arb_HalfBackNeckWidth + backShoulderLineY),
+                          new Vector2D(-Arb_BackNeckRise, Arb_HalfBackNeckWidth),
+                          0.5,
+                          Arb_BackShoulderDartWidth,
+                          dartApex);
+
+
+        // 11. Add armhole as four separate curves
+
+        // Get touching point at back (use across back measurement)
+        Vector2D touchBack = new Vector2D(Arb_AcrossBackLevel, i_AcrossBack / 2.0);
+
+        // Get touching point at front first from touchBack
+        Vector2D touchFront = new Vector2D(touchBack.add(new Vector2D(0.0, m_WidthArmhole)));
+
+
+        // TODO: Add the curves
+
+        // Get start point for first curve
+        Vector2D startPt = new Vector2D(frontShoulderLineX,
+                                        refTopLeft.getY() - Arb_FrontNeckDepth - frontShoulderLineY);
+        Vector2D preStartPt = new Vector2D(0.0, refTopLeft.getY() - Arb_FrontNeckDepth);
+
+        // Compute end point for first curve
+        Vector2D endPt = new Vector2D((2.0 / 3.0) * (f_ArmholeDepth - frontShoulderLineX),
+                                      touchFront.getY());
+
+        // Add first curve plus its end point as a keypoint
+        // TODO: Debug and finish this
+        Vector2D adjPoint = mainBlock.addDirectedCurve(startPt,
+                                             endPt,
+                                             new Vector2D(startPt.subtract(preStartPt)),
+                                             new Vector2D(1.0, 0.0),
+                                             new double[] {90.0, 0.0});
+        mainBlock.addKeypointNextTo(endPt,
+                                    adjPoint,
+                                    EPosition.AFTER);
+
+        // Get end point for second curve
+        startPt = endPt;
+        endPt = new Vector2D(f_ArmholeDepth, Arb_SideSeamFromCentreBack);
+
+        /*mainBlock.addDirectedCurveWithApexTangent(startPt,
+                                                  endPt,
+                                                  new Vector2D(f_ArmholeDepth, touchFront.getY()),
+                                                  2.5,
+                                                  new double[] {0.0, 0.0},
+                                                  new int[] {-1, -1});*/
+
+
+        /* Vector2D startPt = new Vector2D(Arb_BackShoulderLevel, Arb_HalfBackNeckWidth + backShoulderLineY);
+        mainBlock.addDirectedCurve(startPt,
+                                   touchBack,
+                                   new Vector2D(-Arb_BackNeckRise - startPt.getX(), Arb_HalfBackNeckWidth - startPt.getY()),
+                                   new Vector2D(1.0, 0.0),
+                                   new double[] {90.0, 0.0}); */
 
 
     }

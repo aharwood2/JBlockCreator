@@ -7,6 +7,8 @@ import mathcontainers.VectorND;
 
 import java.util.ArrayList;
 
+import static jblockmain.Main.tol;
+
 /**
  * Class that represents a block as a series of connected keypoints.
  * When plotted in order, these keypoints will trace out the block which can then be cut from fabric.
@@ -64,8 +66,8 @@ public class Block
         int i = 0;
         while (i < keypointsX.size())
         {
-            if (Math.abs(keypointsX.get(i) - xy.getX()) < Main.tol &&
-                    Math.abs(keypointsY.get(i) - xy.getY()) < Main.tol)
+            if (Math.abs(keypointsX.get(i) - xy.getX()) < tol &&
+                    Math.abs(keypointsY.get(i) - xy.getY()) < tol)
             {
                 // Point found
                 break;
@@ -178,8 +180,8 @@ public class Block
      * for connectivity to be correct for plotting.
      * @param lineStart     position of start of segment
      * @param lineEnd       position of end of segment
-     * @param position      position of dart centre
-     * @param width         width of dart at base.
+     * @param position      position of dart centre in dimensionless units along edge
+     * @param width         width of dart at base
      * @param length        depth of dart assuming it is symmetrical
      * @param dirNorm       flag indicating the direction of the dart (left or right)
      * @return              list of points of the dart edges
@@ -188,7 +190,7 @@ public class Block
                                      double width, double length, boolean dirNorm)
     {
         // Find the equation of the line to find normal
-        Vector2D direction = new Vector2D(VectorND.getDirectionVector(lineStart, lineEnd));
+        Vector2D direction = new Vector2D(lineEnd.subtract(lineStart));
         Vector2D normal = new Vector2D(direction.getY(), -direction.getX());
         if (dirNorm) normal.multiplyBy(-1.0);
 
@@ -221,7 +223,7 @@ public class Block
      * for connectivity to be correct for plotting.
      * @param lineStart     position of start of segment
      * @param lineEnd       position of end of segment
-     * @param position      position of dart centre
+     * @param position      position of dart centre in dimensionless units along edge
      * @param width         width of dart at base.
      * @param apex          position of the dart apex
      * @return              list of points of the dart edges
@@ -333,17 +335,19 @@ public class Block
      * @param tangentCorner         squared out corner of the apex of the curve
      * @param tangentPointOffset    offset from the apex corner to the curve itself
      * @param anglesAtEnds          angles required at the start and end points of the curve
+     * @param offsetDirection       unit vector indicating quadrant of offset
+     * @return                      final point on the curve
      */
-    public void addDirectedCurveWithApexTangent(Vector2D startPoint, Vector2D endPoint,
+    public Vector2D addDirectedCurveWithApexTangent(Vector2D startPoint, Vector2D endPoint,
                                                 Vector2D tangentCorner, double tangentPointOffset,
-                                                double[] anglesAtEnds)
+                                                double[] anglesAtEnds, int[] offsetDirection)
     {
         // Specify the tangent point using corner and offset
         Vector2D tangentPoint = new Vector2D(
                 tangentCorner.subtract(
                         new Vector2D(
-                                tangentPointOffset * Math.cos(Math.PI / 4.0),
-                                tangentPointOffset * Math.sin(Math.PI / 4.0)
+                                tangentPointOffset * Math.cos(Math.PI / 4.0) * -offsetDirection[0],
+                                tangentPointOffset * Math.sin(Math.PI / 4.0) * -offsetDirection[1]
                         )
                 )
         );
@@ -354,10 +358,10 @@ public class Block
                           EPosition.AFTER);
 
         // Get direction of the bisect line (which will be normal to the curve)
-        Vector2D cornerToTangentLine = new Vector2D(tangentCorner.subtract(tangentPoint));
+        Vector2D apexToCorner = new Vector2D(tangentCorner.subtract(tangentPoint));
 
         // Get normal to this (which will be tangent to curve)
-        Vector2D tangentDirection = new Vector2D(cornerToTangentLine.getY(), -cornerToTangentLine.getX());
+        Vector2D tangentDirection = new Vector2D(apexToCorner.getY(), -apexToCorner.getX());
 
         // Now we can construct the first part of the curve
         addDirectedCurve(startPoint,
@@ -367,11 +371,11 @@ public class Block
         );
 
         // Construct the second part of the curve (intersect at end is 90 degrees)
-        addDirectedCurve(tangentPoint,
-                         endPoint,
-                         tangentDirection,
-                         getDirectionAtKeypoint(endPoint, EPosition.AFTER),
-                         new double[] {0.0, anglesAtEnds[1]}
+        return addDirectedCurve(tangentPoint,
+                                endPoint,
+                                tangentDirection,
+                                getDirectionAtKeypoint(endPoint, EPosition.AFTER),
+                                new double[] {0.0, anglesAtEnds[1]}
         );
     }
 
@@ -381,27 +385,30 @@ public class Block
      * @param startPoint    start position of curve
      * @param endPoint      end position of curve
      * @param angleAtEnds   desired angle at each end of the curve
+     * @return              final point on the curve
      */
-    public void addDirectedCurve(Vector2D startPoint, Vector2D endPoint, double[] angleAtEnds)
+    public Vector2D addDirectedCurve(Vector2D startPoint, Vector2D endPoint, double[] angleAtEnds)
     {
         // Get directions
         Vector2D dirStart = getDirectionAtKeypoint(startPoint, EPosition.BEFORE);
         Vector2D dirEnd = getDirectionAtKeypoint(endPoint, EPosition.AFTER);
 
         // Pass on arguments
-        addDirectedCurve(startPoint, endPoint, dirStart, dirEnd, angleAtEnds);
+        return addDirectedCurve(startPoint, endPoint, dirStart, dirEnd, angleAtEnds);
     }
 
     /**
      * Add a curve between the start and end points which meets each bounding line at the specified angles in degrees.
-     * Direction of both bounding lines must be given.
+     * Direction of both bounding lines must be given. Note that the start and end points are assumed to be already in
+     * the keypoints list and are not added by this method.
      * @param startPoint    start position of curve
      * @param endPoint      end position of curve
      * @param dirStart      direction of the start bounding line
      * @param dirEnd        direction of the end bounding line
      * @param angleAtEnds   desired angle at each end of the curve
+     * @return              final point on the curve
      */
-    public void addDirectedCurve(Vector2D startPoint, Vector2D endPoint,
+    public Vector2D addDirectedCurve(Vector2D startPoint, Vector2D endPoint,
                                  Vector2D dirStart, Vector2D dirEnd,
                                  double[] angleAtEnds)
     {
@@ -415,6 +422,13 @@ public class Block
 
         // Find rotation angle such that curve will start parallel to X axis:
         double rotang = Math.acos(dirStart.getY() / dirStart.norm()) - (Math.PI * (90.0 - angleAtEnds[0]) / 180.0);
+
+        // Check we have the correct rotation -- dirStart should map to X axis if correct i.e. Y = 0
+        double testY = Math.sin(rotang) * dirStart.getX() + Math.cos(rotang) * dirStart.getY();
+        if (Math.abs(testY) > tol) rotang = -rotang;
+        if (Math.abs(testY) > tol) rotang = -rotang;
+
+        // Could test again and then error if cannot distinguish?
 
         // Construct rotation matrix
         Matrix2D R = new Matrix2D(2, 2,
@@ -484,7 +498,20 @@ public class Block
 
         // Solve to get coefficients
         final Matrix2D inverse = mat.invert();
-        PolyCoeffs coeffs = new PolyCoeffs(inverse.postMultiply(constants));
+        VectorND coVec = new VectorND(inverse.postMultiply(constants));
+        PolyCoeffs coeffs = new PolyCoeffs(coVec);
+
+        // Check accuracy of solution
+        VectorND test = new VectorND(mat.postMultiply(coVec));
+        test.subtractThis(constants);
+        test.subtractThis(constants);
+        for (int i = 0; i < test.size(); i++)
+        {
+            if (Math.abs(test.get(i)) > tol)
+            {
+                System.out.println("Cubic spline solver is potentially inaccurate!");
+            }
+        }
 
         // Discretise by specified amount
         int numPts = (int)Math.ceil(refEnd.subtract(refStart).norm() * Main.res);
@@ -492,8 +519,8 @@ public class Block
         // Find points on the curve by seeding x
         // might not always be robust -- should use a local curvilinear coordinate system really.
         double spacing = (refEnd.getX() - refStart.getX()) / (numPts - 1);
-        Vector2D tmp;
-        Vector2D tmp2 = new Vector2D(startPoint);
+        Vector2D tmp = new Vector2D(startPoint);
+        Vector2D tmp2 = new Vector2D(tmp);
         for (int i = 1; i < numPts - 1; i++)
         {
             double x = refStart.getX() + spacing * i;
@@ -505,29 +532,33 @@ public class Block
             tmp2 = new Vector2D(tmp);
         }
 
+        // Return last point added
+        return tmp;
     }
 
     /**
      * Method to construct a curve which meets a specified line at the end points at 90 degrees.
      * @param startPoint    start position of curve
      * @param endPoint      end position of curve
+     * @return              final point on the curve
      */
-    public void addRightAngleCurve(Vector2D startPoint, Vector2D endPoint)
+    public Vector2D addRightAngleCurve(Vector2D startPoint, Vector2D endPoint)
 
     {
         double[] angles = new double[] {90.0, 90.0};
-        addDirectedCurve(startPoint, endPoint, angles);
+        return addDirectedCurve(startPoint, endPoint, angles);
     }
 
     /**
      * Method which constructs a curve which meets a specified line at the end points at 0 degrees (i.e. aligned)
      * @param startPoint    position of the start of the curve
      * @param endPoint      position of the end of the curve
+     * @return              final point on the curve
      */
-    public void addBlendedCurve(Vector2D startPoint, Vector2D endPoint)
+    public Vector2D addBlendedCurve(Vector2D startPoint, Vector2D endPoint)
     {
         double[] angles = new double[] {0.0, 0.0};
-        addDirectedCurve(startPoint, endPoint, angles);
+        return addDirectedCurve(startPoint, endPoint, angles);
     }
 
     /**
@@ -567,7 +598,7 @@ public class Block
      * @param side2 other adjacent side
      * @return hypotenuse
      */
-    public static double triangleGetHypotenuse(double side1, double side2)
+    public static double triangleGetHypotenuseFromSide(double side1, double side2)
     {
         return Math.sqrt(side1 * side1 + side2 * side2);
     }
@@ -578,9 +609,31 @@ public class Block
      * @param hypotenuse hypotenuse
      * @return other adjacent side
      */
-    public static double triangleGetAdjacentSide(double side1, double hypotenuse)
+    public static double triangleGetAdjacentFromSide(double side1, double hypotenuse)
     {
         return Math.sqrt(hypotenuse * hypotenuse - side1 * side1);
+    }
+
+    /**
+     * Get the opposite side of a right-angled triangle given the angle
+     * @param hypotenuse hypotenuse side
+     * @param angle internal angle
+     * @return opposite
+     */
+    public static double triangleGetOppositeFromAngle(double hypotenuse, double angle)
+    {
+        return hypotenuse * Math.sin(Math.PI * angle / 180.0);
+    }
+
+    /**
+     * Get the adjacent side of a right-angled triangle given the angle
+     * @param hypotenuse hypotenuse side
+     * @param angle internal angle
+     * @return adjacent
+     */
+    public static double triangleGetAdjacentFromAngle(double hypotenuse, double angle)
+    {
+        return hypotenuse * Math.cos(Math.PI * angle / 180.0);
     }
 
     /**
@@ -597,13 +650,19 @@ public class Block
 
             // Approximate direction using linear connection to the adjacent point in the list
             int j = i;
+            int adjMultiplier = 1;
             if (adjacency == EPosition.BEFORE) j--;
-            else j++;
+            else
+            {
+                j++;
+                adjMultiplier = -1;
+            }
 
             // Periodic connection
             if (j < 0) j  = keypointsX.size() - 1;
             else if (j == keypointsX.size()) j = 0;
             Vector2D directionVector = new Vector2D(keypointsX.get(i) - keypointsX.get(j), keypointsY.get(i) - keypointsY.get(j));
+            directionVector.multiplyBy(adjMultiplier);
 
             // Normalise and return
             directionVector.divideBy(directionVector.norm());

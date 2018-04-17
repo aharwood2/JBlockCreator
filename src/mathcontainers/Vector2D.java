@@ -12,7 +12,11 @@ public class Vector2D extends VectorND
 
     public Vector2D(VectorND otherVec)
     {
-        super(otherVec);
+        super(2, new double[2]);
+        int lim = otherVec.size;
+        if (lim > 2) lim = 2;
+        for (int i = 0; i < lim; i++) val[i] = otherVec.val[i];
+
     }
 
     public double getX()

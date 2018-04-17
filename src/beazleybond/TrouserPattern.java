@@ -190,7 +190,8 @@ public class TrouserPattern
                 new Vector2D(i_Crutch, 0.0),
                 new Vector2D(i_Crutch, Arb_CentreFrontFromInsideLeg),
                 Arb_FrontCrutchCurveBisect,
-                new double[] {0.0, 90.0}
+                new double[] {0.0, 90.0},
+                new int[] {-1, -1}
         );
 
 
@@ -250,7 +251,7 @@ public class TrouserPattern
 
         // Add keypoint at outside leg and waist
         double xOffset = 1.0;
-        double yOffset = Block.triangleGetAdjacentSide(xOffset, (a_Waist / 4.0) + Arb_BackDartSuppression);
+        double yOffset = Block.triangleGetAdjacentFromSide(xOffset, (a_Waist / 4.0) + Arb_BackDartSuppression);
         backBlock.addKeypoint(new Vector2D(0.0, Arb_CentreBackFromInsideLeg + 2.0 + yOffset));
 
         // Add waist darts
@@ -296,7 +297,8 @@ public class TrouserPattern
                 new Vector2D(i_Crutch + 1.0, 0.0),
                 new Vector2D(i_Crutch, Arb_CentreBackFromInsideLeg),
                 Arb_BackCrutchCurveBisect,
-                new double[] {0.0, 75.0}
+                new double[] {0.0, 75.0},
+                new int[] {-1, -1}
         );
     }
 
