@@ -218,6 +218,41 @@ public class Block
     }
 
     /**
+     * Method to add a dart given the two points at the base of the dart, its apex point and a point before or which to
+     * insert it. Dart points must be in the strict anti-clockwise order.
+     * @param baseStart     position of start of segment
+     * @param baseEnd       position of end of segment
+     * @param apex          position of the dart apex
+     * @param neighbourPt   keypoint next to which the dart should be added
+     * @param adjacency     whether to add dart before or after specified keypoint
+     * @return              list of points of the dart edges
+     */
+    public ArrayList<Vector2D> addDart(Vector2D baseStart, Vector2D baseEnd, Vector2D apex,
+                                       Vector2D neighbourPt, EPosition adjacency)
+    {
+
+        // Add the points
+        if (adjacency == EPosition.BEFORE)
+        {
+            addKeypointNextTo(baseStart, neighbourPt, EPosition.BEFORE);
+        }
+        else
+        {
+            addKeypointNextTo(baseStart, neighbourPt, EPosition.AFTER);
+        }
+        addKeypointNextTo(apex, baseStart, EPosition.AFTER);
+        addKeypointNextTo(baseEnd, apex, EPosition.AFTER);
+
+        // Build list to return
+        ArrayList<Vector2D> dartPoints = new ArrayList<Vector2D>();
+        dartPoints.add(baseStart);
+        dartPoints.add(apex);
+        dartPoints.add(baseEnd);
+
+        return dartPoints;
+    }
+
+    /**
      * Method to add a dart given the end points of the line segment on which to add the dart, position along the
      * segment and the apex of the dart. Start and end points must be specified in the strict anti-clockwise order
      * for connectivity to be correct for plotting.
@@ -328,10 +363,13 @@ public class Block
     }
 
     /**
-     * Method to add a curve which has specified start and end point gradients as well as an apex at which the curve
-     * must have a stationary point. Directions are approximated from adjacent keypoints and hence are not specified.
+     * Method to add a curve which has specified start and end point positions and gradients as well as an apex at which
+     * the curve must have a stationary point. Fully qualified version requires user to specify the current directions
+     * at the keypoints, otherwise the software will attempt to estimate these from neighbouring keypoints.
      * @param startPoint            start point of the curve
      * @param endPoint              end point of the curve
+     * @param dirStart              direction of the start bounding line
+     * @param dirEnd                direction of the end bounding line
      * @param tangentCorner         squared out corner of the apex of the curve
      * @param tangentPointOffset    offset from the apex corner to the curve itself
      * @param anglesAtEnds          angles required at the start and end points of the curve
@@ -339,8 +377,9 @@ public class Block
      * @return                      final point on the curve
      */
     public Vector2D addDirectedCurveWithApexTangent(Vector2D startPoint, Vector2D endPoint,
-                                                Vector2D tangentCorner, double tangentPointOffset,
-                                                double[] anglesAtEnds, int[] offsetDirection)
+                                                    Vector2D dirStart, Vector2D dirEnd,
+                                                    Vector2D tangentCorner, double tangentPointOffset,
+                                                    double[] anglesAtEnds, int[] offsetDirection)
     {
         // Specify the tangent point using corner and offset
         Vector2D tangentPoint = new Vector2D(
@@ -366,7 +405,7 @@ public class Block
         // Now we can construct the first part of the curve
         addDirectedCurve(startPoint,
                          tangentPoint,
-                         getDirectionAtKeypoint(startPoint, EPosition.BEFORE),
+                         dirStart,
                          tangentDirection, new double[] {anglesAtEnds[0], 0.0}
         );
 
@@ -374,9 +413,35 @@ public class Block
         return addDirectedCurve(tangentPoint,
                                 endPoint,
                                 tangentDirection,
-                                getDirectionAtKeypoint(endPoint, EPosition.AFTER),
+                                dirEnd,
                                 new double[] {0.0, anglesAtEnds[1]}
         );
+    }
+
+    /**
+     * Method to add a curve which has specified start and end point gradients as well as an apex at which the curve
+     * must have a stationary point. Directions are approximated from adjacent keypoints.
+     * @param startPoint            start point of the curve
+     * @param endPoint              end point of the curve
+     * @param tangentCorner         squared out corner of the apex of the curve
+     * @param tangentPointOffset    offset from the apex corner to the curve itself
+     * @param anglesAtEnds          angles required at the start and end points of the curve
+     * @param offsetDirection       unit vector indicating quadrant of offset
+     * @return                      final point on the curve
+     */
+    public Vector2D addDirectedCurveWithApexTangent(Vector2D startPoint, Vector2D endPoint,
+                                                Vector2D tangentCorner, double tangentPointOffset,
+                                                double[] anglesAtEnds, int[] offsetDirection)
+    {
+        // Get directions
+        Vector2D dirStart = getDirectionAtKeypoint(startPoint, EPosition.BEFORE);
+        Vector2D dirEnd = getDirectionAtKeypoint(endPoint, EPosition.AFTER);
+
+        // Pass to fully qualified version
+        return addDirectedCurveWithApexTangent(startPoint, endPoint,
+                                               dirStart, dirEnd,
+                                               tangentCorner, tangentPointOffset,
+                                               anglesAtEnds, offsetDirection);
     }
 
     /**
@@ -425,7 +490,6 @@ public class Block
 
         // Check we have the correct rotation -- dirStart should map to X axis if correct i.e. Y = 0
         double testY = Math.sin(rotang) * dirStart.getX() + Math.cos(rotang) * dirStart.getY();
-        if (Math.abs(testY) > tol) rotang = -rotang;
         if (Math.abs(testY) > tol) rotang = -rotang;
 
         // Could test again and then error if cannot distinguish?

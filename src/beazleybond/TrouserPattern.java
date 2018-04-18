@@ -79,7 +79,7 @@ public class TrouserPattern
         readMeasurements(dataStore);
         addEasement();
 
-        // Initialise dependent quantities
+        // Initialise dependent quantities (arbitrary measurements)
         Arb_FrontCrutchFork = (c_Hip / 20.0) + 0.5;
         Arb_BackCrutchFork = (c_Hip / 10.0) + 1.5;
         Arb_FrontWidthOfBlock = (c_Hip / 4.0) - 1.0 + Arb_FrontCrutchFork;

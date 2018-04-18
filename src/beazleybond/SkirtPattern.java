@@ -25,28 +25,28 @@ public class SkirtPattern
     // empirically driven values.
 
     // Ensures the waistline drops by 1cm to allow it to curve round the body. This can be informed from the body scan.
-    private double Arb_WaistLevel = 1.0;
+    private double Arb_WaistLevel;
 
     // Generic assumption that can in future be informed from the body scan.
-    private double Arb_UpperHipLevel = 10.0;
+    private double Arb_UpperHipLevel;
 
     // Generic assumption that can in future be informed from the body scan.
-    private double Arb_HipLevel = 20.0;
+    private double Arb_HipLevel;
 
     // Waist suppression process required calculation of a front and back dart by dividing up the circumference of the
     // waist. For now we assume a fixed percentage is assigned to each although this could be adjusted in future.
-    private double Arb_BackDartPercent = 0.35;
-    private double Arb_FrontDartPercent = 0.20;
-    private double Arb_SideSeamPercent = 0.45;
+    private double Arb_BackDartPercent;
+    private double Arb_FrontDartPercent;
+    private double Arb_SideSeamPercent;
 
     // Dart length is arbitrary but can be inferred from body scan data.
-    private double Arb_BackDartLength = 14.0;
-    private double Arb_FrontDartLength = 8.0;
+    private double Arb_BackDartLength;
+    private double Arb_FrontDartLength;
 
     // Dart placement is also arbitrary and is specified as a percentage of quarter waist as measured from the start
     // point of the waist (using strict connectivity order)
-    private double Arb_BackDartPlacement = 0.5;
-    private double Arb_FrontDartPlacement = 1.0 / 3.0;
+    private double Arb_BackDartPlacement;
+    private double Arb_FrontDartPlacement;
 
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -56,6 +56,20 @@ public class SkirtPattern
     {
         readMeasurements(dataStore);
         addEasement();
+
+        // Populate arbitrary measurements
+        Arb_WaistLevel = 1.0;
+        Arb_UpperHipLevel = 10.0;
+        Arb_HipLevel = 20.0;
+        Arb_BackDartPercent = 0.35;
+        Arb_FrontDartPercent = 0.20;
+        Arb_SideSeamPercent = 0.45;
+        Arb_BackDartLength = 14.0;
+        Arb_FrontDartLength = 8.0;
+        Arb_BackDartPlacement = 0.5;
+        Arb_FrontDartPlacement = 1.0 / 3.0;
+
+        // Create the blocks
         createBlocks();
     }
 
