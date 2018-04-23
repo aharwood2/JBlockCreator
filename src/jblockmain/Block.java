@@ -184,10 +184,11 @@ public class Block
      * @param width         width of dart at base
      * @param length        depth of dart assuming it is symmetrical
      * @param dirNorm       flag indicating the direction of the dart (left or right)
+     * @param straightSide  is side to which dart is to be added going to remain straight
      * @return              list of points of the dart edges
      */
     public ArrayList<Vector2D> addDart(Vector2D lineStart, Vector2D lineEnd, double position,
-                                     double width, double length, boolean dirNorm)
+                                     double width, double length, boolean dirNorm, boolean straightSide)
     {
         // Find the equation of the line to find normal
         Vector2D direction = new Vector2D(lineEnd.subtract(lineStart));
@@ -202,19 +203,12 @@ public class Block
         double side_length = lineEnd.subtract(lineStart).norm();
         Vector2D point = new Vector2D(lineStart.add(direction.multiply(position * side_length)));
 
-        // Add the keypoints associated with the darts
-        Vector2D pt1 = new Vector2D(point.subtract(direction.multiply(width / 2.0)));
-        Vector2D pt2 = new Vector2D(point.add(normal.multiply(length)));
-        Vector2D pt3 = new Vector2D(point.add(direction.multiply(width / 2.0)));
-        addKeypointNextTo(pt1, lineStart, EPosition.AFTER);
-        addKeypointNextTo(pt2, pt1, EPosition.AFTER);
-        addKeypointNextTo(pt3, pt2, EPosition.AFTER);
-
-        ArrayList<Vector2D> dartEdges = new ArrayList<Vector2D>();
-        dartEdges.add(pt1);
-        dartEdges.add(pt2);
-        dartEdges.add(pt3);
-        return dartEdges;
+        return addDart(new Vector2D(point.subtract(direction.multiply(width / 2.0))),
+                       new Vector2D(point.add(normal.multiply(length))),
+                       new Vector2D(point.add(direction.multiply(width / 2.0))),
+                       lineStart,
+                       EPosition.AFTER,
+                       straightSide);
     }
 
     /**
@@ -225,31 +219,19 @@ public class Block
      * @param apex          position of the dart apex
      * @param neighbourPt   keypoint next to which the dart should be added
      * @param adjacency     whether to add dart before or after specified keypoint
+     * @param straightSide  is side to which dart is to be added going to remain straight
      * @return              list of points of the dart edges
      */
     public ArrayList<Vector2D> addDart(Vector2D baseStart, Vector2D baseEnd, Vector2D apex,
-                                       Vector2D neighbourPt, EPosition adjacency)
+                                       Vector2D neighbourPt, EPosition adjacency, boolean straightSide)
     {
-
-        // Add the points
-        if (adjacency == EPosition.BEFORE)
-        {
-            addKeypointNextTo(baseStart, neighbourPt, EPosition.BEFORE);
-        }
-        else
-        {
-            addKeypointNextTo(baseStart, neighbourPt, EPosition.AFTER);
-        }
-        addKeypointNextTo(apex, baseStart, EPosition.AFTER);
-        addKeypointNextTo(baseEnd, apex, EPosition.AFTER);
-
-        // Build list to return
-        ArrayList<Vector2D> dartPoints = new ArrayList<Vector2D>();
-        dartPoints.add(baseStart);
-        dartPoints.add(apex);
-        dartPoints.add(baseEnd);
-
-        return dartPoints;
+        // Package and pass on
+        ArrayList<Vector2D> pointsOfDart = new ArrayList<>();
+        pointsOfDart.add(baseStart);
+        pointsOfDart.add(apex);
+        pointsOfDart.add(baseEnd);
+        addDartKeypoints(neighbourPt, pointsOfDart, adjacency, straightSide);
+        return pointsOfDart;
     }
 
     /**
@@ -261,10 +243,11 @@ public class Block
      * @param position      position of dart centre in dimensionless units along edge
      * @param width         width of dart at base.
      * @param apex          position of the dart apex
+     * @param straightSide  is side to which dart is to be added going to remain straight
      * @return              list of points of the dart edges
      */
     public ArrayList<Vector2D> addDart(Vector2D lineStart, Vector2D lineEnd, double position,
-                                       double width, Vector2D apex)
+                                       double width, Vector2D apex, boolean straightSide)
     {
         // Find the equation of the line
         Vector2D direction = new Vector2D(lineEnd.subtract(lineStart));
@@ -279,17 +262,60 @@ public class Block
         Vector2D point = new Vector2D(lineStart.add(direction.multiply(position * side_length)));
 
         // Add the keypoints associated with the darts
-        Vector2D pt1 = new Vector2D(point.subtract(direction.multiply(width / 2.0)));
-        Vector2D pt3 = new Vector2D(point.add(direction.multiply(width / 2.0)));
-        addKeypointNextTo(pt1, lineStart, EPosition.AFTER);
-        addKeypointNextTo(apex, pt1, EPosition.AFTER);
-        addKeypointNextTo(pt3, apex, EPosition.AFTER);
+        return addDart(new Vector2D(point.subtract(direction.multiply(width / 2.0))),
+                       apex,
+                       new Vector2D(point.add(direction.multiply(width / 2.0))),
+                       lineStart,
+                       EPosition.AFTER,
+                       straightSide);
+    }
 
-        ArrayList<Vector2D> dartEdges = new ArrayList<Vector2D>();
-        dartEdges.add(pt1);
-        dartEdges.add(apex);
-        dartEdges.add(pt3);
-        return dartEdges;
+    /**
+     * Adds given keypoints representing a dart to the keypoints list of the block.
+     * @param adjPoint      point next to which the dart should be added.
+     * @param points        the points to add (base, apex, base -- anticlockwise order)
+     * @param adjacency     whether dart is added before or after the adjacent point
+     * @param straightSide  is side to which dart is to be added going to remain straight
+     */
+    public void addDartKeypoints(Vector2D adjPoint,
+                                 ArrayList<Vector2D> points,
+                                 EPosition adjacency,
+                                 boolean straightSide)
+    {
+        // Adjust base keypoints for inserting on a straight side
+        if (straightSide)
+        {
+
+            // TODO: Implement this as follows:
+
+            // 1. Convert line start, line end, base end and apex to a reference system wrt apex
+
+            // 2. Rotate line end, base end reference points by apex angle to map dart edges together
+
+            // 3. Compute equation of dart edge and of rotated line end to line start points
+
+            // 4. Compute intersection between two lines to get the joining point
+
+            // 5. Joining point is the keypoint for line start dart edge
+
+            // 6. Rotate joining point back to get line end dart edge keypoint
+
+            // 7. Map back to global system by adding apex
+
+        }
+
+
+        // Insert the keypoints
+        if (adjacency == EPosition.AFTER)
+        {
+            addKeypointNextTo(points.get(0), adjPoint, EPosition.AFTER);
+        }
+        else
+        {
+            addKeypointNextTo(points.get(0), adjPoint, EPosition.BEFORE);
+        }
+        addKeypointNextTo(points.get(1), points.get(0), EPosition.AFTER);
+        addKeypointNextTo(points.get(2), points.get(1), EPosition.AFTER);
     }
 
     /**

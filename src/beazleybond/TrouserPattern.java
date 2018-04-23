@@ -204,7 +204,8 @@ public class TrouserPattern
                                                             endSegment,
                                                             positionTopDart,
                                                             Arb_FrontDartWidth,
-                                                            Arb_FrontDartLength, true);
+                                                            Arb_FrontDartLength,
+                                                            true, false);
 
         startSegment = dartPoints.get(2);
         double positionBottomDart = (startSegment.getY() - Arb_FrontCreaseLineFromInsideLeg) /
@@ -213,7 +214,8 @@ public class TrouserPattern
                            endSegment,
                            positionBottomDart,
                            Arb_FrontDartWidth,
-                           Arb_FrontDartLength, true);
+                           Arb_FrontDartLength,
+                           true, false);
 
 
         // Back block //
@@ -270,7 +272,8 @@ public class TrouserPattern
                                        endSegment,
                                        positionTopDart,
                                        Arb_BackDartWidth,
-                                       Arb_BackDartLengthShort, true);
+                                       Arb_BackDartLengthShort,
+                                       true, false);
 
         // Lower dart -- use same method to get position as previously
         startSegment = dartPoints.get(2);
@@ -282,7 +285,8 @@ public class TrouserPattern
                           endSegment,
                           positionBottomDart,
                           Arb_BackDartWidth,
-                          Arb_BackDartLengthLong, true);
+                          Arb_BackDartLengthLong,
+                          true, false);
 
         // Add inside leg curve -- again as we don't really have much information try a circular curve for now
         backBlock.addCircularCurve(new Vector2D(i_Crutch + 1.0, 0.0),

@@ -159,7 +159,7 @@ public class SkirtPattern
                                                           new Vector2D(Arb_WaistLevel, 0.0),
                                                           Arb_BackDartPlacement,
                                                           Arb_BackDartPercent * Int_WaistSupp,
-                                                          Arb_BackDartLength, true);
+                                                          Arb_BackDartLength, true, false);
 
         // Add curves either side of dart ensuring the curve intersects the joining edges at a right angle.
         backBlock.addRightAngleCurve(new Vector2D(0.0, Int_SuppressedSS), dartEdges.get(0));
@@ -171,7 +171,7 @@ public class SkirtPattern
                                        new Vector2D(Arb_WaistLevel, 0.0),
                                        Arb_FrontDartPlacement,
                                        Arb_FrontDartPercent * Int_WaistSupp,
-                                       Arb_FrontDartLength, true);
+                                       Arb_FrontDartLength, true, false);
 
         // Add curves
         frontBlock.addRightAngleCurve(new Vector2D(0.0, Int_SuppressedSS), dartEdges.get(0));
