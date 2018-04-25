@@ -288,19 +288,21 @@ public class Block
 
             // TODO: Implement this as follows:
 
-            // 1. Convert line start, line end, base end and apex to a reference system wrt apex
+            // 1a. Shift line start, line end, base start and base end and apex to a reference system wrt apex
 
-            // 2. Rotate line end, base end reference points by apex angle to map dart edges together
+            // 1b. Rotate to ensure the start edge of dart maps to the Y axis in the reference system
 
-            // 3. Compute equation of dart edge and of rotated line end to line start points
+            // 2. Rotate line end and base end reference points by apex angle to map dart edges together
 
-            // 4. Compute intersection between two lines to get the joining point
+            // 3. Compute equation of line between rotated base end and line start points
 
-            // 5. Joining point is the keypoint for line start dart edge
+            // 4. Compute intersections between this line and the lines of two (unrotated) dart edges
 
-            // 6. Rotate joining point back to get line end dart edge keypoint
+            // 5. Intersection points will be the keypoints (one is rotated)
 
-            // 7. Map back to global system by adding apex
+            // 6. Rotate base end keypoint back (re-opening the dart)
+
+            // 7. Map both keypoints back to global system and add them to block
 
         }
 
