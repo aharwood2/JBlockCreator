@@ -22,6 +22,26 @@ public class Matrix2D
         }
     }
 
+    /**
+     * Constructor assuming a 2 x 2 matrix
+     * @param a00   1st row, 1st column
+     * @param a01   1st row, 2nd column
+     * @param a10   2nd row, 1st column
+     * @param a11   2nd row, 2nd column
+     */
+    public Matrix2D(double a00, double a01, double a10, double a11)
+    {
+        numRows = 2;
+        numCols = 2;
+
+        // Set data
+        val = new double[numRows][numCols];
+        val[0][0] = a00;
+        val[0][1] = a01;
+        val[1][0] = a10;
+        val[1][1] = a11;
+    }
+
     public void transpose()
     {
         double[][] tmp = new double[numRows][numCols];

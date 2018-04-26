@@ -314,7 +314,7 @@ public class BodicePattern
         Vector2D refPt = new Vector2D(refBustPoint.getX() + (h_FrNeckToWaist - g_FrNeckToBust), refTopRight.getY());
 
         // 12. Add front waist dart
-        ArrayList<Vector2D> dartPts1 = mainBlock.addDart(startPt, endPt, apex, refPt, EPosition.BEFORE, false);
+        ArrayList<Vector2D> dartPts1 = mainBlock.addDart(startPt, endPt, apex, refPt, EPosition.BEFORE);
 
         // Update values to add the side seam dart
         startPt = new Vector2D(refBottomRight.getX() + Arb_SideWaistLevel,
@@ -326,7 +326,7 @@ public class BodicePattern
         apex = new Vector2D(f_ArmholeDepth + Main.tol, Arb_SideSeamFromCentreBack);
 
         // 13. Add side seam dart
-        ArrayList<Vector2D> dartPts2 = mainBlock.addDart(startPt, endPt, apex, dartPts1.get(0),EPosition.BEFORE, false);
+        ArrayList<Vector2D> dartPts2 = mainBlock.addDart(startPt, endPt, apex, dartPts1.get(0),EPosition.BEFORE);
 
         // Update values for back waist dart
         startPt = new Vector2D(refBottomRight.getX() + Arb_SideWaistLevel,
@@ -336,7 +336,7 @@ public class BodicePattern
         apex = midCBArmHolePoint;
 
         // 14. Add back waist dart
-        ArrayList<Vector2D> dartPts3 = mainBlock.addDart(startPt, endPt, apex, dartPts2.get(0),EPosition.BEFORE, false);
+        ArrayList<Vector2D> dartPts3 = mainBlock.addDart(startPt, endPt, apex, dartPts2.get(0),EPosition.BEFORE);
 
 
         // Compute the touch point (arbitrarily chosen as the mid point as we cannot enforce curve length yet)

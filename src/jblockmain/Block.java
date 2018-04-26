@@ -192,78 +192,67 @@ public class Block
         Vector2D baseEnd = points.get(2);
 
         // Translation of dart points to the origin wrt apex
+        Vector2D baseStartShifted = new Vector2D(baseStart.subtract(apex));
+        Vector2D baseEndShifted = new Vector2D(baseEnd.subtract(apex));
+        Vector2D lineStartShifted = new Vector2D(lineStart.subtract(apex));
+        Vector2D lineEndShifted = new Vector2D(lineEnd.subtract(apex));
 
-        Vector2D baseStartd = Vector2D(baseStart.subtract(apex));
-        Vector2D baseEndd = Vector2D(baseEnd.subtract(apex));
-        Vector2D apexd = Vector2D(apex.subtract(apex));
-        Vector2D lineStartd = Vector2D(lineStart.subtract(apex));
-        Vector2D lineEndd = Vector2D(lineEnd.subtract(apex));
+        // Calculation to find the angle between start edge of the dart and the y-axis
+        double theta = getAngleToPositiveYAxis(baseStartShifted);
 
-        // Calculation to find the angle between baseStartd and the y-axis
-
-        new double theta = Math.atan(baseStartd.getY().divide(baseStartd.getX()));
-
-        // Generation of a rotation vector and an inverse for later
-
-        Vector2D RV = Math.cos(theta).subtract(Math.sin(theta)), Math.sin(theta).add(Math.cos(theta));
-        Vector2D IRV = Math.cos(-theta).subtract(Math.sin(-theta)), Math.sin(-theta).add(Math.cos(-theta));
+        // Generation of a rotation matrix and an inverse for later
+        Matrix2D R = new Matrix2D(Math.cos(theta), -Math.sin(theta), Math.sin(theta), Math.cos(theta));
+        Matrix2D IR = new Matrix2D(Math.cos(-theta), -Math.sin(-theta), Math.sin(-theta), Math.cos(-theta));
 
         // Rotation of dart points so that the start edge of the dart is on the y-axis
+        Vector2D baseEndRef = new Vector2D(R.postMultiply(baseEndShifted));
+        Vector2D lineStartRef = new Vector2D(R.postMultiply(lineStartShifted));
+        Vector2D lineEndRef = new Vector2D(R.postMultiply(lineEndShifted));
 
-        Vector2D baseStartdd = Vector2D(baseStartd.multiply(RV));
-        Vector2D baseEnddd = Vector2D(baseEndd.multiply(RV));
-        Vector2D apexdd = Vector2D(apexd.multiply(RV));
-        Vector2D lineStartdd = Vector2D(lineStartd.multiply(RV));
-        Vector2D lineEnddd = Vector2D(lineEndd.multiply(RV));
+        // Check the rotation works as expected
+        Vector2D baseStartRef = new Vector2D(R.postMultiply(baseStartShifted));
+        if (Math.abs(baseStartRef.getX() - 0.0) > tol) System.out.println("Dart reference rotation inaccurate!");
 
-        // Calculation to find the angle between the start and end dart edges, minus for the right direction
+        // Calculation to find the apex angle (angle we need to close the dart by)
+        double phi = getAngleToPositiveYAxis(baseEndRef);
 
-        new double phi = -Math.atan(baseEnddd.getY().divide(baseEnddd.getX()));
+        // Generation of a the dart closure rotation matrix and inverse
+        Matrix2D RApex = new Matrix2D(Math.cos(phi), -Math.sin(phi), Math.sin(phi), Math.cos(phi));
+        Matrix2D IRApex = new Matrix2D(Math.cos(-phi), -Math.sin(-phi), Math.sin(-phi), Math.cos(-phi));
 
-        // Generation of a rotation vector and inverse for later
+        // Rotation of lineEndRef to simulate dart closure
+        Vector2D lineEndRefClosed = new Vector2D(RApex.postMultiply(lineEndRef));
 
-        Vector2D RVD = Math.cos(phi).subtract(Math.sin(phi)), Math.sin(phi).add(Math.cos(phi));
-        Vector2D IRVD = Math.cos(-phi).subtract(Math.sin(-phi)), Math.sin(-phi).add(Math.cos(-phi));
+        // Check the rotation works as expected
+        Vector2D baseEndRefClosed = new Vector2D(RApex.postMultiply(baseEndRef));
+        if (Math.abs(baseEndRefClosed.getX() - 0.0) > tol) System.out.println("Dart closure rotation inaccurate!");
 
-        // Rotation of lineEnddd and baseEnddd to simulate dart closure
+        // Direction of line from start point to end point
+        Vector2D directionLineClosed = new Vector2D(lineEndRefClosed.subtract(lineStartRef));
 
-        Vector2D baseEndddd = Vector2D(baseEnddd.multiply(phi));
-        Vector2D lineEndddd = Vector2D(lineEnddd.multiply(phi));
+        // Use similar triangles to determine the intersection of this closed line on the Y-axis.
+        // This point represents where the dart base points are coincident when the dart is closed.
+        double dy = ((directionLineClosed.getY() / directionLineClosed.getX()) * lineStartRef.getX());
+        double mu = (Math.sqrt(lineStartRef.getX() * lineStartRef.getX() + dy * dy)) / directionLineClosed.norm();
+        Vector2D baseSharedRefClosed = new Vector2D(lineStartRef.add(new Vector2D(directionLineClosed.multiply(mu))));
 
-        // Direction vector representing the closed dart final edge
+        // Reversing the dart closure rotation and find the adjusted points
+        Vector2D baseEndRefAdjusted = new Vector2D(IRApex.postMultiply(baseSharedRefClosed));
+        Vector2D baseStartRefAdjusted = baseSharedRefClosed;
 
-        Vector2D directionddd = Vector2D(lineStartdd.subtract(lineEndddd));
+        // Now reverse rotation out of reference system
+        Vector2D baseEndShiftedAdjusted = new Vector2D(IR.postMultiply(baseEndRefAdjusted));
+        Vector2D baseStartShiftedAdjusted = new Vector2D(IR.postMultiply(baseStartRefAdjusted));
 
-        // Calculation to find where the the vector crosses the y-axis
+        // Finally reverse the translation
+        Vector2D baseEndAdjusted = new Vector2D(baseEndShiftedAdjusted.add(apex));
+        Vector2D baseStartAdjusted = new Vector2D(baseStartShiftedAdjusted.add(apex));
 
-        Vector2D zero = Vector2D(0.subtract(lineEndddd.getX());
-        Vector2D ratio = Vector2D(zero.divide(directionddd));
-        Vector2D distance = Vector2D(ratio.multiply(directionddd));
-        Vector2D intercept = Vector2D(lineEndddd.add(distance)));
-
-        // Reversing the second rotation
-
-        Vector2D interceptd = Vector2D(intercept.multiply(IRVD));
-        Vector2D lineEnddddd = Vector2D(lineEnddddd.multiply(IRVD));
-
-        // Reversing the first rotation
-
-        Vector2D interceptdd = Vector2D(intercept.multiply(RV));
-        Vector2D interceptddd = Vector2D(interceptd.multiply(RV));
-        Vector2D apexddd = Vector2D(apexdd.multiply(RV));
-        Vector2D lineStartddd = Vector2D(lineStartdd.multiply(RV));
-        Vector2D lineEnddddd = Vector2D(lineEndddd.multiply(RV));
-
-        // Reversing the translation
-
-        Vector2D interceptdddd = Vector2D(interceptdd.subtract(apex));
-        Vector2D interceptddddd = Vector2D(interceptddd.subtract(apex));
-        Vector2D apexdddd = Vector2D(apexdddd.subtract(apex));
-        Vector2D lineStartdddd = Vector2D(lineStartdddd.subtract(apex));
-        Vector2D lineEndddddd = Vector2D(lineEnddddd.subtract(apex));
-
-        // Add corrected dart points
-        ArrayList<Vector2D> correctedDartsPoints;
+        // Create array of corrected dart points
+        ArrayList<Vector2D> correctedDartsPoints = new ArrayList<>();
+        correctedDartsPoints.add(baseStartAdjusted);
+        correctedDartsPoints.add(apex);
+        correctedDartsPoints.add(baseEndAdjusted);
 
         return correctedDartsPoints;
 
@@ -600,11 +589,11 @@ public class Block
         // Find rotation angle such that curve will start parallel to X axis:
         double rotang = Math.acos(dirStart.getY() / dirStart.norm()) - (Math.PI * (90.0 - angleAtEnds[0]) / 180.0);
 
+        // TODO: Can we use the getAngleToYAxis for this? Or create a getAngleToXAxis version?
+
         // Check we have the correct rotation -- dirStart should map to X axis if correct i.e. Y = 0
         double testY = Math.sin(rotang) * dirStart.getX() + Math.cos(rotang) * dirStart.getY();
         if (Math.abs(testY) > tol) rotang = -rotang;
-
-        // Could test again and then error if cannot distinguish?
 
         // Construct rotation matrix
         Matrix2D R = new Matrix2D(2, 2,
@@ -679,7 +668,6 @@ public class Block
 
         // Check accuracy of solution
         VectorND test = new VectorND(mat.postMultiply(coVec));
-        test.subtractThis(constants);
         test.subtractThis(constants);
         for (int i = 0; i < test.size(); i++)
         {
@@ -818,7 +806,7 @@ public class Block
      * @param adjacency connecting point from which to infer direction.
      * @return  normalised direction vector.
      */
-    public Vector2D getDirectionAtKeypoint(Vector2D keypoint, EPosition adjacency)
+    private Vector2D getDirectionAtKeypoint(Vector2D keypoint, EPosition adjacency)
     {
         try
         {
@@ -851,5 +839,34 @@ public class Block
         }
 
         return new Vector2D(-1.0, -1.0);
+    }
+
+    /**
+     * Computes the rotation angle about the origin in the anti-clockwise sense in the standard X-Y plane between a
+     * position vector drawn between the origin and the point supplied and the positive Y axis.
+     * @param point point to be rotated.
+     * @return      rotation angle required to rotate point onto the positive Y axis.
+     */
+    private double getAngleToPositiveYAxis(Vector2D point)
+    {
+        double angle;
+
+        // Different base expression for Y quadrant
+        if (point.getY() < 0.0)
+        {
+            angle = (Math.PI / 2.0) + Math.atan(Math.abs(point.getY() / point.getX()));
+        }
+        else
+        {
+            angle = Math.atan(Math.abs(point.getX() / point.getY()));
+        }
+
+        // Change rotation direction based on X quadrant
+        if (point.getX() < 0.0)
+        {
+            angle *= -1.0;
+        }
+
+        return angle;
     }
 }
