@@ -15,27 +15,28 @@ public class Main
     // Entry point
     public static void main(String[] args)
     {
-        // Create a patterns
-        SkirtPattern bb_skirt = new SkirtPattern(new Measurements("A674FA46.txt"));
-        bb_skirt.writeToDXF("./output/");
-        bb_skirt = new SkirtPattern(new Measurements("A808FZ31.txt"));
-        bb_skirt.writeToDXF("./output/");
-        bb_skirt = new SkirtPattern(new Measurements("A809FA52.txt"));
-        bb_skirt.writeToDXF("./output/");
+        // System to test all inputs
+        String[] inputFiles = {
+                "Alva12",
+                "A003FA52",
+                "A676FR39",
+                "A674FA46",
+                "A808FZ31",
+                "A809FA52"
+        };
 
-        TrouserPattern bb_trouser = new TrouserPattern(new Measurements("A674FA46.txt"));
-        bb_trouser.writeToDXF("./output/");
-        bb_trouser = new TrouserPattern(new Measurements("A808FZ31.txt"));
-        bb_trouser.writeToDXF("./output/");
-        bb_trouser = new TrouserPattern(new Measurements("A809FA52.txt"));
-        bb_trouser.writeToDXF("./output/");
+        // Create patterns
+        for (String name : inputFiles)
+        {
+            SkirtPattern bb_skirt = new SkirtPattern(new Measurements(name + ".txt"));
+            bb_skirt.writeToDXF("./output/");
 
-        BodicePattern bb_bodice = new BodicePattern(new Measurements("A674FA46.txt"));
-        bb_bodice.writeToDXF("./output/");
-        bb_bodice = new BodicePattern(new Measurements("A808FZ31.txt"));
-        bb_bodice.writeToDXF("./output/");
-        bb_bodice = new BodicePattern(new Measurements("A809FA52.txt"));
-        bb_bodice.writeToDXF("./output/");
+            TrouserPattern bb_trouser = new TrouserPattern(new Measurements(name + ".txt"));
+            bb_trouser.writeToDXF("./output/");
+
+            BodicePattern bb_bodice = new BodicePattern(new Measurements(name + ".txt"));
+            bb_bodice.writeToDXF("./output/");
+        }
     }
 
 }
