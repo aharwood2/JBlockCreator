@@ -175,6 +175,101 @@ public class Block
     }
 
     /**
+     * Method to adjust the end points of the dart if applied to a straight line to ensure the edge is correct when the
+     * dart closes.
+     * @param points        The base start, apex and base end points of the dart before correction.
+     * @param lineStart     The position of the start of the edge on which to add the dart.
+     * @param lineEnd       The position of the end of the edge on which to add the dart.
+     * @return              A new array with corrected values.
+     */
+    private ArrayList<Vector2D> adjustDartPointsForStraightEdge(ArrayList<Vector2D> points,
+                                                                Vector2D lineStart,
+                                                                Vector2D lineEnd)
+    {
+        // Extract and name points from points vector
+        Vector2D baseStart = points.get(0);
+        Vector2D apex = points.get(1);
+        Vector2D baseEnd = points.get(2);
+
+        // Translation of dart points to the origin wrt apex
+
+        Vector2D baseStartd = Vector2D(baseStart.subtract(apex));
+        Vector2D baseEndd = Vector2D(baseEnd.subtract(apex));
+        Vector2D apexd = Vector2D(apex.subtract(apex));
+        Vector2D lineStartd = Vector2D(lineStart.subtract(apex));
+        Vector2D lineEndd = Vector2D(lineEnd.subtract(apex));
+
+        // Calculation to find the angle between baseStartd and the y-axis
+
+        new double theta = Math.atan(baseStartd.getY().divide(baseStartd.getX()));
+
+        // Generation of a rotation vector and an inverse for later
+
+        Vector2D RV = Math.cos(theta).subtract(Math.sin(theta)), Math.sin(theta).add(Math.cos(theta));
+        Vector2D IRV = Math.cos(-theta).subtract(Math.sin(-theta)), Math.sin(-theta).add(Math.cos(-theta));
+
+        // Rotation of dart points so that the start edge of the dart is on the y-axis
+
+        Vector2D baseStartdd = Vector2D(baseStartd.multiply(RV));
+        Vector2D baseEnddd = Vector2D(baseEndd.multiply(RV));
+        Vector2D apexdd = Vector2D(apexd.multiply(RV));
+        Vector2D lineStartdd = Vector2D(lineStartd.multiply(RV));
+        Vector2D lineEnddd = Vector2D(lineEndd.multiply(RV));
+
+        // Calculation to find the angle between the start and end dart edges, minus for the right direction
+
+        new double phi = -Math.atan(baseEnddd.getY().divide(baseEnddd.getX()));
+
+        // Generation of a rotation vector and inverse for later
+
+        Vector2D RVD = Math.cos(phi).subtract(Math.sin(phi)), Math.sin(phi).add(Math.cos(phi));
+        Vector2D IRVD = Math.cos(-phi).subtract(Math.sin(-phi)), Math.sin(-phi).add(Math.cos(-phi));
+
+        // Rotation of lineEnddd and baseEnddd to simulate dart closure
+
+        Vector2D baseEndddd = Vector2D(baseEnddd.multiply(phi));
+        Vector2D lineEndddd = Vector2D(lineEnddd.multiply(phi));
+
+        // Direction vector representing the closed dart final edge
+
+        Vector2D directionddd = Vector2D(lineStartdd.subtract(lineEndddd));
+
+        // Calculation to find where the the vector crosses the y-axis
+
+        Vector2D zero = Vector2D(0.subtract(lineEndddd.getX());
+        Vector2D ratio = Vector2D(zero.divide(directionddd));
+        Vector2D distance = Vector2D(ratio.multiply(directionddd));
+        Vector2D intercept = Vector2D(lineEndddd.add(distance)));
+
+        // Reversing the second rotation
+
+        Vector2D interceptd = Vector2D(intercept.multiply(IRVD));
+        Vector2D lineEnddddd = Vector2D(lineEnddddd.multiply(IRVD));
+
+        // Reversing the first rotation
+
+        Vector2D interceptdd = Vector2D(intercept.multiply(RV));
+        Vector2D interceptddd = Vector2D(interceptd.multiply(RV));
+        Vector2D apexddd = Vector2D(apexdd.multiply(RV));
+        Vector2D lineStartddd = Vector2D(lineStartdd.multiply(RV));
+        Vector2D lineEnddddd = Vector2D(lineEndddd.multiply(RV));
+
+        // Reversing the translation
+
+        Vector2D interceptdddd = Vector2D(interceptdd.subtract(apex));
+        Vector2D interceptddddd = Vector2D(interceptddd.subtract(apex));
+        Vector2D apexdddd = Vector2D(apexdddd.subtract(apex));
+        Vector2D lineStartdddd = Vector2D(lineStartdddd.subtract(apex));
+        Vector2D lineEndddddd = Vector2D(lineEnddddd.subtract(apex));
+
+        // Add corrected dart points
+        ArrayList<Vector2D> correctedDartsPoints;
+
+        return correctedDartsPoints;
+
+    }
+
+    /**
      * Method to add a dart given the end points of the line segment on which to add the dart, position along the
      * segment and the dimensions of the dart. Start and end points must be specified in the strict anti-clockwise order
      * for connectivity to be correct for plotting.
@@ -203,12 +298,20 @@ public class Block
         double side_length = lineEnd.subtract(lineStart).norm();
         Vector2D point = new Vector2D(lineStart.add(direction.multiply(position * side_length)));
 
-        return addDart(new Vector2D(point.subtract(direction.multiply(width / 2.0))),
-                       new Vector2D(point.add(normal.multiply(length))),
-                       new Vector2D(point.add(direction.multiply(width / 2.0))),
-                       lineStart,
-                       EPosition.AFTER,
-                       straightSide);
+        // Package points
+        ArrayList<Vector2D> pointsOfDart = new ArrayList<>();
+        pointsOfDart.add(new Vector2D(point.subtract(direction.multiply(width / 2.0))));
+        pointsOfDart.add(new Vector2D(point.add(normal.multiply(length))));
+        pointsOfDart.add(new Vector2D(point.add(direction.multiply(width / 2.0))));
+
+        // Correct points if necessary
+        if (straightSide) pointsOfDart = adjustDartPointsForStraightEdge(pointsOfDart, lineStart, lineEnd);
+
+        // Add keypoints
+        addDartKeypoints(lineStart, pointsOfDart, EPosition.AFTER);
+
+        // Return the corrected points
+        return pointsOfDart;
     }
 
     /**
@@ -219,18 +322,17 @@ public class Block
      * @param apex          position of the dart apex
      * @param neighbourPt   keypoint next to which the dart should be added
      * @param adjacency     whether to add dart before or after specified keypoint
-     * @param straightSide  is side to which dart is to be added going to remain straight
      * @return              list of points of the dart edges
      */
     public ArrayList<Vector2D> addDart(Vector2D baseStart, Vector2D baseEnd, Vector2D apex,
-                                       Vector2D neighbourPt, EPosition adjacency, boolean straightSide)
+                                       Vector2D neighbourPt, EPosition adjacency)
     {
         // Package and pass on
         ArrayList<Vector2D> pointsOfDart = new ArrayList<>();
         pointsOfDart.add(baseStart);
         pointsOfDart.add(apex);
         pointsOfDart.add(baseEnd);
-        addDartKeypoints(neighbourPt, pointsOfDart, adjacency, straightSide);
+        addDartKeypoints(neighbourPt, pointsOfDart, adjacency);
         return pointsOfDart;
     }
 
@@ -249,6 +351,8 @@ public class Block
     public ArrayList<Vector2D> addDart(Vector2D lineStart, Vector2D lineEnd, double position,
                                        double width, Vector2D apex, boolean straightSide)
     {
+        // TODO: Really need to generalise this and the version above as they share al lot of the same code
+
         // Find the equation of the line
         Vector2D direction = new Vector2D(lineEnd.subtract(lineStart));
         Vector2D normal = new Vector2D(-direction.getY(), direction.getX());
@@ -261,13 +365,20 @@ public class Block
         double side_length = lineEnd.subtract(lineStart).norm();
         Vector2D point = new Vector2D(lineStart.add(direction.multiply(position * side_length)));
 
-        // Add the keypoints associated with the darts
-        return addDart(new Vector2D(point.subtract(direction.multiply(width / 2.0))),
-                       apex,
-                       new Vector2D(point.add(direction.multiply(width / 2.0))),
-                       lineStart,
-                       EPosition.AFTER,
-                       straightSide);
+        // Package points
+        ArrayList<Vector2D> pointsOfDart = new ArrayList<>();
+        pointsOfDart.add(new Vector2D(point.subtract(direction.multiply(width / 2.0))));
+        pointsOfDart.add(apex);
+        pointsOfDart.add(new Vector2D(point.add(direction.multiply(width / 2.0))));
+
+        // Correct points if necessary
+        if (straightSide) pointsOfDart = adjustDartPointsForStraightEdge(pointsOfDart, lineStart, lineEnd);
+
+        // Add keypoints
+        addDartKeypoints(lineStart, pointsOfDart, EPosition.AFTER);
+
+        // Return the corrected points
+        return pointsOfDart;
     }
 
     /**
@@ -275,100 +386,11 @@ public class Block
      * @param adjPoint      point next to which the dart should be added.
      * @param points        the points to add (base, apex, base -- anticlockwise order)
      * @param adjacency     whether dart is added before or after the adjacent point
-     * @param straightSide  is side to which dart is to be added going to remain straight
      */
     public void addDartKeypoints(Vector2D adjPoint,
                                  ArrayList<Vector2D> points,
-                                 EPosition adjacency,
-                                 boolean straightSide)
+                                 EPosition adjacency)
     {
-        // Adjust base keypoints for inserting on a straight side
-        if (straightSide)
-        {
-
-            // Translation of dart points to the origin wrt apex
-
-            new Vector2d baseStartd = Vector2d(baseStart.subtract(apex));
-            new Vector2d baseEndd = Vector2d(baseEnd.subtract(apex));
-            new Vector2d apexd = Vector2d(apex.subtract(apex));
-            new Vector2d lineStartd = Vector2d(lineStart.subtract(apex));
-            new Vector2d lineEndd = Vector2d(lineEnd.subtract(apex));
-
-            // Calculation to find the angle between baseStartd and the y-axis
-
-            new double theta = Math.atan(baseStartd.getY().divide(baseStartd.getX()));
-
-            // Generation of a rotation vector and an inverse for later
-
-            new Vector2d RV = math.cos(theta).subtract(math.sin(theta)), math.sin(theta).add(math.cos(theta));
-            new Vector2d IRV = math.cos(-theta).subtract(math.sin(-theta)), math.sin(-theta).add(math.cos(-theta));
-
-            // Rotation of dart points so that the start edge of the dart is on the y-axis
-
-            new Vector2d baseStartdd = Vector2d(baseStartd.multiply(RV));
-            new Vector2d baseEnddd = Vector2d(baseEndd.multiply(RV));
-            new Vector2d apexdd = Vector2d(apexd.multiply(RV));
-            new Vector2d lineStartdd = Vector2d(lineStartd.multiply(RV));
-            new Vector2d lineEnddd = Vector2d(lineEndd.multiply(RV));
-
-            // Calculation to find the angle between the start and end dart edges, minus for the right direction
-
-            new double phi = -Math.atan(baseEnddd.getY().divide(baseEnddd.getX()));
-
-            // Generation of a rotation vector and inverse for later
-
-            new Vector2d RVD = math.cos(phi).subtract(math.sin(phi)), math.sin(phi).add(math.cos(phi));
-            new Vector2d IRVD = math.cos(-phi).subtract(math.sin(-phi)), math.sin(-phi).add(math.cos(-phi));
-
-            // Rotation of lineEnddd and baseEnddd to simulate dart closure
-
-            new Vector2d baseEndddd = Vector2d(baseEnddd.multiply(phi));
-            new Vector2d lineEndddd = Vector2d(lineEnddd.multiply(phi));
-
-            // Direction vector representing the closed dart final edge
-
-            new Vector2d directionddd = Vector2d(lineStartdd.subtract(lineEndddd));
-
-            // Calculation to find where the the vector crosses the y-axis
-
-            new Vector2d zero = Vector2d(0.subtract(lineEndddd.getX());
-            new Vector2d ratio = Vector2d(zero.divide(directionddd));
-            new Vector2d distance = Vector2d(ratio.multiply(directionddd));
-            new Vector2d intercept = Vector2d(lineEndddd.add(distance)));
-
-            // Reversing the second rotation
-
-            new Vector2d interceptd = Vector2d(intercept.multiply(IRVD));
-            new Vector2d lineEnddddd = Vector2d(lineEnddddd.multiply(IRVD));
-
-            // Reversing the first rotation
-
-            new Vector2d interceptdd = Vector2d(intercept.multiply(RV));
-            new Vector2d interceptddd = Vector2d(interceptd.multiply(RV));
-            new Vector2d apexddd = Vector2d(apexdd.multiply(RV));
-            new Vector2d lineStartddd = Vector2d(lineStartdd.multiply(RV));
-            new Vector2d lineEnddddd = Vector2d(lineEndddd.multiply(RV));
-
-            // Reversing the translation
-
-            new Vector2d interceptdddd = Vector2d(interceptdd.subtract(apex));
-            new Vector2d interceptddddd = Vector2d(interceptddd.subtract(apex));
-            new Vector2d apexdddd = Vector2d(apexdddd.subtract(apex));
-            new Vector2d lineStartdddd = Vector2d(lineStartdddd.subtract(apex));
-            new Vector2d lineEndddddd = Vector2d(lineEnddddd.subtract(apex));
-
-            // Adding keypoints
-
-            return addDart(lineStartdddd,
-                    interceptdddd,
-                    apexdddd,
-                    interceptddddd,
-                    lineEndddddd);
-        }
-
-        }
-
-
         // Insert the keypoints
         if (adjacency == EPosition.AFTER)
         {
