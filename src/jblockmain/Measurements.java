@@ -143,7 +143,9 @@ public class Measurements
                         storeMaps.get(mapNumber).put(Integer.valueOf(id), new Store(Integer.valueOf(id), name, Double.valueOf(val)));
                     }
                 }
-            } catch (IOException e) {
+            }
+            catch (IOException e)
+            {
                 e.printStackTrace();
             }
 
@@ -155,47 +157,48 @@ public class Measurements
                 // Disregard line one as unneeded and store the second line of the input file
                 // containing measurement id's and names
                 fileStream.readLine();
-                String CustomMeasurements = fileStream.readLine();
+                String allMeasurements = fileStream.readLine();
 
                 // Splits the list into a string array dividing on every tab
-                String[] DividedChunks = CustomMeasurements.split("\t");
+                String[] dividedChunks = allMeasurements.split("\t");
 
-                // Creates a variable corresponding to array length
-                int ArrayLength = DividedChunks.length;
+                // Creates a variable corresponding to array length (total number of measurements)
+                int arrayLength = dividedChunks.length;
 
-                // Adds all needed chunks to a new array
-                // TODO possibly make this bit automatic not manual?
-                String[] NeededChunks = Arrays.copyOfRange(DividedChunks, ArrayLength - 33, ArrayLength);
+                // Adds all needed chunks to a new array (i.e. the custom measurements only)
+                // TODO: possibly make this bit automatic not manual?
+                final int expectedNumCustomMeasurements = 33;
+                String[] neededChunks = Arrays.copyOfRange(dividedChunks, arrayLength - expectedNumCustomMeasurements, arrayLength);
 
                 // Creates a variable corresponding to final array length
-                final int FinalArrayLength = NeededChunks.length;
+                final int numCustomMeasurements = neededChunks.length;
 
-                // Creates two new arrays, one for the ID numbers and one for the ID names
-                String[] IDNumber = new String[FinalArrayLength];
-                String[] IDName = new String[FinalArrayLength];
+                // Creates two new arrays, one for the measurement ID numbers and one for the measurement names
+                String[] idNumber = new String[numCustomMeasurements];
+                String[] idName = new String[numCustomMeasurements];
 
                 // For loop separating the ID numbers
-                for (int i = 0; i < NeededChunks.length; ++i)
+                for (int i = 0; i < numCustomMeasurements; ++i)
                 {
                     // Takes the ID number part of the array and stores it in the IDNumber array
-                    IDNumber[i] = NeededChunks[i].substring(1, 4);
+                    idNumber[i] = neededChunks[i].substring(1, 4);
                 }
 
                 // For loop separating the ID names
-                for (int i = 0; i < NeededChunks.length; ++i)
+                for (int i = 0; i < numCustomMeasurements; ++i)
                 {
                     // Takes the ID name part of the array and stores it in the IDName array
-                    IDName[i] = NeededChunks[i].substring(6, NeededChunks[i].length());
+                    idName[i] = neededChunks[i].substring(6, neededChunks[i].length());
                 }
 
                 // Create a null string
-                String MeasurementValues = null;
+                String measurementValues = null;
 
                 // Start a counter for the number of users
                 int numUsers = 0;
 
                 // While loop for batch inputs
-                while((MeasurementValues = fileStream.readLine()) != null)
+                while((measurementValues = fileStream.readLine()) != null)
                 {
                     // Increment user counter
                     numUsers++;
@@ -209,34 +212,37 @@ public class Measurements
                     }
 
                     // Splits the list into a string array dividing on every tab
-                    String[] Numbers = MeasurementValues.split("\t");
+                    String[] numbers = measurementValues.split("\t");
 
                     // Creates a variable corresponding to the array length
-                    int DataArrayLength = Numbers.length;
+                    int valueArrayLength = numbers.length;
 
                     // Gets the first entry in the numbers array, containing user ID data
-                    String UserData = Numbers[0];
+                    String userData = numbers[0];
 
                     // Splits the user data into a string array dividing on every space
-                    String[] UserInfo = UserData.split(" ");
+                    String[] userInfo = userData.split(" ");
 
                     // Gets the first entry in the array corresponding to the unique User ID and puts it in the userNames array
-                    String UserID = UserInfo[0];
+                    String userID = userInfo[0];
                     userNames.add(UserID);
 
                     // Removes all values in the data array except the ones needed for pattern drafting
-                    String[] IDValues = Arrays.copyOfRange(Numbers, DataArrayLength - 33, DataArrayLength);
+                    String[] IDValues = Arrays.copyOfRange(Numbers, DataArrayLength - expectedNumCustomMeasurements, DataArrayLength);
 
-                    for (int i = 0; i < FinalArrayLength; ++i)
+                    for (int i = 0; i < numCustomMeasurements; ++i)
                     {
-                        storeMaps.get(mapNumber).put(Integer.valueOf(IDNumber[i]), new Store(Integer.valueOf(IDNumber[i]), IDName[i], Double.valueOf(IDValues[i])));
+                        storeMaps.get(mapNumber).put(
+                            Integer.valueOf(idNumber[i]), 
+                            new Store(Integer.valueOf(idNumber[i]), idName[i], Double.valueOf(idValues[i]))
+                        );
                     }
                 }
-        }
-        catch (IOException e)
-        {
-            e.printStackTrace();
-        }
+            }
+            catch (IOException e)
+            {
+                e.printStackTrace();
+            }
         }
     }
 }
