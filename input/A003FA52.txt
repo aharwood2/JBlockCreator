@@ -1,7 +1,7 @@
 #SizeStream Measurements
 #Stored on Monday, April 23, 2018 12:04:44
 #
-#
+
 #format - Measurement Valid (1 = valid), Measurement Name, Measurement
 #
 1  [001] Chest/Bust Circum Tape Measure: 93.45

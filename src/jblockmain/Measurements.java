@@ -50,12 +50,17 @@ public class Measurements
     // Mapper to map measurement ID to value store
     private ArrayList<String> userNames;
 
-    // Setter for the current mpa to use
+    // Setter for the current map to use
     public void setMapNumber(int num)
     {
-        mapNumber = num;
-
-        // TODO: Throw exception if not found
+        try
+        {
+            mapNumber = num;
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+        }
     }
 
     // Getter for name of file
@@ -81,6 +86,9 @@ public class Measurements
     {
         // Initialise HashMap
         storeMaps = new ArrayList<>();
+
+        // Initialise names list
+        userNames = new ArrayList<>();
     }
 
     public Measurements(String scanDataFileName, boolean isBatch)
@@ -113,14 +121,14 @@ public class Measurements
     // Method to inspect each line and assign a value to the variable named
     private void assignMeasurements(BufferedReader fileStream, boolean isTabbed)
     {
-        if(isTabbed)
+        if(!isTabbed)
         {
             try
             {
                 // Read first line
                 String line;
 
-                while ((line = fileStream.readLine()) != null && storeMaps.get(mapNumber).size() != 0)
+                while ((line = fileStream.readLine()) != null)
                 {
                     // Only process lines that start with a 1 and contain a []
                     if (line.charAt(0) == '1' && line.contains("[") && line.contains("]"))
@@ -160,7 +168,7 @@ public class Measurements
                 String[] NeededChunks = Arrays.copyOfRange(DividedChunks, ArrayLength - 33, ArrayLength);
 
                 // Creates a variable corresponding to final array length
-                int FinalArrayLength = NeededChunks.length;
+                final int FinalArrayLength = NeededChunks.length;
 
                 // Creates two new arrays, one for the ID numbers and one for the ID names
                 String[] IDNumber = new String[FinalArrayLength];
@@ -180,37 +188,55 @@ public class Measurements
                     IDName[i] = NeededChunks[i].substring(6, NeededChunks[i].length());
                 }
 
-                // TODO make this next bit a for loop for batch files
-                // Take the next line of the text file containing user ID and measurements
-                String MeasurementValues = fileStream.readLine();
+                // Create a null string
+                String MeasurementValues = null;
 
-                // Splits the list into a string array dividing on every tab
-                String[] Numbers = MeasurementValues.split("\t");
+                // Start a counter for the number of users
+                int numUsers = 0;
 
-                // Creates a variable corresponding to the array length
-                int DataArrayLength = Numbers.length;
-
-                // Gets the first entry in the numbers array, containing user ID data
-                String UserData = Numbers[0];
-
-                // Splits the user data into a string array dividing on every space
-                String[] UserInfo = UserData.split(" ");
-
-                // Gets the first entry in the array corresponding to the unique User ID
-                String UserID = UserInfo[0];
-
-                // Removes all values in the data array except the ones needed for pattern drafting
-                String[] IDValues = Arrays.copyOfRange(Numbers, DataArrayLength - 33, DataArrayLength);
-
-                for (int i = 0; i < FinalArrayLength; ++i)
+                // While loop for batch inputs
+                while((MeasurementValues = fileStream.readLine()) != null)
                 {
-                    storeMaps.get(mapNumber).put(Integer.valueOf(IDNumber[i]), new Store(Integer.valueOf(IDNumber[i]), IDName[i], Double.valueOf(IDValues[i])));
-                }
+                    // Increment user counter
+                    numUsers++;
 
-        } catch (IOException e)
-            {
-        e.printStackTrace();
-    }
+                    // Constructor creates first instance
+                    if (numUsers != 1)
+                    {
+                        // Prepare map
+                        mapNumber++;
+                        storeMaps.add(new HashMap<>());
+                    }
+
+                    // Splits the list into a string array dividing on every tab
+                    String[] Numbers = MeasurementValues.split("\t");
+
+                    // Creates a variable corresponding to the array length
+                    int DataArrayLength = Numbers.length;
+
+                    // Gets the first entry in the numbers array, containing user ID data
+                    String UserData = Numbers[0];
+
+                    // Splits the user data into a string array dividing on every space
+                    String[] UserInfo = UserData.split(" ");
+
+                    // Gets the first entry in the array corresponding to the unique User ID and puts it in the userNames array
+                    String UserID = UserInfo[0];
+                    userNames.add(UserID);
+
+                    // Removes all values in the data array except the ones needed for pattern drafting
+                    String[] IDValues = Arrays.copyOfRange(Numbers, DataArrayLength - 33, DataArrayLength);
+
+                    for (int i = 0; i < FinalArrayLength; ++i)
+                    {
+                        storeMaps.get(mapNumber).put(Integer.valueOf(IDNumber[i]), new Store(Integer.valueOf(IDNumber[i]), IDName[i], Double.valueOf(IDValues[i])));
+                    }
+                }
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+        }
         }
     }
 }

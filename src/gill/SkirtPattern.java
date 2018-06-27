@@ -100,7 +100,7 @@ public class SkirtPattern
         backBlock.addKeypoint(new Vector2D(k_WaistToKnee + Arb_HemLevelX, 0.0));
         backBlock.addKeypoint(new Vector2D(k_WaistToKnee + Arb_HemLevelX, g_BkHipArc/2 + Arb_HemLevelY/4));
         backBlock.addKeypoint(new Vector2D(k_WaistToKnee +Arb_HemLevelX, (g_BkHipArc/2 + Arb_HemLevelY/4) + (f_FrHipArc/2 + Arb_HemLevelY/4)));
-        backBlock.addKeypoint(new Vector2D(j_WaistToHip, (g_BkHipArc/2 +Arb_HemLevelY/4) + (f_FrHipArc/2 + Arb_HemLevelY/4));
+        backBlock.addKeypoint(new Vector2D(j_WaistToHip, (g_BkHipArc/2 +Arb_HemLevelY/4) + (f_FrHipArc/2 + Arb_HemLevelY/4)));
         backBlock.addKeypoint(new Vector2D(h_WaistToAbdomen, (g_BkHipArc/2 +Arb_HemLevelY/4) + (f_FrHipArc/2 + Arb_HemLevelY/4)));
         backBlock.addKeypoint(new Vector2D(0.0, (g_BkHipArc/2 +Arb_HemLevelY/4) + (f_FrHipArc/2 + Arb_HemLevelY/4)));
 
