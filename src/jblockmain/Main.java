@@ -15,26 +15,21 @@ public class Main
     // Entry point
     public static void main(String[] args)
     {
-        // System to test all inputs
-        String[] inputFiles = {
-                "Alva12",
-                "A003FA52",
-                "A676FR39",
-                "A674FA46",
-                "A808FZ31",
-                "A809FA52"
-        };
+
+        Measurements measurements = new Measurements("A003FA52.txt", false);
 
         // Create patterns
-        for (String name : inputFiles)
+        for (int i = 0; i < measurements.getNames().size(); i++)
         {
-            SkirtPattern bb_skirt = new SkirtPattern(new Measurements(name + ".txt"));
+            measurements.setMapNumber(i);
+
+            SkirtPattern bb_skirt = new SkirtPattern(measurements);
             bb_skirt.writeToDXF("./output/");
 
-            TrouserPattern bb_trouser = new TrouserPattern(new Measurements(name + ".txt"));
+            TrouserPattern bb_trouser = new TrouserPattern(measurements);
             bb_trouser.writeToDXF("./output/");
 
-            BodicePattern bb_bodice = new BodicePattern(new Measurements(name + ".txt"));
+            BodicePattern bb_bodice = new BodicePattern(measurements);
             bb_bodice.writeToDXF("./output/");
         }
     }
