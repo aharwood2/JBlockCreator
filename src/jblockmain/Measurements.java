@@ -102,6 +102,12 @@ public class Measurements
         storeMaps.add(new HashMap<>());
         mapNumber = 0;
 
+        // If not batch then store name in names list
+        if (!isBatch)
+        {
+            userNames.add(scanDataFileName);
+        }
+
         try
         {
             // Open file and get an input stream
@@ -131,7 +137,7 @@ public class Measurements
                 while ((line = fileStream.readLine()) != null)
                 {
                     // Only process lines that start with a 1 and contain a []
-                    if (line.charAt(0) == '1' && line.contains("[") && line.contains("]"))
+                    if (line.length() > 0 && line.charAt(0) == '1' && line.contains("[") && line.contains("]"))
                     {
                         // Split the line into the id, name and the value
                         int splitPoint = line.indexOf(":");
