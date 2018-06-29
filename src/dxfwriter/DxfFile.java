@@ -177,6 +177,12 @@ public class DxfFile
             writeDxfLine("62", "8");            // Colour number?
             writeDxfLine("6", "DASHED");        // Linetype name (as specified above?)
 
+            // Spec of layer 3
+            writeDxfLine("2", "3");             // Layer name
+            writeDxfLine("70", "64");
+            writeDxfLine("62", "9");            // Colour number?
+            writeDxfLine("6", "DASHED");        // Linetype name (as specified above?)
+
             // End table
             writeDxfLine("0", "ENDTAB");
 
@@ -206,8 +212,22 @@ public class DxfFile
             for (int i = 0; i < linesX.size() - 1; i++)
             {
                 writeDxfLine("0", "LINE");
-                writeDxfLine("8", "1");     // Layer on which to draw line (layer 1)
+                writeDxfLine("8", "Pattern");     // Layer on which to draw line (layer 1)
                 writeDxfLine("62", "255");  // Colour of line using index colour (255 = black)
+                writeDxfLine("10", Double.toString(linesX.get(i))); // X coordinate start
+                writeDxfLine("20", Double.toString(linesY.get(i))); // Y coordinate start
+                writeDxfLine("11", Double.toString(linesX.get(i + 1))); // X coordinate end
+                writeDxfLine("21", Double.toString(linesY.get(i + 1))); // Y coordinate end
+            }
+
+            // Marks the keypoints used as individual circles on a separate layer
+            for (int i = 0; i < linesX.size() - 1; i++)
+            {
+                writeDxfLine("0", "CIRCLE");
+                writeDxfLine("8", "Keypoints");     // Layer on which to draw (layer 3)
+                writeDxfLine("39", "0");    // Changes thickness of the points (as float???)
+                writeDxfLine("40", "0.25");
+                writeDxfLine("62", "60");  // Colour of points using index colour)
                 writeDxfLine("10", Double.toString(linesX.get(i))); // X coordinate start
                 writeDxfLine("20", Double.toString(linesY.get(i))); // Y coordinate start
                 writeDxfLine("11", Double.toString(linesX.get(i + 1))); // X coordinate end
@@ -222,7 +242,7 @@ public class DxfFile
                 int j = i + 1;
                 if (j > 3) j = 0;
                 writeDxfLine("0", "LINE");
-                writeDxfLine("8", "2");     // Layer on which to draw line (layer 1)
+                writeDxfLine("8", "Extras");     // Layer on which to draw line (layer 2)
                 writeDxfLine("62", "1");  // Colour of line using index colour (1 = red)
                 writeDxfLine("10", Double.toString(scaleSqX[i])); // X coordinate start
                 writeDxfLine("20", Double.toString(scaleSqY[i])); // Y coordinate start
@@ -232,7 +252,7 @@ public class DxfFile
 
             // Add text
             writeDxfLine("0", "TEXT");
-            writeDxfLine("8", "2");     // Layer
+            writeDxfLine("8", "Extras");     // Layer
             writeDxfLine("62", "140");  // Colour of line using index colour (100 = ?)
             writeDxfLine("39", "1.0");
             writeDxfLine("10", Float.toString(scaleSqX[2] + 1.0f));
