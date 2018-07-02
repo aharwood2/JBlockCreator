@@ -183,6 +183,12 @@ public class DxfFile
             writeDxfLine("62", "9");            // Colour number?
             writeDxfLine("6", "DASHED");        // Linetype name (as specified above?)
 
+            // Spec of layer 4
+            writeDxfLine("2", "4");             // Layer name
+            writeDxfLine("70", "64");
+            writeDxfLine("62", "9");            // Colour number?
+            writeDxfLine("6", "DASHED");        // Linetype name (as specified above?)
+
             // End table
             writeDxfLine("0", "ENDTAB");
 
@@ -225,9 +231,23 @@ public class DxfFile
             {
                 writeDxfLine("0", "CIRCLE");
                 writeDxfLine("8", "Keypoints");     // Layer on which to draw (layer 3)
-                writeDxfLine("39", "0");    // Changes thickness of the points (as float???)
                 writeDxfLine("40", "0.25");
                 writeDxfLine("62", "60");  // Colour of points using index colour)
+                writeDxfLine("10", Double.toString(linesX.get(i))); // X coordinate start
+                writeDxfLine("20", Double.toString(linesY.get(i))); // Y coordinate start
+                writeDxfLine("11", Double.toString(linesX.get(i + 1))); // X coordinate end
+                writeDxfLine("21", Double.toString(linesY.get(i + 1))); // Y coordinate end
+            }
+
+            // Add point coordinates one at a time
+            for (int i = 0; i < linesX.size() - 1; i++)
+            {
+                writeDxfLine("0", "TEXT");
+                writeDxfLine("8", "Coordinates");     // Layer on which to draw line (layer 4)
+                writeDxfLine("62", "256");  // Colour of line using index colour
+                writeDxfLine("1", "(" + String.format("%.2f", linesX.get(i)) + ", " + String.format("%.2f", linesY.get(i)) + ")");
+                writeDxfLine("40", "0.15"); // Text height (i.e size)
+                writeDxfLine("50", "45"); // Text rotation angle
                 writeDxfLine("10", Double.toString(linesX.get(i))); // X coordinate start
                 writeDxfLine("20", Double.toString(linesY.get(i))); // Y coordinate start
                 writeDxfLine("11", Double.toString(linesX.get(i + 1))); // X coordinate end
