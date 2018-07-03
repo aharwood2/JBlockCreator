@@ -16,7 +16,7 @@ public class Main
     public static void main(String[] args)
     {
 
-        Measurements measurements = new Measurements("A003FA52.txt", false);
+        Measurements measurements = new Measurements("Spreadsheet.txt", true);
 
         // Create patterns
         for (int i = 0; i < measurements.getNames().size(); i++)

@@ -48,6 +48,8 @@ public class SkirtPattern
     private double Arb_BackDartPlacement;
     private double Arb_FrontDartPlacement;
 
+    // Arb Measurement for construction lines
+    private double Arb_Con;
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     /* Methods */
@@ -68,6 +70,9 @@ public class SkirtPattern
         Arb_FrontDartLength = 8.0;
         Arb_BackDartPlacement = 0.5;
         Arb_FrontDartPlacement = 1.0 / 3.0;
+
+        // Arb Measurement for construction lines
+        Arb_Con = 2.0;
 
         // Create the blocks
         createBlocks();
@@ -133,7 +138,7 @@ public class SkirtPattern
 
         // Add point for waist line drop.
         backBlock.addKeypointNextTo(new Vector2D(Arb_WaistLevel, 0.0),
-                                    new Vector2D(d_CentreBack, 0), EPosition.BEFORE);
+                new Vector2D(d_CentreBack, 0), EPosition.BEFORE);
 
         // Add point for suppressed side seam at waist.
         // Can be computed using side seam percentage of total suppression required.
@@ -149,6 +154,15 @@ public class SkirtPattern
         // Assume for now, in the absence of vary form curve that this is a curve defined by a circle.
         backBlock.addCircularCurve(new Vector2D(Arb_HipLevel, c_Hip / 4.0),
                                    new Vector2D(0.0, Int_SuppressedSS), 0.5, true);
+
+
+        // Add construction keypoints for Upper Hip Level
+        backBlock.addConstructionPoint(new Vector2D((Arb_UpperHipLevel + Arb_WaistLevel), 0.0 - Arb_Con), "Upper Hip");
+        backBlock.addConstructionPoint(new Vector2D((Arb_UpperHipLevel + Arb_WaistLevel), c_Hip/4 + Arb_Con), "Upper Hip");
+
+        // Add construction keypoints for Hip Level
+        backBlock.addConstructionPoint(new Vector2D((Arb_HipLevel + Arb_WaistLevel), 0.0 - Arb_Con), "Hip");
+        backBlock.addConstructionPoint(new Vector2D((Arb_HipLevel + Arb_WaistLevel), c_Hip/4 + Arb_Con), "Hip");
 
         // Trace off block
         blocks.add(new Block(backBlock, inputFileName + "_Skirt_Front_Block"));

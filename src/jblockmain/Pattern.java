@@ -41,6 +41,26 @@ public abstract class Pattern implements IPlottable
     }
 
     @Override
+    public ArrayList<Double> getXCtPoints(int blockNumber) throws IndexOutOfBoundsException
+    {
+        if (blockNumber > blocks.size()) throw new IndexOutOfBoundsException("Accessing out of range of number of blocks!");
+        return blocks.get(blockNumber).getConstructionX();
+    }
+
+    @Override
+    public ArrayList<Double> getYCtPoints(int blockNumber) throws IndexOutOfBoundsException
+    {
+        if (blockNumber > blocks.size()) throw new IndexOutOfBoundsException("Accessing out of range of number of blocks!");
+        return blocks.get(blockNumber).getConstructionY();
+    }
+
+    public ArrayList<String> getNames(int blockNumber) throws IndexOutOfBoundsException
+    {
+        if (blockNumber > blocks.size()) throw new IndexOutOfBoundsException("Accessing out of range of number of blocks!");
+        return blocks.get(blockNumber).getConstructionNames();
+    }
+
+    @Override
     public int getNumberOfBlocksToPlot()
     {
         return blocks.size();
@@ -55,6 +75,7 @@ public abstract class Pattern implements IPlottable
             try
             {
                 file.addLines(getXPoints(i), getYPoints(i));
+                file.addConstructionPoints(getXCtPoints(i), getYCtPoints(i), getNames(i));
             }
             catch (IndexOutOfBoundsException e)
             {

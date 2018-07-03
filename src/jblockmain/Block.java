@@ -32,6 +32,20 @@ public class Block
     private ArrayList<Double> keypointsY;
 
     /**
+     * X positions of the construction points.
+     */
+    private ArrayList<Double> constructionX;
+
+    /**
+     * Y positions of the construction points.
+     */
+    private ArrayList<Double> constructionY;
+    /**
+     * Names of the construction points.
+     */
+    private ArrayList<String> constructionNames;
+
+    /**
      * Constructor.
      * @param newName   name of new block.
      */
@@ -39,6 +53,9 @@ public class Block
     {
         keypointsX = new ArrayList<Double>();
         keypointsY = new ArrayList<Double>();
+        constructionX = new ArrayList<Double>();
+        constructionY = new ArrayList<Double>();
+        constructionNames = new ArrayList<String>();
         this.name = newName;
     }
 
@@ -52,6 +69,10 @@ public class Block
         this(newName);
         this.keypointsX = new ArrayList<>(otherBlock.keypointsX);
         this.keypointsY = new ArrayList<>(otherBlock.keypointsY);
+        this.constructionX = new ArrayList<>(otherBlock.constructionX);
+        this.constructionY = new ArrayList<>(otherBlock.constructionY);
+        this.constructionNames = new ArrayList<>(otherBlock.constructionNames);
+
     }
 
     /**
@@ -93,6 +114,21 @@ public class Block
         keypointsX.add(xy.getX());
         keypointsY.add(xy.getY());
         return keypointsX.size() - 1;
+    }
+
+    /**
+     * Method to add a keypoint to the end of the list.
+     * @param xy    position of point
+     * @param name  name of point
+     * @return      keypoint number
+     */
+    public int addConstructionPoint(Vector2D xy, String name)
+    {
+        // Add to end of list
+        constructionX.add(xy.getX());
+        constructionY.add(xy.getY());
+        constructionNames.add(name);
+        return constructionX.size() - 1;
     }
 
     /**
@@ -747,6 +783,50 @@ public class Block
         return tmp;
     }
 
+    public ArrayList<Double> getConstructionX()
+    {
+        if (constructionX != null && constructionX.size() != 0)
+        {
+            ArrayList<Double> tmp = new ArrayList<>(constructionX);
+            tmp.add(constructionX.get(0));
+            return tmp;
+        }
+        else
+        {
+            ArrayList<Double> noX = new ArrayList<>();
+            return noX;
+        }
+    }
+
+    public ArrayList<Double> getConstructionY()
+    {
+        if (constructionY != null && constructionY.size() != 0)
+        {
+            ArrayList<Double> tmp = new ArrayList<>(constructionY);
+            tmp.add(constructionY.get(0));
+            return tmp;
+        }
+        else
+        {
+            ArrayList<Double> noY = new ArrayList<>();
+            return noY;
+        }
+    }
+
+    public ArrayList<String> getConstructionNames()
+    {
+        if (constructionNames != null && constructionNames.size() != 0)
+        {
+            ArrayList<String> tmp = new ArrayList<>(constructionNames);
+            tmp.add(constructionNames.get(0));
+            return tmp;
+        }
+        else
+        {
+            ArrayList<String> noNames= new ArrayList<>();
+            return noNames;
+        }
+    }
     /**
      * Getter for name of block
      * @return name of block

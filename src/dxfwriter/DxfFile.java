@@ -34,6 +34,13 @@ public class DxfFile
     private ArrayList<Double> linesX;
     private ArrayList<Double> linesY;
 
+    // Line coordinates
+    private ArrayList<Double> ConX;
+    private ArrayList<Double> ConY;
+
+    // Construction point names list
+    private ArrayList<String > names;
+
 
     /**
      * Constructor to open a DXF file.
@@ -73,6 +80,35 @@ public class DxfFile
         maxX = Collections.max(linesX);
         minY = Collections.min(linesY);
         maxY = Collections.max(linesY);
+    }
+
+    /**
+     * Method to take a list of coordinates for construction points and add them to the DXF file
+     * @param xPts coordinates of x
+     * @param yPts coordinates of y
+     * @param names names of the points
+     */
+    public void addConstructionPoints(ArrayList<Double> xPts, ArrayList<Double> yPts, ArrayList<String> names)
+    {
+        this.ConX = xPts;
+        this.ConY = yPts;
+        this.names = names;
+
+        if (ConX.size() == 0 && ConY.size() == 0 && names.size() == 0)
+        {
+            minX = 0;
+            maxX = 0;
+            minY = 0;
+            maxY = 0;
+        }
+        else
+        {
+            // Set the min and max
+            minX = Collections.min(ConX);
+            maxX = Collections.max(ConX);
+            minY = Collections.min(ConY);
+            maxY = Collections.max(ConY);
+        }
     }
 
     /**
@@ -166,25 +202,31 @@ public class DxfFile
             writeDxfLine("0", "LAYER");
 
             // Spec of layer 1
-            writeDxfLine("2", "1");             // Layer name
+            writeDxfLine("2", "Line");             // Layer name
             writeDxfLine("70", "64");
             writeDxfLine("62", "7");            // Colour number?
             writeDxfLine("6", "CONTINUOUS");    // Linetype name (as specified above?)
 
             // Spec of layer 2
-            writeDxfLine("2", "2");             // Layer name
+            writeDxfLine("2", "Extras");             // Layer name
             writeDxfLine("70", "64");
             writeDxfLine("62", "8");            // Colour number?
             writeDxfLine("6", "DASHED");        // Linetype name (as specified above?)
 
             // Spec of layer 3
-            writeDxfLine("2", "3");             // Layer name
+            writeDxfLine("2", "Keypoints");             // Layer name
             writeDxfLine("70", "64");
             writeDxfLine("62", "9");            // Colour number?
             writeDxfLine("6", "DASHED");        // Linetype name (as specified above?)
 
             // Spec of layer 4
-            writeDxfLine("2", "4");             // Layer name
+            writeDxfLine("2", "Coordinates");             // Layer name
+            writeDxfLine("70", "64");
+            writeDxfLine("62", "9");            // Colour number?
+            writeDxfLine("6", "DASHED");        // Linetype name (as specified above?)
+
+            // Spec of layer 5
+            writeDxfLine("2", "Construction Lines");             // Layer name
             writeDxfLine("70", "64");
             writeDxfLine("62", "9");            // Colour number?
             writeDxfLine("6", "DASHED");        // Linetype name (as specified above?)
@@ -224,6 +266,36 @@ public class DxfFile
                 writeDxfLine("20", Double.toString(linesY.get(i))); // Y coordinate start
                 writeDxfLine("11", Double.toString(linesX.get(i + 1))); // X coordinate end
                 writeDxfLine("21", Double.toString(linesY.get(i + 1))); // Y coordinate end
+            }
+
+            // Add construction line entities one at a time
+            for (int i = 0; i < ConX.size() - 1; i++)
+            {
+                writeDxfLine("0", "LINE");
+                writeDxfLine("8", "Construction Lines");     // Layer on which to draw line (layer 1)
+                writeDxfLine("62", "8");  // Colour of line using index colour (255 = black)
+                writeDxfLine("10", Double.toString(ConX.get(i))); // X coordinate start
+                writeDxfLine("20", Double.toString(ConY.get(i))); // Y coordinate start
+                writeDxfLine("11", Double.toString(ConX.get(i + 1))); // X coordinate end
+                writeDxfLine("21", Double.toString(ConY.get(i + 1))); // Y coordinate end
+                i++;
+            }
+
+            // Add construction point names one at a time
+            for (int i = 0; i < ConX.size() - 1; i++)
+            {
+                writeDxfLine("0", "TEXT");
+                writeDxfLine("8", "Construction Lines");     // Layer on which to draw line (layer 4)
+                writeDxfLine("62", "8");  // Colour of line using index colour
+                writeDxfLine("1", names.get(i));
+                writeDxfLine("40", "0.75"); // Text height (i.e size)
+                writeDxfLine("50", "0"); // Text rotation angle
+                writeDxfLine("72", "2");
+                writeDxfLine("73", "3");
+                writeDxfLine("10", Double.toString(ConX.get(i))); // X coordinate start
+                writeDxfLine("20", Double.toString(ConY.get(i))); // Y coordinate start
+                writeDxfLine("11", Double.toString(ConX.get(i))); // X coordinate end
+                writeDxfLine("21", Double.toString(ConY.get(i))); // Y coordinate end
             }
 
             // Marks the keypoints used as individual circles on a separate layer
