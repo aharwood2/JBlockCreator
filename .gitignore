@@ -1,3 +1,8 @@
+*.idea/
+output/
+*.iml
+out/production/
+
 target/
 pom.xml.tag
 pom.xml.releaseBackup
