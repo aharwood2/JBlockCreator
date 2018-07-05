@@ -68,8 +68,11 @@ public class TrouserPattern
     private double Arb_FrontHalfKneeWidth;
     private double Arb_BackHalfKneeWidth;
 
-
-
+    // Arb Measurement for construction lines
+    private double Arb_UpperHipLevel;
+    private double Arb_HipLevel;
+    private double Arb_CrutchLevel;
+    private double Arb_Knee;
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     /* Methods */
@@ -90,6 +93,12 @@ public class TrouserPattern
         Arb_BackCreaseLineFromInsideLeg = Arb_CentreBackFromInsideLeg + (c_Hip / 10.0) - 1.0;
         Arb_FrontHalfKneeWidth = (e_KneeStraight / 4.0) - 1.0;
         Arb_BackHalfKneeWidth = (e_KneeStraight / 4.0) + 1.0;
+
+        // Arb Measurement for construction lines
+        Arb_UpperHipLevel = 10.0;
+        Arb_HipLevel = 20.0;
+        Arb_CrutchLevel = 29.0;
+        Arb_Knee = 60.0;
 
         // Create the blocks
         createBlocks();
@@ -217,6 +226,25 @@ public class TrouserPattern
                            Arb_FrontDartLength,
                            true, false);
 
+        // Add construction keypoints for Upper Hip Level
+        frontBlock.addConstructionPoint(new Vector2D((Arb_UpperHipLevel), 0.0 - Arb_Con),
+                                        new Vector2D((Arb_UpperHipLevel), c_Hip/4 - 1.0 + Arb_FrontCrutchFork + Arb_Con),
+                                        "Upper Hip");
+
+        // Add construction keypoints for Hip Level
+        frontBlock.addConstructionPoint(new Vector2D((Arb_HipLevel), 0.0 - Arb_Con),
+                                        new Vector2D((Arb_HipLevel), c_Hip/4 - 1.0 + Arb_FrontCrutchFork + Arb_Con),
+                                        "Hip");
+
+        // Add construction keypoints for Crutch Level
+        frontBlock.addConstructionPoint(new Vector2D((Arb_CrutchLevel), 0.0 - Arb_Con),
+                                        new Vector2D((Arb_CrutchLevel), c_Hip/4 - 1.0 + Arb_FrontCrutchFork + Arb_Con),
+                                        "Crutch");
+
+        // Add construction keypoints for Knee Level
+        frontBlock.addConstructionPoint(new Vector2D((Arb_Knee), 0.0 - Arb_Con),
+                                        new Vector2D((Arb_Knee), c_Hip/4 - 1.0 + Arb_FrontCrutchFork + Arb_Con),
+                                        "Knee");
 
         // Back block //
 
@@ -304,6 +332,26 @@ public class TrouserPattern
                 new double[] {0.0, 75.0},
                 new int[] {-1, -1}
         );
+
+        // Add construction keypoints for Upper Hip Level
+        backBlock.addConstructionPoint(new Vector2D((Arb_UpperHipLevel), 0.0 - Arb_Con),
+                                       new Vector2D((Arb_UpperHipLevel), c_Hip/4 + 1.0 + Arb_BackCrutchFork + Arb_Con),
+                                       "Upper Hip");
+
+        // Add construction keypoints for Hip Level
+        backBlock.addConstructionPoint(new Vector2D((Arb_HipLevel), 0.0 - Arb_Con),
+                                       new Vector2D((Arb_HipLevel), c_Hip/4 + 1.0 + Arb_BackCrutchFork + Arb_Con),
+                                       "Hip");
+
+        // Add construction keypoints for Crutch Level
+        backBlock.addConstructionPoint(new Vector2D((Arb_CrutchLevel), 0.0 - Arb_Con),
+                                       new Vector2D((Arb_CrutchLevel), c_Hip/4 + 1.0 + Arb_BackCrutchFork + Arb_Con),
+                                       "Crutch");
+
+        // Add construction keypoints for Knee Level
+        backBlock.addConstructionPoint(new Vector2D((Arb_Knee), 0.0 - Arb_Con),
+                                       new Vector2D((Arb_Knee), c_Hip/4 + 1.0 + Arb_BackCrutchFork + Arb_Con),
+                                       "Knee");
     }
 
 }
