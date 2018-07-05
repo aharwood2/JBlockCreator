@@ -480,68 +480,25 @@ public class Block
         double radius = Math.sqrt(centrex * centrex + centrey * centrey - gam);
 
         // Discretise equation of circle using specified resolution and correct for quadrant
-        double th1;
-        double th2;
         double xOffsetStart = startPoint.getX() - centrex;
-        double xOffsetEnd = endPoint.getX() - centrex;
         double yOffsetStart = startPoint.getY() - centrey;
+        double th1 = Math.acos(xOffsetStart / radius);
+
+        double xOffsetEnd = endPoint.getX() - centrex;
         double yOffsetEnd = endPoint.getY() - centrey;
+        double th2 = Math.acos(xOffsetEnd / radius);
 
-        // Quadrant check for offset start
-
-        if (xOffsetStart > 0.0 && yOffsetStart > 0.0)
+        // Quadrant check to get offset correct
+        if ((xOffsetStart < 0.0 && yOffsetStart < 0.0) || (xOffsetStart > 0.0 && yOffsetStart < 0.0))
         {
-            // Quadrant 1
-            th1 = Math.acos(xOffsetStart / radius);
+            // Flip theta
+            th1 *= -1.0;
         }
-        else if (xOffsetStart < 0.0 && yOffsetStart > 0.0)
+        if ((xOffsetEnd < 0.0 && yOffsetEnd < 0.0) || (xOffsetEnd > 0.0 && yOffsetEnd < 0.0))
         {
-            // Quadrant 2
-            th1 = Math.acos(xOffsetStart / radius);
+            // Flip theta
+            th2 *= -1.0;
         }
-        else if (xOffsetStart < 0.0 && yOffsetStart < 0.0)
-        {
-            // Quadrant 3
-            th1 = -Math.acos(xOffsetStart / radius);
-        }
-        else if (xOffsetStart > 0.0 && yOffsetStart < 0.0)
-        {
-            // Quadrant 4
-            th1 = -Math.acos(xOffsetStart / radius);
-        }
-        else
-        {
-            th1 = Math.acos(xOffsetStart / radius);
-        }
-
-        // Quadrant check for offset end
-
-        if (xOffsetEnd > 0.0 && yOffsetEnd > 0.0)
-        {
-            // Quadrant 1
-            th2 = Math.acos(xOffsetEnd / radius);
-        }
-        else if (xOffsetEnd < 0.0 && yOffsetEnd > 0.0)
-        {
-            // Quadrant 2
-            th2 = Math.acos(xOffsetEnd / radius);
-        }
-        else if (xOffsetEnd < 0.0 && yOffsetEnd < 0.0)
-        {
-            // Quadrant 3
-            th2 = -Math.acos(xOffsetEnd / radius);
-        }
-        else if (xOffsetEnd > 0.0 && yOffsetEnd < 0.0)
-        {
-            // Quadrant 4
-            th2 = -Math.acos(xOffsetEnd / radius);
-        }
-        else
-        {
-            th2 = Math.acos(xOffsetEnd / radius);
-        }
-
-
 
         double dcircum = Math.abs(th2 - th1) * radius;
         int numPts = (int)Math.ceil(dcircum * Main.res);
