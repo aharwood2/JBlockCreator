@@ -33,6 +33,15 @@ public class SkirtPattern
     //will change when more concrete theory is established
     private double Arb_HemLevelY;
 
+    // Arb for construction lines
+    private double Arb_Con;
+
+    // Arb for darts
+    private double Arb_FrontDartPlacement;
+    private double Arb_BackDartPlacement;
+    private double Arb_FrontDartLength;
+    private double Arb_BackDartLength;
+
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     /* Methods */
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -44,6 +53,11 @@ public class SkirtPattern
         // Populate arbitrary measurements
         Arb_HemLevelX = 6.5;
         Arb_HemLevelY = 5.0;
+        Arb_Con = 2.0;
+        Arb_FrontDartPlacement = 2.0/ 3.0;
+        Arb_BackDartPlacement = 1.0/ 2.0;
+        Arb_FrontDartLength = h_WaistToAbdomen - 1.5;
+        Arb_BackDartLength = i_WaistToSeat - 1.5;
 
         // Create the blocks
         createBlocks();
@@ -81,35 +95,77 @@ public class SkirtPattern
      * The actual block creation process following the drafting method of Gill.
      */
     @Override
-    protected void createBlocks() {
+    protected void createBlocks()
+    {
         // Points that make up the shape are listed in a strict anti-clockwise order to maintain correct connectivity for
         // plotting. The bottom left corner of the space to be the origin.
 
         // Create component representing half back of skirt folded in half.
-        blocks.add(new Block(inputFileName + "_Skirt_Block"));
-        Block backBlock = blocks.get(0);
+        blocks.add(new Block(inputFileName + "_Gill_Skirt_Block"));
+        Block fullBlock = blocks.get(0);
 
         // Add all the fixed points to the block that coincide with the basic rectangle. These points do not move
         // throughout the drafting process.
         // Points are the origin, 1, 2, 3, 4, 5, 6, 7, 8, 9  of the block rectangle forming three sides.
         // Bottom edge, right edge, top edge
-        backBlock.addKeypoint(new Vector2D(0.0, 0.0));
-        backBlock.addKeypoint(new Vector2D(h_WaistToAbdomen, 0.0));
-        backBlock.addKeypoint(new Vector2D(i_WaistToSeat, 0.0));
-        backBlock.addKeypoint(new Vector2D(j_WaistToHip, 0.0));
-        backBlock.addKeypoint(new Vector2D(k_WaistToKnee + Arb_HemLevelX, 0.0));
-        backBlock.addKeypoint(new Vector2D(k_WaistToKnee + Arb_HemLevelX, g_BkHipArc/2 + Arb_HemLevelY/4));
-        backBlock.addKeypoint(new Vector2D(k_WaistToKnee +Arb_HemLevelX, (g_BkHipArc/2 + Arb_HemLevelY/4) + (f_FrHipArc/2 + Arb_HemLevelY/4)));
-        backBlock.addKeypoint(new Vector2D(j_WaistToHip, (g_BkHipArc/2 +Arb_HemLevelY/4) + (f_FrHipArc/2 + Arb_HemLevelY/4)));
-        backBlock.addKeypoint(new Vector2D(h_WaistToAbdomen, (g_BkHipArc/2 +Arb_HemLevelY/4) + (f_FrHipArc/2 + Arb_HemLevelY/4)));
-        backBlock.addKeypoint(new Vector2D(0.0, (g_BkHipArc/2 +Arb_HemLevelY/4) + (f_FrHipArc/2 + Arb_HemLevelY/4)));
+        fullBlock.addKeypoint(new Vector2D(0.0, 0.0));
+        fullBlock.addKeypoint(new Vector2D(h_WaistToAbdomen, 0.0));
+        fullBlock.addKeypoint(new Vector2D(i_WaistToSeat, 0.0));
+        fullBlock.addKeypoint(new Vector2D(j_WaistToHip, 0.0));
+        fullBlock.addKeypoint(new Vector2D(k_WaistToKnee + Arb_HemLevelX, 0.0));
+        fullBlock.addKeypoint(new Vector2D(k_WaistToKnee + Arb_HemLevelX, g_BkHipArc / 2 + Arb_HemLevelY / 4));
+        fullBlock.addKeypoint(new Vector2D(k_WaistToKnee + Arb_HemLevelX, (g_BkHipArc / 2 + Arb_HemLevelY / 4) + (f_FrHipArc / 2 + Arb_HemLevelY / 4)));
+        fullBlock.addKeypoint(new Vector2D(j_WaistToHip, (g_BkHipArc / 2 + Arb_HemLevelY / 4) + (f_FrHipArc / 2 + Arb_HemLevelY / 4)));
+        fullBlock.addKeypoint(new Vector2D(h_WaistToAbdomen, (g_BkHipArc / 2 + Arb_HemLevelY / 4) + (f_FrHipArc / 2 + Arb_HemLevelY / 4)));
+        fullBlock.addKeypoint(new Vector2D(0.0, (g_BkHipArc / 2 + Arb_HemLevelY / 4) + (f_FrHipArc / 2 + Arb_HemLevelY / 4)));
 
-        // TODO
-        // Point 10 with curve subject to discussion on Monday 25th
-        // Point 11 with " " " " " "
-        // Point 12 with " " " " " "
-        // Point origin with " " " " " "
-        // Front and back darts
+        // Construction lines for front/back block separation
+        fullBlock.addConstructionPoint(new Vector2D(-1.25 - Arb_Con, g_BkHipArc / 2 + Arb_HemLevelY / 4), new Vector2D(k_WaistToKnee + Arb_HemLevelX + Arb_Con, g_BkHipArc / 2 + Arb_HemLevelY / 4), "");
 
+        // Points 10, 11, and 12 on the waistline level
+        fullBlock.addKeypoint(new Vector2D(-1.25, ((g_BkHipArc / 2 + Arb_HemLevelY / 4.0) + (((g_BkHipArc + f_FrHipArc) - (b_BkWaistArc + a_FrWaistArc)) / 4.0))));
+        fullBlock.addKeypoint(new Vector2D(j_WaistToHip, g_BkHipArc / 2 + Arb_HemLevelY / 4.0));
+        fullBlock.addKeypoint(new Vector2D(-1.25, ((g_BkHipArc / 2 + Arb_HemLevelY / 4.0) - (((g_BkHipArc + f_FrHipArc) - (b_BkWaistArc + a_FrWaistArc)) / 4.0))));
+
+        // Curve between point 10 and point 11
+        fullBlock.addCircularCurve(new Vector2D(-1.25, ((g_BkHipArc / 2 + Arb_HemLevelY / 4.0) + (((g_BkHipArc + f_FrHipArc) - (b_BkWaistArc + a_FrWaistArc)) / 4.0))),
+                new Vector2D(j_WaistToHip, g_BkHipArc / 2 + Arb_HemLevelY / 4.0), 1.0, true);
+
+        // Curve between point 11 and point 12
+        fullBlock.addCircularCurve(new Vector2D(j_WaistToHip, g_BkHipArc / 2 + Arb_HemLevelY / 4.0),
+                new Vector2D(-1.25, ((g_BkHipArc / 2 + Arb_HemLevelY / 4.0) - (((g_BkHipArc + f_FrHipArc) - (b_BkWaistArc + a_FrWaistArc)) / 4.0))), 1.0, true);
+
+        // Add front dart.
+        ArrayList<Vector2D> dartEdges = fullBlock.addDart(new Vector2D(0.0, (g_BkHipArc / 2 + Arb_HemLevelY / 4) + (f_FrHipArc / 2 + Arb_HemLevelY / 4)),
+                new Vector2D(-1.25, ((g_BkHipArc / 2 + Arb_HemLevelY / 4.0) + (((g_BkHipArc + f_FrHipArc) - (b_BkWaistArc + a_FrWaistArc)) / 4.0))),
+                Arb_FrontDartPlacement,
+                (((g_BkHipArc + f_FrHipArc) - (b_BkWaistArc + a_FrWaistArc)) * 0.18),
+                Arb_FrontDartLength, true, false);
+
+        // Add curves either side of dart ensuring the curve intersects the joining edges at a right angle.
+        fullBlock.addRightAngleCurve(new Vector2D(0.0, (g_BkHipArc / 2 + Arb_HemLevelY / 4) + (f_FrHipArc / 2 + Arb_HemLevelY / 4)), dartEdges.get(0));
+
+        fullBlock.addRightAngleCurve(dartEdges.get(2), new Vector2D(-1.25, ((g_BkHipArc / 2 + Arb_HemLevelY / 4.0) + (((g_BkHipArc + f_FrHipArc) - (b_BkWaistArc + a_FrWaistArc)) / 4.0))));
+
+        // Add back dart
+        dartEdges = fullBlock.addDart(new Vector2D(-1.25, ((g_BkHipArc / 2 + Arb_HemLevelY / 4.0) - (((g_BkHipArc + f_FrHipArc) - (b_BkWaistArc + a_FrWaistArc)) / 4.0))),
+                new Vector2D(0.0, 0.0),
+                Arb_BackDartPlacement,
+                (((g_BkHipArc + f_FrHipArc) - (b_BkWaistArc + a_FrWaistArc)) * 0.32),
+                Arb_BackDartLength, true, false);
+
+        // Add curves
+        fullBlock.addRightAngleCurve(new Vector2D(-1.25, ((g_BkHipArc / 2 + Arb_HemLevelY / 4.0) - (((g_BkHipArc + f_FrHipArc) - (b_BkWaistArc + a_FrWaistArc)) / 4.0))), dartEdges.get(0));
+
+        fullBlock.addRightAngleCurve(dartEdges.get(2), new Vector2D(0.0, 0.0));
+
+        // Add construction keypoints for Abdomen Level
+        fullBlock.addConstructionPoint(new Vector2D(h_WaistToAbdomen, 0.0 - Arb_Con), new Vector2D(h_WaistToAbdomen, (g_BkHipArc / 2 + Arb_HemLevelY / 4) + (f_FrHipArc / 2 + Arb_HemLevelY / 4) + Arb_Con), "Abdomen");
+
+        // Add construction keypoints for Hip Level
+        fullBlock.addConstructionPoint(new Vector2D(i_WaistToSeat, 0.0 - Arb_Con), new Vector2D(i_WaistToSeat, g_BkHipArc / 2 + Arb_HemLevelY / 4 + 3.0 * Arb_Con), "Seat");
+
+        // Add construction keypoints for Abdomen Level
+        fullBlock.addConstructionPoint(new Vector2D(j_WaistToHip, 0.0 - Arb_Con), new Vector2D(j_WaistToHip, (g_BkHipArc / 2 + Arb_HemLevelY / 4) + (f_FrHipArc / 2 + Arb_HemLevelY / 4) + Arb_Con), "Hip");
     }
 }
