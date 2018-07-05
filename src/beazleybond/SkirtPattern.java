@@ -71,9 +71,6 @@ public class SkirtPattern
         Arb_BackDartPlacement = 0.5;
         Arb_FrontDartPlacement = 1.0 / 3.0;
 
-        // Arb Measurement for construction lines
-        Arb_Con = 2.0;
-
         // Create the blocks
         createBlocks();
     }
@@ -157,12 +154,14 @@ public class SkirtPattern
 
 
         // Add construction keypoints for Upper Hip Level
-        backBlock.addConstructionPoint(new Vector2D((Arb_UpperHipLevel + Arb_WaistLevel), 0.0 - Arb_Con), "Upper Hip");
-        backBlock.addConstructionPoint(new Vector2D((Arb_UpperHipLevel + Arb_WaistLevel), c_Hip/4 + Arb_Con), "Upper Hip");
+        backBlock.addConstructionPoint(new Vector2D((Arb_UpperHipLevel + Arb_WaistLevel), 0.0 - Arb_Con),
+                                       new Vector2D((Arb_UpperHipLevel + Arb_WaistLevel), c_Hip/4 + Arb_Con),
+                                       "Upper Hip");
 
         // Add construction keypoints for Hip Level
-        backBlock.addConstructionPoint(new Vector2D((Arb_HipLevel + Arb_WaistLevel), 0.0 - Arb_Con), "Hip");
-        backBlock.addConstructionPoint(new Vector2D((Arb_HipLevel + Arb_WaistLevel), c_Hip/4 + Arb_Con), "Hip");
+        backBlock.addConstructionPoint(new Vector2D((Arb_HipLevel + Arb_WaistLevel), 0.0 - Arb_Con),
+                                       new Vector2D((Arb_HipLevel + Arb_WaistLevel), c_Hip/4 + Arb_Con),
+                                       "Hip");
 
         // Trace off block
         blocks.add(new Block(backBlock, inputFileName + "_Skirt_Front_Block"));

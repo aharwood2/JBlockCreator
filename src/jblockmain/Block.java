@@ -118,15 +118,18 @@ public class Block
 
     /**
      * Method to add a keypoint to the end of the list.
-     * @param xy    position of point
-     * @param name  name of point
-     * @return      keypoint number
+     * @param startPoint    position of start of construction line
+     * @param endPoint      position of the end of the construction line
+     * @param name          name of construction line
+     * @return              construction line number
      */
-    public int addConstructionPoint(Vector2D xy, String name)
+    public int addConstructionPoint(Vector2D startPoint, Vector2D endPoint, String name)
     {
         // Add to end of list
-        constructionX.add(xy.getX());
-        constructionY.add(xy.getY());
+        constructionX.add(startPoint.getX());
+        constructionY.add(startPoint.getY());
+        constructionX.add(endPoint.getX());
+        constructionY.add(endPoint.getY());
         constructionNames.add(name);
         return constructionX.size() - 1;
     }
@@ -783,6 +786,10 @@ public class Block
         return tmp;
     }
 
+    /**
+     * Get list of X coordinates of the construction line points.
+     * @return list of X coordinates.
+     */
     public ArrayList<Double> getConstructionX()
     {
         if (constructionX != null && constructionX.size() != 0)
@@ -791,13 +798,13 @@ public class Block
             tmp.add(constructionX.get(0));
             return tmp;
         }
-        else
-        {
-            ArrayList<Double> noX = new ArrayList<>();
-            return noX;
-        }
+        return new ArrayList<>();
     }
 
+    /**
+     * Get list of Y coordinates of the construction line points.
+     * @return list of Y coordinates.
+     */
     public ArrayList<Double> getConstructionY()
     {
         if (constructionY != null && constructionY.size() != 0)
@@ -806,13 +813,13 @@ public class Block
             tmp.add(constructionY.get(0));
             return tmp;
         }
-        else
-        {
-            ArrayList<Double> noY = new ArrayList<>();
-            return noY;
-        }
+        return new ArrayList<>();
     }
 
+    /**
+     * Get list of names of the construction lines.
+     * @return list of names.
+     */
     public ArrayList<String> getConstructionNames()
     {
         if (constructionNames != null && constructionNames.size() != 0)
@@ -821,11 +828,7 @@ public class Block
             tmp.add(constructionNames.get(0));
             return tmp;
         }
-        else
-        {
-            ArrayList<String> noNames= new ArrayList<>();
-            return noNames;
-        }
+        return new ArrayList<>();
     }
     /**
      * Getter for name of block

@@ -7,6 +7,9 @@ import java.util.ArrayList;
 /** Interface to be implemented by every pattern added to the module. */
 public abstract class Pattern implements IPlottable
 {
+    // Offset used for drawing of construction lines
+    protected double Arb_Con = 2.0;
+
     // Constructor to initialise variables
     public Pattern()
     {
@@ -26,37 +29,41 @@ public abstract class Pattern implements IPlottable
     protected abstract void createBlocks();
 
     /* Interface implementation */
+    private void rangeCheck(int blockNumber)
+    {
+        if (blockNumber > blocks.size()) throw new IndexOutOfBoundsException("Accessing out of range of number of blocks!");
+    }
     @Override
     public ArrayList<Double> getXPoints(int blockNumber) throws IndexOutOfBoundsException
     {
-        if (blockNumber > blocks.size()) throw new IndexOutOfBoundsException("Accessing out of range of number of blocks!");
+        rangeCheck(blockNumber);
         return blocks.get(blockNumber).getPlottableKeypointsX();
     }
 
     @Override
     public ArrayList<Double> getYPoints(int blockNumber) throws IndexOutOfBoundsException
     {
-        if (blockNumber > blocks.size()) throw new IndexOutOfBoundsException("Accessing out of range of number of blocks!");
+        rangeCheck(blockNumber);
         return blocks.get(blockNumber).getPlottableKeypointsY();
     }
 
     @Override
     public ArrayList<Double> getXCtPoints(int blockNumber) throws IndexOutOfBoundsException
     {
-        if (blockNumber > blocks.size()) throw new IndexOutOfBoundsException("Accessing out of range of number of blocks!");
+        rangeCheck(blockNumber);
         return blocks.get(blockNumber).getConstructionX();
     }
 
     @Override
     public ArrayList<Double> getYCtPoints(int blockNumber) throws IndexOutOfBoundsException
     {
-        if (blockNumber > blocks.size()) throw new IndexOutOfBoundsException("Accessing out of range of number of blocks!");
+        rangeCheck(blockNumber);
         return blocks.get(blockNumber).getConstructionY();
     }
 
     public ArrayList<String> getNames(int blockNumber) throws IndexOutOfBoundsException
     {
-        if (blockNumber > blocks.size()) throw new IndexOutOfBoundsException("Accessing out of range of number of blocks!");
+        rangeCheck(blockNumber);
         return blocks.get(blockNumber).getConstructionNames();
     }
 

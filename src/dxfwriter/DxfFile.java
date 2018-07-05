@@ -202,31 +202,31 @@ public class DxfFile
             writeDxfLine("0", "LAYER");
 
             // Spec of layer 1
-            writeDxfLine("2", "Line");             // Layer name
+            writeDxfLine("2", "Line");                  // Layer name
             writeDxfLine("70", "64");
             writeDxfLine("62", "7");            // Colour number?
             writeDxfLine("6", "CONTINUOUS");    // Linetype name (as specified above?)
 
             // Spec of layer 2
-            writeDxfLine("2", "Extras");             // Layer name
+            writeDxfLine("2", "Extras");                // Layer name
             writeDxfLine("70", "64");
             writeDxfLine("62", "8");            // Colour number?
             writeDxfLine("6", "DASHED");        // Linetype name (as specified above?)
 
             // Spec of layer 3
-            writeDxfLine("2", "Keypoints");             // Layer name
+            writeDxfLine("2", "Keypoints");                 // Layer name
             writeDxfLine("70", "64");
             writeDxfLine("62", "9");            // Colour number?
             writeDxfLine("6", "DASHED");        // Linetype name (as specified above?)
 
             // Spec of layer 4
-            writeDxfLine("2", "Coordinates");             // Layer name
+            writeDxfLine("2", "Coordinates");               // Layer name
             writeDxfLine("70", "64");
             writeDxfLine("62", "9");            // Colour number?
             writeDxfLine("6", "DASHED");        // Linetype name (as specified above?)
 
             // Spec of layer 5
-            writeDxfLine("2", "Construction Lines");             // Layer name
+            writeDxfLine("2", "Construction Lines");        // Layer name
             writeDxfLine("70", "64");
             writeDxfLine("62", "9");            // Colour number?
             writeDxfLine("6", "DASHED");        // Linetype name (as specified above?)
@@ -287,7 +287,7 @@ public class DxfFile
                 writeDxfLine("0", "TEXT");
                 writeDxfLine("8", "Construction Lines");     // Layer on which to draw line (layer 4)
                 writeDxfLine("62", "8");  // Colour of line using index colour
-                writeDxfLine("1", names.get(i));
+                writeDxfLine("1", names.get(i / 2));
                 writeDxfLine("40", "0.75"); // Text height (i.e size)
                 writeDxfLine("50", "0"); // Text rotation angle
                 writeDxfLine("72", "2");
