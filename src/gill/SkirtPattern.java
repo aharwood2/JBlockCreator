@@ -33,9 +33,6 @@ public class SkirtPattern
     //will change when more concrete theory is established
     private double Arb_HemLevelY;
 
-    // Arb for construction lines
-    private double Arb_Con;
-
     // Arb for darts
     private double Arb_FrontDartPlacement;
     private double Arb_BackDartPlacement;
@@ -53,7 +50,6 @@ public class SkirtPattern
         // Populate arbitrary measurements
         Arb_HemLevelX = 6.5;
         Arb_HemLevelY = 5.0;
-        Arb_Con = 2.0;
         Arb_FrontDartPlacement = 2.0/ 3.0;
         Arb_BackDartPlacement = 1.0/ 2.0;
         Arb_FrontDartLength = h_WaistToAbdomen - 1.5;
