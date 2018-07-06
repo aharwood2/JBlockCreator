@@ -116,7 +116,9 @@ public class SkirtPattern
         fullBlock.addKeypoint(new Vector2D(0.0, (g_BkHipArc / 2 + Arb_HemLevelY / 4) + (f_FrHipArc / 2 + Arb_HemLevelY / 4)));
 
         // Construction lines for front/back block separation
-        fullBlock.addConstructionPoint(new Vector2D(-1.25 - Arb_Con, g_BkHipArc / 2 + Arb_HemLevelY / 4), new Vector2D(k_WaistToKnee + Arb_HemLevelX + Arb_Con, g_BkHipArc / 2 + Arb_HemLevelY / 4), "");
+        fullBlock.addConstructionPoint(new Vector2D(-1.25 - Arb_Con, g_BkHipArc / 2 + Arb_HemLevelY / 4),
+                                       new Vector2D(k_WaistToKnee + Arb_HemLevelX + Arb_Con, g_BkHipArc / 2 + Arb_HemLevelY / 4),
+                                 "");
 
         // Points 10, 11, and 12 on the waistline level
         fullBlock.addKeypoint(new Vector2D(-1.25, ((g_BkHipArc / 2 + Arb_HemLevelY / 4.0) + (((g_BkHipArc + f_FrHipArc) - (b_BkWaistArc + a_FrWaistArc)) / 4.0))));
