@@ -31,6 +31,9 @@ public class Main
 
             BodicePattern bb_bodice = new BodicePattern(measurements);
             bb_bodice.writeToDXF("./output/");
+
+            gill.SkirtPattern gill_skirt = new gill.SkirtPattern(measurements);
+            gill_skirt.writeToDXF("./output/");
         }
     }
 

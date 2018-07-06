@@ -231,10 +231,10 @@ public class Measurements
 
                     // Gets the first entry in the array corresponding to the unique User ID and puts it in the userNames array
                     String userID = userInfo[0];
-                    userNames.add(UserID);
+                    userNames.add(userID);
 
                     // Removes all values in the data array except the ones needed for pattern drafting
-                    String[] IDValues = Arrays.copyOfRange(Numbers, DataArrayLength - expectedNumCustomMeasurements, DataArrayLength);
+                    String[] idValues = Arrays.copyOfRange(numbers, valueArrayLength - expectedNumCustomMeasurements, valueArrayLength);
 
                     for (int i = 0; i < numCustomMeasurements; ++i)
                     {

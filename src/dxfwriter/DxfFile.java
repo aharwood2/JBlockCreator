@@ -290,7 +290,7 @@ public class DxfFile
                 writeDxfLine("1", names.get(i / 2));
                 writeDxfLine("40", "0.75"); // Text height (i.e size)
                 writeDxfLine("50", "0"); // Text rotation angle
-                writeDxfLine("72", "2");
+                writeDxfLine("72", "3");
                 writeDxfLine("73", "3");
                 writeDxfLine("10", Double.toString(ConX.get(i))); // X coordinate start
                 writeDxfLine("20", Double.toString(ConY.get(i))); // Y coordinate start
