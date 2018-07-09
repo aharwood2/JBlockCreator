@@ -57,13 +57,13 @@ public class StraightSleevePattern
     @Override
     protected void readMeasurements(Measurements dataStore)
     {
-        // Currently we do not have the measurements to use scan data, this will be resolved shortly
-
         // Based on measurements for this pattern we can read the following from the scan:
         //a_UpperArmGirth = dataStore.getId(24).value;
         //b_FullLength = dataStore.getId(23).value;
-        //c_DepthOfSleeveHead = dataStore.getId().value;
-        //d_SleeveHeadToElbow = dataStore.getId().value;
+        //c_DepthOfSleeveHead = dataStore.getId(6).value;
+        //d_SleeveHeadToElbow = dataStore.getId(25).value;
+
+        /* Measurement 25 is not currently in our custom measurements */
 
         // Get name
         //inputFileName = dataStore.getName();
