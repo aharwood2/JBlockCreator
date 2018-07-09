@@ -33,9 +33,6 @@ public class SkirtPattern
     //will change when more concrete theory is established
     private double Arb_HemLevelY;
 
-    // Arb for construction lines
-    private double Arb_Con;
-
     // Arb for darts
     private double Arb_FrontDartPlacement;
     private double Arb_BackDartPlacement;
@@ -53,7 +50,6 @@ public class SkirtPattern
         // Populate arbitrary measurements
         Arb_HemLevelX = 6.5;
         Arb_HemLevelY = 5.0;
-        Arb_Con = 2.0;
         Arb_FrontDartPlacement = 2.0/ 3.0;
         Arb_BackDartPlacement = 1.0/ 2.0;
         Arb_FrontDartLength = h_WaistToAbdomen - 1.5;
@@ -120,7 +116,9 @@ public class SkirtPattern
         fullBlock.addKeypoint(new Vector2D(0.0, (g_BkHipArc / 2 + Arb_HemLevelY / 4) + (f_FrHipArc / 2 + Arb_HemLevelY / 4)));
 
         // Construction lines for front/back block separation
-        fullBlock.addConstructionPoint(new Vector2D(-1.25 - Arb_Con, g_BkHipArc / 2 + Arb_HemLevelY / 4), new Vector2D(k_WaistToKnee + Arb_HemLevelX + Arb_Con, g_BkHipArc / 2 + Arb_HemLevelY / 4), "");
+        fullBlock.addConstructionPoint(new Vector2D(-1.25 - Arb_Con, g_BkHipArc / 2 + Arb_HemLevelY / 4),
+                                       new Vector2D(k_WaistToKnee + Arb_HemLevelX + Arb_Con, g_BkHipArc / 2 + Arb_HemLevelY / 4),
+                                 "");
 
         // Points 10, 11, and 12 on the waistline level
         fullBlock.addKeypoint(new Vector2D(-1.25, ((g_BkHipArc / 2 + Arb_HemLevelY / 4.0) + (((g_BkHipArc + f_FrHipArc) - (b_BkWaistArc + a_FrWaistArc)) / 4.0))));
@@ -129,11 +127,11 @@ public class SkirtPattern
 
         // Curve between point 10 and point 11
         fullBlock.addCircularCurve(new Vector2D(-1.25, ((g_BkHipArc / 2 + Arb_HemLevelY / 4.0) + (((g_BkHipArc + f_FrHipArc) - (b_BkWaistArc + a_FrWaistArc)) / 4.0))),
-                new Vector2D(j_WaistToHip, g_BkHipArc / 2 + Arb_HemLevelY / 4.0), 1.0, true);
+                new Vector2D(j_WaistToHip, g_BkHipArc / 2 + Arb_HemLevelY / 4.0), 0.5, true);
 
         // Curve between point 11 and point 12
         fullBlock.addCircularCurve(new Vector2D(j_WaistToHip, g_BkHipArc / 2 + Arb_HemLevelY / 4.0),
-                new Vector2D(-1.25, ((g_BkHipArc / 2 + Arb_HemLevelY / 4.0) - (((g_BkHipArc + f_FrHipArc) - (b_BkWaistArc + a_FrWaistArc)) / 4.0))), 1.0, true);
+                new Vector2D(-1.25, ((g_BkHipArc / 2 + Arb_HemLevelY / 4.0) - (((g_BkHipArc + f_FrHipArc) - (b_BkWaistArc + a_FrWaistArc)) / 4.0))), 0.5, true);
 
         // Add front dart.
         ArrayList<Vector2D> dartEdges = fullBlock.addDart(new Vector2D(0.0, (g_BkHipArc / 2 + Arb_HemLevelY / 4) + (f_FrHipArc / 2 + Arb_HemLevelY / 4)),

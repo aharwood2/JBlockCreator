@@ -145,7 +145,7 @@ public class BodicePattern
         // for plotting. The bottom left corner of the space to be the origin.
 
         // Create a block
-        Block mainBlock = new Block(inputFileName + "_Bodice_Main_Block");
+        Block mainBlock = new Block(inputFileName + "_BB_Bodice_Main_Block");
         blocks.add(mainBlock);
 
         // Add basic rectangle points for reference
@@ -230,6 +230,11 @@ public class BodicePattern
                           backShoulderDartApex,
                           true);
 
+        // Construction lines for armhole
+        mainBlock.addConstructionPoint(new Vector2D(0.0 - 3.0 * Arb_Con, i_AcrossBack / 2.0), new Vector2D(f_ArmholeDepth + Arb_Con, i_AcrossBack / 2.0), "Bk_Arm" );
+        mainBlock.addConstructionPoint(new Vector2D(0.0 - 3.0 * Arb_Con, i_AcrossBack / 2.0 + m_WidthArmhole), new Vector2D(f_ArmholeDepth + Arb_Con, i_AcrossBack / 2.0 + m_WidthArmhole), "Ft_Arm" );
+        mainBlock.addConstructionPoint(new Vector2D(f_ArmholeDepth, 0.0 - Arb_Con), new Vector2D(f_ArmholeDepth, Arb_CBtoCF + Arb_Con), "Armhole" );
+
 
         // 11. Add armhole as four separate curves
 
@@ -244,9 +249,7 @@ public class BodicePattern
                                         refTopLeft.getY() - Arb_HalfFrontNeckWidth - frontShoulderLineY);
         Vector2D preStartPt = new Vector2D(0.0, refTopLeft.getY() - Arb_HalfFrontNeckWidth);
 
-        // Compute end point for first curve
-        Vector2D endPt = new Vector2D((2.0 / 3.0) * (f_ArmholeDepth - frontShoulderLineX),
-                                      touchFront.getY());
+        Vector2D endPt = new Vector2D((2.0 / 3.0) * f_ArmholeDepth, i_AcrossBack / 2.0 + m_WidthArmhole);
 
         // a. Add first curve plus its end point as a keypoint
         Vector2D adjPoint = mainBlock.addDirectedCurve(startPt,

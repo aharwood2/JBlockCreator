@@ -238,8 +238,13 @@ public class Measurements
 
                     for (int i = 0; i < numCustomMeasurements; ++i)
                     {
+                        if (idValues[i].equals("Unavailable"))
+                        {
+                            System.out.println("Measurement " + idName[i] + " is not available for user " + userNames.get(numUsers - 1));
+                            idValues[i] = "0.0";
+                        }
                         storeMaps.get(mapNumber).put(
-                            Integer.valueOf(idNumber[i]), 
+                            Integer.valueOf(idNumber[i]),
                             new Store(Integer.valueOf(idNumber[i]), idName[i], Double.valueOf(idValues[i]))
                         );
                     }
