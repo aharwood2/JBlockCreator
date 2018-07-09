@@ -145,7 +145,7 @@ public class BodicePattern
         // for plotting. The bottom left corner of the space to be the origin.
 
         // Create a block
-        Block mainBlock = new Block(inputFileName + "_Bodice_Main_Block");
+        Block mainBlock = new Block(inputFileName + "_BB_Bodice_Main_Block");
         blocks.add(mainBlock);
 
         // Add basic rectangle points for reference

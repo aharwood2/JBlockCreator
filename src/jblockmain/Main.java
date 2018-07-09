@@ -2,6 +2,7 @@ package jblockmain;
 
 import beazleybond.BodicePattern;
 import beazleybond.SkirtPattern;
+import beazleybond.StraightSleevePattern;
 import beazleybond.TrouserPattern;
 
 import java.io.File;
@@ -36,6 +37,10 @@ public class Main
             new File("./output/BBBodice/").mkdirs();
             BodicePattern bb_bodice = new BodicePattern(measurements);
             bb_bodice.writeToDXF("./output/BBBodice/");
+
+            new File("./output/BBSleeve/").mkdirs();
+            StraightSleevePattern bb_sleeve = new StraightSleevePattern(measurements);
+            bb_sleeve.writeToDXF("./output/BBSleeve");
 
             new File("./output/GillSkirt/").mkdirs();
             gill.SkirtPattern gill_skirt = new gill.SkirtPattern(measurements);
