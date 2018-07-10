@@ -1,5 +1,7 @@
 package beazleybond;
 
+import jblockenums.EGarment;
+import jblockenums.EMethod;
 import jblockmain.*;
 import mathcontainers.Vector2D;
 
@@ -9,9 +11,6 @@ public class StraightSleevePattern
     extends Pattern
 {
     /* Straight sleeve pattern */
-
-    /* Measurement file name */
-    String inputFileName;
 
     /* Pattern-specific Measurements */
     private double a_UpperArmGirth = 28.0;
@@ -49,6 +48,18 @@ public class StraightSleevePattern
 
     /* Implement abstract methods from super class */
     @Override
+    protected EMethod assignMethod()
+    {
+        return EMethod.BEAZLEYBOND;
+    }
+
+    @Override
+    protected EGarment assignGarment()
+    {
+        return EGarment.STRAIGHTSLEEVE;
+    }
+
+    @Override
     protected void addEasement()
     {
         a_UpperArmGirth += 6.0;
@@ -58,15 +69,13 @@ public class StraightSleevePattern
     protected void readMeasurements(Measurements dataStore)
     {
         // Based on measurements for this pattern we can read the following from the scan:
-        //a_UpperArmGirth = dataStore.getId(24).value;
-        //b_FullLength = dataStore.getId(23).value;
-        //c_DepthOfSleeveHead = dataStore.getId(6).value;
-        //d_SleeveHeadToElbow = dataStore.getId(25).value;
-
-        /* Measurement 25 is not currently in our custom measurements */
+        a_UpperArmGirth = dataStore.getId(24).value;
+        b_FullLength = dataStore.getId(23).value;
+        c_DepthOfSleeveHead = dataStore.getId(35).value;
+        d_SleeveHeadToElbow = dataStore.getId(25).value;
 
         // Get name
-        //inputFileName = dataStore.getName();
+        inputFileName = dataStore.getName();
     }
 
     /**
