@@ -96,11 +96,10 @@ public abstract class Pattern implements IPlottable
     {
         for (int i = 0; i < getNumberOfBlocksToPlot(); i++)
         {
-            Enum packagetype = method;
-            Enum garmenttype = garment;
-
-            Path path = Paths.get("./output/" + packagetype + "/" + garmenttype + "/");
-
+            // Construct output path
+            Path path = Paths.get("./output/" + method + "/" + garment + "/");
+    
+            // Create directory structure if required
             try
             {
                 Files.createDirectories(path);
@@ -110,6 +109,7 @@ public abstract class Pattern implements IPlottable
                 System.err.println("Cannot create directories - " + e);
             }
 
+            // Create new DXF file
             DxfFile file = new DxfFile(path.toString() + "/" + blocks.get(i).getName());
             try
             {
