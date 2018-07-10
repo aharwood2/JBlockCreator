@@ -107,7 +107,6 @@ public class BodicePattern
         return EMethod.BEAZLEYBOND;
     }
 
-
     @Override
     protected EGarment assignGarment()
     {
