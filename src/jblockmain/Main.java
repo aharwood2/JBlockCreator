@@ -5,8 +5,6 @@ import beazleybond.SkirtPattern;
 import beazleybond.StraightSleevePattern;
 import beazleybond.TrouserPattern;
 
-import java.io.File;
-
 public class Main
 {
     // Set a global tolerance for some operations
