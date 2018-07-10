@@ -17,7 +17,7 @@ public class Main
     public static void main(String[] args)
     {
 
-        Measurements measurements = new Measurements("SpreadsheetBigger.txt", true);
+        Measurements measurements = new Measurements("Spreadsheet.txt", true);
 
         // Create patterns
         for (int i = 0; i < measurements.getNames().size(); i++)
@@ -34,7 +34,7 @@ public class Main
             bb_bodice.writeToDXF();
 
             StraightSleevePattern bb_sleeve = new StraightSleevePattern(measurements);
-            bb_sleeve.writeToDXF("./output");
+            bb_sleeve.writeToDXF();
 
             gill.SkirtPattern gill_skirt = new gill.SkirtPattern(measurements);
             gill_skirt.writeToDXF();

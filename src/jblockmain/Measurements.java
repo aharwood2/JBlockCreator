@@ -179,7 +179,7 @@ public class Measurements
 
                 // Adds all needed chunks to a new array (i.e. the custom measurements only)
                 // TODO: possibly make this bit automatic not manual?
-                final int expectedNumCustomMeasurements = 33;
+                final int expectedNumCustomMeasurements = 35;
                 String[] neededChunks = Arrays.copyOfRange(dividedChunks, arrayLength - expectedNumCustomMeasurements, arrayLength);
 
                 // Creates a variable corresponding to final array length
