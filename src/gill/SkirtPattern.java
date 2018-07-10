@@ -1,5 +1,7 @@
 package gill;
 
+import jblockenums.EGarment;
+import jblockenums.EMethod;
 import jblockmain.*;
 import mathcontainers.Vector2D;
 
@@ -8,9 +10,6 @@ import java.util.ArrayList;
 public class SkirtPattern
     extends Pattern
 {
-    /* Measurement file name */
-    String inputFileName;
-
     /* Pattern-specific Measurements */
     private double a_FrWaistArc             = 36.2;
     private double b_BkWaistArc             = 34.9;
@@ -60,6 +59,18 @@ public class SkirtPattern
     }
 
     /* Implement abstract methods from super class */
+    @Override
+    protected EMethod assignMethod()
+    {
+        return EMethod.GILL;
+    }
+
+    @Override
+    protected EGarment assignGarment()
+    {
+        return EGarment.SKIRT;
+    }
+
     @Override
     protected void addEasement()
     {

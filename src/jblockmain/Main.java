@@ -25,25 +25,20 @@ public class Main
         {
             measurements.setMapNumber(i);
 
-            new File("./output/BBSkirt/").mkdirs();
             SkirtPattern bb_skirt = new SkirtPattern(measurements);
-            bb_skirt.writeToDXF("./output/BBSkirt/");
+            bb_skirt.writeToDXF();
 
-            new File("./output/BBTrousers/").mkdirs();
             TrouserPattern bb_trouser = new TrouserPattern(measurements);
-            bb_trouser.writeToDXF("./output/BBTrousers/");
+            bb_trouser.writeToDXF();
 
-            new File("./output/BBBodice/").mkdirs();
             BodicePattern bb_bodice = new BodicePattern(measurements);
-            bb_bodice.writeToDXF("./output/BBBodice/");
+            bb_bodice.writeToDXF();
 
-            new File("./output/GillSkirt/").mkdirs();
             gill.SkirtPattern gill_skirt = new gill.SkirtPattern(measurements);
-            gill_skirt.writeToDXF("./output/GillSkirt/");
+            gill_skirt.writeToDXF();
 
-            new File("./output/AldrichSkirt/").mkdirs();
             aldrich.SkirtPattern aldrich_skirt = new aldrich.SkirtPattern(measurements);
-            aldrich_skirt.writeToDXF("./output/AldrichSkirt/");
+            aldrich_skirt.writeToDXF();
         }
     }
 

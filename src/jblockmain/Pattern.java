@@ -1,7 +1,12 @@
 package jblockmain;
 
 import dxfwriter.DxfFile;
+import jblockenums.EGarment;
+import jblockenums.EMethod;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 
 /** Interface to be implemented by every pattern added to the module. */
@@ -10,10 +15,23 @@ public abstract class Pattern implements IPlottable
     // Offset used for drawing of construction lines
     protected double Arb_Con = 2.0;
 
+    // Measurement file name
+    protected String inputFileName;
+
+    // Method associated with pattern
+    protected final EMethod method;
+    protected final EGarment garment;
+
+    // Abstract method to assign final method type
+    protected abstract EMethod assignMethod();
+    protected abstract EGarment assignGarment();
+
     // Constructor to initialise variables
     public Pattern()
     {
         blocks = new ArrayList<Block>();
+        method = assignMethod();
+        garment = assignGarment();
     }
 
     // Blocks that comprise the pattern
@@ -33,6 +51,7 @@ public abstract class Pattern implements IPlottable
     {
         if (blockNumber > blocks.size()) throw new IndexOutOfBoundsException("Accessing out of range of number of blocks!");
     }
+
     @Override
     public ArrayList<Double> getXPoints(int blockNumber) throws IndexOutOfBoundsException
     {
@@ -73,12 +92,25 @@ public abstract class Pattern implements IPlottable
         return blocks.size();
     }
 
-    @Override
-    public void writeToDXF(String path)
+    public void writeToDXF()
     {
         for (int i = 0; i < getNumberOfBlocksToPlot(); i++)
         {
-            DxfFile file = new DxfFile(path + blocks.get(i).getName());
+            Enum packagetype = method;
+            Enum garmenttype = garment;
+
+            Path path = Paths.get("./output/" + packagetype + "/" + garmenttype + "/");
+
+            try
+            {
+                Files.createDirectories(path);
+            }
+            catch (java.io.IOException e)
+            {
+                System.err.println("Cannot create directories - " + e);
+            }
+
+            DxfFile file = new DxfFile(path.toString() + "/" + blocks.get(i).getName());
             try
             {
                 file.addLines(getXPoints(i), getYPoints(i));
@@ -92,5 +124,4 @@ public abstract class Pattern implements IPlottable
         }
 
     }
-
 }

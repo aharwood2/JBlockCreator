@@ -1,5 +1,8 @@
 package beazleybond;
 
+import jblockenums.EGarment;
+import jblockenums.EMethod;
+import jblockenums.EPosition;
 import jblockmain.*;
 import mathcontainers.Vector2D;
 
@@ -9,8 +12,6 @@ import java.util.ArrayList;
 public class BodicePattern
     extends Pattern
 {
-    /* Measurement file name */
-    String inputFileName;
 
     /* Pattern-specific Measurements */
     // In future will be simply extracted from the Measurements object.
@@ -100,6 +101,19 @@ public class BodicePattern
     }
 
     /* Implement abstract methods from super class */
+    @Override
+    protected EMethod assignMethod()
+    {
+        return EMethod.BEAZLEYBOND;
+    }
+
+
+    @Override
+    protected EGarment assignGarment()
+    {
+        return EGarment.BODICE;
+    }
+
     @Override
     protected void addEasement()
     {
