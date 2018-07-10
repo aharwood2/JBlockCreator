@@ -1,6 +1,5 @@
 package jblockmain;
 
-import jblockenums.EGarment;
 import jblockenums.EPosition;
 import mathcontainers.Matrix2D;
 import mathcontainers.PolyCoeffs;
@@ -22,11 +21,6 @@ public class Block
      * Name of the block.
      */
     private String name;
-
-    /**
-     * Type of garment this block represents.
-     */
-    private EGarment type;
 
     /**
      * X positions of the keypoints.
@@ -55,7 +49,6 @@ public class Block
     /**
      * Constructor.
      * @param newName   name of new block.
-     * @param garment   type of garment.
      */
     public Block(String newName)
     {
