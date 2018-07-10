@@ -4,8 +4,6 @@ import beazleybond.BodicePattern;
 import beazleybond.SkirtPattern;
 import beazleybond.TrouserPattern;
 
-import java.io.File;
-
 public class Main
 {
     // Set a global tolerance for some operations
@@ -41,5 +39,4 @@ public class Main
             aldrich_skirt.writeToDXF();
         }
     }
-
 }
