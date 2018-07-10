@@ -79,7 +79,6 @@ public class SkirtPattern
         return EMethod.BEAZLEYBOND;
     }
 
-
     @Override
     protected EGarment assignGarment()
     {
