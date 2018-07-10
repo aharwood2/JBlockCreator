@@ -138,11 +138,11 @@ public class SkirtPattern
 
         // Curve between point 10 and point 11
         fullBlock.addCircularCurve(new Vector2D(-1.25, ((g_BkHipArc / 2 + Arb_HemLevelY / 4.0) + (((g_BkHipArc + f_FrHipArc) - (b_BkWaistArc + a_FrWaistArc)) / 4.0))),
-                new Vector2D(j_WaistToHip, g_BkHipArc / 2 + Arb_HemLevelY / 4.0), 1.0, true);
+                new Vector2D(j_WaistToHip, g_BkHipArc / 2 + Arb_HemLevelY / 4.0), 0.5, true);
 
         // Curve between point 11 and point 12
         fullBlock.addCircularCurve(new Vector2D(j_WaistToHip, g_BkHipArc / 2 + Arb_HemLevelY / 4.0),
-                new Vector2D(-1.25, ((g_BkHipArc / 2 + Arb_HemLevelY / 4.0) - (((g_BkHipArc + f_FrHipArc) - (b_BkWaistArc + a_FrWaistArc)) / 4.0))), 1.0, true);
+                new Vector2D(-1.25, ((g_BkHipArc / 2 + Arb_HemLevelY / 4.0) - (((g_BkHipArc + f_FrHipArc) - (b_BkWaistArc + a_FrWaistArc)) / 4.0))), 0.5, true);
 
         // Add front dart.
         ArrayList<Vector2D> dartEdges = fullBlock.addDart(new Vector2D(0.0, (g_BkHipArc / 2 + Arb_HemLevelY / 4) + (f_FrHipArc / 2 + Arb_HemLevelY / 4)),
