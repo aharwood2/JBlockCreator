@@ -109,7 +109,6 @@ public class TrouserPattern
         return EMethod.BEAZLEYBOND;
     }
 
-
     @Override
     protected EGarment assignGarment()
     {
