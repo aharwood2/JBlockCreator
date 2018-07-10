@@ -69,6 +69,12 @@ public class Measurements
         return userNames.get(mapNumber);
     }
 
+    // Getter for current map number
+    public int getMapNumber()
+    {
+        return mapNumber;
+    }
+
     // Getter for measurements
     public Store getId(int id) throws MeasurementNotFoundException
     {

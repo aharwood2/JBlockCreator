@@ -1,5 +1,7 @@
 package aldrich;
 
+import jblockenums.EGarment;
+import jblockenums.EMethod;
 import jblockmain.*;
 import mathcontainers.Vector2D;
 
@@ -86,6 +88,18 @@ public class SkirtPattern
     }
 
     /* Implement abstract methods from super class */
+    @Override
+    protected EMethod assignMethod()
+    {
+        return EMethod.ALRICH;
+    }
+
+    @Override
+    protected EGarment assignGarment()
+    {
+        return EGarment.SKIRT;
+    }
+
     @Override
     protected void addEasement()
     {

@@ -1,5 +1,8 @@
 package beazleybond;
 
+import jblockenums.EGarment;
+import jblockenums.EMethod;
+import jblockenums.EPosition;
 import jblockmain.*;
 import mathcontainers.Vector2D;
 
@@ -9,9 +12,6 @@ import java.util.ArrayList;
 public class SkirtPattern
     extends Pattern
 {
-    /* Measurement file name */
-    String inputFileName;
-
     /* Pattern-specific Measurements */
     private double a_Waist                     = 70.0;
     private double b_UpperHip                  = 90.0;
@@ -74,6 +74,18 @@ public class SkirtPattern
 
     /* Implement abstract methods from super class */
     @Override
+    protected EMethod assignMethod()
+    {
+        return EMethod.BEAZLEYBOND;
+    }
+
+    @Override
+    protected EGarment assignGarment()
+    {
+        return EGarment.SKIRT;
+    }
+
+    @Override
     protected void addEasement()
     {
         // Size 12 skirt.
@@ -117,7 +129,7 @@ public class SkirtPattern
         // plotting. The bottom left corner of the space to be the origin.
 
         // Create component representing half back of skirt folded in half.
-        blocks.add(new Block(inputFileName + "_Skirt_Back_Block"));
+        blocks.add(new Block(inputFileName + "_BB_Skirt_Back_Block"));
         Block backBlock = blocks.get(0);
 
         // Add all the fixed points to the block that coincide with the basic rectangle. These points do not move
@@ -161,7 +173,7 @@ public class SkirtPattern
                                        "Hip");
 
         // Trace off block
-        blocks.add(new Block(backBlock, inputFileName + "_Skirt_Front_Block"));
+        blocks.add(new Block(backBlock, inputFileName + "_BB_Skirt_Front_Block"));
         Block frontBlock = blocks.get(blocks.size()- 1);
 
         // Add back dart.

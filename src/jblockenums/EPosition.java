@@ -1,4 +1,4 @@
-package jblockmain;
+package jblockenums;
 
 public enum EPosition
 {

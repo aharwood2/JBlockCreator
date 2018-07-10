@@ -1,5 +1,6 @@
 package jblockmain;
 
+import jblockenums.EPosition;
 import mathcontainers.Matrix2D;
 import mathcontainers.PolyCoeffs;
 import mathcontainers.Vector2D;

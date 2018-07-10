@@ -1,5 +1,7 @@
 package beazleybond;
 
+import jblockenums.EGarment;
+import jblockenums.EMethod;
 import jblockmain.Block;
 import jblockmain.Measurements;
 import jblockmain.Pattern;
@@ -12,10 +14,6 @@ import java.util.ArrayList;
 public class TrouserPattern
     extends Pattern
 {
-
-    /* Measurement file name */
-    String inputFileName;
-
     /* Pattern-specific Measurements */
     // In future will be simply extracted from the Measurements object.
     private double a_Waist              = 70.0;
@@ -105,6 +103,18 @@ public class TrouserPattern
     }
 
     /* Implement abstract methods from super class */
+    @Override
+    protected EMethod assignMethod()
+    {
+        return EMethod.BEAZLEYBOND;
+    }
+
+    @Override
+    protected EGarment assignGarment()
+    {
+        return EGarment.TROUSER;
+    }
+
     @Override
     protected void addEasement()
     {
