@@ -117,7 +117,7 @@ public class Measurements
         try
         {
             // Open file and get an input stream
-            FileReader file = new FileReader("./input/" + scanDataFileName);
+            FileReader file = new FileReader(scanDataFileName);
             BufferedReader fileStream = new BufferedReader(file);
 
             assignMeasurements(fileStream, isBatch);
