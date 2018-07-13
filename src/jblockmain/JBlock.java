@@ -10,6 +10,7 @@ import beazleybond.BodicePattern;
 import beazleybond.SkirtPattern;
 import beazleybond.StraightSleevePattern;
 import beazleybond.TrouserPattern;
+import jblockmain.Measurements;
 
 public class JBlock extends JFrame
 {
@@ -27,6 +28,9 @@ public class JBlock extends JFrame
     private JButton butRun;
     private JButton butSave;
     private JButton butLoad;
+    private JLabel openPath;
+    private JLabel savePath;
+    private JCheckBox isbatchCheckbox;
     private File fileInput = null;
 
     // Set a global tolerance for some operations
@@ -50,6 +54,7 @@ public class JBlock extends JFrame
                 {
                     JBlock.this.fileInput = fileChooser.getSelectedFile();
                     System.out.println("Input file is: " + fileInput.toString());
+                    openPath.setText(fileChooser.getCurrentDirectory().toString());
                 }
                 else
                 {
@@ -79,6 +84,7 @@ public class JBlock extends JFrame
                 {
                     System.out.println("Current directory is: " + fileChooser.getCurrentDirectory());
                     System.out.println("Save location is: " + fileChooser.getSelectedFile());
+                    savePath.setText(fileChooser.getSelectedFile().toString());
                 }
                 else
                 {
@@ -94,7 +100,7 @@ public class JBlock extends JFrame
             @Override
             public void actionPerformed(ActionEvent e)
             {
-                Measurements measurements = new Measurements(JBlock.this.fileInput.toString(), true);
+                Measurements measurements = new Measurements(JBlock.this.fileInput.toString(), JBlock.this.isbatchCheckbox.isSelected());
 
                 // Create patterns
                 for (int i = 0; i < measurements.getNames().size(); i++)
@@ -146,12 +152,16 @@ public class JBlock extends JFrame
     public static void main(String[] args)
     {
         // Create a JFrame instance
-        JFrame frame = new JFrame("JBlock2D - Custom Pattern Drafting");
+        JFrame frame = new JFrame("JBlock2D - Custom Pattern Drafting - Version 1.0");
         frame.setContentPane(new JBlock().panelMain);
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         frame.pack();
+
+        // Sets the frame as visible
         frame.setVisible(true);
-        frame.setSize(600, 400);
+
+        // Sets the frame size
+        frame.setSize(450, 400);
 
         // Instantiate backend
         new JBlock();
