@@ -13,28 +13,21 @@ import beazleybond.TrouserPattern;
 
 public class JBlock extends JFrame
 {
-    // Mass initializations
+    // Declaration of used backend components
     private JPanel panelMain;
-    private JLabel Gill;
-    private JLabel Aldrich;
-    private JLabel BeazleyBond;
-    private JCheckBox ASkirt;
-    private JCheckBox BBSkirt;
-    private JCheckBox GSkirt;
-    private JCheckBox BBStraightSleeve;
-    private JCheckBox BBTrousers;
-    private JCheckBox BBBodice;
-    private JButton RunJBlock;
-    private JButton save;
-    private JButton open;
-    private boolean BBSkirtbool = false;
-    private boolean BBTrousersbool = false;
-    private boolean BBBodicebool = false;
-    private boolean BBStraightSleevebool = false;
-    private boolean GSkirtbool = false;
-    private boolean ASkirtbool = false;
-    private File openfile = null;
-    private File savefile = null;
+    private JLabel labAldrich;
+    private JLabel labBeazleyBond;
+    private JLabel labGill;
+    private JCheckBox checkAldrichSkirt;
+    private JCheckBox checkBeazleySkirt;
+    private JCheckBox checkGillSkirt;
+    private JCheckBox checkBeazleyStraightSleeve;
+    private JCheckBox checkBeazleyTrousers;
+    private JCheckBox checkBeazleyBodice;
+    private JButton butRun;
+    private JButton butSave;
+    private JButton butLoad;
+    private File fileInput = null;
 
     // Set a global tolerance for some operations
     public static final double tol = 10e-8;
@@ -43,10 +36,10 @@ public class JBlock extends JFrame
     public static final double res = 1;
 
 
-    public JBlock()
+    private JBlock()
     {
-        // Listener for the open button
-        open.addActionListener(new ActionListener()
+        // Listener for the butLoad button
+        butLoad.addActionListener(new ActionListener()
         {
             @Override
             public void actionPerformed(ActionEvent e)
@@ -55,18 +48,19 @@ public class JBlock extends JFrame
                 JFileChooser fileChooser = new JFileChooser();
                 if (fileChooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION)
                 {
-                    JBlock.this.openfile = fileChooser.getSelectedFile();
-                    System.out.println("Input file is: " + openfile.toString());
+                    JBlock.this.fileInput = fileChooser.getSelectedFile();
+                    System.out.println("Input file is: " + fileInput.toString());
                 }
                 else
                 {
+                    // TODO: Assign some default?
                     System.out.println("No selection");
                 }
             }
         });
 
-        // Listener for the save button
-        save.addActionListener(new ActionListener()
+        // Listener for the butSave button
+        butSave.addActionListener(new ActionListener()
         {
             @Override
             public void actionPerformed(ActionEvent e)
@@ -76,8 +70,11 @@ public class JBlock extends JFrame
                 fileChooser.setCurrentDirectory(new java.io.File(""));
                 fileChooser.setDialogTitle("Select Save Location");
                 fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-                JBlock.this.savefile = fileChooser.getSelectedFile();
                 fileChooser.setAcceptAllFileFilterUsed(false);
+
+                // TODO: Need to actually store the output path somewhere and use it
+
+
                 if (fileChooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION)
                 {
                     System.out.println("Current directory is: " + fileChooser.getCurrentDirectory());
@@ -92,12 +89,12 @@ public class JBlock extends JFrame
         });
 
         // Listener for the Run button
-        RunJBlock.addActionListener(new ActionListener()
+        butRun.addActionListener(new ActionListener()
         {
             @Override
             public void actionPerformed(ActionEvent e)
             {
-                Measurements measurements = new Measurements(JBlock.this.openfile.toString(), true);
+                Measurements measurements = new Measurements(JBlock.this.fileInput.toString(), true);
 
                 // Create patterns
                 for (int i = 0; i < measurements.getNames().size(); i++)
@@ -105,37 +102,37 @@ public class JBlock extends JFrame
                     measurements.setMapNumber(i);
 
                     // Creates patterns depending on which checkboxes are ticked
-                    if (BBSkirt.isSelected())
+                    if (checkBeazleySkirt.isSelected())
                     {
                         SkirtPattern bb_skirt = new SkirtPattern(measurements);
                         bb_skirt.writeToDXF();
                     }
 
-                    if (BBTrousers.isSelected())
+                    if (checkBeazleyTrousers.isSelected())
                     {
                         TrouserPattern bb_trouser = new TrouserPattern(measurements);
                         bb_trouser.writeToDXF();
                     }
 
-                    if (BBBodice.isSelected())
+                    if (checkBeazleyBodice.isSelected())
                     {
                         BodicePattern bb_bodice = new BodicePattern(measurements);
                         bb_bodice.writeToDXF();
                     }
 
-                    if (BBStraightSleeve.isSelected())
+                    if (checkBeazleyStraightSleeve.isSelected())
                     {
                         StraightSleevePattern bb_sleeve = new StraightSleevePattern(measurements);
                         bb_sleeve.writeToDXF();
                     }
 
-                    if (GSkirt.isSelected())
+                    if (checkGillSkirt.isSelected())
                     {
                         gill.SkirtPattern gill_skirt = new gill.SkirtPattern(measurements);
                         gill_skirt.writeToDXF();
                     }
 
-                    if (ASkirt.isSelected())
+                    if (checkAldrichSkirt.isSelected())
                     {
                         aldrich.SkirtPattern aldrich_skirt = new aldrich.SkirtPattern(measurements);
                         aldrich_skirt.writeToDXF();
@@ -148,12 +145,15 @@ public class JBlock extends JFrame
     // PSVM to run the application
     public static void main(String[] args)
     {
+        // Create a JFrame instance
         JFrame frame = new JFrame("JBlock2D - Custom Pattern Drafting");
         frame.setContentPane(new JBlock().panelMain);
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         frame.pack();
         frame.setVisible(true);
         frame.setSize(600, 400);
+
+        // Instantiate backend
         new JBlock();
     }
 }

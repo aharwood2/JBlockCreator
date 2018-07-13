@@ -8,7 +8,7 @@ import mathcontainers.VectorND;
 
 import java.util.ArrayList;
 
-import static jblockmain.Main.tol;
+import static jblockmain.JBlock.tol;
 
 /**
  * Class that represents a block as a series of connected keypoints.
@@ -505,7 +505,7 @@ public class Block
         }
 
         double dcircum = Math.abs(th2 - th1) * radius;
-        int numPts = (int)Math.ceil(dcircum * Main.res);
+        int numPts = (int)Math.ceil(dcircum * JBlock.res);
 
         // Specify in polar coordinates then convert to Cartesian
         Vector2D tmp;
@@ -736,7 +736,7 @@ public class Block
         }
 
         // Discretise by specified amount
-        int numPts = (int)Math.ceil(refEnd.subtract(refStart).norm() * Main.res);
+        int numPts = (int)Math.ceil(refEnd.subtract(refStart).norm() * JBlock.res);
 
         // Find points on the curve by seeding x
         // might not always be robust -- should use a local curvilinear coordinate system really.

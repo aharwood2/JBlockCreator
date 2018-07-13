@@ -8,7 +8,7 @@
     <properties/>
     <border type="none"/>
     <children>
-      <component id="ab45d" class="javax.swing.JLabel" binding="Gill">
+      <component id="ab45d" class="javax.swing.JLabel" binding="labGill">
         <constraints>
           <grid row="2" column="0" row-span="1" col-span="3" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
         </constraints>
@@ -16,7 +16,7 @@
           <text value="Gill"/>
         </properties>
       </component>
-      <component id="43d88" class="javax.swing.JLabel" binding="Aldrich">
+      <component id="43d88" class="javax.swing.JLabel" binding="labAldrich">
         <constraints>
           <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
         </constraints>
@@ -24,7 +24,7 @@
           <text value="Aldrich"/>
         </properties>
       </component>
-      <component id="6817c" class="javax.swing.JLabel" binding="BeazleyBond">
+      <component id="6817c" class="javax.swing.JLabel" binding="labBeazleyBond">
         <constraints>
           <grid row="1" column="0" row-span="1" col-span="2" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
         </constraints>
@@ -32,7 +32,7 @@
           <text value="Beazley - Bond"/>
         </properties>
       </component>
-      <component id="9194a" class="javax.swing.JCheckBox" binding="ASkirt">
+      <component id="9194a" class="javax.swing.JCheckBox" binding="checkAldrichSkirt">
         <constraints>
           <grid row="0" column="1" row-span="1" col-span="6" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
         </constraints>
@@ -41,7 +41,7 @@
           <text value="Skirt"/>
         </properties>
       </component>
-      <component id="b601a" class="javax.swing.JCheckBox" binding="BBSkirt">
+      <component id="b601a" class="javax.swing.JCheckBox" binding="checkBeazleySkirt">
         <constraints>
           <grid row="1" column="2" row-span="1" col-span="2" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
         </constraints>
@@ -49,7 +49,7 @@
           <text value="Skirt"/>
         </properties>
       </component>
-      <component id="c299f" class="javax.swing.JCheckBox" binding="GSkirt">
+      <component id="c299f" class="javax.swing.JCheckBox" binding="checkGillSkirt">
         <constraints>
           <grid row="2" column="3" row-span="1" col-span="6" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
         </constraints>
@@ -57,7 +57,7 @@
           <text value="Skirt"/>
         </properties>
       </component>
-      <component id="aeaba" class="javax.swing.JCheckBox" binding="BBStraightSleeve">
+      <component id="aeaba" class="javax.swing.JCheckBox" binding="checkBeazleyStraightSleeve">
         <constraints>
           <grid row="1" column="4" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false">
             <preferred-size width="91" height="23"/>
@@ -67,7 +67,7 @@
           <text value="Straight Sleeve"/>
         </properties>
       </component>
-      <component id="d9930" class="javax.swing.JCheckBox" binding="BBTrousers">
+      <component id="d9930" class="javax.swing.JCheckBox" binding="checkBeazleyTrousers">
         <constraints>
           <grid row="1" column="5" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
         </constraints>
@@ -75,7 +75,7 @@
           <text value="Trousers"/>
         </properties>
       </component>
-      <component id="dc349" class="javax.swing.JCheckBox" binding="BBBodice">
+      <component id="dc349" class="javax.swing.JCheckBox" binding="checkBeazleyBodice">
         <constraints>
           <grid row="1" column="6" row-span="1" col-span="3" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
         </constraints>
@@ -83,7 +83,7 @@
           <text value="Bodice (WIP)"/>
         </properties>
       </component>
-      <component id="3a476" class="javax.swing.JButton" binding="RunJBlock">
+      <component id="3a476" class="javax.swing.JButton" binding="butRun">
         <constraints>
           <grid row="3" column="0" row-span="1" col-span="9" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
         </constraints>
@@ -92,7 +92,7 @@
           <toolTipText value="Click button to run after setting conditions"/>
         </properties>
       </component>
-      <component id="32a7a" class="javax.swing.JButton" binding="save">
+      <component id="32a7a" class="javax.swing.JButton" binding="butSave">
         <constraints>
           <grid row="0" column="8" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
         </constraints>
@@ -100,7 +100,7 @@
           <text value="Save"/>
         </properties>
       </component>
-      <component id="f23a4" class="javax.swing.JButton" binding="open">
+      <component id="f23a4" class="javax.swing.JButton" binding="butLoad">
         <constraints>
           <grid row="0" column="7" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
         </constraints>
