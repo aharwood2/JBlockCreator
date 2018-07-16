@@ -161,6 +161,7 @@ public class JBlock extends JFrame
                     Prompts.infoBox("Please choose your input file by clicking on the \"Open\" button",
                                     "Input File Needed",
                                     EMsgType.ERROR);
+                    return;
                 }
                 if (fileOutput == null)
                 {
