@@ -1,15 +1,13 @@
-package aldrich;
+/*package aldrich;
 import jblockmain.*;
 import mathcontainers.Vector2D;
 
 import java.util.ArrayList;
 
 /** Class to construct a close fitting bodice using the Aldrich drafting method. */
-/*public class CloseFittingBodice
+/* public class CloseFittingBodice
 extends Pattern
 {
-    /* Measurement file name */
-    /*String inputFileName;
 
     /* Pattern-specific Measurements */
     // In future will be simply extracted from the Measurements object.
@@ -30,3 +28,4 @@ extends Pattern
 
 
 //}
+

@@ -95,7 +95,7 @@ public class SkirtPattern
         k_WaistToKnee = dataStore.getId(14).value;
 
         // Get name
-        inputFileName = dataStore.getName();
+        userName = dataStore.getName();
     }
 
     /**
@@ -108,7 +108,7 @@ public class SkirtPattern
         // plotting. The bottom left corner of the space to be the origin.
 
         // Create component representing half back of skirt folded in half.
-        blocks.add(new Block(inputFileName + "_Gill_Skirt_Block"));
+        blocks.add(new Block(userName + "_Gill_Skirt_Block"));
         Block fullBlock = blocks.get(0);
 
         // Add all the fixed points to the block that coincide with the basic rectangle. These points do not move

@@ -5,8 +5,6 @@ import jblockenums.EMethod;
 import jblockmain.*;
 import mathcontainers.Vector2D;
 
-import java.util.ArrayList;
-
 public class StraightSleevePattern
     extends Pattern
 {
@@ -75,7 +73,7 @@ public class StraightSleevePattern
         d_SleeveHeadToElbow = dataStore.getId(25).value;
 
         // Get name
-        inputFileName = dataStore.getName();
+        userName = dataStore.getName();
     }
 
     /**
@@ -88,7 +86,7 @@ public class StraightSleevePattern
         // plotting. The bottom left corner of the space to be the origin.
 
         // Create component representing half back of skirt folded in half.
-        blocks.add(new Block(inputFileName + "_BB_Sleeve_Block"));
+        blocks.add(new Block(userName + "_BB_Sleeve_Block"));
         Block fullBlock = blocks.get(0);
 
         // Upper arm line point on back underarm

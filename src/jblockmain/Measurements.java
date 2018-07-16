@@ -101,9 +101,6 @@ public class Measurements
     {
         this();
 
-        // Assign name
-        this.scanDataFileName = scanDataFileName.substring(0, scanDataFileName.length() - 4);
-
         // Add a new HashMap
         storeMaps.add(new HashMap<>());
         mapNumber = 0;
@@ -111,7 +108,8 @@ public class Measurements
         // If not batch then store name in names list
         if (!isBatch)
         {
-            userNames.add(scanDataFileName);
+            String scanDataUserName = scanDataFileName.substring(scanDataFileName.lastIndexOf("\\", scanDataFileName.length() - 4));
+            userNames.add(scanDataUserName);
         }
 
         try

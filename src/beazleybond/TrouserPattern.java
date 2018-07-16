@@ -148,7 +148,7 @@ public class TrouserPattern
         l_InsideLegToAnkle = dataStore.getId(22).value;
 
         // Get name
-        inputFileName = dataStore.getName();
+        userName = dataStore.getName();
     }
 
     /**
@@ -161,7 +161,7 @@ public class TrouserPattern
         // for plotting. The bottom left corner of the space to be the origin.
 
         // Create front block first
-        blocks.add(new Block(inputFileName + "_Trousers_Front_Block"));
+        blocks.add(new Block(userName + "_Trousers_Front_Block"));
         Block frontBlock = blocks.get(blocks.size() - 1);
 
         // Start keypoint placement from bottom left
@@ -259,7 +259,7 @@ public class TrouserPattern
         // Back block //
 
         // Create block
-        blocks.add(new Block(inputFileName + "_BB_Trousers_Back_Block"));
+        blocks.add(new Block(userName + "_BB_Trousers_Back_Block"));
         Block backBlock = blocks.get(blocks.size() - 1);
 
         // Add first keypoint (bottom left)

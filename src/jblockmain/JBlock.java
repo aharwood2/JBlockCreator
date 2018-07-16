@@ -10,7 +10,6 @@ import beazleybond.BodicePattern;
 import beazleybond.SkirtPattern;
 import beazleybond.StraightSleevePattern;
 import beazleybond.TrouserPattern;
-import jblockmain.Measurements;
 
 public class JBlock extends JFrame
 {
@@ -32,6 +31,7 @@ public class JBlock extends JFrame
     private JLabel savePath;
     private JCheckBox isbatchCheckbox;
     private File fileInput = null;
+    private File fileOutput = null;
 
     // Set a global tolerance for some operations
     public static final double tol = 10e-8;
@@ -89,6 +89,7 @@ public class JBlock extends JFrame
                     System.out.println("Current directory is: " + fileChooser.getCurrentDirectory());
                     System.out.println("Save location is: " + fileChooser.getSelectedFile());
                     savePath.setText(fileChooser.getSelectedFile().toString());
+                    JBlock.this.fileOutput = fileChooser.getSelectedFile();
                 }
                 else
                 {
@@ -115,37 +116,37 @@ public class JBlock extends JFrame
                     if (checkBeazleySkirt.isSelected())
                     {
                         SkirtPattern bb_skirt = new SkirtPattern(measurements);
-                        bb_skirt.writeToDXF();
+                        bb_skirt.writeToDXF(fileOutput);
                     }
 
                     if (checkBeazleyTrousers.isSelected())
                     {
                         TrouserPattern bb_trouser = new TrouserPattern(measurements);
-                        bb_trouser.writeToDXF();
+                        bb_trouser.writeToDXF(fileOutput);
                     }
 
                     if (checkBeazleyBodice.isSelected())
                     {
                         BodicePattern bb_bodice = new BodicePattern(measurements);
-                        bb_bodice.writeToDXF();
+                        bb_bodice.writeToDXF(fileOutput);
                     }
 
                     if (checkBeazleyStraightSleeve.isSelected())
                     {
                         StraightSleevePattern bb_sleeve = new StraightSleevePattern(measurements);
-                        bb_sleeve.writeToDXF();
+                        bb_sleeve.writeToDXF(fileOutput);
                     }
 
                     if (checkGillSkirt.isSelected())
                     {
                         gill.SkirtPattern gill_skirt = new gill.SkirtPattern(measurements);
-                        gill_skirt.writeToDXF();
+                        gill_skirt.writeToDXF(fileOutput);
                     }
 
                     if (checkAldrichSkirt.isSelected())
                     {
                         aldrich.SkirtPattern aldrich_skirt = new aldrich.SkirtPattern(measurements);
-                        aldrich_skirt.writeToDXF();
+                        aldrich_skirt.writeToDXF(fileOutput);
                     }
                 }
             }

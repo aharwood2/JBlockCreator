@@ -115,8 +115,8 @@ public class SkirtPattern
         // Others
         Arb_HipLevel = dataStore.getId(15).value;
 
-        // Get name
-        inputFileName = dataStore.getName();
+        // Get name of user
+        userName = dataStore.getName();
     }
 
     /**
@@ -129,7 +129,7 @@ public class SkirtPattern
         // plotting. The bottom left corner of the space to be the origin.
 
         // Create component representing half back of skirt folded in half.
-        blocks.add(new Block(inputFileName + "_BB_Skirt_Back_Block"));
+        blocks.add(new Block(userName + "_BB_Skirt_Back_Block"));
         Block backBlock = blocks.get(0);
 
         // Add all the fixed points to the block that coincide with the basic rectangle. These points do not move
@@ -173,7 +173,7 @@ public class SkirtPattern
                                        "Hip");
 
         // Trace off block
-        blocks.add(new Block(backBlock, inputFileName + "_BB_Skirt_Front_Block"));
+        blocks.add(new Block(backBlock, userName + "_BB_Skirt_Front_Block"));
         Block frontBlock = blocks.get(blocks.size()- 1);
 
         // Add back dart.

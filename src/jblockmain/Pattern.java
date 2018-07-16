@@ -4,6 +4,7 @@ import dxfwriter.DxfFile;
 import jblockenums.EGarment;
 import jblockenums.EMethod;
 
+import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -15,8 +16,8 @@ public abstract class Pattern implements IPlottable
     // Offset used for drawing of construction lines
     protected double Arb_Con = 2.0;
 
-    // Measurement file name
-    protected String inputFileName;
+    // User associated with the pattern
+    protected String userName;
 
     // Method associated with pattern
     protected final EMethod method;
@@ -92,12 +93,12 @@ public abstract class Pattern implements IPlottable
         return blocks.size();
     }
 
-    public void writeToDXF()
+    public void writeToDXF(File fileOutput)
     {
         for (int i = 0; i < getNumberOfBlocksToPlot(); i++)
         {
             // Construct output path
-            Path path = Paths.get("./output/" + method + "/" + garment + "/");
+            Path path = Paths.get(fileOutput.toString() + "/" + method + "/" + garment + "/");
     
             // Create directory structure if required
             try
