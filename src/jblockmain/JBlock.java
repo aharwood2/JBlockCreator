@@ -39,6 +39,10 @@ public class JBlock extends JFrame
     // Set a global resolution for some curves (points per cm)
     public static final double res = 1;
 
+    // Version number
+    public final static int majVer = 0;
+    public final static int minVer = 1;
+
 
     private JBlock()
     {
