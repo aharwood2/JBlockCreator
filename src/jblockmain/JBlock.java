@@ -42,8 +42,8 @@ public class JBlock extends JFrame
     public static final double res = 1;
 
     // Version number
-    public static final int majVer = 0;
-    public static final int minVer = 2;
+    public static final int majVer = 1;
+    public static final int minVer = 0;
 
     private JBlock()
     {
