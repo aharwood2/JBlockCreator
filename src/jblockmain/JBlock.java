@@ -43,7 +43,6 @@ public class JBlock extends JFrame
     public final static int majVer = 0;
     public final static int minVer = 1;
 
-
     private JBlock()
     {
         // Listener for the butLoad button
@@ -102,54 +101,69 @@ public class JBlock extends JFrame
         // Listener for the Run button
         butRun.addActionListener(new ActionListener()
         {
-            @Override
-            public void actionPerformed(ActionEvent e)
-            {
-                Measurements measurements = new Measurements(JBlock.this.fileInput.toString(), JBlock.this.isbatchCheckbox.isSelected());
-
-                // Create patterns
-                for (int i = 0; i < measurements.getNames().size(); i++)
+                @Override
+                public void actionPerformed (ActionEvent e)
                 {
-                    measurements.setMapNumber(i);
-
-                    // Creates patterns depending on which checkboxes are ticked
-                    if (checkBeazleySkirt.isSelected())
+                    if (fileOutput != null && fileInput != null)
                     {
-                        SkirtPattern bb_skirt = new SkirtPattern(measurements);
-                        bb_skirt.writeToDXF(fileOutput);
+                        Measurements measurements = new Measurements(JBlock.this.fileInput.toString(), JBlock.this.isbatchCheckbox.isSelected());
+
+                        // Create patterns
+                        for (int i = 0; i < measurements.getNames().size(); i++)
+                        {
+                            measurements.setMapNumber(i);
+
+                            // Creates patterns depending on which checkboxes are ticked
+                            if (checkBeazleySkirt.isSelected())
+                            {
+                                SkirtPattern bb_skirt = new SkirtPattern(measurements);
+                                bb_skirt.writeToDXF(fileOutput);
+                            }
+
+                            if (checkBeazleyTrousers.isSelected())
+                            {
+                                TrouserPattern bb_trouser = new TrouserPattern(measurements);
+                                bb_trouser.writeToDXF(fileOutput);
+                            }
+
+                            if (checkBeazleyBodice.isSelected())
+                            {
+                                BodicePattern bb_bodice = new BodicePattern(measurements);
+                                bb_bodice.writeToDXF(fileOutput);
+                            }
+
+                            if (checkBeazleyStraightSleeve.isSelected())
+                            {
+                                StraightSleevePattern bb_sleeve = new StraightSleevePattern(measurements);
+                                bb_sleeve.writeToDXF(fileOutput);
+                            }
+
+                            if (checkGillSkirt.isSelected())
+                            {
+                                gill.SkirtPattern gill_skirt = new gill.SkirtPattern(measurements);
+                                gill_skirt.writeToDXF(fileOutput);
+                            }
+
+                            if (checkAldrichSkirt.isSelected())
+                            {
+                                aldrich.SkirtPattern aldrich_skirt = new aldrich.SkirtPattern(measurements);
+                                aldrich_skirt.writeToDXF(fileOutput);
+                            }
+                        }
                     }
-
-                    if (checkBeazleyTrousers.isSelected())
+                    else if (fileOutput == null && fileInput == null)
                     {
-                        TrouserPattern bb_trouser = new TrouserPattern(measurements);
-                        bb_trouser.writeToDXF(fileOutput);
+                        ErrorPrompt.infoBox("Please choose your input file and output destination", "Input and Output");
                     }
-
-                    if (checkBeazleyBodice.isSelected())
+                    else if (fileOutput != null && fileInput == null)
                     {
-                        BodicePattern bb_bodice = new BodicePattern(measurements);
-                        bb_bodice.writeToDXF(fileOutput);
+                        ErrorPrompt.infoBox("Please choose your input file", "Input");
                     }
-
-                    if (checkBeazleyStraightSleeve.isSelected())
+                    else if (fileOutput == null && fileInput != null)
                     {
-                        StraightSleevePattern bb_sleeve = new StraightSleevePattern(measurements);
-                        bb_sleeve.writeToDXF(fileOutput);
-                    }
-
-                    if (checkGillSkirt.isSelected())
-                    {
-                        gill.SkirtPattern gill_skirt = new gill.SkirtPattern(measurements);
-                        gill_skirt.writeToDXF(fileOutput);
-                    }
-
-                    if (checkAldrichSkirt.isSelected())
-                    {
-                        aldrich.SkirtPattern aldrich_skirt = new aldrich.SkirtPattern(measurements);
-                        aldrich_skirt.writeToDXF(fileOutput);
+                        ErrorPrompt.infoBox("Please choose your output destination", "Output");
                     }
                 }
-            }
         });
     }
 
