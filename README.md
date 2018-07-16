@@ -12,10 +12,10 @@ still need to make sure you have the JRE installed beforehand though and the sta
 Java executables.
 
 ## Release Notes ##
-Version: 0.2    
+Version: 0.2
 Issue #1: Patterns can now store the name of the input file and use it when writing DXFs.    
 Issue #2: Patterns now have a 10cm square drawn on a separate layer to allow scaling.    
 Issue #3: Patterns now have their name written on a separate layer.    
 
-Version: 0.1    
+Version: 0.1
 Initial Evaluation Version

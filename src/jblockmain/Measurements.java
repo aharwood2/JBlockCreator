@@ -108,8 +108,11 @@ public class Measurements
         // If not batch then store name in names list
         if (!isBatch)
         {
-            String scanDataUserName = scanDataFileName.substring(scanDataFileName.lastIndexOf("\\", scanDataFileName.length() - 4));
-            userNames.add(scanDataUserName);
+            userNames.add(
+                    scanDataFileName.substring(
+                            scanDataFileName.lastIndexOf("\\", scanDataFileName.length() - 4)
+                    )
+            );
         }
 
         try

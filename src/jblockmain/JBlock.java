@@ -1,15 +1,17 @@
 package jblockmain;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
-import javax.swing.JFileChooser;
 
 import beazleybond.BodicePattern;
 import beazleybond.SkirtPattern;
 import beazleybond.StraightSleevePattern;
 import beazleybond.TrouserPattern;
+
+import jblockenums.EMsgType;
 
 public class JBlock extends JFrame
 {
@@ -40,8 +42,8 @@ public class JBlock extends JFrame
     public static final double res = 1;
 
     // Version number
-    public final static int majVer = 0;
-    public final static int minVer = 1;
+    public static final int majVer = 0;
+    public static final int minVer = 2;
 
     private JBlock()
     {
@@ -57,12 +59,12 @@ public class JBlock extends JFrame
                 {
                     JBlock.this.fileInput = fileChooser.getSelectedFile();
                     System.out.println("Input file is: " + fileInput.toString());
-                    openPath.setText(fileChooser.getCurrentDirectory().toString());
-                }
-                else
-                {
-                    // TODO: Assign some default?
-                    System.out.println("No selection");
+                    String file = fileChooser.getSelectedFile().toString();
+                    if (file.length() > 40)
+                    {
+                        file = file.substring(0, 40) + "...";
+                    }
+                    openPath.setText(file);
                 }
             }
         });
@@ -80,90 +82,93 @@ public class JBlock extends JFrame
                 fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
                 fileChooser.setAcceptAllFileFilterUsed(false);
 
-                // TODO: Need to actually store the output path somewhere and use it
-
-
                 if (fileChooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION)
                 {
                     System.out.println("Current directory is: " + fileChooser.getCurrentDirectory());
                     System.out.println("Save location is: " + fileChooser.getSelectedFile());
-                    savePath.setText(fileChooser.getSelectedFile().toString());
+                    String file = fileChooser.getCurrentDirectory().toString();
+                    if (file.length() > 40)
+                    {
+                        file = file.substring(0, 40) + "...";
+                    }
+                    savePath.setText(file);
                     JBlock.this.fileOutput = fileChooser.getSelectedFile();
                 }
-                else
-                {
-                    System.out.println("No selection");
-                }
-
             }
         });
 
         // Listener for the Run button
         butRun.addActionListener(new ActionListener()
         {
-                @Override
-                public void actionPerformed (ActionEvent e)
+            @Override
+            public void actionPerformed (ActionEvent e)
+            {
+                if (fileOutput != null && fileInput != null)
                 {
-                    if (fileOutput != null && fileInput != null)
+                    Measurements measurements = new Measurements(JBlock.this.fileInput.toString(),
+                                                                 JBlock.this.isbatchCheckbox.isSelected());
+
+                    // Create patterns
+                    for (int i = 0; i < measurements.getNames().size(); i++)
                     {
-                        Measurements measurements = new Measurements(JBlock.this.fileInput.toString(), JBlock.this.isbatchCheckbox.isSelected());
+                        measurements.setMapNumber(i);
 
-                        // Create patterns
-                        for (int i = 0; i < measurements.getNames().size(); i++)
+                        // Creates patterns depending on which checkboxes are ticked
+                        if (checkBeazleySkirt.isSelected())
                         {
-                            measurements.setMapNumber(i);
+                            SkirtPattern bb_skirt = new SkirtPattern(measurements);
+                            bb_skirt.writeToDXF(fileOutput);
+                        }
 
-                            // Creates patterns depending on which checkboxes are ticked
-                            if (checkBeazleySkirt.isSelected())
-                            {
-                                SkirtPattern bb_skirt = new SkirtPattern(measurements);
-                                bb_skirt.writeToDXF(fileOutput);
-                            }
+                        if (checkBeazleyTrousers.isSelected())
+                        {
+                            TrouserPattern bb_trouser = new TrouserPattern(measurements);
+                            bb_trouser.writeToDXF(fileOutput);
+                        }
 
-                            if (checkBeazleyTrousers.isSelected())
-                            {
-                                TrouserPattern bb_trouser = new TrouserPattern(measurements);
-                                bb_trouser.writeToDXF(fileOutput);
-                            }
+                        if (checkBeazleyBodice.isSelected())
+                        {
+                            BodicePattern bb_bodice = new BodicePattern(measurements);
+                            bb_bodice.writeToDXF(fileOutput);
+                        }
 
-                            if (checkBeazleyBodice.isSelected())
-                            {
-                                BodicePattern bb_bodice = new BodicePattern(measurements);
-                                bb_bodice.writeToDXF(fileOutput);
-                            }
+                        if (checkBeazleyStraightSleeve.isSelected())
+                        {
+                            StraightSleevePattern bb_sleeve = new StraightSleevePattern(measurements);
+                            bb_sleeve.writeToDXF(fileOutput);
+                        }
 
-                            if (checkBeazleyStraightSleeve.isSelected())
-                            {
-                                StraightSleevePattern bb_sleeve = new StraightSleevePattern(measurements);
-                                bb_sleeve.writeToDXF(fileOutput);
-                            }
+                        if (checkGillSkirt.isSelected())
+                        {
+                            gill.SkirtPattern gill_skirt = new gill.SkirtPattern(measurements);
+                            gill_skirt.writeToDXF(fileOutput);
+                        }
 
-                            if (checkGillSkirt.isSelected())
-                            {
-                                gill.SkirtPattern gill_skirt = new gill.SkirtPattern(measurements);
-                                gill_skirt.writeToDXF(fileOutput);
-                            }
-
-                            if (checkAldrichSkirt.isSelected())
-                            {
-                                aldrich.SkirtPattern aldrich_skirt = new aldrich.SkirtPattern(measurements);
-                                aldrich_skirt.writeToDXF(fileOutput);
-                            }
+                        if (checkAldrichSkirt.isSelected())
+                        {
+                            aldrich.SkirtPattern aldrich_skirt = new aldrich.SkirtPattern(measurements);
+                            aldrich_skirt.writeToDXF(fileOutput);
                         }
                     }
-                    else if (fileOutput == null && fileInput == null)
-                    {
-                        ErrorPrompt.infoBox("Please choose your input file and output destination", "Input and Output");
-                    }
-                    else if (fileOutput != null && fileInput == null)
-                    {
-                        ErrorPrompt.infoBox("Please choose your input file", "Input");
-                    }
-                    else if (fileOutput == null && fileInput != null)
-                    {
-                        ErrorPrompt.infoBox("Please choose your output destination", "Output");
-                    }
+
+                    // Create done prompt
+                    Prompts.infoBox("Done!", "Done", EMsgType.INFO);
                 }
+
+                // Handle missing options
+                if (fileInput == null)
+                {
+                    Prompts.infoBox("Please choose your input file by clicking on the \"Open\" button",
+                                    "Input File Needed",
+                                    EMsgType.ERROR);
+                }
+                if (fileOutput == null)
+                {
+                    Prompts.infoBox("Please choose a directory to write the patterns to by clicking on \"Save\"",
+                                    "Output Directory Needed",
+                                    EMsgType.ERROR);
+                }
+            }
         });
     }
 
@@ -171,18 +176,21 @@ public class JBlock extends JFrame
     public static void main(String[] args)
     {
         // Create a JFrame instance
-        JFrame frame = new JFrame("JBlock2D - Custom Pattern Drafting - Version 1.0");
+        JFrame frame = new JFrame("JBlock2D - Custom Pattern Drafting (Version "
+                                          + majVer + "." + minVer + ")");
         frame.setContentPane(new JBlock().panelMain);
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         frame.pack();
+
+        // Centre on screen
+        Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+        frame.setLocation(dim.width / 2 - frame.getSize().width / 2,
+                          dim.height / 2 - frame.getSize().height / 2);
 
         // Sets the frame as visible
         frame.setVisible(true);
 
         // Sets the frame size
-        frame.setSize(450, 400);
-
-        // Instantiate backend
-        new JBlock();
+        frame.setSize(400, 400);
     }
 }
