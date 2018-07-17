@@ -19,6 +19,6 @@ public class Prompts
     {
 
 
-        JOptionPane.showMessageDialog(null, infoMessage, "Error: " + titleBar, JOptionPane.INFORMATION_MESSAGE);
+        JOptionPane.showMessageDialog(null, infoMessage, type + ": " + titleBar, JOptionPane.INFORMATION_MESSAGE);
     }
 }

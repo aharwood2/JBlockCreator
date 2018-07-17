@@ -4,6 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 import java.io.File;
 
 import beazleybond.BodicePattern;
@@ -42,13 +43,13 @@ public class JBlock extends JFrame
     public static final double res = 1;
 
     // Version number
-    public static final int majVer = 1;
-    public static final int minVer = 0;
+    private static final int majVer = 1;
+    private static final int minVer = 0;
 
-    private JBlock()
+    public class OpenFile{}
     {
         // Listener for the butLoad button
-        butLoad.addActionListener(new ActionListener()
+        ActionListener openfile = new ActionListener()
         {
             @Override
             public void actionPerformed(ActionEvent e)
@@ -67,10 +68,15 @@ public class JBlock extends JFrame
                     openPath.setText(file);
                 }
             }
-        });
+        };
 
+        butLoad.addActionListener(openfile);
+    }
+
+    public class SaveFile{}
+    {
         // Listener for the butSave button
-        butSave.addActionListener(new ActionListener()
+        ActionListener savefile = new ActionListener()
         {
             @Override
             public void actionPerformed(ActionEvent e)
@@ -95,18 +101,23 @@ public class JBlock extends JFrame
                     JBlock.this.fileOutput = fileChooser.getSelectedFile();
                 }
             }
-        });
+        };
 
+        butSave.addActionListener(savefile);
+    }
+
+    private JBlock()
+    {
         // Listener for the Run button
         butRun.addActionListener(new ActionListener()
         {
             @Override
-            public void actionPerformed (ActionEvent e)
+            public void actionPerformed(ActionEvent e)
             {
                 if (fileOutput != null && fileInput != null)
                 {
                     Measurements measurements = new Measurements(JBlock.this.fileInput.toString(),
-                                                                 JBlock.this.isbatchCheckbox.isSelected());
+                            JBlock.this.isbatchCheckbox.isSelected());
 
                     // Create patterns
                     for (int i = 0; i < measurements.getNames().size(); i++)
@@ -159,15 +170,15 @@ public class JBlock extends JFrame
                 if (fileInput == null)
                 {
                     Prompts.infoBox("Please choose your input file by clicking on the \"Open\" button",
-                                    "Input File Needed",
-                                    EMsgType.ERROR);
+                            "Input File Needed",
+                            EMsgType.ERROR);
                     return;
                 }
                 if (fileOutput == null)
                 {
                     Prompts.infoBox("Please choose a directory to write the patterns to by clicking on \"Save\"",
-                                    "Output Directory Needed",
-                                    EMsgType.ERROR);
+                            "Output Directory Needed",
+                            EMsgType.ERROR);
                 }
             }
         });
@@ -178,7 +189,7 @@ public class JBlock extends JFrame
     {
         // Create a JFrame instance
         JFrame frame = new JFrame("JBlock2D - Custom Pattern Drafting (Version "
-                                          + majVer + "." + minVer + ")");
+                + majVer + "." + minVer + ")");
         frame.setContentPane(new JBlock().panelMain);
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         frame.pack();
@@ -186,12 +197,113 @@ public class JBlock extends JFrame
         // Centre on screen
         Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
         frame.setLocation(dim.width / 2 - frame.getSize().width / 2,
-                          dim.height / 2 - frame.getSize().height / 2);
+                dim.height / 2 - frame.getSize().height / 2);
 
         // Sets the frame as visible
         frame.setVisible(true);
 
         // Sets the frame size
         frame.setSize(400, 400);
+
+        /* MENU BAR SETUP */
+
+        // Create a window for the menu
+        JFrame frame1 = new JFrame("Menu");
+        JPanel panel = new JPanel();
+        frame1.getContentPane().add(panel, "Center");
+
+        // Create an action listener for the menu items we will create
+        ActionListener listener = new ActionListener()
+        {
+            @Override
+            public void actionPerformed(ActionEvent e)
+            {
+                JMenuItem item = (JMenuItem) e.getSource();
+                String cmd = item.getActionCommand();
+                if (cmd.equals("Exit"))
+                {
+                    System.exit(0);
+                }
+                if (cmd.equals("View help"))
+                {
+                    Prompts.infoBox("PLACEHOLDER", "PLACEHOLDER", EMsgType.INFO);
+                }
+                if (cmd.equals("Open"))
+                {
+
+                }
+                if (cmd.equals("Save"))
+                {
+
+                }
+                if (cmd.equals("Run"))
+                {
+
+                }
+            }
+        };
+
+        // Create some menu panes, and fill them with menu items
+        JMenu file = new JMenu("File");
+        file.setMnemonic('F');
+        file.add(menuItem("Open", listener, "Open", 'O', KeyEvent.VK_O));
+        file.add(menuItem("Save", listener, "Save", 'S', KeyEvent.VK_S));
+        file.add(menuItem("Run", listener, "Run", 'R', KeyEvent.VK_R));
+        file.add(menuItem("Exit", listener, "Exit", 'E', KeyEvent.VK_E));
+
+        JMenu edit = new JMenu("Help");
+        edit.setMnemonic('H');
+        edit.add(menuItem("View Help", listener, "View help", 'H', KeyEvent.VK_H));
+
+        // Create a menubar and add these panes to it.
+        JMenuBar menubar = new JMenuBar();
+        menubar.add(file);
+        menubar.add(edit);
+
+        // Add menubar to the main window.  Note special method to add menubars
+        frame.setJMenuBar(menubar);
+
+        // Now create a popup menu and add the some stuff to it
+        final JPopupMenu popup = new JPopupMenu();
+        popup.add(menuItem("Open", listener, "open", 0, 0));
+        popup.addSeparator();                // Add a separator between items
+        JMenu colors = new JMenu("Colors");  // Create a submenu
+        popup.add(colors);                   // and add it to the popup menu
+
+        // Now fill the submenu with mutually-exclusive radio buttons
+        ButtonGroup colorgroup = new ButtonGroup();
+        colors.add(radioItem("Red", listener, "color(red)", colorgroup));
+        colors.add(radioItem("Green", listener, "color(green)", colorgroup));
+        colors.add(radioItem("Blue", listener, "color(blue)", colorgroup));
+
+        // Finally, make our main window appear
+        frame.setSize(450, 350);
+        frame.setVisible(true);
+    }
+
+    // A convenience method for creating menu items.
+    private static JMenuItem menuItem(String label,
+                                      ActionListener listener, String command,
+                                      int mnemonic, int acceleratorKey)
+    {
+        JMenuItem item = new JMenuItem(label);
+        item.addActionListener(listener);
+        item.setActionCommand(command);
+        if (mnemonic != 0) item.setMnemonic((char) mnemonic);
+        if (acceleratorKey != 0)
+            item.setAccelerator(KeyStroke.getKeyStroke(acceleratorKey,
+                    java.awt.Event.CTRL_MASK));
+        return item;
+    }
+
+    // A convenience method for creating radio button menu items.
+    private static JMenuItem radioItem(String label, ActionListener listener,
+                                       String command, ButtonGroup mutExGroup)
+    {
+        JMenuItem item = new JRadioButtonMenuItem(label);
+        item.addActionListener(listener);
+        item.setActionCommand(command);
+        mutExGroup.add(item);
+        return item;
     }
 }
