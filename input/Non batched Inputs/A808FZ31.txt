@@ -1,0 +1,496 @@
+#SizeStream Measurements
+#Stored on Thursday, April 26, 2018 11:31:00
+#
+#
+#format - Measurement Valid (1 = valid), Measurement Name, Measurement
+#
+1  [001] Chest/Bust Circum Tape Measure: 96.94
+1  [002] Opt Small of back Waist Tape Measure: 78.914
+1  [003] Hip Circum Tape Measure: 112.99
+1  [004] Half Back Centre Tape Measure: 39.836
+1  [005] Neck Circumference: 40.245
+1  [006] Scye Depth (Vertical): 21.827
+1  [007] Side Neck to Bust Length Right: 26.488
+1  [008] Side Neck to Bust to Waist R: 40.285
+1  [009] Across Back Tape Measurement: 32.746
+1  [010] Across Chest Arm to Arm Length: 31.245
+1  [011] Shoulder Length Right: 9.1645
+1  [012] Bust Width: 18.1
+1  [013] Upper Hip SOB -10cm: 96.652
+1  [014] Waist to Knee Length: 61.021
+1  [015] Waist to Hip Length: 26.996
+1  [016] Skirt Length: 67.821
+1  [017] Thigh Circ R: 65.157
+1  [018] Knee Circ R: 41.547
+1  [019] Ankle Circ R: 30.237
+1  [020] Waist to Crotch Length (Body Rise): 29.892
+1  [021] Waist to Ankle (Outside Leg): 95.727
+1  [022] Crotch to Ankle (Inside Leg): 65.835
+1  [023] Sleeve Lenght R: 54.589
+1  [024] Bicep Circ: 32.679
+1  [026] Fr Waist Arc: 47.838
+1  [027] Bk Waist Arc: 45.049
+1  [028] Fr Abdomen Arc: 50.21
+1  [029] Bk Abdomen Arc: 47.583
+1  [030] Bk Seat Arc: 55.227
+1  [031] Fr Hip Arc: 55.816
+1  [032] Bk Hip Arc: 57.13
+1  [033] Waist to Abdomen: 10.897
+1  [034] Waist to Seat: 21.003
+#SizeStream Core Measurements
+#format - Measurement Valid (1 = valid), Measurement Name, Measurement
+#
+1  Collar Circumference: 37.89
+1  Neck Circumference: 40.245
+1  Chest / Bust Circum Tape Measure: 96.94
+1  Bust Girth With Drop Tape Measure: 93.037
+1  Underbust Circum Tape Measure: 85.902
+1  Waist Circum Tape Measure: 92.946
+1  Waist Height: 103.54
+1  Pants Waist Tape Measure: 96.581
+1  Opt Small of Back Waist Tape Measure: 78.914
+1  Opt Small Waist Back Height: 103.12
+1  Seat Circum Tape Measure: 109.16
+1  Hip Circum Tape Measure: 112.99
+1  Crotch Length Full: 78.986
+1  Crotch Height: 73.232
+1  Inseam Left: 73.89
+1  Stomach FP Circum Tape Measure: 96.88
+1  Stomach Max Circum Tape Measure: 89.82
+1  Wrist Circumference Left: 18.125
+1  Wrist Circumference Right: 17.289
+1  Abdomen Circum Tape Measure: 97.922
+1  Inseam Right: 73.922
+1  Shoulder Length Left: 10.972
+1  Shoulder Length Right: 9.1645
+1  High Hip: 101.18
+1  Arm Hole Circumference Left: 52.073
+1  Arm Hole Circumference Right: 49.045
+1  Arm Length Left: 54.462
+1  Arm Length Right: 54.589
+1  Side Neck to Bust length Left: 25.747
+1  Side Neck to Bust length Right: 26.488
+1  Horizontal Waist Tape Measure: 90.08
+1  Horizontal Waist Height: 97.216
+1  Abdomen Height: 92.227
+1  Front Vertical Rise: 29.996
+1  Thigh Circumference Left: 66.406
+1  Thigh Circumference Right: 65.157
+1  Back Shoulder Width Horizontal: 36.411
+1  MidThigh Circumference Left: 54.334
+1  MidThigh Circumference Right: 52.216
+1  Knee Circumference Left: 42.827
+1  Knee Circumference Right: 41.547
+1  Calf Circumference Left: 44.115
+1  Calf Circumference Right: 43.295
+1  Min lower leg Height Left: 10.404
+1  Min lower leg Height Right: 10.285
+1  Min Lower Leg Girth Left: 28.507
+1  Min Lower Leg Girth Right: 28.993
+1  Surface Area Total: 18572
+1  Surface Area Torso: 6171.8
+1  Across Back Tape Measurement: 32.746
+1  Across Chest Tape Measurement: 44.404
+1  Bicep Circumference Left: 35.266
+1  Bicep Circumference Right: 32.679
+1  Back Vertical Rise: 29.892
+1  Ankle Circumference Left: 29.991
+1  Ankle Circumference Right: 30.237
+1  Half Back Center Tape Measure: 39.836
+1  Back Neck to Back Chest Contour Length: 25.192
+1  Back Neck to Back Chest Vertical Length: 23.381
+1  Forearm Circumference Left: 29.439
+1  Forearm Circumference Right: 28.395
+1  Elbow Circumference Tape Measure Left: 30.489
+1  Elbow Circumference Tape Measure Right: 28.587
+1  Chin Height: 142.67
+1  Front Waist Tape Measure: 39.143
+1  Hip Circumference: 112.99
+1  Horizontal Waist: 90.134
+1  Leg Volume Left: 11884
+1  Leg Volume Right: 11539
+1  Mid Shoulder Height Left: 138.03
+1  Mid Shoulder Height Right: 138.03
+1  Mid Shoulder to Waist Length Left: 42.432
+1  Mid Shoulder to Waist Length Right: 43.394
+1  Narrow Waist: 78.585
+1  Narrow Waist Tape Measure: 78.539
+1  Opt Formula Waist Back Height: 99.365
+1  Opt Formula Waist Front Height: 99.652
+1  Opt Formula Waist Left Height: 99.652
+1  Opt Formula Waist Right Height: 99.652
+1  Opt Formula Waist Tape Measure: 85.677
+1  Opt Small Waist Front Height: 103.23
+1  Opt Small Waist Left Height: 104.41
+1  Opt Small Waist Right Height: 103.54
+1  Outer Arm Hole Circumference Left: 49.519
+1  Outer Arm Hole Circumference Right: 50.098
+1  Outside Leg Length Left: 105.94
+1  Outside Leg Length Right: 104.86
+1  Over Arm Circum Tape Measure: 113.27
+1  OverArm Circumference: 114.82
+1  Pants Waist: 96.583
+1  Seat Circumference: 109.23
+1  Seat Fold Height: 74.147
+1  Shoulder Arc Right: 55.992
+1  Shoulder Circumference: 102.61
+1  Shoulder Circumference Height: 128.74
+1  Shoulder Slope Left: 22.846
+1  Shoulder Slope Right: 23.804
+1  Side Back Waist to Floor Left: 98.214
+1  Side Back Waist to Floor Right: 98.187
+1  Side Neck Trunk Length: 164.37
+1  Side Neck Trunk Length Tape Measure: 162.3
+1  Sleeve Length Left: 69.633
+1  Sleeve Length Right: 69.513
+1  Stomach FP Circumference: 96.88
+1  Stomach Max Circumference: 89.82
+1  Subject Height: 166.47
+1  Thigh Height Left: 68.152
+1  Thigh Height Right: 68.152
+1  Underbust Circumference: 86.124
+1  UnderKnee Circumference Left: 42.54
+1  UnderKnee Circumference Right: 41.335
+1  UnderKnee Height Left: 39.449
+1  UnderKnee Height Right: 39.79
+1  Upper Bust Front Length: 39.338
+1  Vertical Trunk Circumference Left: 162.39
+1  Vertical Trunk Circumference Right: 161.41
+1  Waist at 50%: 85.002
+1  Waist Circumference: 92.95
+1  Bust To Bust Length: 11.655
+#
+#Horizontal Circumferences, Right Arm
+#
+Height 85.66 cm:  17.42
+Height 86.55 cm:  17.14
+Height 87.44 cm:  17.3
+Height 88.33 cm:  17.71
+Height 89.21 cm:  18.6
+Height 90.1 cm:  19.53
+Height 90.99 cm:  20.19
+Height 91.88 cm:  20.87
+Height 92.77 cm:  21.41
+Height 93.66 cm:  22.01
+Height 94.55 cm:  22.85
+Height 95.44 cm:  23.59
+Height 96.32 cm:  24.43
+Height 97.21 cm:  25.39
+Height 98.1 cm:  26.2
+Height 98.99 cm:  26.75
+Height 99.88 cm:  27.28
+Height 100.8 cm:  27.83
+Height 101.7 cm:  28.28
+Height 102.5 cm:  28.5
+Height 103.4 cm:  28.59
+Height 104.3 cm:  28.54
+Height 105.2 cm:  28.3
+Height 106.1 cm:  29.1
+Height 107. cm:  29.59
+Height 108. cm:  30.03
+Height 108.9 cm:  30.24
+Height 109.8 cm:  30.47
+Height 110.7 cm:  30.88
+Height 111.7 cm:  31.38
+Height 112.6 cm:  31.84
+Height 113.5 cm:  32.31
+Height 114.4 cm:  32.75
+Height 115.4 cm:  32.94
+Height 116.3 cm:  33.05
+Height 117.2 cm:  32.97
+Height 118.2 cm:  33.06
+Height 119.1 cm:  33.2
+Height 120. cm:  33.05
+Height 120.9 cm:  33.74
+#
+#Horizontal Circumferences, Right Leg
+#
+Height 0. cm:  55.97
+Height 0.9971 cm:  58.51
+Height 1.994 cm:  57.81
+Height 2.991 cm:  54.63
+Height 3.989 cm:  49.07
+Height 4.986 cm:  42.41
+Height 5.983 cm:  36.04
+Height 6.98 cm:  31.76
+Height 7.977 cm:  29.87
+Height 8.974 cm:  28.82
+Height 9.971 cm:  29.1
+Height 10.97 cm:  29.31
+Height 11.97 cm:  29.59
+Height 12.96 cm:  29.83
+Height 13.96 cm:  30.2
+Height 14.96 cm:  30.99
+Height 15.95 cm:  31.88
+Height 16.95 cm:  32.71
+Height 17.95 cm:  33.52
+Height 18.95 cm:  34.19
+Height 19.94 cm:  34.83
+Height 20.94 cm:  35.53
+Height 21.94 cm:  36.29
+Height 22.93 cm:  37.14
+Height 23.93 cm:  38.08
+Height 24.93 cm:  38.87
+Height 25.93 cm:  39.55
+Height 26.92 cm:  40.2
+Height 27.92 cm:  41.
+Height 28.92 cm:  41.85
+Height 29.91 cm:  42.44
+Height 30.91 cm:  42.98
+Height 31.91 cm:  43.34
+Height 32.91 cm:  43.49
+Height 33.9 cm:  43.49
+Height 34.9 cm:  43.33
+Height 35.9 cm:  43.07
+Height 36.89 cm:  42.54
+Height 37.89 cm:  41.96
+Height 38.89 cm:  41.4
+Height 39.89 cm:  41.18
+Height 40.88 cm:  41.25
+Height 41.88 cm:  41.22
+Height 42.88 cm:  41.49
+Height 43.87 cm:  42.08
+Height 44.87 cm:  43.3
+Height 45.87 cm:  44.27
+Height 46.86 cm:  44.98
+Height 47.86 cm:  45.72
+Height 48.86 cm:  46.35
+Height 49.85 cm:  46.97
+Height 50.85 cm:  47.64
+Height 51.85 cm:  48.47
+Height 52.84 cm:  49.42
+Height 53.84 cm:  50.55
+Height 54.84 cm:  51.6
+Height 55.83 cm:  52.74
+Height 56.83 cm:  53.96
+Height 57.83 cm:  55.04
+Height 58.82 cm:  56.24
+Height 59.82 cm:  57.32
+Height 60.82 cm:  58.42
+Height 61.81 cm:  59.63
+Height 62.81 cm:  60.68
+Height 63.81 cm:  61.61
+Height 64.8 cm:  62.64
+Height 65.8 cm:  63.57
+Height 66.8 cm:  64.26
+Height 67.79 cm:  65.07
+Height 68.79 cm:  65.62
+Height 69.79 cm:  66.21
+Height 70.78 cm:  67.04
+Height 71.78 cm:  69.39
+Height 72.78 cm:  72.39
+#
+#Horizontal Circumferences, Torso, Crotch point to Head
+#
+Height 74. cm:  119.6
+Height 75. cm:  117.
+Height 76. cm:  115.6
+Height 77. cm:  114.4
+Height 78. cm:  113.6
+Height 79. cm:  112.7
+Height 80. cm:  111.5
+Height 81. cm:  110.5
+Height 82. cm:  109.4
+Height 83. cm:  108.4
+Height 84. cm:  107.4
+Height 85. cm:  106.4
+Height 86. cm:  105.5
+Height 87. cm:  104.6
+Height 88. cm:  103.6
+Height 89. cm:  102.6
+Height 90. cm:  101.5
+Height 91. cm:  100.1
+Height 92. cm:  98.63
+Height 93. cm:  97.
+Height 94. cm:  95.26
+Height 95. cm:  93.67
+Height 96. cm:  92.07
+Height 97. cm:  90.46
+Height 98. cm:  88.66
+Height 99. cm:  86.7
+Height 100. cm:  84.67
+Height 101. cm:  82.61
+Height 102. cm:  80.76
+Height 103. cm:  79.24
+Height 104. cm:  78.53
+Height 105. cm:  78.74
+Height 106. cm:  79.47
+Height 107. cm:  80.54
+Height 108. cm:  81.69
+Height 109. cm:  82.47
+Height 110. cm:  82.96
+Height 111. cm:  83.16
+Height 112. cm:  84.49
+Height 113. cm:  86.72
+Height 114. cm:  90.38
+Height 115. cm:  93.4
+Height 116. cm:  95.78
+Height 117. cm:  98.15
+Height 118. cm:  99.3
+Height 119. cm:  100.1
+Height 120. cm:  99.49
+Height 121. cm:  98.8
+Height 122. cm:  119.1
+Height 123. cm:  115.7
+Height 124. cm:  113.1
+Height 125. cm:  111.1
+Height 126. cm:  108.9
+Height 127. cm:  106.8
+Height 128. cm:  104.6
+Height 129. cm:  102.3
+Height 130. cm:  99.84
+Height 131. cm:  97.24
+Height 132. cm:  94.54
+Height 133. cm:  91.42
+Height 134. cm:  87.56
+Height 135. cm:  86.93
+Height 135.9 cm:  80.81
+Height 136.9 cm:  70.79
+Height 137.8 cm:  58.86
+Height 138.8 cm:  46.71
+Height 139.7 cm:  40.92
+Height 140.6 cm:  38.53
+Height 141.6 cm:  37.57
+Height 142.5 cm:  37.29
+Height 143.5 cm:  37.45
+Height 144.4 cm:  38.86
+Height 145.3 cm:  63.63
+Height 146.3 cm:  71.71
+Height 147.2 cm:  76.07
+Height 148.2 cm:  79.22
+Height 149.1 cm:  80.48
+Height 150. cm:  80.95
+Height 151. cm:  81.36
+Height 151.9 cm:  81.2
+Height 152.9 cm:  79.73
+Height 153.8 cm:  77.34
+Height 154.7 cm:  75.45
+Height 155.7 cm:  71.57
+Height 156.6 cm:  67.11
+Height 157.6 cm:  65.75
+Height 158.5 cm:  64.32
+Height 159.4 cm:  62.09
+Height 160.4 cm:  59.29
+Height 161.3 cm:  55.27
+Height 162.3 cm:  49.37
+Height 163.2 cm:  41.67
+Height 164.1 cm:  31.88
+Height 165.1 cm:  18.98
+#
+#Horizontal Circumferences, Left Arm
+#
+Height 87.18 cm:  18.29
+Height 88.07 cm:  17.95
+Height 88.95 cm:  18.02
+Height 89.83 cm:  18.71
+Height 90.71 cm:  19.54
+Height 91.59 cm:  20.08
+Height 92.47 cm:  20.64
+Height 93.36 cm:  21.32
+Height 94.24 cm:  22.03
+Height 95.12 cm:  22.75
+Height 96. cm:  23.61
+Height 96.88 cm:  24.56
+Height 97.77 cm:  25.42
+Height 98.65 cm:  26.27
+Height 99.53 cm:  27.17
+Height 100.4 cm:  27.9
+Height 101.3 cm:  28.72
+Height 102.2 cm:  29.17
+Height 103.1 cm:  29.49
+Height 103.9 cm:  29.85
+Height 104.8 cm:  30.22
+Height 105.7 cm:  30.58
+Height 106.6 cm:  30.62
+Height 107.5 cm:  30.98
+Height 108.4 cm:  31.55
+Height 109.4 cm:  32.29
+Height 110.3 cm:  32.89
+Height 111.2 cm:  33.29
+Height 112.1 cm:  33.67
+Height 113. cm:  34.03
+Height 113.9 cm:  34.53
+Height 114.8 cm:  35.32
+Height 115.8 cm:  35.77
+Height 116.7 cm:  35.78
+Height 117.6 cm:  35.86
+Height 118.5 cm:  35.72
+Height 119.4 cm:  35.66
+Height 120.3 cm:  35.73
+#
+#Horizontal Circumferences, Left Leg
+#
+Height 0. cm:  47.68
+Height 0.9965 cm:  63.42
+Height 1.993 cm:  60.07
+Height 2.99 cm:  55.99
+Height 3.986 cm:  49.33
+Height 4.983 cm:  42.04
+Height 5.979 cm:  35.65
+Height 6.976 cm:  31.74
+Height 7.972 cm:  30.14
+Height 8.969 cm:  29.17
+Height 9.965 cm:  28.76
+Height 10.96 cm:  28.96
+Height 11.96 cm:  29.14
+Height 12.96 cm:  29.32
+Height 13.95 cm:  30.17
+Height 14.95 cm:  31.07
+Height 15.94 cm:  31.81
+Height 16.94 cm:  32.62
+Height 17.94 cm:  33.21
+Height 18.93 cm:  34.19
+Height 19.93 cm:  35.
+Height 20.93 cm:  35.68
+Height 21.92 cm:  36.45
+Height 22.92 cm:  37.23
+Height 23.92 cm:  37.9
+Height 24.91 cm:  38.59
+Height 25.91 cm:  39.38
+Height 26.91 cm:  40.29
+Height 27.9 cm:  41.25
+Height 28.9 cm:  42.13
+Height 29.9 cm:  42.84
+Height 30.89 cm:  43.31
+Height 31.89 cm:  43.68
+Height 32.89 cm:  43.93
+Height 33.88 cm:  44.08
+Height 34.88 cm:  44.04
+Height 35.88 cm:  43.77
+Height 36.87 cm:  43.21
+Height 37.87 cm:  42.68
+Height 38.87 cm:  42.24
+Height 39.86 cm:  42.14
+Height 40.86 cm:  42.23
+Height 41.85 cm:  42.21
+Height 42.85 cm:  42.44
+Height 43.85 cm:  43.04
+Height 44.85 cm:  44.12
+Height 45.84 cm:  45.13
+Height 46.84 cm:  46.08
+Height 47.84 cm:  46.87
+Height 48.84 cm:  47.41
+Height 49.83 cm:  48.04
+Height 50.83 cm:  48.89
+Height 51.83 cm:  49.96
+Height 52.82 cm:  51.15
+Height 53.82 cm:  52.52
+Height 54.82 cm:  53.74
+Height 55.82 cm:  54.74
+Height 56.81 cm:  55.87
+Height 57.81 cm:  57.03
+Height 58.81 cm:  58.05
+Height 59.81 cm:  59.05
+Height 60.8 cm:  60.03
+Height 61.8 cm:  60.95
+Height 62.8 cm:  61.91
+Height 63.79 cm:  62.88
+Height 64.79 cm:  63.76
+Height 65.79 cm:  64.6
+Height 66.79 cm:  65.48
+Height 67.78 cm:  66.35
+Height 68.78 cm:  66.95
+Height 69.78 cm:  67.2
+Height 70.78 cm:  67.48
+Height 71.77 cm:  68.55
+Height 72.77 cm:  70.49
