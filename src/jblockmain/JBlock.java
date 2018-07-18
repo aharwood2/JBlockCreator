@@ -46,6 +46,116 @@ public class JBlock extends JFrame
     private static final int majVer = 1;
     private static final int minVer = 0;
 
+    public void saveClickedEvent()
+    {
+        // Choose a folder location to save the output files
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setCurrentDirectory(new java.io.File(""));
+        fileChooser.setDialogTitle("Select Save Location");
+        fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+        fileChooser.setAcceptAllFileFilterUsed(false);
+
+        if (fileChooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION)
+        {
+            System.out.println("Current directory is: " + fileChooser.getCurrentDirectory());
+            System.out.println("Save location is: " + fileChooser.getSelectedFile());
+            String file = fileChooser.getCurrentDirectory().toString();
+            if (file.length() > 40)
+            {
+                file = file.substring(0, 40) + "...";
+            }
+            savePath.setText(file);
+            JBlock.this.fileOutput = fileChooser.getSelectedFile();
+        }
+    }
+
+    public void openClickedEvent()
+    {
+        // Choose a folder input
+        JFileChooser fileChooser = new JFileChooser();
+        if (fileChooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION)
+        {
+            JBlock.this.fileInput = fileChooser.getSelectedFile();
+            System.out.println("Input file is: " + fileInput.toString());
+            String file = fileChooser.getSelectedFile().toString();
+            if (file.length() > 40)
+            {
+                file = file.substring(0, 40) + "...";
+            }
+            openPath.setText(file);
+        }
+    }
+
+    public void runClickedEvent()
+    {
+        if (fileOutput != null && fileInput != null)
+        {
+            Measurements measurements = new Measurements(JBlock.this.fileInput.toString(),
+                    JBlock.this.isbatchCheckbox.isSelected());
+
+            // Create patterns
+            for (int i = 0; i < measurements.getNames().size(); i++)
+            {
+                measurements.setMapNumber(i);
+
+                // Creates patterns depending on which checkboxes are ticked
+                if (checkBeazleySkirt.isSelected())
+                {
+                    SkirtPattern bb_skirt = new SkirtPattern(measurements);
+                    bb_skirt.writeToDXF(fileOutput);
+                }
+
+                if (checkBeazleyTrousers.isSelected())
+                {
+                    TrouserPattern bb_trouser = new TrouserPattern(measurements);
+                    bb_trouser.writeToDXF(fileOutput);
+                }
+
+                if (checkBeazleyBodice.isSelected())
+                {
+                    BodicePattern bb_bodice = new BodicePattern(measurements);
+                    bb_bodice.writeToDXF(fileOutput);
+                }
+
+                if (checkBeazleyStraightSleeve.isSelected())
+                {
+                    StraightSleevePattern bb_sleeve = new StraightSleevePattern(measurements);
+                    bb_sleeve.writeToDXF(fileOutput);
+                }
+
+                if (checkGillSkirt.isSelected())
+                {
+                    gill.SkirtPattern gill_skirt = new gill.SkirtPattern(measurements);
+                    gill_skirt.writeToDXF(fileOutput);
+                }
+
+                if (checkAldrichSkirt.isSelected())
+                {
+                    aldrich.SkirtPattern aldrich_skirt = new aldrich.SkirtPattern(measurements);
+                    aldrich_skirt.writeToDXF(fileOutput);
+                }
+            }
+
+            // Create done prompt
+            Prompts.infoBox("Done!", "Done", EMsgType.INFO);
+        }
+
+        // Handle missing options
+        if (fileInput == null)
+        {
+            Prompts.infoBox("Please choose your input file by clicking on the \"Open\" button",
+                    "Input File Needed",
+                    EMsgType.ERROR);
+            return;
+        }
+        if (fileOutput == null)
+        {
+            Prompts.infoBox("Please choose a directory to write the patterns to by clicking on \"Save\"",
+                    "Output Directory Needed",
+                    EMsgType.ERROR);
+        }
+    }
+
     public class OpenFile{}
     {
         // Listener for the butLoad button
@@ -54,22 +164,9 @@ public class JBlock extends JFrame
             @Override
             public void actionPerformed(ActionEvent e)
             {
-                // Choose a folder input
-                JFileChooser fileChooser = new JFileChooser();
-                if (fileChooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION)
-                {
-                    JBlock.this.fileInput = fileChooser.getSelectedFile();
-                    System.out.println("Input file is: " + fileInput.toString());
-                    String file = fileChooser.getSelectedFile().toString();
-                    if (file.length() > 40)
-                    {
-                        file = file.substring(0, 40) + "...";
-                    }
-                    openPath.setText(file);
-                }
+                openClickedEvent();
             }
         };
-
         butLoad.addActionListener(openfile);
     }
 
@@ -81,25 +178,7 @@ public class JBlock extends JFrame
             @Override
             public void actionPerformed(ActionEvent e)
             {
-                // Choose a folder location to save the output files
-                JFileChooser fileChooser = new JFileChooser();
-                fileChooser.setCurrentDirectory(new java.io.File(""));
-                fileChooser.setDialogTitle("Select Save Location");
-                fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-                fileChooser.setAcceptAllFileFilterUsed(false);
-
-                if (fileChooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION)
-                {
-                    System.out.println("Current directory is: " + fileChooser.getCurrentDirectory());
-                    System.out.println("Save location is: " + fileChooser.getSelectedFile());
-                    String file = fileChooser.getCurrentDirectory().toString();
-                    if (file.length() > 40)
-                    {
-                        file = file.substring(0, 40) + "...";
-                    }
-                    savePath.setText(file);
-                    JBlock.this.fileOutput = fileChooser.getSelectedFile();
-                }
+                saveClickedEvent();
             }
         };
 
@@ -114,72 +193,7 @@ public class JBlock extends JFrame
             @Override
             public void actionPerformed(ActionEvent e)
             {
-                if (fileOutput != null && fileInput != null)
-                {
-                    Measurements measurements = new Measurements(JBlock.this.fileInput.toString(),
-                            JBlock.this.isbatchCheckbox.isSelected());
-
-                    // Create patterns
-                    for (int i = 0; i < measurements.getNames().size(); i++)
-                    {
-                        measurements.setMapNumber(i);
-
-                        // Creates patterns depending on which checkboxes are ticked
-                        if (checkBeazleySkirt.isSelected())
-                        {
-                            SkirtPattern bb_skirt = new SkirtPattern(measurements);
-                            bb_skirt.writeToDXF(fileOutput);
-                        }
-
-                        if (checkBeazleyTrousers.isSelected())
-                        {
-                            TrouserPattern bb_trouser = new TrouserPattern(measurements);
-                            bb_trouser.writeToDXF(fileOutput);
-                        }
-
-                        if (checkBeazleyBodice.isSelected())
-                        {
-                            BodicePattern bb_bodice = new BodicePattern(measurements);
-                            bb_bodice.writeToDXF(fileOutput);
-                        }
-
-                        if (checkBeazleyStraightSleeve.isSelected())
-                        {
-                            StraightSleevePattern bb_sleeve = new StraightSleevePattern(measurements);
-                            bb_sleeve.writeToDXF(fileOutput);
-                        }
-
-                        if (checkGillSkirt.isSelected())
-                        {
-                            gill.SkirtPattern gill_skirt = new gill.SkirtPattern(measurements);
-                            gill_skirt.writeToDXF(fileOutput);
-                        }
-
-                        if (checkAldrichSkirt.isSelected())
-                        {
-                            aldrich.SkirtPattern aldrich_skirt = new aldrich.SkirtPattern(measurements);
-                            aldrich_skirt.writeToDXF(fileOutput);
-                        }
-                    }
-
-                    // Create done prompt
-                    Prompts.infoBox("Done!", "Done", EMsgType.INFO);
-                }
-
-                // Handle missing options
-                if (fileInput == null)
-                {
-                    Prompts.infoBox("Please choose your input file by clicking on the \"Open\" button",
-                            "Input File Needed",
-                            EMsgType.ERROR);
-                    return;
-                }
-                if (fileOutput == null)
-                {
-                    Prompts.infoBox("Please choose a directory to write the patterns to by clicking on \"Save\"",
-                            "Output Directory Needed",
-                            EMsgType.ERROR);
-                }
+                runClickedEvent();
             }
         });
     }
@@ -190,7 +204,8 @@ public class JBlock extends JFrame
         // Create a JFrame instance
         JFrame frame = new JFrame("JBlock2D - Custom Pattern Drafting (Version "
                 + majVer + "." + minVer + ")");
-        frame.setContentPane(new JBlock().panelMain);
+        final JBlock block = new JBlock();
+        frame.setContentPane(block.panelMain);
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         frame.pack();
 
@@ -230,15 +245,15 @@ public class JBlock extends JFrame
                 }
                 if (cmd.equals("Open"))
                 {
-
+                    block.openClickedEvent();
                 }
                 if (cmd.equals("Save"))
                 {
-
+                    block.saveClickedEvent();
                 }
                 if (cmd.equals("Run"))
                 {
-
+                    block.runClickedEvent();
                 }
             }
         };
