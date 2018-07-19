@@ -93,7 +93,7 @@ public abstract class Pattern implements IPlottable
         return blocks.size();
     }
 
-    public void writeToDXF(File fileOutput)
+    public void writeToDXF(File fileOutput, boolean[] dxfLayerChooser)
     {
         for (int i = 0; i < getNumberOfBlocksToPlot(); i++)
         {
@@ -111,7 +111,7 @@ public abstract class Pattern implements IPlottable
             }
 
             // Create new DXF file
-            DxfFile file = new DxfFile(path.toString() + "/" + blocks.get(i).getName());
+            DxfFile file = new DxfFile(path.toString() + "/" + blocks.get(i).getName(), dxfLayerChooser);
             try
             {
                 file.addLines(getXPoints(i), getYPoints(i));
@@ -121,7 +121,7 @@ public abstract class Pattern implements IPlottable
             {
                 e.printStackTrace();
             }
-            file.writeFile(blocks.get(i).getName());
+            file.writeFile(blocks.get(i).getName(), dxfLayerChooser);
         }
 
     }

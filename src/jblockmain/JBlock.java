@@ -33,8 +33,14 @@ public class JBlock extends JFrame
     private JLabel openPath;
     private JLabel savePath;
     private JCheckBox isbatchCheckbox;
+    private JCheckBox scaleBoxAndUserCheckBox;
+    private JCheckBox patternOutlineCheckBox;
+    private JCheckBox keypointsAsCirclesCheckBox;
+    private JCheckBox keypointCoordinatesCheckBox;
+    private JCheckBox constructionLinesCheckBox;
     private File fileInput = null;
     private File fileOutput = null;
+    private boolean[] dxfLayerChooser = new boolean[5];
 
     // Set a global tolerance for some operations
     public static final double tol = 10e-8;
@@ -102,37 +108,37 @@ public class JBlock extends JFrame
                 if (checkBeazleySkirt.isSelected())
                 {
                     SkirtPattern bb_skirt = new SkirtPattern(measurements);
-                    bb_skirt.writeToDXF(fileOutput);
+                    bb_skirt.writeToDXF(fileOutput, dxfLayerChooser);
                 }
 
                 if (checkBeazleyTrousers.isSelected())
                 {
                     TrouserPattern bb_trouser = new TrouserPattern(measurements);
-                    bb_trouser.writeToDXF(fileOutput);
+                    bb_trouser.writeToDXF(fileOutput, dxfLayerChooser);
                 }
 
                 if (checkBeazleyBodice.isSelected())
                 {
                     BodicePattern bb_bodice = new BodicePattern(measurements);
-                    bb_bodice.writeToDXF(fileOutput);
+                    bb_bodice.writeToDXF(fileOutput, dxfLayerChooser);
                 }
 
                 if (checkBeazleyStraightSleeve.isSelected())
                 {
                     StraightSleevePattern bb_sleeve = new StraightSleevePattern(measurements);
-                    bb_sleeve.writeToDXF(fileOutput);
+                    bb_sleeve.writeToDXF(fileOutput, dxfLayerChooser);
                 }
 
                 if (checkGillSkirt.isSelected())
                 {
                     gill.SkirtPattern gill_skirt = new gill.SkirtPattern(measurements);
-                    gill_skirt.writeToDXF(fileOutput);
+                    gill_skirt.writeToDXF(fileOutput, dxfLayerChooser);
                 }
 
                 if (checkAldrichSkirt.isSelected())
                 {
                     aldrich.SkirtPattern aldrich_skirt = new aldrich.SkirtPattern(measurements);
-                    aldrich_skirt.writeToDXF(fileOutput);
+                    aldrich_skirt.writeToDXF(fileOutput, dxfLayerChooser);
                 }
             }
 
@@ -183,6 +189,31 @@ public class JBlock extends JFrame
         };
 
         butSave.addActionListener(savefile);
+    }
+
+    public void DXFLayerChooser()
+    {
+        // Class for selecting which dxf layers to show
+        if (scaleBoxAndUserCheckBox.isSelected())
+        {
+            dxfLayerChooser[0] = true;
+        }
+        if (patternOutlineCheckBox.isSelected())
+        {
+            dxfLayerChooser[1] = true;
+        }
+        if (keypointsAsCirclesCheckBox.isSelected())
+        {
+            dxfLayerChooser[2] = true;
+        }
+        if (keypointCoordinatesCheckBox.isSelected())
+        {
+            dxfLayerChooser[3] = true;
+        }
+        if (constructionLinesCheckBox.isSelected())
+        {
+            dxfLayerChooser[4] = true;
+        }
     }
 
     private JBlock()
@@ -262,8 +293,11 @@ public class JBlock extends JFrame
         JMenu file = new JMenu("File");
         file.setMnemonic('F');
         file.add(menuItem("Open", listener, "Open", 'O', KeyEvent.VK_O));
+        file.addSeparator();
         file.add(menuItem("Save", listener, "Save", 'S', KeyEvent.VK_S));
+        file.addSeparator();
         file.add(menuItem("Run", listener, "Run", 'R', KeyEvent.VK_R));
+        file.addSeparator();
         file.add(menuItem("Exit", listener, "Exit", 'E', KeyEvent.VK_E));
 
         JMenu edit = new JMenu("Help");
@@ -292,7 +326,8 @@ public class JBlock extends JFrame
         colors.add(radioItem("Blue", listener, "color(blue)", colorgroup));
 
         // Finally, make our main window appear
-        frame.setSize(450, 350);
+        frame.setSize(560, 350);
+        frame.setResizable(false);
         frame.setVisible(true);
     }
 
