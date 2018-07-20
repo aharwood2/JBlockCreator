@@ -46,7 +46,7 @@ public class DxfFile
      * Constructor to open a DXF file.
      * @param filename  name of the file including path
      */
-    public DxfFile(String filename, boolean[] dxfLayerChooser)
+    public DxfFile(String filename)
     {
         bIsOpen = false;
 
@@ -114,6 +114,7 @@ public class DxfFile
     /**
      * Writes the contents of the DXF file.
      * @param blockName     name of the block to be overlaid on the DXF drawing
+     * @param dxfLayerChooser   array of flags indicating which features should be written
      */
     public void writeFile(String blockName, boolean[] dxfLayerChooser)
     {
