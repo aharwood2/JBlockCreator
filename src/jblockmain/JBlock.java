@@ -52,9 +52,11 @@ public class JBlock extends JFrame
     private static final int majVer = 1;
     private static final int minVer = 0;
 
+    // Method for when the save button is clicked
     public void saveClickedEvent()
     {
         // Choose a folder location to save the output files
+        // Opens a file explorer for users to choose directory
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setCurrentDirectory(new java.io.File(""));
         fileChooser.setDialogTitle("Select Save Location");
@@ -63,6 +65,8 @@ public class JBlock extends JFrame
 
         if (fileChooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION)
         {
+            // Prints out the directory chosen, purely for test purposes
+            // Also stores the location in the save path gui label and the fileoutput variable
             System.out.println("Current directory is: " + fileChooser.getCurrentDirectory());
             System.out.println("Save location is: " + fileChooser.getSelectedFile());
             String file = fileChooser.getCurrentDirectory().toString();
@@ -75,12 +79,15 @@ public class JBlock extends JFrame
         }
     }
 
+    // Method for when the open button is clicked
     public void openClickedEvent()
     {
         // Choose a folder input
         JFileChooser fileChooser = new JFileChooser();
         if (fileChooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION)
         {
+            // Prints out the input file chosen, purely for test purposes
+            // Also stores the location in the input path gui label and the fileinput variable
             JBlock.this.fileInput = fileChooser.getSelectedFile();
             System.out.println("Input file is: " + fileInput.toString());
             String file = fileChooser.getSelectedFile().toString();
@@ -92,6 +99,7 @@ public class JBlock extends JFrame
         }
     }
 
+    // Method for when the run button is clicked
     public void runClickedEvent()
     {
         if (fileOutput != null && fileInput != null)
@@ -211,6 +219,7 @@ public class JBlock extends JFrame
         }
     }
 
+    // Method containing button actionlisteners
     private JBlock()
     {
         // Listener for the Run button
@@ -279,6 +288,7 @@ public class JBlock extends JFrame
             @Override
             public void actionPerformed(ActionEvent e)
             {
+                // If statements for if the toolbar menu items are clicked
                 JMenuItem item = (JMenuItem) e.getSource();
                 String cmd = item.getActionCommand();
                 if (cmd.equals("Exit"))
