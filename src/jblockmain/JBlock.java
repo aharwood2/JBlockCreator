@@ -173,21 +173,41 @@ public class JBlock extends JFrame
         {
             dxfLayerChoices[0] = true;
         }
+        else if (!scaleBoxAndUserCheckBox.isSelected())
+        {
+            dxfLayerChoices[0] = false;
+        }
         if (patternOutlineCheckBox.isSelected())
         {
             dxfLayerChoices[1] = true;
+        }
+        else if (!patternOutlineCheckBox.isSelected())
+        {
+            dxfLayerChoices[1] = false;
         }
         if (keypointsAsCirclesCheckBox.isSelected())
         {
             dxfLayerChoices[2] = true;
         }
+        else if (!keypointsAsCirclesCheckBox.isSelected())
+        {
+            dxfLayerChoices[2] = false;
+        }
         if (keypointCoordinatesCheckBox.isSelected())
         {
             dxfLayerChoices[3] = true;
         }
+        else if (!keypointCoordinatesCheckBox.isSelected())
+        {
+            dxfLayerChoices[3] = false;
+        }
         if (constructionLinesCheckBox.isSelected())
         {
             dxfLayerChoices[4] = true;
+        }
+        else if (!constructionLinesCheckBox.isSelected())
+        {
+            dxfLayerChoices[4] = false;
         }
     }
 
