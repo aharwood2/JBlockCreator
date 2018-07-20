@@ -40,7 +40,7 @@ public class JBlock extends JFrame
     private JCheckBox constructionLinesCheckBox;
     private File fileInput = null;
     private File fileOutput = null;
-    private boolean[] dxfLayerChooser = new boolean[5];
+    private boolean[] dxfLayerChoices = new boolean[5];
 
     // Set a global tolerance for some operations
     public static final double tol = 10e-8;
@@ -99,6 +99,9 @@ public class JBlock extends JFrame
             Measurements measurements = new Measurements(JBlock.this.fileInput.toString(),
                     JBlock.this.isbatchCheckbox.isSelected());
 
+            // Need to populate the boolean array
+            getLayerInformation();
+
             // Create patterns
             for (int i = 0; i < measurements.getNames().size(); i++)
             {
@@ -108,37 +111,37 @@ public class JBlock extends JFrame
                 if (checkBeazleySkirt.isSelected())
                 {
                     SkirtPattern bb_skirt = new SkirtPattern(measurements);
-                    bb_skirt.writeToDXF(fileOutput, dxfLayerChooser);
+                    bb_skirt.writeToDXF(fileOutput, dxfLayerChoices);
                 }
 
                 if (checkBeazleyTrousers.isSelected())
                 {
                     TrouserPattern bb_trouser = new TrouserPattern(measurements);
-                    bb_trouser.writeToDXF(fileOutput, dxfLayerChooser);
+                    bb_trouser.writeToDXF(fileOutput, dxfLayerChoices);
                 }
 
                 if (checkBeazleyBodice.isSelected())
                 {
                     BodicePattern bb_bodice = new BodicePattern(measurements);
-                    bb_bodice.writeToDXF(fileOutput, dxfLayerChooser);
+                    bb_bodice.writeToDXF(fileOutput, dxfLayerChoices);
                 }
 
                 if (checkBeazleyStraightSleeve.isSelected())
                 {
                     StraightSleevePattern bb_sleeve = new StraightSleevePattern(measurements);
-                    bb_sleeve.writeToDXF(fileOutput, dxfLayerChooser);
+                    bb_sleeve.writeToDXF(fileOutput, dxfLayerChoices);
                 }
 
                 if (checkGillSkirt.isSelected())
                 {
                     gill.SkirtPattern gill_skirt = new gill.SkirtPattern(measurements);
-                    gill_skirt.writeToDXF(fileOutput, dxfLayerChooser);
+                    gill_skirt.writeToDXF(fileOutput, dxfLayerChoices);
                 }
 
                 if (checkAldrichSkirt.isSelected())
                 {
                     aldrich.SkirtPattern aldrich_skirt = new aldrich.SkirtPattern(measurements);
-                    aldrich_skirt.writeToDXF(fileOutput, dxfLayerChooser);
+                    aldrich_skirt.writeToDXF(fileOutput, dxfLayerChoices);
                 }
             }
 
@@ -162,31 +165,29 @@ public class JBlock extends JFrame
         }
     }
     
-    // TODO figure out whether the issue preventing specific layers being chosen/not chosen
-    // is due to a fault in the code below or in a fault in how it is passed through the 
-    // writetodxf function into the dxfwriter class.
-    public void DXFLayerChooser()
+    // Method to populate the boolean array of DXF layer configuration
+    public void getLayerInformation()
     {
         // Class for selecting which dxf layers to show
         if (scaleBoxAndUserCheckBox.isSelected())
         {
-            dxfLayerChooser[0] = true;
+            dxfLayerChoices[0] = true;
         }
         if (patternOutlineCheckBox.isSelected())
         {
-            dxfLayerChooser[1] = true;
+            dxfLayerChoices[1] = true;
         }
         if (keypointsAsCirclesCheckBox.isSelected())
         {
-            dxfLayerChooser[2] = true;
+            dxfLayerChoices[2] = true;
         }
         if (keypointCoordinatesCheckBox.isSelected())
         {
-            dxfLayerChooser[3] = true;
+            dxfLayerChoices[3] = true;
         }
         if (constructionLinesCheckBox.isSelected())
         {
-            dxfLayerChooser[4] = true;
+            dxfLayerChoices[4] = true;
         }
     }
 
