@@ -161,35 +161,6 @@ public class JBlock extends JFrame
                     EMsgType.ERROR);
         }
     }
-
-    public class OpenFile{}
-    {
-        // Listener for the butLoad button
-        ActionListener openfile = new ActionListener()
-        {
-            @Override
-            public void actionPerformed(ActionEvent e)
-            {
-                openClickedEvent();
-            }
-        };
-        butLoad.addActionListener(openfile);
-    }
-
-    public class SaveFile{}
-    {
-        // Listener for the butSave button
-        ActionListener savefile = new ActionListener()
-        {
-            @Override
-            public void actionPerformed(ActionEvent e)
-            {
-                saveClickedEvent();
-            }
-        };
-
-        butSave.addActionListener(savefile);
-    }
     
     // TODO figure out whether the issue preventing specific layers being chosen/not chosen
     // is due to a fault in the code below or in a fault in how it is passed through the 
@@ -228,6 +199,26 @@ public class JBlock extends JFrame
             public void actionPerformed(ActionEvent e)
             {
                 runClickedEvent();
+            }
+        });
+
+        // Attach listener to open button
+        butLoad.addActionListener(new ActionListener()
+        {
+            @Override
+            public void actionPerformed(ActionEvent e)
+            {
+                openClickedEvent();
+            }
+        });
+
+        // Attach listener to save button
+        butSave.addActionListener(new ActionListener()
+        {
+            @Override
+            public void actionPerformed(ActionEvent e)
+            {
+                saveClickedEvent();
             }
         });
     }
