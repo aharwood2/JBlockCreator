@@ -190,7 +190,10 @@ public class JBlock extends JFrame
 
         butSave.addActionListener(savefile);
     }
-
+    
+    // TODO figure out whether the issue preventing specific layers being chosen/not chosen
+    // is due to a fault in the code below or in a fault in how it is passed through the 
+    // writetodxf function into the dxfwriter class.
     public void DXFLayerChooser()
     {
         // Class for selecting which dxf layers to show
