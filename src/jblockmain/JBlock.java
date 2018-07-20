@@ -174,7 +174,7 @@ public class JBlock extends JFrame
     }
     
     // Method to populate the boolean array of DXF layer configuration
-    public void getLayerInformation()
+    private void getLayerInformation()
     {
         // Class for selecting which dxf layers to show
         if (scaleBoxAndUserCheckBox.isSelected())
