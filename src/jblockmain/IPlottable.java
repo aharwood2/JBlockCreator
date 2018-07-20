@@ -12,5 +12,5 @@ public interface IPlottable
     ArrayList<Double> getXCtPoints(int blockNumber) throws Exception;
     ArrayList<Double> getYCtPoints(int blockNumber) throws Exception;
     int getNumberOfBlocksToPlot();
-    void writeToDXF(File fileOutput, boolean[] dxfLayerChooser);
+    void writeToDXF(File fileOutput, boolean[] dxfLayerChooser);    // TODO: Need to improve this definition as boolean[] should have a defined length if in an interface. Ideally should be its own class.
 }
