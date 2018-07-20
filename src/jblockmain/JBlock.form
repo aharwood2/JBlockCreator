@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="jblockmain.JBlock">
-  <grid id="27dc6" binding="panelMain" layout-manager="GridLayoutManager" row-count="8" column-count="3" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+  <grid id="27dc6" binding="panelMain" layout-manager="GridLayoutManager" row-count="8" column-count="5" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
     <margin top="5" left="5" bottom="5" right="5"/>
     <constraints>
-      <xy x="20" y="25" width="348" height="395"/>
+      <xy x="20" y="25" width="494" height="395"/>
     </constraints>
     <properties/>
     <border type="none"/>
@@ -130,6 +130,65 @@
         </constraints>
         <properties>
           <text value="Is the file batched?"/>
+        </properties>
+      </component>
+      <component id="44e74" class="javax.swing.JLabel">
+        <constraints>
+          <grid row="0" column="4" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <text value="Select DXF layers to be visible"/>
+        </properties>
+      </component>
+      <component id="773b3" class="javax.swing.JCheckBox" binding="scaleBoxAndUserCheckBox" default-binding="true">
+        <constraints>
+          <grid row="1" column="4" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <enabled value="true"/>
+          <selected value="true"/>
+          <text value="Scale box and user ID"/>
+        </properties>
+      </component>
+      <component id="5ceea" class="javax.swing.JCheckBox" binding="patternOutlineCheckBox" default-binding="true">
+        <constraints>
+          <grid row="2" column="4" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <selected value="true"/>
+          <text value="Pattern outline"/>
+        </properties>
+      </component>
+      <component id="d25d8" class="javax.swing.JCheckBox" binding="keypointsAsCirclesCheckBox" default-binding="true">
+        <constraints>
+          <grid row="3" column="4" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <text value="Keypoints as circles"/>
+        </properties>
+      </component>
+      <component id="afa5a" class="javax.swing.JCheckBox" binding="keypointCoordinatesCheckBox" default-binding="true">
+        <constraints>
+          <grid row="4" column="4" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <text value="Keypoint coordinates"/>
+        </properties>
+      </component>
+      <component id="1d54" class="javax.swing.JCheckBox" binding="constructionLinesCheckBox" default-binding="true">
+        <constraints>
+          <grid row="5" column="4" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <text value="Construction lines"/>
+        </properties>
+      </component>
+      <component id="6a6c6" class="javax.swing.JSeparator">
+        <constraints>
+          <grid row="0" column="3" row-span="8" col-span="1" vsize-policy="6" hsize-policy="6" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <orientation value="1"/>
         </properties>
       </component>
     </children>

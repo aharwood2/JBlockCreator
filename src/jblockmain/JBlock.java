@@ -33,8 +33,14 @@ public class JBlock extends JFrame
     private JLabel openPath;
     private JLabel savePath;
     private JCheckBox isbatchCheckbox;
+    private JCheckBox scaleBoxAndUserCheckBox;
+    private JCheckBox patternOutlineCheckBox;
+    private JCheckBox keypointsAsCirclesCheckBox;
+    private JCheckBox keypointCoordinatesCheckBox;
+    private JCheckBox constructionLinesCheckBox;
     private File fileInput = null;
     private File fileOutput = null;
+    private boolean[] dxfLayerChoices = new boolean[5];
 
     // Set a global tolerance for some operations
     public static final double tol = 10e-8;
@@ -46,9 +52,11 @@ public class JBlock extends JFrame
     private static final int majVer = 1;
     private static final int minVer = 0;
 
+    // Method for when the save button is clicked
     public void saveClickedEvent()
     {
         // Choose a folder location to save the output files
+        // Opens a file explorer for users to choose directory
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setCurrentDirectory(new java.io.File(""));
         fileChooser.setDialogTitle("Select Save Location");
@@ -57,6 +65,8 @@ public class JBlock extends JFrame
 
         if (fileChooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION)
         {
+            // Prints out the directory chosen, purely for test purposes
+            // Also stores the location in the save path gui label and the fileoutput variable
             System.out.println("Current directory is: " + fileChooser.getCurrentDirectory());
             System.out.println("Save location is: " + fileChooser.getSelectedFile());
             String file = fileChooser.getCurrentDirectory().toString();
@@ -69,12 +79,15 @@ public class JBlock extends JFrame
         }
     }
 
+    // Method for when the open button is clicked
     public void openClickedEvent()
     {
         // Choose a folder input
         JFileChooser fileChooser = new JFileChooser();
         if (fileChooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION)
         {
+            // Prints out the input file chosen, purely for test purposes
+            // Also stores the location in the input path gui label and the fileinput variable
             JBlock.this.fileInput = fileChooser.getSelectedFile();
             System.out.println("Input file is: " + fileInput.toString());
             String file = fileChooser.getSelectedFile().toString();
@@ -86,12 +99,16 @@ public class JBlock extends JFrame
         }
     }
 
+    // Method for when the run button is clicked
     public void runClickedEvent()
     {
         if (fileOutput != null && fileInput != null)
         {
             Measurements measurements = new Measurements(JBlock.this.fileInput.toString(),
                     JBlock.this.isbatchCheckbox.isSelected());
+
+            // Need to populate the boolean array
+            getLayerInformation();
 
             // Create patterns
             for (int i = 0; i < measurements.getNames().size(); i++)
@@ -102,37 +119,37 @@ public class JBlock extends JFrame
                 if (checkBeazleySkirt.isSelected())
                 {
                     SkirtPattern bb_skirt = new SkirtPattern(measurements);
-                    bb_skirt.writeToDXF(fileOutput);
+                    bb_skirt.writeToDXF(fileOutput, dxfLayerChoices);
                 }
 
                 if (checkBeazleyTrousers.isSelected())
                 {
                     TrouserPattern bb_trouser = new TrouserPattern(measurements);
-                    bb_trouser.writeToDXF(fileOutput);
+                    bb_trouser.writeToDXF(fileOutput, dxfLayerChoices);
                 }
 
                 if (checkBeazleyBodice.isSelected())
                 {
                     BodicePattern bb_bodice = new BodicePattern(measurements);
-                    bb_bodice.writeToDXF(fileOutput);
+                    bb_bodice.writeToDXF(fileOutput, dxfLayerChoices);
                 }
 
                 if (checkBeazleyStraightSleeve.isSelected())
                 {
                     StraightSleevePattern bb_sleeve = new StraightSleevePattern(measurements);
-                    bb_sleeve.writeToDXF(fileOutput);
+                    bb_sleeve.writeToDXF(fileOutput, dxfLayerChoices);
                 }
 
                 if (checkGillSkirt.isSelected())
                 {
                     gill.SkirtPattern gill_skirt = new gill.SkirtPattern(measurements);
-                    gill_skirt.writeToDXF(fileOutput);
+                    gill_skirt.writeToDXF(fileOutput, dxfLayerChoices);
                 }
 
                 if (checkAldrichSkirt.isSelected())
                 {
                     aldrich.SkirtPattern aldrich_skirt = new aldrich.SkirtPattern(measurements);
-                    aldrich_skirt.writeToDXF(fileOutput);
+                    aldrich_skirt.writeToDXF(fileOutput, dxfLayerChoices);
                 }
             }
 
@@ -155,36 +172,54 @@ public class JBlock extends JFrame
                     EMsgType.ERROR);
         }
     }
-
-    public class OpenFile{}
+    
+    // Method to populate the boolean array of DXF layer configuration
+    private void getLayerInformation()
     {
-        // Listener for the butLoad button
-        ActionListener openfile = new ActionListener()
+        // Class for selecting which dxf layers to show
+        if (scaleBoxAndUserCheckBox.isSelected())
         {
-            @Override
-            public void actionPerformed(ActionEvent e)
-            {
-                openClickedEvent();
-            }
-        };
-        butLoad.addActionListener(openfile);
+            dxfLayerChoices[0] = true;
+        }
+        else if (!scaleBoxAndUserCheckBox.isSelected())
+        {
+            dxfLayerChoices[0] = false;
+        }
+        if (patternOutlineCheckBox.isSelected())
+        {
+            dxfLayerChoices[1] = true;
+        }
+        else if (!patternOutlineCheckBox.isSelected())
+        {
+            dxfLayerChoices[1] = false;
+        }
+        if (keypointsAsCirclesCheckBox.isSelected())
+        {
+            dxfLayerChoices[2] = true;
+        }
+        else if (!keypointsAsCirclesCheckBox.isSelected())
+        {
+            dxfLayerChoices[2] = false;
+        }
+        if (keypointCoordinatesCheckBox.isSelected())
+        {
+            dxfLayerChoices[3] = true;
+        }
+        else if (!keypointCoordinatesCheckBox.isSelected())
+        {
+            dxfLayerChoices[3] = false;
+        }
+        if (constructionLinesCheckBox.isSelected())
+        {
+            dxfLayerChoices[4] = true;
+        }
+        else if (!constructionLinesCheckBox.isSelected())
+        {
+            dxfLayerChoices[4] = false;
+        }
     }
 
-    public class SaveFile{}
-    {
-        // Listener for the butSave button
-        ActionListener savefile = new ActionListener()
-        {
-            @Override
-            public void actionPerformed(ActionEvent e)
-            {
-                saveClickedEvent();
-            }
-        };
-
-        butSave.addActionListener(savefile);
-    }
-
+    // Method containing button actionlisteners
     private JBlock()
     {
         // Listener for the Run button
@@ -194,6 +229,26 @@ public class JBlock extends JFrame
             public void actionPerformed(ActionEvent e)
             {
                 runClickedEvent();
+            }
+        });
+
+        // Attach listener to open button
+        butLoad.addActionListener(new ActionListener()
+        {
+            @Override
+            public void actionPerformed(ActionEvent e)
+            {
+                openClickedEvent();
+            }
+        });
+
+        // Attach listener to save button
+        butSave.addActionListener(new ActionListener()
+        {
+            @Override
+            public void actionPerformed(ActionEvent e)
+            {
+                saveClickedEvent();
             }
         });
     }
@@ -233,6 +288,7 @@ public class JBlock extends JFrame
             @Override
             public void actionPerformed(ActionEvent e)
             {
+                // If statements for if the toolbar menu items are clicked
                 JMenuItem item = (JMenuItem) e.getSource();
                 String cmd = item.getActionCommand();
                 if (cmd.equals("Exit"))
@@ -262,8 +318,11 @@ public class JBlock extends JFrame
         JMenu file = new JMenu("File");
         file.setMnemonic('F');
         file.add(menuItem("Open", listener, "Open", 'O', KeyEvent.VK_O));
+        file.addSeparator();
         file.add(menuItem("Save", listener, "Save", 'S', KeyEvent.VK_S));
+        file.addSeparator();
         file.add(menuItem("Run", listener, "Run", 'R', KeyEvent.VK_R));
+        file.addSeparator();
         file.add(menuItem("Exit", listener, "Exit", 'E', KeyEvent.VK_E));
 
         JMenu edit = new JMenu("Help");
@@ -292,7 +351,8 @@ public class JBlock extends JFrame
         colors.add(radioItem("Blue", listener, "color(blue)", colorgroup));
 
         // Finally, make our main window appear
-        frame.setSize(450, 350);
+        frame.setSize(560, 350);
+        frame.setResizable(false);
         frame.setVisible(true);
     }
 

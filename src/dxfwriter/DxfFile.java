@@ -39,7 +39,7 @@ public class DxfFile
     private ArrayList<Double> ConY;
 
     // Construction point names list
-    private ArrayList<String > names;
+    private ArrayList<String> names;
 
 
     /**
@@ -114,8 +114,9 @@ public class DxfFile
     /**
      * Writes the contents of the DXF file.
      * @param blockName     name of the block to be overlaid on the DXF drawing
+     * @param dxfLayerChooser   array of flags indicating which features should be written
      */
-    public void writeFile(String blockName)
+    public void writeFile(String blockName, boolean[] dxfLayerChooser)
     {
         if (bIsOpen)
         {
@@ -256,101 +257,116 @@ public class DxfFile
             writeDxfLine("0", "SECTION");
             writeDxfLine("2", "ENTITIES");
 
-            // Add line entities one at a time
-            for (int i = 0; i < linesX.size() - 1; i++)
+            if (dxfLayerChooser[1] == true)
             {
-                writeDxfLine("0", "LINE");
-                writeDxfLine("8", "Pattern");     // Layer on which to draw line (layer 1)
-                writeDxfLine("62", "255");  // Colour of line using index colour (255 = black)
-                writeDxfLine("10", Double.toString(linesX.get(i))); // X coordinate start
-                writeDxfLine("20", Double.toString(linesY.get(i))); // Y coordinate start
-                writeDxfLine("11", Double.toString(linesX.get(i + 1))); // X coordinate end
-                writeDxfLine("21", Double.toString(linesY.get(i + 1))); // Y coordinate end
+                // Add line entities one at a time
+                for (int i = 0; i < linesX.size() - 1; i++)
+                {
+                    writeDxfLine("0", "LINE");
+                    writeDxfLine("8", "Pattern");     // Layer on which to draw line (layer 1)
+                    writeDxfLine("62", "255");  // Colour of line using index colour (255 = black)
+                    writeDxfLine("10", Double.toString(linesX.get(i))); // X coordinate start
+                    writeDxfLine("20", Double.toString(linesY.get(i))); // Y coordinate start
+                    writeDxfLine("11", Double.toString(linesX.get(i + 1))); // X coordinate end
+                    writeDxfLine("21", Double.toString(linesY.get(i + 1))); // Y coordinate end
+                }
             }
 
-            // Add construction line entities one at a time
-            for (int i = 0; i < ConX.size() - 1; i++)
+            if (dxfLayerChooser[4] == true)
             {
-                writeDxfLine("0", "LINE");
-                writeDxfLine("8", "Construction Lines");     // Layer on which to draw line (layer 1)
-                writeDxfLine("62", "8");  // Colour of line using index colour (255 = black)
-                writeDxfLine("10", Double.toString(ConX.get(i))); // X coordinate start
-                writeDxfLine("20", Double.toString(ConY.get(i))); // Y coordinate start
-                writeDxfLine("11", Double.toString(ConX.get(i + 1))); // X coordinate end
-                writeDxfLine("21", Double.toString(ConY.get(i + 1))); // Y coordinate end
-                i++;
+                // Add construction line entities one at a time
+                for (int i = 0; i < ConX.size() - 1; i++)
+                {
+                    writeDxfLine("0", "LINE");
+                    writeDxfLine("8", "Construction Lines");     // Layer on which to draw line (layer 1)
+                    writeDxfLine("62", "8");  // Colour of line using index colour (255 = black)
+                    writeDxfLine("10", Double.toString(ConX.get(i))); // X coordinate start
+                    writeDxfLine("20", Double.toString(ConY.get(i))); // Y coordinate start
+                    writeDxfLine("11", Double.toString(ConX.get(i + 1))); // X coordinate end
+                    writeDxfLine("21", Double.toString(ConY.get(i + 1))); // Y coordinate end
+                    i++;
+                }
+
+                // Add construction point names one at a time
+                for (int i = 0; i < ConX.size() - 1; i++)
+                {
+                    writeDxfLine("0", "TEXT");
+                    writeDxfLine("8", "Construction Lines");     // Layer on which to draw line (layer 4)
+                    writeDxfLine("62", "8");  // Colour of line using index colour
+                    writeDxfLine("1", names.get(i / 2));
+                    writeDxfLine("40", "0.75"); // Text height (i.e size)
+                    writeDxfLine("50", "0"); // Text rotation angle
+                    writeDxfLine("72", "3");
+                    writeDxfLine("73", "3");
+                    writeDxfLine("10", Double.toString(ConX.get(i))); // X coordinate start
+                    writeDxfLine("20", Double.toString(ConY.get(i))); // Y coordinate start
+                    writeDxfLine("11", Double.toString(ConX.get(i))); // X coordinate end
+                    writeDxfLine("21", Double.toString(ConY.get(i))); // Y coordinate end
+                }
             }
 
-            // Add construction point names one at a time
-            for (int i = 0; i < ConX.size() - 1; i++)
+            if (dxfLayerChooser[2] == true)
             {
+                // Marks the keypoints used as individual circles on a separate layer
+                for (int i = 0; i < linesX.size() - 1; i++)
+                {
+                    writeDxfLine("0", "CIRCLE");
+                    writeDxfLine("8", "Keypoints");     // Layer on which to draw (layer 3)
+                    writeDxfLine("40", "0.25");
+                    writeDxfLine("62", "60");  // Colour of points using index colour)
+                    writeDxfLine("10", Double.toString(linesX.get(i))); // X coordinate start
+                    writeDxfLine("20", Double.toString(linesY.get(i))); // Y coordinate start
+                    writeDxfLine("11", Double.toString(linesX.get(i + 1))); // X coordinate end
+                    writeDxfLine("21", Double.toString(linesY.get(i + 1))); // Y coordinate end
+                }
+            }
+
+            if (dxfLayerChooser[3] == true)
+            {
+                // Add point coordinates one at a time
+                for (int i = 0; i < linesX.size() - 1; i++)
+                {
+                    writeDxfLine("0", "TEXT");
+                    writeDxfLine("8", "Coordinates");     // Layer on which to draw line (layer 4)
+                    writeDxfLine("62", "256");  // Colour of line using index colour
+                    writeDxfLine("1", "(" + String.format("%.2f", linesX.get(i)) + ", " + String.format("%.2f", linesY.get(i)) + ")");
+                    writeDxfLine("40", "0.15"); // Text height (i.e size)
+                    writeDxfLine("50", "45"); // Text rotation angle
+                    writeDxfLine("10", Double.toString(linesX.get(i))); // X coordinate start
+                    writeDxfLine("20", Double.toString(linesY.get(i))); // Y coordinate start
+                    writeDxfLine("11", Double.toString(linesX.get(i + 1))); // X coordinate end
+                    writeDxfLine("21", Double.toString(linesY.get(i + 1))); // Y coordinate end
+                }
+            }
+
+            if (dxfLayerChooser[0] == true)
+            {
+                // Write lines to create a 10 x 10 cm square off to bottom left of pattern
+                float[] scaleSqX = {-5.0f, -5.0f, 5.0f, 5.0f};
+                float[] scaleSqY = {-5.0f, 5.0f, 5.0f, -5.0f};
+                for (int i = 0; i < 4; i++)
+                {
+                    int j = i + 1;
+                    if (j > 3) j = 0;
+                    writeDxfLine("0", "LINE");
+                    writeDxfLine("8", "Extras");     // Layer on which to draw line (layer 2)
+                    writeDxfLine("62", "1");  // Colour of line using index colour (1 = red)
+                    writeDxfLine("10", Double.toString(scaleSqX[i])); // X coordinate start
+                    writeDxfLine("20", Double.toString(scaleSqY[i])); // Y coordinate start
+                    writeDxfLine("11", Double.toString(scaleSqX[j])); // X coordinate end
+                    writeDxfLine("21", Double.toString(scaleSqY[j])); // Y coordinate end
+                }
+
+                // Add text
                 writeDxfLine("0", "TEXT");
-                writeDxfLine("8", "Construction Lines");     // Layer on which to draw line (layer 4)
-                writeDxfLine("62", "8");  // Colour of line using index colour
-                writeDxfLine("1", names.get(i / 2));
-                writeDxfLine("40", "0.75"); // Text height (i.e size)
-                writeDxfLine("50", "0"); // Text rotation angle
-                writeDxfLine("72", "3");
-                writeDxfLine("73", "3");
-                writeDxfLine("10", Double.toString(ConX.get(i))); // X coordinate start
-                writeDxfLine("20", Double.toString(ConY.get(i))); // Y coordinate start
-                writeDxfLine("11", Double.toString(ConX.get(i))); // X coordinate end
-                writeDxfLine("21", Double.toString(ConY.get(i))); // Y coordinate end
+                writeDxfLine("8", "Extras");     // Layer
+                writeDxfLine("62", "140");  // Colour of line using index colour (100 = ?)
+                writeDxfLine("39", "1.0");
+                writeDxfLine("10", Float.toString(scaleSqX[2] + 1.0f));
+                writeDxfLine("20", Float.toString(scaleSqY[0]));
+                writeDxfLine("40", Float.toString((scaleSqY[1] - scaleSqY[0]) * 0.1f));
+                writeDxfLine("1", blockName);
             }
-
-            // Marks the keypoints used as individual circles on a separate layer
-            for (int i = 0; i < linesX.size() - 1; i++)
-            {
-                writeDxfLine("0", "CIRCLE");
-                writeDxfLine("8", "Keypoints");     // Layer on which to draw (layer 3)
-                writeDxfLine("40", "0.25");
-                writeDxfLine("62", "60");  // Colour of points using index colour)
-                writeDxfLine("10", Double.toString(linesX.get(i))); // X coordinate start
-                writeDxfLine("20", Double.toString(linesY.get(i))); // Y coordinate start
-                writeDxfLine("11", Double.toString(linesX.get(i + 1))); // X coordinate end
-                writeDxfLine("21", Double.toString(linesY.get(i + 1))); // Y coordinate end
-            }
-
-            // Add point coordinates one at a time
-            for (int i = 0; i < linesX.size() - 1; i++)
-            {
-                writeDxfLine("0", "TEXT");
-                writeDxfLine("8", "Coordinates");     // Layer on which to draw line (layer 4)
-                writeDxfLine("62", "256");  // Colour of line using index colour
-                writeDxfLine("1", "(" + String.format("%.2f", linesX.get(i)) + ", " + String.format("%.2f", linesY.get(i)) + ")");
-                writeDxfLine("40", "0.15"); // Text height (i.e size)
-                writeDxfLine("50", "45"); // Text rotation angle
-                writeDxfLine("10", Double.toString(linesX.get(i))); // X coordinate start
-                writeDxfLine("20", Double.toString(linesY.get(i))); // Y coordinate start
-                writeDxfLine("11", Double.toString(linesX.get(i + 1))); // X coordinate end
-                writeDxfLine("21", Double.toString(linesY.get(i + 1))); // Y coordinate end
-            }
-
-            // Write lines to create a 10 x 10 cm square off to bottom left of pattern
-            float[] scaleSqX = {-5.0f, -5.0f, 5.0f, 5.0f};
-            float[] scaleSqY = {-5.0f, 5.0f, 5.0f, -5.0f};
-            for (int i = 0; i < 4; i++)
-            {
-                int j = i + 1;
-                if (j > 3) j = 0;
-                writeDxfLine("0", "LINE");
-                writeDxfLine("8", "Extras");     // Layer on which to draw line (layer 2)
-                writeDxfLine("62", "1");  // Colour of line using index colour (1 = red)
-                writeDxfLine("10", Double.toString(scaleSqX[i])); // X coordinate start
-                writeDxfLine("20", Double.toString(scaleSqY[i])); // Y coordinate start
-                writeDxfLine("11", Double.toString(scaleSqX[j])); // X coordinate end
-                writeDxfLine("21", Double.toString(scaleSqY[j])); // Y coordinate end
-            }
-
-            // Add text
-            writeDxfLine("0", "TEXT");
-            writeDxfLine("8", "Extras");     // Layer
-            writeDxfLine("62", "140");  // Colour of line using index colour (100 = ?)
-            writeDxfLine("39", "1.0");
-            writeDxfLine("10", Float.toString(scaleSqX[2] + 1.0f));
-            writeDxfLine("20", Float.toString(scaleSqY[0]));
-            writeDxfLine("40", Float.toString((scaleSqY[1] - scaleSqY[0]) * 0.1f));
-            writeDxfLine("1", blockName);
 
             // End section
             writeDxfLine("0", "ENDSEC");
