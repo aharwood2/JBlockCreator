@@ -286,10 +286,7 @@ public class DxfFile
                     writeDxfLine("21", Double.toString(ConY.get(i + 1))); // Y coordinate end
                     i++;
                 }
-            }
 
-            if (dxfLayerChooser[4] == true)
-            {
                 // Add construction point names one at a time
                 for (int i = 0; i < ConX.size() - 1; i++)
                 {
