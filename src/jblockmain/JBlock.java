@@ -38,8 +38,8 @@ public class JBlock extends JFrame
     private JCheckBox keypointsAsCirclesCheckBox;
     private JCheckBox keypointCoordinatesCheckBox;
     private JCheckBox constructionLinesCheckBox;
-    private File fileInput = null;
-    private File fileOutput = null;
+    private File fileInput = new File(".");
+    private File fileOutput = new File(".");
     private boolean[] dxfLayerChoices = new boolean[5];
 
     // Set a global tolerance for some operations
@@ -57,7 +57,7 @@ public class JBlock extends JFrame
     {
         // Choose a folder location to save the output files
         // Opens a file explorer for users to choose directory
-        JFileChooser fileChooser = new JFileChooser();
+        JFileChooser fileChooser = new JFileChooser(new File(fileOutput.toString()));
         fileChooser.setCurrentDirectory(new java.io.File(""));
         fileChooser.setDialogTitle("Select Save Location");
         fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
@@ -83,7 +83,7 @@ public class JBlock extends JFrame
     public void openClickedEvent()
     {
         // Choose a folder input
-        JFileChooser fileChooser = new JFileChooser();
+        JFileChooser fileChooser = new JFileChooser(new File(fileInput.toString()));
         if (fileChooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION)
         {
             // Prints out the input file chosen, purely for test purposes
@@ -256,6 +256,16 @@ public class JBlock extends JFrame
     // PSVM to run the application
     public static void main(String[] args)
     {
+        // Makes the UI look like the system UI
+        try
+        {
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+        }
+        catch (Exception ex)
+        {
+            ex.printStackTrace();
+        }
+
         // Create a JFrame instance
         JFrame frame = new JFrame("JBlock2D - Custom Pattern Drafting (Version "
                 + majVer + "." + minVer + ")");
