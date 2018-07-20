@@ -111,7 +111,7 @@ public abstract class Pattern implements IPlottable
             }
 
             // Create new DXF file
-            DxfFile file = new DxfFile(path.toString() + "/" + blocks.get(i).getName(), dxfLayerChooser);
+            DxfFile file = new DxfFile(path.toString() + "/" + blocks.get(i).getName());
             try
             {
                 file.addLines(getXPoints(i), getYPoints(i));
