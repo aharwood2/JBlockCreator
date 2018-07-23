@@ -78,11 +78,11 @@ public class Measurements
     // Getter for measurements
     public Store getId(int id) throws MeasurementNotFoundException
     {
-        Store store =  storeMaps.get(mapNumber).get(id);
+        Store store = storeMaps.get(mapNumber).get(id);
         if (store == null)
         {
             throw new MeasurementNotFoundException("No measurement with ID " + id + " found in the data store. " +
-                                                           "Is it missing from the scan data input file?" );
+                    "Is it missing from the scan data input file?");
         }
         return store;
     }
@@ -245,7 +245,7 @@ public class Measurements
 
                     for (int i = 0; i < numCustomMeasurements; ++i)
                     {
-                        if (idValues[i].equals("Unavailable"))
+                        if (idValues[i].equals("Unavailable") || idValues[i].equals("null"))
                         {
                             System.out.println("Measurement " + idName[i] + " is not available for user " + userNames.get(numUsers - 1));
                             idValues[i] = "0.0";

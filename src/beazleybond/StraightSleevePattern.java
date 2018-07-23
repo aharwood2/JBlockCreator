@@ -2,6 +2,7 @@ package beazleybond;
 
 import jblockenums.EGarment;
 import jblockenums.EMethod;
+import jblockexceptions.MeasurementNotFoundException;
 import jblockmain.*;
 import mathcontainers.Vector2D;
 
@@ -33,7 +34,7 @@ public class StraightSleevePattern
 
     public StraightSleevePattern(Measurements dataStore)
     {
-        readMeasurements(dataStore);
+        if (!readMeasurements(dataStore)) return;
         addEasement();
 
         // Populate arbitrary measurements
@@ -64,16 +65,24 @@ public class StraightSleevePattern
     }
 
     @Override
-    protected void readMeasurements(Measurements dataStore)
+    protected boolean readMeasurements(Measurements dataStore)
     {
-        // Based on measurements for this pattern we can read the following from the scan:
-        a_UpperArmGirth = dataStore.getId(24).value;
-        b_FullLength = dataStore.getId(23).value;
-        c_DepthOfSleeveHead = dataStore.getId(35).value;
-        d_SleeveHeadToElbow = dataStore.getId(25).value;
+        try {
+            // Based on measurements for this pattern we can read the following from the scan:
+            a_UpperArmGirth = dataStore.getId(24).value;
+            b_FullLength = dataStore.getId(23).value;
+            c_DepthOfSleeveHead = dataStore.getId(35).value;
+            d_SleeveHeadToElbow = dataStore.getId(25).value;
 
-        // Get name
-        userName = dataStore.getName();
+            // Get name
+            userName = dataStore.getName();
+
+            return true;
+        }
+        catch(MeasurementNotFoundException e)
+        {
+            return false;
+        }
     }
 
     /**

@@ -154,7 +154,7 @@ public class JBlock extends JFrame
             }
 
             // Create done prompt
-            Prompts.infoBox("Done!", "Done", EMsgType.INFO);
+            Prompts.infoBox("Done!", "Done", EMsgType.Info);
         }
 
         // Handle missing options
@@ -162,14 +162,14 @@ public class JBlock extends JFrame
         {
             Prompts.infoBox("Please choose your input file by clicking on the \"Open\" button",
                     "Input File Needed",
-                    EMsgType.ERROR);
+                    EMsgType.Error);
             return;
         }
         if (fileOutput == null)
         {
             Prompts.infoBox("Please choose a directory to write the patterns to by clicking on \"Save\"",
                     "Output Directory Needed",
-                    EMsgType.ERROR);
+                    EMsgType.Error);
         }
     }
     
@@ -297,7 +297,7 @@ public class JBlock extends JFrame
                 }
                 if (cmd.equals("View help"))
                 {
-                    Prompts.infoBox("PLACEHOLDER", "PLACEHOLDER", EMsgType.INFO);
+                    Prompts.infoBox("PLACEHOLDER", "PLACEHOLDER", EMsgType.Info);
                 }
                 if (cmd.equals("Open"))
                 {

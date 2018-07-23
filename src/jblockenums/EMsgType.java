@@ -5,9 +5,9 @@ package jblockenums;
  */
 public enum EMsgType
 {
-    INFO,
-    WARN,
-    ERROR;
+    Info,
+    Warning,
+    Error;
 
     /**
      * Method to convert the message enum to a string.
@@ -18,13 +18,13 @@ public enum EMsgType
     {
         switch (type)
         {
-            case INFO:
+            case Info:
                 return "Info";
 
-            case WARN:
+            case Warning:
                 return "Warning";
 
-            case ERROR:
+            case Error:
                 return "Error";
 
             default:

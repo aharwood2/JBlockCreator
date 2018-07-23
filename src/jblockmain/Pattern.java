@@ -39,7 +39,7 @@ public abstract class Pattern implements IPlottable
     protected ArrayList<Block> blocks;
 
     // Obtain measurements from the body scan required by the pattern
-    protected abstract void readMeasurements(Measurements dataStore);
+    protected abstract boolean readMeasurements(Measurements dataStore);
 
     // Modify any measurements read from the scan by adding ease
     protected abstract void addEasement();
@@ -123,6 +123,5 @@ public abstract class Pattern implements IPlottable
             }
             file.writeFile(blocks.get(i).getName(), dxfLayerChooser);
         }
-
     }
 }

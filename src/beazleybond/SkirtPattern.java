@@ -3,6 +3,7 @@ package beazleybond;
 import jblockenums.EGarment;
 import jblockenums.EMethod;
 import jblockenums.EPosition;
+import jblockexceptions.MeasurementNotFoundException;
 import jblockmain.*;
 import mathcontainers.Vector2D;
 
@@ -53,7 +54,7 @@ public class SkirtPattern
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     public SkirtPattern(Measurements dataStore)
     {
-        readMeasurements(dataStore);
+        if(!readMeasurements(dataStore)) return;
         addEasement();
 
         // Populate arbitrary measurements
@@ -102,21 +103,30 @@ public class SkirtPattern
     }
 
     @Override
-    protected void readMeasurements(Measurements dataStore)
+    protected boolean readMeasurements(Measurements dataStore)
     {
-        // Based on measurements for this pattern we can read the following from the scan:
-        a_Waist = dataStore.getId(2).value;
-        b_UpperHip = dataStore.getId(13).value;
-        c_Hip = dataStore.getId(3).value;
-        d_CentreBack = dataStore.getId(16).value;
-        e_SideSeam = dataStore.getId(16).value;
-        f_CentreFront = dataStore.getId(16).value;
+        try {
+            // Based on measurements for this pattern we can read the following from the scan:
+            a_Waist = dataStore.getId(2).value;
+            b_UpperHip = dataStore.getId(13).value;
+            c_Hip = dataStore.getId(3).value;
+            d_CentreBack = dataStore.getId(16).value;
+            e_SideSeam = dataStore.getId(16).value;
+            f_CentreFront = dataStore.getId(16).value;
 
-        // Others
-        Arb_HipLevel = dataStore.getId(15).value;
+            // Others
+            Arb_HipLevel = dataStore.getId(15).value;
 
-        // Get name of user
-        userName = dataStore.getName();
+            // Get name of user
+            userName = dataStore.getName();
+
+            return true;
+        }
+        catch(MeasurementNotFoundException e)
+        {
+           return false;
+        }
+
     }
 
     /**

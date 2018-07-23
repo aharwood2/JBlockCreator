@@ -2,6 +2,7 @@ package aldrich;
 
 import jblockenums.EGarment;
 import jblockenums.EMethod;
+import jblockexceptions.MeasurementNotFoundException;
 import jblockmain.*;
 import mathcontainers.Vector2D;
 
@@ -66,7 +67,7 @@ public class SkirtPattern
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     public SkirtPattern(Measurements dataStore)
     {
-        readMeasurements(dataStore);
+        if (!readMeasurements(dataStore)) return;
         addEasement();
 
         // Populate arbitrary measurements
@@ -107,16 +108,24 @@ public class SkirtPattern
     }
 
     @Override
-    protected void readMeasurements(Measurements dataStore)
+    protected boolean readMeasurements(Measurements dataStore)
     {
-        // Based on measurements for this pattern we can read the following from the scan:
-        a_Waist = dataStore.getId(26).value + dataStore.getId(27).value;
-        b_Hips = dataStore.getId(31).value + dataStore.getId(32).value;
-        c_WaistToHip = dataStore.getId(15).value;
-        d_SkirtLength = dataStore.getId(14).value;
+        try {
+            // Based on measurements for this pattern we can read the following from the scan:
+            a_Waist = dataStore.getId(26).value + dataStore.getId(27).value;
+            b_Hips = dataStore.getId(31).value + dataStore.getId(32).value;
+            c_WaistToHip = dataStore.getId(15).value;
+            d_SkirtLength = dataStore.getId(14).value;
 
-        // Get name
-        inputFileName = dataStore.getName();
+            // Get name
+            inputFileName = dataStore.getName();
+
+            return true;
+        }
+        catch(MeasurementNotFoundException e)
+        {
+            return false;
+        }
     }
 
     /**

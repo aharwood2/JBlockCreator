@@ -2,9 +2,11 @@ package gill;
 
 import jblockenums.EGarment;
 import jblockenums.EMethod;
+import jblockexceptions.MeasurementNotFoundException;
 import jblockmain.*;
 import mathcontainers.Vector2D;
 
+import java.lang.reflect.MalformedParameterizedTypeException;
 import java.util.ArrayList;
 
 public class SkirtPattern
@@ -43,7 +45,7 @@ public class SkirtPattern
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     public SkirtPattern(Measurements dataStore)
     {
-        readMeasurements(dataStore);
+        if (!readMeasurements(dataStore)) return;
         addEasement();
 
         // Populate arbitrary measurements
@@ -79,23 +81,31 @@ public class SkirtPattern
 
 
     @Override
-    protected void readMeasurements(Measurements dataStore)
+    protected boolean readMeasurements(Measurements dataStore)
     {
-        // Based on measurements for this pattern we can read the following from the scan:
-        a_FrWaistArc = dataStore.getId(26).value;
-        b_BkWaistArc = dataStore.getId(27).value;
-        c_FrAbdomenArc = dataStore.getId(28).value;
-        d_BkAbdomenArc = dataStore.getId(29).value;
-        e_BkSeatArc = dataStore.getId(30).value;
-        f_FrHipArc = dataStore.getId(31).value;
-        g_BkHipArc = dataStore.getId(32).value;
-        h_WaistToAbdomen = dataStore.getId(33).value;
-        i_WaistToSeat = dataStore.getId(34).value;
-        j_WaistToHip = dataStore.getId(15).value;
-        k_WaistToKnee = dataStore.getId(14).value;
+        try {
+            // Based on measurements for this pattern we can read the following from the scan:
+            a_FrWaistArc = dataStore.getId(26).value;
+            b_BkWaistArc = dataStore.getId(27).value;
+            c_FrAbdomenArc = dataStore.getId(28).value;
+            d_BkAbdomenArc = dataStore.getId(29).value;
+            e_BkSeatArc = dataStore.getId(30).value;
+            f_FrHipArc = dataStore.getId(31).value;
+            g_BkHipArc = dataStore.getId(32).value;
+            h_WaistToAbdomen = dataStore.getId(33).value;
+            i_WaistToSeat = dataStore.getId(34).value;
+            j_WaistToHip = dataStore.getId(15).value;
+            k_WaistToKnee = dataStore.getId(14).value;
 
-        // Get name
-        userName = dataStore.getName();
+            // Get name
+            userName = dataStore.getName();
+
+            return true;
+        }
+        catch(MeasurementNotFoundException e)
+        {
+            return false;
+        }
     }
 
     /**
