@@ -35,6 +35,23 @@ public abstract class Pattern implements IPlottable
         garment = assignGarment();
     }
 
+   // Arraylist for missing measurements
+    protected ArrayList<String> missingMeasurements = new ArrayList<String>();
+
+    // Method for storing data of patterns that could not be created
+    protected void MissingMeasurements(String userid, String method, String pattern)
+    {
+        missingMeasurements.add(userid + "/" + method + "/" + pattern);
+        OutputMM();
+    }
+
+    // Method for printing out the size and entries of MissingMeasurements
+    protected void OutputMM()
+    {
+        System.out.println(missingMeasurements.size());
+        System.out.println(missingMeasurements);
+    }
+
     // Blocks that comprise the pattern
     protected ArrayList<Block> blocks;
 

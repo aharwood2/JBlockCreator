@@ -12,6 +12,8 @@ import beazleybond.SkirtPattern;
 import beazleybond.StraightSleevePattern;
 import beazleybond.TrouserPattern;
 
+import jblockenums.EGarment;
+import jblockenums.EMethod;
 import jblockenums.EMsgType;
 
 public class JBlock extends JFrame
@@ -273,7 +275,7 @@ public class JBlock extends JFrame
         frame.setVisible(true);
 
         // Sets the frame size
-        frame.setSize(400, 400);
+        frame.setSize(450, 450);
 
         /* MENU BAR SETUP */
 
@@ -351,7 +353,7 @@ public class JBlock extends JFrame
         colors.add(radioItem("Blue", listener, "color(blue)", colorgroup));
 
         // Finally, make our main window appear
-        frame.setSize(560, 350);
+        frame.setSize(530, 350);
         frame.setResizable(false);
         frame.setVisible(true);
     }

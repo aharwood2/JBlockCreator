@@ -124,7 +124,8 @@ public class SkirtPattern
         }
         catch(MeasurementNotFoundException e)
         {
-           return false;
+            MissingMeasurements(dataStore.getName(), method.toString(), garment.toString());
+            return false;
         }
 
     }
