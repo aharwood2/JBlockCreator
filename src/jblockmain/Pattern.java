@@ -27,6 +27,9 @@ public abstract class Pattern implements IPlottable
     protected abstract EMethod assignMethod();
     protected abstract EGarment assignGarment();
 
+    // Arraylist for missing measurements
+    protected ArrayList<String> missingMeasurements = new ArrayList<String>();
+
     // Constructor to initialise variables
     public Pattern()
     {
@@ -35,18 +38,15 @@ public abstract class Pattern implements IPlottable
         garment = assignGarment();
     }
 
-   // Arraylist for missing measurements
-    protected ArrayList<String> missingMeasurements = new ArrayList<String>();
-
     // Method for storing data of patterns that could not be created
-    protected void MissingMeasurements(String userid, String method, String pattern)
+    protected void addMissingMeasurement(String userid, String method, String pattern)
     {
         missingMeasurements.add(userid + "/" + method + "/" + pattern);
-        OutputMM();
+        printMissingMeasurements();
     }
 
-    // Method for printing out the size and entries of MissingMeasurements
-    protected void OutputMM()
+    // Method for printing out the size and entries of addMissingMeasurement
+    protected void printMissingMeasurements()
     {
         System.out.println(missingMeasurements.size());
         System.out.println(missingMeasurements);

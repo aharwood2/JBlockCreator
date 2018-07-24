@@ -81,7 +81,7 @@ public class StraightSleevePattern
         }
         catch(MeasurementNotFoundException e)
         {
-            MissingMeasurements(dataStore.getName(), method.toString(), garment.toString());
+            addMissingMeasurement(dataStore.getName(), method.toString(), garment.toString());
             return false;
         }
     }

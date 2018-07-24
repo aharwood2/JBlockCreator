@@ -6,7 +6,6 @@ import jblockexceptions.MeasurementNotFoundException;
 import jblockmain.*;
 import mathcontainers.Vector2D;
 
-import java.lang.reflect.MalformedParameterizedTypeException;
 import java.util.ArrayList;
 
 public class SkirtPattern
@@ -104,7 +103,7 @@ public class SkirtPattern
         }
         catch(MeasurementNotFoundException e)
         {
-            MissingMeasurements(dataStore.getName(), method.toString(), garment.toString());
+            addMissingMeasurement(dataStore.getName(), method.toString(), garment.toString());
             return false;
         }
     }
