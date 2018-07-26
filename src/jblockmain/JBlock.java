@@ -6,6 +6,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.io.File;
+import java.util.ArrayList;
 
 import beazleybond.BodicePattern;
 import beazleybond.SkirtPattern;
@@ -55,7 +56,7 @@ public class JBlock extends JFrame
     private static final int minVer = 0;
 
     // Method for when the save button is clicked
-    public void saveClickedEvent()
+    private void saveClickedEvent()
     {
         // Choose a folder location to save the output files
         // Opens a file explorer for users to choose directory
@@ -82,7 +83,7 @@ public class JBlock extends JFrame
     }
 
     // Method for when the open button is clicked
-    public void openClickedEvent()
+    private void openClickedEvent()
     {
         // Choose a folder input
         JFileChooser fileChooser = new JFileChooser();
@@ -102,7 +103,7 @@ public class JBlock extends JFrame
     }
 
     // Method for when the run button is clicked
-    public void runClickedEvent()
+    private void runClickedEvent()
     {
         if (fileOutput != null && fileInput != null)
         {

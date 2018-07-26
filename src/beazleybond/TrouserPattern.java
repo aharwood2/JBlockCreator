@@ -156,7 +156,7 @@ public class TrouserPattern
         }
         catch(MeasurementNotFoundException e)
         {
-            addMissingMeasurement(dataStore.getName(), method.toString(), garment.toString());
+            Pattern.addMissingMeasurement(dataStore.getName(), method.toString(), garment.toString());
             return false;
         }
     }
