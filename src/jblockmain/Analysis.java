@@ -1,75 +1,42 @@
 package jblockmain;
 
 import dxfwriter.DxfFile;
-import jblockenums.EGarment;
-import jblockenums.EMethod;
+import jblockenums.EAnalysis;
 
-import java.io.BufferedWriter;
 import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.io.FileWriter;
 
-
-/** Interface to be implemented by every pattern added to the module. */
-public abstract class Pattern implements IPlottable
+/** Interface to be implemented by every analysis technique added to the module. */
+public abstract class Analysis implements IPlottableAnalysis
 {
-    // Offset used for drawing of construction lines
-    protected double Arb_Con = 2.0;
-
-    // User associated with the pattern
+    // User associated with the technique output (only for single not layered)
     protected String userName;
 
-    // Method associated with pattern
-    protected final EMethod method;
-    protected final EGarment garment;
+    // Analysis technique associated
+    protected final EAnalysis analysis;
 
-    // Abstract method to assign final method type
-    protected abstract EMethod assignMethod();
-    protected abstract EGarment assignGarment();
+    // Abstract method to assign final analysis technique type
+    protected abstract EAnalysis assignAnalysis();
 
     // Arraylist for missing measurements
     protected static ArrayList<String> missingMeasurements = new ArrayList<String>();
 
-    // Constructor to initialise variables
-    public Pattern()
+    public Analysis()
     {
         blocks = new ArrayList<Block>();
-        method = assignMethod();
-        garment = assignGarment();
+        analysis = assignAnalysis();
     }
 
     // Method for storing data of patterns that could not be created
-    protected static void addMissingMeasurement(String userid, String method, String pattern)
+    protected static void addMissingMeasurement(String userid, String technique)
     {
-        missingMeasurements.add(userid + "/" + method + "/" + pattern);
+        missingMeasurements.add(userid + "/" + technique);
     }
 
-    protected static void printMissingMeasurements(File fileoutput)
-    {
-        if (missingMeasurements.size() > 0)
-        {
-            try
-            {
-                FileWriter writer = new FileWriter(fileoutput + "/Failed_Outputs.txt");
-                BufferedWriter writer2 = new BufferedWriter(writer);
-                for (String str : missingMeasurements)
-                {
-                    writer2.write(str);
-                    writer2.newLine();
-                }
-                writer.close();
-            }
-            catch (Exception e)
-            {
-                e.printStackTrace();
-            }
-        }
-    }
-
-    // Blocks that comprise the pattern
+    // Blocks that comprise the analysis technique
     protected ArrayList<Block> blocks;
 
     // Obtain measurements from the body scan required by the pattern
@@ -81,7 +48,7 @@ public abstract class Pattern implements IPlottable
     // Start the creation of the blocks for the pattern
     protected abstract void createBlocks();
 
-    /* Interface implementation */
+    /* Interface implementaiton */
     private void rangeCheck(int blockNumber)
     {
         if (blockNumber > blocks.size()) throw new IndexOutOfBoundsException("Accessing out of range of number of blocks!");
@@ -127,13 +94,12 @@ public abstract class Pattern implements IPlottable
         return blocks.size();
     }
 
-    public void writeToDXF(File fileOutput, boolean[] dxfLayerChooser)
+    public void writeToDXFAnalysis(File fileOutput, boolean[] dxfLayersAnalysis)
     {
         for (int i = 0; i < getNumberOfBlocksToPlot(); i++)
         {
-            // Construct output path
-            Path path = Paths.get(fileOutput.toString() + "/" + method + "/" + garment + "/");
-    
+            Path path = Paths.get(fileOutput.toString() + "/" + analysis + "/");
+
             // Create directory structure if required
             try
             {
@@ -155,7 +121,7 @@ public abstract class Pattern implements IPlottable
             {
                 e.printStackTrace();
             }
-            file.writeFile(blocks.get(i).getName(), dxfLayerChooser);
+            file.writeFile(blocks.get(i).getName(), dxfLayersAnalysis);
         }
     }
 }
