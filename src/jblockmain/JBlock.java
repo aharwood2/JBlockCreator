@@ -8,6 +8,7 @@ import java.awt.event.KeyEvent;
 import java.io.File;
 import java.util.ArrayList;
 
+import analysis.RectanglePlot;
 import beazleybond.BodicePattern;
 import beazleybond.SkirtPattern;
 import beazleybond.StraightSleevePattern;
@@ -41,6 +42,9 @@ public class JBlock extends JFrame
     private JCheckBox keypointsAsCirclesCheckBox;
     private JCheckBox keypointCoordinatesCheckBox;
     private JCheckBox constructionLinesCheckBox;
+    private JTabbedPane tabbedPane;
+    private JCheckBox rectanglePlot2MeasurementCheckBox;
+    private JCheckBox layeredCheckBox;
     private File fileInput = null;
     private File fileOutput = null;
     private boolean[] dxfLayerChoices = new boolean[5];
@@ -282,8 +286,8 @@ public class JBlock extends JFrame
 
         // Create a window for the menu
         JFrame frame1 = new JFrame("Menu");
-        JPanel panel = new JPanel();
-        frame1.getContentPane().add(panel, "Center");
+        JPanel panelpattern = new JPanel();
+        frame1.getContentPane().add(panelpattern, "Center");
 
         // Create an action listener for the menu items we will create
         ActionListener listener = new ActionListener()
