@@ -57,8 +57,7 @@ public class JBlock extends JFrame
     {
         // Choose a folder location to save the output files
         // Opens a file explorer for users to choose directory
-        JFileChooser fileChooser = new JFileChooser(new File(fileOutput.toString()));
-        fileChooser.setCurrentDirectory(new java.io.File(""));
+        JFileChooser fileChooser = new JFileChooser(fileOutput);
         fileChooser.setDialogTitle("Select Save Location");
         fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
         fileChooser.setAcceptAllFileFilterUsed(false);
@@ -66,7 +65,7 @@ public class JBlock extends JFrame
         if (fileChooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION)
         {
             // Prints out the directory chosen, purely for test purposes
-            // Also stores the location in the save path gui label and the fileoutput variable
+            // Also stores the location in the save path GUI label and the fileOutput variable
             System.out.println("Current directory is: " + fileChooser.getCurrentDirectory());
             System.out.println("Save location is: " + fileChooser.getSelectedFile());
             String file = fileChooser.getCurrentDirectory().toString();
@@ -75,7 +74,7 @@ public class JBlock extends JFrame
                 file = file.substring(0, 40) + "...";
             }
             savePath.setText(file);
-            JBlock.this.fileOutput = fileChooser.getSelectedFile();
+            fileOutput = fileChooser.getSelectedFile();
         }
     }
 
@@ -83,12 +82,12 @@ public class JBlock extends JFrame
     public void openClickedEvent()
     {
         // Choose a folder input
-        JFileChooser fileChooser = new JFileChooser(new File(fileInput.toString()));
+        JFileChooser fileChooser = new JFileChooser(fileInput);
         if (fileChooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION)
         {
             // Prints out the input file chosen, purely for test purposes
-            // Also stores the location in the input path gui label and the fileinput variable
-            JBlock.this.fileInput = fileChooser.getSelectedFile();
+            // Also stores the location in the input path GUI label and the fileInput variable
+            fileInput = fileChooser.getSelectedFile();
             System.out.println("Input file is: " + fileInput.toString());
             String file = fileChooser.getSelectedFile().toString();
             if (file.length() > 40)
@@ -104,8 +103,8 @@ public class JBlock extends JFrame
     {
         if (fileOutput != null && fileInput != null)
         {
-            Measurements measurements = new Measurements(JBlock.this.fileInput.toString(),
-                    JBlock.this.isbatchCheckbox.isSelected());
+            Measurements measurements = new Measurements(fileInput.toString(),
+                    isbatchCheckbox.isSelected());
 
             // Need to populate the boolean array
             getLayerInformation();
