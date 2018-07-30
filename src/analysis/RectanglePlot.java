@@ -3,24 +3,34 @@ package analysis;
 import jblockexceptions.MeasurementNotFoundException;
 import jblockmain.Analysis;
 import jblockmain.Block;
+import jblockmain.JBlock;
 import jblockmain.Measurements;
 import jblockenums.EAnalysis;
 import mathcontainers.Vector2D;
 
-// TODO make this retrieve the x and y choices from the GUI and use them throughout, as is you can only use 038 & 040
+import java.util.ArrayList;
 
 public class RectanglePlot
     extends Analysis
 {
     /* Technique Specific Variables */
-    private Double x_Axis;
-    private Double y_Axis;
+    private double x_Axis;
+    private int xID;
+    private double y_Axis;
+    private int yID;
+    private ArrayList<Double> bottom_left;
+    private ArrayList<Double> bottom_right;
+    private ArrayList<Double> top_left;
+    private ArrayList<Double> top_right;
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     /* Methods */
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    public RectanglePlot(Measurements dataStore)
+    public RectanglePlot(Measurements dataStore, int xAxisID, int yAxisID, boolean isLayered)
     {
+        xID = xAxisID;
+        yID = yAxisID;
+
         if (!readMeasurements(dataStore)) return;
         addEasement();
 
@@ -45,8 +55,8 @@ public class RectanglePlot
     protected boolean readMeasurements(Measurements dataStore)
     {
         try {
-            x_Axis = dataStore.getId(40).value;
-            y_Axis = dataStore.getId(38).value;
+            x_Axis = dataStore.getId(xID).value;
+            y_Axis = dataStore.getId(yID).value;
 
             // Get name
             userName = dataStore.getName();
@@ -70,7 +80,7 @@ public class RectanglePlot
         // plotting. The bottom left corner of the space to be the origin.
 
         // Create component representing half back of skirt folded in half.
-        blocks.add(new Block(userName + "_Rectangle_Plot"));
+        blocks.add(new Block(userName + "_" + String.valueOf(xID) + "_" + String.valueOf(yID) + "_Rectangle_Plot"));
         Block fullBlock = blocks.get(0);
 
         // Adding the origin, constant for all plots
