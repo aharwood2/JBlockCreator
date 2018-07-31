@@ -13,7 +13,7 @@ import java.util.ArrayList;
 public abstract class Analysis implements IPlottableAnalysis
 {
     // User associated with the technique output (only for single not layered)
-    protected String userName;
+    protected static String userName;
 
     // Analysis technique associated
     protected final EAnalysis analysis;
@@ -37,7 +37,7 @@ public abstract class Analysis implements IPlottableAnalysis
     }
 
     // Blocks that comprise the analysis technique
-    protected ArrayList<Block> blocks;
+    protected  ArrayList<Block> blocks;
 
     // Obtain measurements from the body scan required by the pattern
     protected abstract boolean readMeasurements(Measurements dataStore);

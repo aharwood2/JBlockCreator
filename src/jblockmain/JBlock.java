@@ -158,54 +158,47 @@ public class JBlock extends JFrame
             getLayerInformation();
 
             // Create patterns
-            for (int i = 0; i < measurements.getNames().size(); i++)
-            {
+            for (int i = 0; i < measurements.getNames().size(); i++) {
                 measurements.setMapNumber(i);
 
                 // Creates patterns depending on which checkboxes are ticked
-                if (checkBeazleySkirt.isSelected())
-                {
+                if (checkBeazleySkirt.isSelected()) {
                     SkirtPattern bb_skirt = new SkirtPattern(measurements);
                     bb_skirt.writeToDXF(fileOutput, dxfLayerChoices);
                 }
 
-                if (checkBeazleyTrousers.isSelected())
-                {
+                if (checkBeazleyTrousers.isSelected()) {
                     TrouserPattern bb_trouser = new TrouserPattern(measurements);
                     bb_trouser.writeToDXF(fileOutput, dxfLayerChoices);
                 }
 
-                if (checkBeazleyBodice.isSelected())
-                {
+                if (checkBeazleyBodice.isSelected()) {
                     BodicePattern bb_bodice = new BodicePattern(measurements);
                     bb_bodice.writeToDXF(fileOutput, dxfLayerChoices);
                 }
 
-                if (checkBeazleyStraightSleeve.isSelected())
-                {
+                if (checkBeazleyStraightSleeve.isSelected()) {
                     StraightSleevePattern bb_sleeve = new StraightSleevePattern(measurements);
                     bb_sleeve.writeToDXF(fileOutput, dxfLayerChoices);
                 }
 
-                if (checkGillSkirt.isSelected())
-                {
+                if (checkGillSkirt.isSelected()) {
                     gill.SkirtPattern gill_skirt = new gill.SkirtPattern(measurements);
                     gill_skirt.writeToDXF(fileOutput, dxfLayerChoices);
                 }
 
-                if (checkAldrichSkirt.isSelected())
-                {
+                if (checkAldrichSkirt.isSelected()) {
                     aldrich.SkirtPattern aldrich_skirt = new aldrich.SkirtPattern(measurements);
                     aldrich_skirt.writeToDXF(fileOutput, dxfLayerChoices);
                 }
 
                 // Creates analysis outputs depending on which checkboxes are ticked
-                if (rectanglePlot2MeasurementCheckBox.isSelected())
-                {
+                if (rectanglePlot2MeasurementCheckBox.isSelected()) {
                     analysis.RectanglePlot rectanglePlot = new analysis.RectanglePlot(measurements,
                             Integer.parseInt(xaxisID.getText()),
                             Integer.parseInt(yaxisID.getText()),
-                            isLayeredRP);
+                            isLayeredRP,
+                            i);
                     rectanglePlot.writeToDXFAnalysis(fileOutput, dxfLayersAnalysis);
                 }
             }
