@@ -2,5 +2,5 @@ package jblockenums;
 
 public enum EMethod
 {
-    ALRICH, BEAZLEYBOND, GILL
+    ALDRICH, BEAZLEYBOND, GILL
 }

@@ -8,9 +8,7 @@ import java.awt.event.KeyEvent;
 import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.ArrayList;
 
-import analysis.RectanglePlot;
 import beazleybond.BodicePattern;
 import beazleybond.SkirtPattern;
 import beazleybond.StraightSleevePattern;
@@ -19,6 +17,7 @@ import jblockenums.EMsgType;
 
 public class JBlock extends JFrame
 {
+
     // Declaration of used backend components
     private JPanel panelMain;
     private JLabel labAldrich;
@@ -30,7 +29,7 @@ public class JBlock extends JFrame
     private JCheckBox checkBeazleyStraightSleeve;
     private JCheckBox checkBeazleyTrousers;
     private JCheckBox checkBeazleyBodice;
-    private JButton butRun;
+    private JButton butRunPattern;
     private JButton butSave;
     private JButton butLoad;
     private JLabel openPath;
@@ -43,10 +42,21 @@ public class JBlock extends JFrame
     private JCheckBox constructionLinesCheckBox;
     private JTabbedPane tabbedPane;
     private JCheckBox rectanglePlot2MeasurementCheckBox;
-    private JCheckBox layeredCheckBox;
+    private JCheckBox layeredCheckBoxRP;
+    private JTextField textFieldRPx;
+    private JTextField textFieldRPy;
+    private JLabel xaxisID;
+    private JLabel yaxisID;
+    private JCheckBox scaleBoxAndUserCheckBoxAnalysis;
+    private JCheckBox connectingLinesCheckBox;
+    private JCheckBox keypointsAsCirclesCheckBoxAnalysis;
+    private JCheckBox keypointCoordinatesCheckBoxAnalysis;
+    private JCheckBox constructionLinesIfUsedCheckBox;
     private File fileInput = null;
     private File fileOutput = null;
     private boolean[] dxfLayerChoices = new boolean[5];
+    private boolean[] dxfLayersAnalysis = new boolean[5];
+    private boolean isLayeredRP;
 
     // Set a global tolerance for some operations
     public static final double tol = 10e-8;
@@ -57,6 +67,43 @@ public class JBlock extends JFrame
     // Version number
     private static final int majVer = 1;
     private static final int minVer = 0;
+
+    // Methods for when the user enters text into the rectangle plot analysis text fields
+    private void enterTextRPX()
+    {
+        String xID = textFieldRPx.getText();
+        xaxisID.setText(xID);
+        try
+        {
+            Integer IDx = Integer.parseInt(xID);
+            if (IDx < 1 || IDx > 40)
+            {
+                Prompts.infoBox("Input must be a valid measurement ID", "Invalid ID", EMsgType.Error);
+            }
+        }
+        catch (Exception e)
+        {
+            Prompts.infoBox("Input must be a valid measurement ID", "Invalid ID", EMsgType.Error);
+        }
+    }
+
+    private void enterTextRPY()
+    {
+        String yID = textFieldRPy.getText();
+        yaxisID.setText(yID);
+        try
+        {
+            Integer IDy = Integer.parseInt(yID);
+            if (IDy < 1 || IDy > 40)
+            {
+                Prompts.infoBox("Input must be a valid measurement ID", "Invalid ID", EMsgType.Error);
+            }
+        }
+        catch (Exception e)
+        {
+            Prompts.infoBox("Input must be a valid measurement ID", "Invalid ID", EMsgType.Error);
+        }
+    }
 
     // Method for when the save button is clicked
     private void saveClickedEvent()
@@ -114,7 +161,8 @@ public class JBlock extends JFrame
                     JBlock.this.isbatchCheckbox.isSelected());
 
             // Need to populate the boolean array
-            getLayerInformation();
+            getLayerInformationPatterns();
+            getLayerInformationAnalysis();
 
             // Create patterns
             for (int i = 0; i < measurements.getNames().size(); i++)
@@ -122,8 +170,7 @@ public class JBlock extends JFrame
                 measurements.setMapNumber(i);
 
                 // Creates patterns depending on which checkboxes are ticked
-                if (checkBeazleySkirt.isSelected())
-                {
+                if (checkBeazleySkirt.isSelected()) {
                     SkirtPattern bb_skirt = new SkirtPattern(measurements);
                     bb_skirt.writeToDXF(fileOutput, dxfLayerChoices);
                 }
@@ -156,6 +203,17 @@ public class JBlock extends JFrame
                 {
                     aldrich.SkirtPattern aldrich_skirt = new aldrich.SkirtPattern(measurements);
                     aldrich_skirt.writeToDXF(fileOutput, dxfLayerChoices);
+                }
+
+                // Creates analysis outputs depending on which checkboxes are ticked
+                if (rectanglePlot2MeasurementCheckBox.isSelected())
+                {
+                    analysis.RectanglePlot rectanglePlot = new analysis.RectanglePlot(measurements,
+                            Integer.parseInt(xaxisID.getText()),
+                            Integer.parseInt(yaxisID.getText()),
+                            isLayeredRP,
+                            i);
+                    rectanglePlot.writeToDXFAnalysis(fileOutput, dxfLayersAnalysis);
                 }
             }
 
@@ -190,9 +248,22 @@ public class JBlock extends JFrame
                     EMsgType.Error);
         }
     }
-    
-    // Method to populate the boolean array of DXF layer configuration
-    private void getLayerInformation()
+
+    // Method to set ifLayeredRectanglePlot boolean
+    private void layeredRectanglePlot()
+    {
+        if (layeredCheckBoxRP.isSelected())
+        {
+            isLayeredRP = true;
+        }
+        else if (!layeredCheckBoxRP.isSelected())
+        {
+            isLayeredRP = false;
+        }
+    }
+
+    // Method to populate the pattern boolean array of DXF layer configuration
+    private void getLayerInformationPatterns()
     {
         // Class for selecting which dxf layers to show
         if (scaleBoxAndUserCheckBox.isSelected())
@@ -237,11 +308,57 @@ public class JBlock extends JFrame
         }
     }
 
-    // Method containing button actionlisteners
+    // Method to populate the analysis boolean array of DXF layer configuration
+    private void getLayerInformationAnalysis()
+    {
+        // Class for selecting which dxf layers to show
+        if (scaleBoxAndUserCheckBoxAnalysis.isSelected())
+        {
+            dxfLayersAnalysis[0] = true;
+        }
+        else if (!scaleBoxAndUserCheckBoxAnalysis.isSelected())
+        {
+            dxfLayersAnalysis[0] = false;
+        }
+        if (connectingLinesCheckBox.isSelected())
+        {
+            dxfLayersAnalysis[1] = true;
+        }
+        else if (!connectingLinesCheckBox.isSelected())
+        {
+            dxfLayersAnalysis[1] = false;
+        }
+        if (keypointsAsCirclesCheckBoxAnalysis.isSelected())
+        {
+            dxfLayersAnalysis[2] = true;
+        }
+        else if (!keypointsAsCirclesCheckBoxAnalysis.isSelected())
+        {
+            dxfLayersAnalysis[2] = false;
+        }
+        if (keypointCoordinatesCheckBoxAnalysis.isSelected())
+        {
+            dxfLayersAnalysis[3] = true;
+        }
+        else if (!keypointCoordinatesCheckBoxAnalysis.isSelected())
+        {
+            dxfLayersAnalysis[3] = false;
+        }
+        if (constructionLinesIfUsedCheckBox.isSelected())
+        {
+            dxfLayersAnalysis[4] = true;
+        }
+        else if (!constructionLinesIfUsedCheckBox.isSelected())
+        {
+            dxfLayersAnalysis[4] = false;
+        }
+    }
+
+    // Method containing button, text field and checkbox actionlisteners
     private JBlock()
     {
         // Listener for the Run button
-        butRun.addActionListener(new ActionListener()
+        butRunPattern.addActionListener(new ActionListener()
         {
             @Override
             public void actionPerformed(ActionEvent e)
@@ -267,6 +384,36 @@ public class JBlock extends JFrame
             public void actionPerformed(ActionEvent e)
             {
                 saveClickedEvent();
+            }
+        });
+
+        // Attach listener to rectangle plot x-axis text field
+        textFieldRPx.addActionListener(new ActionListener()
+        {
+            @Override
+            public void actionPerformed(ActionEvent e)
+            {
+                enterTextRPX();
+            }
+        });
+
+        // Attach listener to rectangle plot y-axis
+        textFieldRPy.addActionListener(new ActionListener()
+        {
+            @Override
+            public void actionPerformed(ActionEvent e)
+            {
+                enterTextRPY();
+            }
+        });
+
+        // Attach listener to rectangle plot layered checkbox
+        layeredCheckBoxRP.addActionListener(new ActionListener()
+        {
+            @Override
+            public void actionPerformed(ActionEvent e)
+            {
+                layeredRectanglePlot();
             }
         });
     }
@@ -369,7 +516,7 @@ public class JBlock extends JFrame
         colors.add(radioItem("Blue", listener, "color(blue)", colorgroup));
 
         // Finally, make our main window appear
-        frame.setSize(530, 350);
+        frame.setSize(800, 350);
         frame.setResizable(false);
         frame.setVisible(true);
     }
