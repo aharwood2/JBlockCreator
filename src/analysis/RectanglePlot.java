@@ -43,7 +43,6 @@ public class RectanglePlot
             // Create the block for a non-layered plot
             isLayeredNo();
         }
-
     }
 
     /* Implement abstract methods from super class */
@@ -90,7 +89,7 @@ public class RectanglePlot
 
         // Create rectangle plot
         blocks.add(new Block(userName + "_" + String.valueOf(xID) + "_" + String.valueOf(yID) + "_Rectangle_Plot"));
-        Block fullBlock = blocks.get(0);
+        Block fullBlock = blocks.get(loopNumber);
 
         // Adding the origin, constant for all plots
         fullBlock.addKeypoint(new Vector2D(0.0, 0.0));
@@ -120,7 +119,7 @@ public class RectanglePlot
             blocks.add(new Block("layered_" + String.valueOf(xID) + "_" + String.valueOf(yID) + "_Rectangle_Plot"));
         }
 
-        Block fullBlock = blocks.get(loopNumber);
+        Block fullBlock = blocks.get(0);
 
         // Adding the origin, constant for all plots
         fullBlock.addKeypoint(new Vector2D(0.0, 0.0));
