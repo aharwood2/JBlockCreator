@@ -6,15 +6,14 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 
 import beazleybond.BodicePattern;
 import beazleybond.SkirtPattern;
 import beazleybond.StraightSleevePattern;
 import beazleybond.TrouserPattern;
-
-import jblockenums.EGarment;
-import jblockenums.EMethod;
 import jblockenums.EMsgType;
 
 public class JBlock extends JFrame
@@ -156,8 +155,20 @@ public class JBlock extends JFrame
                 }
             }
 
-            // Create done prompt
-            Prompts.infoBox("Done!", "Done", EMsgType.Info);
+            // Write out to a text file the patterns that could not be made
+            Pattern.printMissingMeasurements(fileOutput);
+
+            // Prompt for finishing, two options depending on if some patterns could not be made
+            if(Files.exists(Paths.get(fileOutput + "/Failed_Outputs.txt")))
+            {
+                // Create done prompt
+                Prompts.infoBox("Some outputs could not be made, see output folder for details.", "Done", EMsgType.Info);
+            }
+            else
+            {
+                // Create done prompt
+                Prompts.infoBox("Done!", "Done", EMsgType.Info);
+            }
         }
 
         // Handle missing options

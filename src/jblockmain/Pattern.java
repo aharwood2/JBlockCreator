@@ -4,11 +4,14 @@ import dxfwriter.DxfFile;
 import jblockenums.EGarment;
 import jblockenums.EMethod;
 
+import java.io.BufferedWriter;
 import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.io.FileWriter;
+
 
 /** Interface to be implemented by every pattern added to the module. */
 public abstract class Pattern implements IPlottable
@@ -42,6 +45,28 @@ public abstract class Pattern implements IPlottable
     protected static void addMissingMeasurement(String userid, String method, String pattern)
     {
         missingMeasurements.add(userid + "/" + method + "/" + pattern);
+    }
+
+    protected static void printMissingMeasurements(File fileoutput)
+    {
+        if (missingMeasurements.size() > 0)
+        {
+            try
+            {
+                FileWriter writer = new FileWriter(fileoutput + "/Failed_Outputs.txt");
+                BufferedWriter writer2 = new BufferedWriter(writer);
+                for (String str : missingMeasurements)
+                {
+                    writer2.write(str);
+                    writer2.newLine();
+                }
+                writer.close();
+            }
+            catch (Exception e)
+            {
+                e.printStackTrace();
+            }
+        }
     }
 
     // Blocks that comprise the pattern

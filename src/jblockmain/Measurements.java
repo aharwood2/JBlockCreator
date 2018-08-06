@@ -114,7 +114,6 @@ public class Measurements
                     )
             );
         }
-
         try
         {
             // Open file and get an input stream
