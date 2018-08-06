@@ -3,6 +3,7 @@ package beazleybond;
 import jblockenums.EGarment;
 import jblockenums.EMethod;
 import jblockenums.EPosition;
+import jblockexceptions.MeasurementNotFoundException;
 import jblockmain.*;
 import mathcontainers.Vector2D;
 
@@ -69,7 +70,7 @@ public class BodicePattern
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     public BodicePattern(Measurements dataStore)
     {
-        readMeasurements(dataStore);
+        if (!readMeasurements(dataStore)) return;
         addEasement();
 
         // Populate arbitrary measurements
@@ -127,25 +128,36 @@ public class BodicePattern
     }
 
     @Override
-    protected void readMeasurements(Measurements dataStore)
+    protected boolean readMeasurements(Measurements dataStore)
     {
-        // Get measurements from the scan data store
-        a_Bust = dataStore.getId(1).value;
-        b_Waist = dataStore.getId(2).value;
-        c_Neck = dataStore.getId(5).value;
-        //d_BackNeckRise =
-        e_NapeToWaist = dataStore.getId(4).value;
-        f_ArmholeDepth = dataStore.getId(6).value;
-        g_FrNeckToBust = dataStore.getId(7).value;
-        h_FrNeckToWaist = dataStore.getId(8).value;
-        i_AcrossBack = dataStore.getId(9).value;
-        j_AcrossFront = dataStore.getId(10).value;
-        k_Shoulder = dataStore.getId(11).value;
-        l_WidthBustProm = dataStore.getId(12).value;
-        //m_WidthArmhole =
+        try
+        {
+            // Get measurements from the scan data store
+            a_Bust = dataStore.getId(1).value;
+            b_Waist = dataStore.getId(2).value;
+            c_Neck = dataStore.getId(5).value;
+            //d_BackNeckRise =
+            e_NapeToWaist = dataStore.getId(4).value;
+            f_ArmholeDepth = dataStore.getId(6).value;
+            g_FrNeckToBust = dataStore.getId(7).value;
+            h_FrNeckToWaist = dataStore.getId(8).value;
+            i_AcrossBack = dataStore.getId(9).value;
+            j_AcrossFront = dataStore.getId(10).value;
+            k_Shoulder = dataStore.getId(11).value;
+            l_WidthBustProm = dataStore.getId(12).value;
+            //m_WidthArmhole =
 
-        // Get name
-        userName = dataStore.getName();
+            // Get name
+            userName = dataStore.getName();
+
+            return true;
+        }
+        catch(MeasurementNotFoundException e)
+        {
+            Pattern.addMissingMeasurement(dataStore.getName(), method.toString(), garment.toString());
+            return false;
+        }
+
     }
 
     /**

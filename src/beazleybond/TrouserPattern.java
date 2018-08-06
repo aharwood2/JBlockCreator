@@ -2,6 +2,7 @@ package beazleybond;
 
 import jblockenums.EGarment;
 import jblockenums.EMethod;
+import jblockexceptions.MeasurementNotFoundException;
 import jblockmain.Block;
 import jblockmain.Measurements;
 import jblockmain.Pattern;
@@ -77,7 +78,7 @@ public class TrouserPattern
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     public TrouserPattern(Measurements dataStore)
     {
-        readMeasurements(dataStore);
+        if (!readMeasurements(dataStore)) return;
         addEasement();
 
         // Initialise dependent quantities (arbitrary measurements)
@@ -132,23 +133,32 @@ public class TrouserPattern
     }
 
     @Override
-    protected void readMeasurements(Measurements dataStore)
+    protected boolean readMeasurements(Measurements dataStore)
     {
-        // Get measurements from the scan data store
-        a_Waist = dataStore.getId(2).value;
-        b_UpperHip = dataStore.getId(13).value;
-        c_Hip = dataStore.getId(3).value;
-        d_Thigh = dataStore.getId(17).value;
-        e_KneeStraight = dataStore.getId(18).value;
-        f_Ankle = dataStore.getId(19).value;
-        h_Hip = dataStore.getId(15).value;
-        i_Crutch = dataStore.getId(20).value;
-        j_Knee = dataStore.getId(14).value;
-        k_OutsideLegToAnkle = dataStore.getId(21).value;
-        l_InsideLegToAnkle = dataStore.getId(22).value;
+        try {
+            // Get measurements from the scan data store
+            a_Waist = dataStore.getId(2).value;
+            b_UpperHip = dataStore.getId(13).value;
+            c_Hip = dataStore.getId(3).value;
+            d_Thigh = dataStore.getId(17).value;
+            e_KneeStraight = dataStore.getId(18).value;
+            f_Ankle = dataStore.getId(19).value;
+            h_Hip = dataStore.getId(15).value;
+            i_Crutch = dataStore.getId(20).value;
+            j_Knee = dataStore.getId(14).value;
+            k_OutsideLegToAnkle = dataStore.getId(21).value;
+            l_InsideLegToAnkle = dataStore.getId(22).value;
 
-        // Get name
-        userName = dataStore.getName();
+            // Get name
+            userName = dataStore.getName();
+
+            return true;
+        }
+        catch(MeasurementNotFoundException e)
+        {
+            Pattern.addMissingMeasurement(dataStore.getName(), method.toString(), garment.toString());
+            return false;
+        }
     }
 
     /**

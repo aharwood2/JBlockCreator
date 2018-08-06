@@ -4,11 +4,14 @@ import dxfwriter.DxfFile;
 import jblockenums.EGarment;
 import jblockenums.EMethod;
 
+import java.io.BufferedWriter;
 import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.io.FileWriter;
+
 
 /** Interface to be implemented by every pattern added to the module. */
 public abstract class Pattern implements IPlottable
@@ -27,6 +30,9 @@ public abstract class Pattern implements IPlottable
     protected abstract EMethod assignMethod();
     protected abstract EGarment assignGarment();
 
+    // Arraylist for missing measurements
+    protected static ArrayList<String> missingMeasurements = new ArrayList<String>();
+
     // Constructor to initialise variables
     public Pattern()
     {
@@ -35,11 +41,39 @@ public abstract class Pattern implements IPlottable
         garment = assignGarment();
     }
 
+    // Method for storing data of patterns that could not be created
+    protected static void addMissingMeasurement(String userid, String method, String pattern)
+    {
+        missingMeasurements.add(userid + "/" + method + "/" + pattern);
+    }
+
+    protected static void printMissingMeasurements(File fileoutput)
+    {
+        if (missingMeasurements.size() > 0)
+        {
+            try
+            {
+                FileWriter writer = new FileWriter(fileoutput + "/Failed_Outputs.txt");
+                BufferedWriter writer2 = new BufferedWriter(writer);
+                for (String str : missingMeasurements)
+                {
+                    writer2.write(str);
+                    writer2.newLine();
+                }
+                writer.close();
+            }
+            catch (Exception e)
+            {
+                e.printStackTrace();
+            }
+        }
+    }
+
     // Blocks that comprise the pattern
     protected ArrayList<Block> blocks;
 
     // Obtain measurements from the body scan required by the pattern
-    protected abstract void readMeasurements(Measurements dataStore);
+    protected abstract boolean readMeasurements(Measurements dataStore);
 
     // Modify any measurements read from the scan by adding ease
     protected abstract void addEasement();
@@ -123,6 +157,5 @@ public abstract class Pattern implements IPlottable
             }
             file.writeFile(blocks.get(i).getName(), dxfLayerChooser);
         }
-
     }
 }

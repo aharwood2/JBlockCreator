@@ -3,7 +3,7 @@
   <grid id="27dc6" binding="panelMain" layout-manager="GridLayoutManager" row-count="8" column-count="5" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
     <margin top="5" left="5" bottom="5" right="5"/>
     <constraints>
-      <xy x="20" y="25" width="494" height="395"/>
+      <xy x="20" y="25" width="474" height="395"/>
     </constraints>
     <properties/>
     <border type="none"/>
@@ -185,7 +185,9 @@
       </component>
       <component id="6a6c6" class="javax.swing.JSeparator">
         <constraints>
-          <grid row="0" column="3" row-span="8" col-span="1" vsize-policy="6" hsize-policy="6" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+          <grid row="0" column="3" row-span="8" col-span="1" vsize-policy="6" hsize-policy="6" anchor="0" fill="3" indent="0" use-parent-layout="false">
+            <preferred-size width="1" height="0"/>
+          </grid>
         </constraints>
         <properties>
           <orientation value="1"/>

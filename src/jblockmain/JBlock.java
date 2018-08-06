@@ -6,12 +6,14 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.ArrayList;
 
 import beazleybond.BodicePattern;
 import beazleybond.SkirtPattern;
 import beazleybond.StraightSleevePattern;
 import beazleybond.TrouserPattern;
-
 import jblockenums.EMsgType;
 
 public class JBlock extends JFrame
@@ -53,7 +55,7 @@ public class JBlock extends JFrame
     private static final int minVer = 0;
 
     // Method for when the save button is clicked
-    public void saveClickedEvent()
+    private void saveClickedEvent()
     {
         // Choose a folder location to save the output files
         // Opens a file explorer for users to choose directory
@@ -79,7 +81,7 @@ public class JBlock extends JFrame
     }
 
     // Method for when the open button is clicked
-    public void openClickedEvent()
+    private void openClickedEvent()
     {
         // Choose a folder input
         JFileChooser fileChooser = new JFileChooser(fileInput);
@@ -99,7 +101,7 @@ public class JBlock extends JFrame
     }
 
     // Method for when the run button is clicked
-    public void runClickedEvent()
+    private void runClickedEvent()
     {
         if (fileOutput != null && fileInput != null)
         {
@@ -152,8 +154,20 @@ public class JBlock extends JFrame
                 }
             }
 
-            // Create done prompt
-            Prompts.infoBox("Done!", "Done", EMsgType.INFO);
+            // Write out to a text file the patterns that could not be made
+            Pattern.printMissingMeasurements(fileOutput);
+
+            // Prompt for finishing, two options depending on if some patterns could not be made
+            if(Files.exists(Paths.get(fileOutput + "/Failed_Outputs.txt")))
+            {
+                // Create done prompt
+                Prompts.infoBox("Some outputs could not be made, see output folder for details.", "Done", EMsgType.Info);
+            }
+            else
+            {
+                // Create done prompt
+                Prompts.infoBox("Done!", "Done", EMsgType.Info);
+            }
         }
 
         // Handle missing options
@@ -161,14 +175,14 @@ public class JBlock extends JFrame
         {
             Prompts.infoBox("Please choose your input file by clicking on the \"Open\" button",
                     "Input File Needed",
-                    EMsgType.ERROR);
+                    EMsgType.Error);
             return;
         }
         if (fileOutput == null)
         {
             Prompts.infoBox("Please choose a directory to write the patterns to by clicking on \"Save\"",
                     "Output Directory Needed",
-                    EMsgType.ERROR);
+                    EMsgType.Error);
         }
     }
     
@@ -282,7 +296,7 @@ public class JBlock extends JFrame
         frame.setVisible(true);
 
         // Sets the frame size
-        frame.setSize(400, 400);
+        frame.setSize(450, 450);
 
         /* MENU BAR SETUP */
 
@@ -306,7 +320,7 @@ public class JBlock extends JFrame
                 }
                 if (cmd.equals("View help"))
                 {
-                    Prompts.infoBox("PLACEHOLDER", "PLACEHOLDER", EMsgType.INFO);
+                    Prompts.infoBox("PLACEHOLDER", "PLACEHOLDER", EMsgType.Info);
                 }
                 if (cmd.equals("Open"))
                 {
@@ -360,7 +374,7 @@ public class JBlock extends JFrame
         colors.add(radioItem("Blue", listener, "color(blue)", colorgroup));
 
         // Finally, make our main window appear
-        frame.setSize(560, 350);
+        frame.setSize(530, 350);
         frame.setResizable(false);
         frame.setVisible(true);
     }
