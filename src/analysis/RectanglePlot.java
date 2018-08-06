@@ -1,155 +1,71 @@
 package analysis;
 
-import jblockexceptions.MeasurementNotFoundException;
-import jblockmain.Analysis;
-import jblockmain.Block;
+import jblockmain.IPlottable;
 import jblockmain.Measurements;
-import jblockenums.EAnalysis;
-import mathcontainers.Vector2D;
 
+import java.io.File;
 import java.util.ArrayList;
 
-public class RectanglePlot
-    extends Analysis
+public class RectanglePlot implements IPlottable
 {
     /* Technique Specific Variables */
-    private static double x_Axis;
-    private static int xID;
-    private static double y_Axis;
-    private static int yID;
-    private static int loopNumber;
-    private static ArrayList<Double> x_Values = new ArrayList<Double>();
-    private static ArrayList<Double> y_Values = new ArrayList<Double>();
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    /* Methods */
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    public RectanglePlot(Measurements dataStore, int xAxisID, int yAxisID, boolean isLayered, int loopNum)
-        {
-        xID = xAxisID;
-        yID = yAxisID;
-        loopNumber = loopNum;
+    // List of Rectangles in this plot
+    private ArrayList<Rectangle> rectangles;
 
-        if (!readMeasurements(dataStore)) return;
-        addEasement();
-
-        if (isLayered)
-        {
-            // Create the blocks for both a layered plot and non-layered plot
-            isLayeredYes();
-        }
-        else
-        {
-            // Create the block for a non-layered plot
-            isLayeredNo();
-        }
+    // Constructor
+    public RectanglePlot()
+    {
+        rectangles = new ArrayList<>();
     }
 
-    /* Implement abstract methods from super class */
-    @Override
-    protected EAnalysis assignAnalysis()
+    // Method to add a new Rectangle to the plot
+    public void addNewRectangle(Measurements measurements, int measurementIdX, int measurementIdY)
     {
-        return EAnalysis.RECTANGLEPLOT;
+        // Add new rectangle
+        rectangles.add(
+                new Rectangle(
+                        0.0,
+                        0.0,
+                        measurements.getId(measurementIdX).value,
+                        measurements.getId(measurementIdY).value
+                )
+        );
     }
 
     @Override
-    protected void addEasement()
+    public ArrayList<Double> getXPoints(int blockNumber) throws Exception
     {
-        //no easement needed
+        return rectangles.get(blockNumber).getX();
     }
 
     @Override
-    protected boolean readMeasurements(Measurements dataStore)
+    public ArrayList<Double> getYPoints(int blockNumber) throws Exception
     {
-        try
-        {
-            x_Axis = dataStore.getId(xID).value;
-            y_Axis = dataStore.getId(yID).value;
-
-            // Get name
-            userName = dataStore.getName();
-
-            return true;
-        }
-        catch(MeasurementNotFoundException e)
-        {
-            Analysis.addMissingMeasurement(dataStore.getName(), analysis.toString());
-            return false;
-        }
+        return rectangles.get(blockNumber).getY();
     }
 
-    /**
-     * The actual block creation process following the drafting method of Gill.
-     */
     @Override
-    protected void isLayeredNo()
+    public ArrayList<Double> getXCtPoints(int blockNumber) throws Exception
     {
-        // Points that make up the shape are listed in a strict anti-clockwise order to maintain correct connectivity for
-        // plotting. The bottom left corner of the space to be the origin.
-
-        // Create rectangle plot
-        blocks.add(new Block(userName + "_" + String.valueOf(xID) + "_" + String.valueOf(yID) + "_Rectangle_Plot"));
-        Block fullBlock = blocks.get(loopNumber);
-
-        // Adding the origin, constant for all plots
-        fullBlock.addKeypoint(new Vector2D(0.0, 0.0));
-
-        // Adding the bottom right point of the rectangle
-        fullBlock.addKeypoint(new Vector2D(x_Axis, 0.0));
-
-        // Adding the top right point of the rectangle
-        fullBlock.addKeypoint(new Vector2D(x_Axis, y_Axis));
-
-        // Adding the top left point of the rectangle
-        fullBlock.addKeypoint(new Vector2D(0.0, y_Axis));
+        return null;
     }
 
-    // Method to create a layered rectangle plot output
-    private static void isLayeredYes()
+    @Override
+    public ArrayList<Double> getYCtPoints(int blockNumber) throws Exception
     {
-        x_Values.add(x_Axis);
-        y_Values.add(y_Axis);
+        return null;
+    }
 
-        ////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        /* Layered rectangle plot */
-        ////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    @Override
+    public int getNumberOfBlocksToPlot()
+    {
+        return rectangles.size();
+    }
 
-        if (x_Values.size() == 1 && y_Values.size() == 1) {
-            // Create base of the layered rectangle plot
-            blocks.add(new Block("layered_" + String.valueOf(xID) + "_" + String.valueOf(yID) + "_Rectangle_Plot"));
-        }
-
-        Block fullBlock = blocks.get(0);
-
-        // Adding the origin, constant for all plots
-        fullBlock.addKeypoint(new Vector2D(0.0, 0.0));
-
-        // Adding the bottom right point of the rectangle
-        fullBlock.addKeypoint(new Vector2D(x_Axis, 0.0));
-
-        // Adding the top right point of the rectangle
-        fullBlock.addKeypoint(new Vector2D(x_Axis, y_Axis));
-
-        // Adding the top left point of the rectangle
-        fullBlock.addKeypoint(new Vector2D(0.0, y_Axis));
-
-        ////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        /* First plain rectangle plot */
-        ////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-        blocks.add(new Block(userName + "_" + String.valueOf(xID) + "_" + String.valueOf(yID) + "_Rectangle_Plot"));
-        Block layers = blocks.get(loopNumber + 1);
-
-        // Adding the origin, constant for all plots
-        layers.addKeypoint(new Vector2D(0.0, 0.0));
-
-        // Adding the bottom right point of the rectangle
-        layers.addKeypoint(new Vector2D(x_Axis, 0.0));
-
-        // Adding the top right point of the rectangle
-        layers.addKeypoint(new Vector2D(x_Axis, y_Axis));
-
-        // Adding the top left point of the rectangle
-        layers.addKeypoint(new Vector2D(0.0, y_Axis));
+    @Override
+    public void writeToDXF(File fileOutput, boolean[] dxfLayerChooser)
+    {
+        // TODO
     }
 }

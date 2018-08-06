@@ -9,6 +9,7 @@ import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
+import analysis.RectanglePlot;
 import beazleybond.BodicePattern;
 import beazleybond.SkirtPattern;
 import beazleybond.StraightSleevePattern;
@@ -164,6 +165,12 @@ public class JBlock extends JFrame
             getLayerInformationPatterns();
             getLayerInformationAnalysis();
 
+            // Create the plot if necessary
+            RectanglePlot plot = null;
+            if (rectanglePlot2MeasurementCheckBox.isSelected())
+                plot = new RectanglePlot();
+
+
             // Create patterns
             for (int i = 0; i < measurements.getNames().size(); i++)
             {
@@ -206,14 +213,14 @@ public class JBlock extends JFrame
                 }
 
                 // Creates analysis outputs depending on which checkboxes are ticked
-                if (rectanglePlot2MeasurementCheckBox.isSelected())
+                if (plot != null)
                 {
-                    analysis.RectanglePlot rectanglePlot = new analysis.RectanglePlot(measurements,
+                    plot.addNewRectangle(
+                            measurements,
                             Integer.parseInt(xaxisID.getText()),
-                            Integer.parseInt(yaxisID.getText()),
-                            isLayeredRP,
-                            i);
-                    rectanglePlot.writeToDXFAnalysis(fileOutput, dxfLayersAnalysis);
+                            Integer.parseInt(yaxisID.getText())
+                    );
+                    plot.writeToDXF(fileOutput, dxfLayersAnalysis);
                 }
             }
 
