@@ -170,7 +170,6 @@ public class JBlock extends JFrame
             if (rectanglePlot2MeasurementCheckBox.isSelected())
                 plot = new RectanglePlot();
 
-
             // Create patterns
             for (int i = 0; i < measurements.getNames().size(); i++)
             {
@@ -218,7 +217,8 @@ public class JBlock extends JFrame
                     plot.addNewRectangle(
                             measurements,
                             Integer.parseInt(xaxisID.getText()),
-                            Integer.parseInt(yaxisID.getText())
+                            Integer.parseInt(yaxisID.getText()),
+                            isLayeredRP
                     );
                     plot.writeToDXF(fileOutput, dxfLayersAnalysis);
                 }

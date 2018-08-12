@@ -25,6 +25,8 @@ public class RectanglePlot implements IPlottable
     private int xAxisID;
     private int yAxisID;
     private String userID;
+    private boolean isLayered;
+    private int numUsers;
 
     // Constructor
     public RectanglePlot()
@@ -33,7 +35,7 @@ public class RectanglePlot implements IPlottable
     }
 
     // Method to add a new Rectangle to the plot
-    public void addNewRectangle(Measurements measurements, int measurementIdX, int measurementIdY)
+    public void addNewRectangle(Measurements measurements, int measurementIdX, int measurementIdY, boolean isLayeredPlot)
     {
         // Add new rectangle
         rectangles.add(
@@ -47,6 +49,8 @@ public class RectanglePlot implements IPlottable
         xAxisID = measurementIdX;
         yAxisID = measurementIdY;
         userID = measurements.getName();
+        isLayered = isLayeredPlot;
+        numUsers = measurements.getNames().size();
     }
 
     /* Interface implementation */
@@ -119,6 +123,38 @@ public class RectanglePlot implements IPlottable
             try
             {
                 file.addLines(getXPoints(i), getYPoints(i));
+            }
+            catch (Exception e)
+            {
+                e.printStackTrace();
+            }
+            file.writeFile(filename, dxfLayerChooser);
+        }
+
+        if (isLayered && rectangles.size() == numUsers)
+        {
+            // Construct output path
+            Path path = Paths.get(fileOutput.toString() + "/" + analysis + "/");
+
+            // Create directory structure if required
+            try
+            {
+                Files.createDirectories(path);
+            }
+            catch (java.io.IOException e)
+            {
+                System.err.println("Cannot create directories - " + e);
+            }
+
+            // Create new DXF file
+            String filename = "Layered_" + xAxisID + "_" + yAxisID + "_Rectangle_Plot";
+            DxfFile file = new DxfFile(path.toString() + "/" + filename);
+            try
+            {
+                for (int i = 0; i < rectangles.size(); i++)
+                {
+                    file.addLines(getXPoints(i), getYPoints(i));
+                }
             }
             catch (Exception e)
             {

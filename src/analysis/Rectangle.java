@@ -22,6 +22,9 @@ class Rectangle
         ArrayList<Double> points = new ArrayList<>();
         points.add(lowX);
         points.add(highX);
+        points.add(highX);
+        points.add(lowX);
+        points.add(lowX);
         return points;
     }
 
@@ -29,7 +32,10 @@ class Rectangle
     {
         ArrayList<Double> points = new ArrayList<>();
         points.add(lowY);
+        points.add(lowY);
         points.add(highY);
+        points.add(highY);
+        points.add(lowY);
         return points;
     }
 }
