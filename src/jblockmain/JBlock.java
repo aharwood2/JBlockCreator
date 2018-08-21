@@ -53,6 +53,7 @@ public class JBlock extends JFrame
     private JCheckBox keypointsAsCirclesCheckBoxAnalysis;
     private JCheckBox keypointCoordinatesCheckBoxAnalysis;
     private JCheckBox constructionLinesIfUsedCheckBox;
+    private JProgressBar progressBar1;
     private File fileInput = null;
     private File fileOutput = null;
     private boolean[] dxfLayerChoices = new boolean[5];
@@ -523,7 +524,7 @@ public class JBlock extends JFrame
         colors.add(radioItem("Blue", listener, "color(blue)", colorgroup));
 
         // Finally, make our main window appear
-        frame.setSize(800, 350);
+        frame.setSize(850, 350);
         frame.setResizable(false);
         frame.setVisible(true);
     }
