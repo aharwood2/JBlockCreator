@@ -54,6 +54,7 @@ public class JBlock extends JFrame
     private JCheckBox keypointCoordinatesCheckBoxAnalysis;
     private JCheckBox constructionLinesIfUsedCheckBox;
     private JProgressBar progressBar1;
+    private JLabel PatternImage;
     private File fileInput = null;
     private File fileOutput = null;
     private boolean[] dxfLayerChoices = new boolean[5];
@@ -524,7 +525,7 @@ public class JBlock extends JFrame
         colors.add(radioItem("Blue", listener, "color(blue)", colorgroup));
 
         // Finally, make our main window appear
-        frame.setSize(850, 350);
+        frame.setSize(870, 350);
         frame.setResizable(false);
         frame.setVisible(true);
     }
@@ -553,5 +554,10 @@ public class JBlock extends JFrame
         item.setActionCommand(command);
         mutExGroup.add(item);
         return item;
+    }
+
+    private void createUIComponents()
+    {
+        PatternImage = new JLabel(new ImageIcon("./Images/Gill_Skirt.jpg"));
     }
 }
