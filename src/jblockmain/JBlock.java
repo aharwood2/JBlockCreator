@@ -443,12 +443,6 @@ public class JBlock extends JFrame
         frame.setLocation(dim.width / 2 - frame.getSize().width / 2,
                 dim.height / 2 - frame.getSize().height / 2);
 
-        // Sets the frame as visible
-        frame.setVisible(true);
-
-        // Sets the frame size
-        frame.setSize(450, 450);
-
         /* MENU BAR SETUP */
 
         // Create a window for the menu
@@ -471,7 +465,8 @@ public class JBlock extends JFrame
                 }
                 if (cmd.equals("View help"))
                 {
-                    Prompts.infoBox("PLACEHOLDER", "PLACEHOLDER", EMsgType.Info);
+                    String url = "https://github.com/aharwood2/JBlock2D/tree/development/JBlock2D%20Guide";
+                    Prompts.infoBox("Locate the guide in your program folder or go the JBlock2D github page for help", "Help", EMsgType.Info);
                 }
                 if (cmd.equals("Open"))
                 {
