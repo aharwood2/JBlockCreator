@@ -61,6 +61,7 @@ public class JBlock extends JFrame
     private boolean[] dxfLayerChoices = new boolean[5];
     private boolean[] dxfLayersAnalysis = new boolean[5];
     private boolean isLayeredRP;
+    private boolean isRunning = false;
 
     // Set a global tolerance for some operations
     public static final double tol = 10e-8;
@@ -71,6 +72,120 @@ public class JBlock extends JFrame
     // Version number
     private static final int majVer = 1;
     private static final int minVer = 1;
+
+    private class RunThread extends Thread
+    {
+        @Override
+        public void run()
+        {
+            if (fileOutput != null && fileInput != null)
+            {
+                butRunPattern.setText("Running...");
+
+                Measurements measurements = new Measurements(JBlock.this.fileInput.toString(),
+                                                             JBlock.this.isbatchCheckbox.isSelected());
+
+                // Need to populate the boolean array
+                getLayerInformationPatterns();
+                getLayerInformationAnalysis();
+
+                // Create the plot if necessary
+                RectanglePlot plot = null;
+                if (rectanglePlot2MeasurementCheckBox.isSelected())
+                    plot = new RectanglePlot();
+
+                // Create patterns
+                for (int i = 0; i < measurements.getNames().size(); i++)
+                {
+                    measurements.setMapNumber(i);
+
+                    // Creates patterns depending on which checkboxes are ticked
+                    if (checkBeazleySkirt.isSelected()) {
+                        SkirtPattern bb_skirt = new SkirtPattern(measurements);
+                        bb_skirt.writeToDXF(fileOutput, dxfLayerChoices);
+                    }
+
+                    if (checkBeazleyTrousers.isSelected())
+                    {
+                        TrouserPattern bb_trouser = new TrouserPattern(measurements);
+                        bb_trouser.writeToDXF(fileOutput, dxfLayerChoices);
+                    }
+
+                    if (checkBeazleyBodice.isSelected())
+                    {
+                        BodicePattern bb_bodice = new BodicePattern(measurements);
+                        bb_bodice.writeToDXF(fileOutput, dxfLayerChoices);
+                    }
+
+                    if (checkBeazleyStraightSleeve.isSelected())
+                    {
+                        StraightSleevePattern bb_sleeve = new StraightSleevePattern(measurements);
+                        bb_sleeve.writeToDXF(fileOutput, dxfLayerChoices);
+                    }
+
+                    if (checkGillSkirt.isSelected())
+                    {
+                        gill.SkirtPattern gill_skirt = new gill.SkirtPattern(measurements);
+                        gill_skirt.writeToDXF(fileOutput, dxfLayerChoices);
+                    }
+
+                    if (checkAldrichSkirt.isSelected())
+                    {
+                        aldrich.SkirtPattern aldrich_skirt = new aldrich.SkirtPattern(measurements);
+                        aldrich_skirt.writeToDXF(fileOutput, dxfLayerChoices);
+                    }
+
+                    // Creates analysis outputs depending on which checkboxes are ticked
+                    if (plot != null)
+                    {
+                        plot.addNewRectangle(
+                                measurements,
+                                Integer.parseInt(xaxisID.getText()),
+                                Integer.parseInt(yaxisID.getText()),
+                                isLayeredRP
+                        );
+                        plot.writeToDXF(fileOutput, dxfLayersAnalysis);
+                    }
+                }
+
+                // Write out to a text file the patterns that could not be made
+                Pattern.printMissingMeasurements(fileOutput);
+
+                // Prompt for finishing, two options depending on if some patterns could not be made
+                if(Files.exists(Paths.get(fileOutput + "/Failed_Outputs.txt")))
+                {
+                    // Create done prompt
+                    Prompts.infoBox("Some outputs could not be made, see output folder for details.", "Done", EMsgType.Info);
+                }
+                else
+                {
+                    // Create done prompt
+                    Prompts.infoBox("Done!", "Done", EMsgType.Info);
+                }
+            }
+
+            // Handle missing options
+            if (fileInput == null)
+            {
+                Prompts.infoBox("Please choose your input file by clicking on the \"Open\" button",
+                                "Input File Needed",
+                                EMsgType.Error);
+                isRunning = false;
+                setRunButtonText("Run");
+                return;
+            }
+            if (fileOutput == null)
+            {
+                Prompts.infoBox("Please choose a directory to write the patterns to by clicking on \"Save\"",
+                                "Output Directory Needed",
+                                EMsgType.Error);
+            }
+
+            setRunButtonText("Run");
+            isRunning = false;
+        }
+    }
+
 
     // Methods for when the user enters text into the rectangle plot analysis text fields
     private void enterTextRPX()
@@ -156,109 +271,19 @@ public class JBlock extends JFrame
         }
     }
 
+    private void setRunButtonText(String text)
+    {
+        butRunPattern.setText(text);
+        butRunAnalysis.setText(text);
+    }
+
     // Method for when the run button is clicked
     private void runClickedEvent()
     {
-        if (fileOutput != null && fileInput != null)
+        if (!isRunning)
         {
-            // Create a working prompt
-            Prompts.infoBox("Running...", "JBlock2D is creating outputs!", EMsgType.Info);
-
-            Measurements measurements = new Measurements(JBlock.this.fileInput.toString(),
-                    JBlock.this.isbatchCheckbox.isSelected());
-
-            // Need to populate the boolean array
-            getLayerInformationPatterns();
-            getLayerInformationAnalysis();
-
-            // Create the plot if necessary
-            RectanglePlot plot = null;
-            if (rectanglePlot2MeasurementCheckBox.isSelected())
-                plot = new RectanglePlot();
-
-            // Create patterns
-            for (int i = 0; i < measurements.getNames().size(); i++)
-            {
-                measurements.setMapNumber(i);
-
-                // Creates patterns depending on which checkboxes are ticked
-                if (checkBeazleySkirt.isSelected()) {
-                    SkirtPattern bb_skirt = new SkirtPattern(measurements);
-                    bb_skirt.writeToDXF(fileOutput, dxfLayerChoices);
-                }
-
-                if (checkBeazleyTrousers.isSelected())
-                {
-                    TrouserPattern bb_trouser = new TrouserPattern(measurements);
-                    bb_trouser.writeToDXF(fileOutput, dxfLayerChoices);
-                }
-
-                if (checkBeazleyBodice.isSelected())
-                {
-                    BodicePattern bb_bodice = new BodicePattern(measurements);
-                    bb_bodice.writeToDXF(fileOutput, dxfLayerChoices);
-                }
-
-                if (checkBeazleyStraightSleeve.isSelected())
-                {
-                    StraightSleevePattern bb_sleeve = new StraightSleevePattern(measurements);
-                    bb_sleeve.writeToDXF(fileOutput, dxfLayerChoices);
-                }
-
-                if (checkGillSkirt.isSelected())
-                {
-                    gill.SkirtPattern gill_skirt = new gill.SkirtPattern(measurements);
-                    gill_skirt.writeToDXF(fileOutput, dxfLayerChoices);
-                }
-
-                if (checkAldrichSkirt.isSelected())
-                {
-                    aldrich.SkirtPattern aldrich_skirt = new aldrich.SkirtPattern(measurements);
-                    aldrich_skirt.writeToDXF(fileOutput, dxfLayerChoices);
-                }
-
-                // Creates analysis outputs depending on which checkboxes are ticked
-                if (plot != null)
-                {
-                    plot.addNewRectangle(
-                            measurements,
-                            Integer.parseInt(xaxisID.getText()),
-                            Integer.parseInt(yaxisID.getText()),
-                            isLayeredRP
-                    );
-                    plot.writeToDXF(fileOutput, dxfLayersAnalysis);
-                }
-            }
-
-            // Write out to a text file the patterns that could not be made
-            Pattern.printMissingMeasurements(fileOutput);
-
-            // Prompt for finishing, two options depending on if some patterns could not be made
-            if(Files.exists(Paths.get(fileOutput + "/Failed_Outputs.txt")))
-            {
-                // Create done prompt
-                Prompts.infoBox("Some outputs could not be made, see output folder for details.", "Done", EMsgType.Info);
-            }
-            else
-            {
-                // Create done prompt
-                Prompts.infoBox("Done!", "Done", EMsgType.Info);
-            }
-        }
-
-        // Handle missing options
-        if (fileInput == null)
-        {
-            Prompts.infoBox("Please choose your input file by clicking on the \"Open\" button",
-                    "Input File Needed",
-                    EMsgType.Error);
-            return;
-        }
-        if (fileOutput == null)
-        {
-            Prompts.infoBox("Please choose a directory to write the patterns to by clicking on \"Save\"",
-                    "Output Directory Needed",
-                    EMsgType.Error);
+            isRunning = true;
+            new RunThread().start();
         }
     }
 
