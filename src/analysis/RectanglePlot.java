@@ -22,35 +22,41 @@ public class RectanglePlot implements IPlottable
     private final EAnalysis analysis = EAnalysis.RECTANGLEPLOT;
 
     // Variables for x,y axis measurement ID
-    private int xAxisID;
-    private int yAxisID;
-    private String userID;
-    private boolean isLayered;
-    private int numUsers;
+    private final int xAxisID;
+    private final int yAxisID;
+    private final String measurementFileName;
+    private final boolean isLayered;
+    private final boolean isRect;
+    private final int numUsers;
+    private final Measurements measurements;
 
     // Constructor
-    public RectanglePlot()
+    public RectanglePlot(Measurements _measurements, int measurementIdX, int measurementIdY, boolean isLayeredPlot, boolean isRectangle)
     {
+        measurements = _measurements;
         rectangles = new ArrayList<>();
+        xAxisID = measurementIdX;
+        yAxisID = measurementIdY;
+        measurementFileName = measurements.getScanDataFileName();
+        isLayered = isLayeredPlot;
+        isRect = isRectangle;
+        numUsers = measurements.getNames().size();
+
     }
 
     // Method to add a new Rectangle to the plot
-    public void addNewRectangle(Measurements measurements, int measurementIdX, int measurementIdY, boolean isLayeredPlot)
+    public void addNewRectangle()
     {
         // Add new rectangle
         rectangles.add(
                 new Rectangle(
                         0.0,
                         0.0,
-                        measurements.getId(measurementIdX).value,
-                        measurements.getId(measurementIdY).value
+                        measurements.getId(xAxisID).value,
+                        measurements.getId(yAxisID).value
                 )
         );
-        xAxisID = measurementIdX;
-        yAxisID = measurementIdY;
-        userID = measurements.getName();
-        isLayered = isLayeredPlot;
-        numUsers = measurements.getNames().size();
+
     }
 
     /* Interface implementation */
@@ -102,50 +108,39 @@ public class RectanglePlot implements IPlottable
     @Override
     public void writeToDXF(File fileOutput, boolean[] dxfLayerChooser)
     {
-        for (int i = 0; i < rectangles.size(); i++)
+        // Construct output path
+        Path path = Paths.get(fileOutput.toString() + "/" + analysis + "/");
+
+        // Create directory structure if required
+        try
         {
-            // Construct output path
-            Path path = Paths.get(fileOutput.toString() + "/" + analysis + "/");
-
-            // Create directory structure if required
-            try
-            {
-                Files.createDirectories(path);
-            }
-            catch (java.io.IOException e)
-            {
-                System.err.println("Cannot create directories - " + e);
-            }
-
-            // Create new DXF file
-            String filename = userID + "_" + xAxisID + "_" + yAxisID + "_Rectangle_Plot";
-            DxfFile file = new DxfFile(path.toString() + "/" + filename);
-            try
-            {
-                file.addLines(getXPoints(i), getYPoints(i));
-            }
-            catch (Exception e)
-            {
-                e.printStackTrace();
-            }
-            file.writeFile(filename, dxfLayerChooser);
+            Files.createDirectories(path);
+        }
+        catch (java.io.IOException e)
+        {
+            System.err.println("Cannot create directories - " + e);
         }
 
-        if (isLayered && rectangles.size() == numUsers)
+        if (isRect)
         {
-            // Construct output path
-            Path path = Paths.get(fileOutput.toString() + "/" + analysis + "/");
+            ArrayList<String> names = measurements.getNames();
+            for (int i = 0; i < rectangles.size(); i++) {
 
-            // Create directory structure if required
-            try
-            {
-                Files.createDirectories(path);
-            }
-            catch (java.io.IOException e)
-            {
-                System.err.println("Cannot create directories - " + e);
-            }
+                // Create new DXF file
+                String filename = names.get(i) + "_" + xAxisID + "_" + yAxisID + "_Rectangle_Plot";
+                DxfFile file = new DxfFile(path.toString() + "/" + filename);
 
+                try {
+                    file.addLines(getXPoints(i), getYPoints(i));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                file.writeFile(filename, dxfLayerChooser);
+            }
+        }
+
+        if (isLayered)
+        {
             // Create new DXF file
             String filename = "Layered_" + xAxisID + "_" + yAxisID + "_Rectangle_Plot";
             DxfFile file = new DxfFile(path.toString() + "/" + filename);

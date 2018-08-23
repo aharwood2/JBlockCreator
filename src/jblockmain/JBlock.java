@@ -61,6 +61,7 @@ public class JBlock extends JFrame
     private boolean[] dxfLayerChoices = new boolean[5];
     private boolean[] dxfLayersAnalysis = new boolean[5];
     private boolean isLayeredRP;
+    private boolean isRectangle;
     private boolean isRunning = false;
 
     // Set a global tolerance for some operations
@@ -93,8 +94,11 @@ public class JBlock extends JFrame
 
                 // Create the plot if necessary
                 RectanglePlot plot = null;
-                if (rectanglePlot2MeasurementCheckBox.isSelected())
-                    plot = new RectanglePlot();
+                if (rectanglePlot2MeasurementCheckBox.isSelected() || layeredCheckBoxRP.isSelected())
+                    plot = new RectanglePlot(measurements,
+                            Integer.parseInt(xaxisID.getText()),
+                            Integer.parseInt(yaxisID.getText()),
+                            isLayeredRP, isRectangle);
 
                 // Create patterns
                 for (int i = 0; i < measurements.getNames().size(); i++)
@@ -138,17 +142,10 @@ public class JBlock extends JFrame
                     }
 
                     // Creates analysis outputs depending on which checkboxes are ticked
-                    if (plot != null)
-                    {
-                        plot.addNewRectangle(
-                                measurements,
-                                Integer.parseInt(xaxisID.getText()),
-                                Integer.parseInt(yaxisID.getText()),
-                                isLayeredRP
-                        );
-                        plot.writeToDXF(fileOutput, dxfLayersAnalysis);
-                    }
+                    if (plot != null) plot.addNewRectangle();
                 }
+
+                plot.writeToDXF(fileOutput, dxfLayersAnalysis);
 
                 // Write out to a text file the patterns that could not be made
                 Pattern.printMissingMeasurements(fileOutput);
@@ -300,6 +297,18 @@ public class JBlock extends JFrame
         else if (!layeredCheckBoxRP.isSelected())
         {
             isLayeredRP = false;
+        }
+    }
+
+    private void rectanglePlot()
+    {
+        if (rectanglePlot2MeasurementCheckBox.isSelected())
+        {
+            isRectangle = true;
+        }
+        else if (!rectanglePlot2MeasurementCheckBox.isSelected())
+        {
+            isRectangle = false;
         }
     }
 
@@ -465,6 +474,14 @@ public class JBlock extends JFrame
             public void actionPerformed(ActionEvent e)
             {
                 layeredRectanglePlot();
+            }
+        });
+        rectanglePlot2MeasurementCheckBox.addActionListener(new ActionListener()
+        {
+            @Override
+            public void actionPerformed(ActionEvent e)
+            {
+                rectanglePlot();
             }
         });
     }

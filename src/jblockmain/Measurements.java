@@ -63,6 +63,10 @@ public class Measurements
         }
     }
 
+    public String getScanDataFileName() {
+        return scanDataFileName;
+    }
+
     // Getter for name of file
     public String getName()
     {
