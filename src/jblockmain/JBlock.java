@@ -53,8 +53,9 @@ public class JBlock extends JFrame
     private JCheckBox keypointsAsCirclesCheckBoxAnalysis;
     private JCheckBox keypointCoordinatesCheckBoxAnalysis;
     private JCheckBox constructionLinesIfUsedCheckBox;
-    private JProgressBar progressBar1;
     private JLabel PatternImage;
+    private JLabel AnalysisImage;
+    private JButton butRunAnalysis;
     private File fileInput = null;
     private File fileOutput = null;
     private boolean[] dxfLayerChoices = new boolean[5];
@@ -69,7 +70,7 @@ public class JBlock extends JFrame
 
     // Version number
     private static final int majVer = 1;
-    private static final int minVer = 0;
+    private static final int minVer = 1;
 
     // Methods for when the user enters text into the rectangle plot analysis text fields
     private void enterTextRPX()
@@ -160,6 +161,9 @@ public class JBlock extends JFrame
     {
         if (fileOutput != null && fileInput != null)
         {
+            // Create a working prompt
+            Prompts.infoBox("Running...", "JBlock2D is creating outputs!", EMsgType.Info);
+
             Measurements measurements = new Measurements(JBlock.this.fileInput.toString(),
                     JBlock.this.isbatchCheckbox.isSelected());
 
@@ -376,6 +380,16 @@ public class JBlock extends JFrame
             }
         });
 
+        // Listener for the Run button
+        butRunAnalysis.addActionListener(new ActionListener()
+        {
+            @Override
+            public void actionPerformed(ActionEvent e)
+            {
+                runClickedEvent();
+            }
+        });
+
         // Attach listener to open button
         butLoad.addActionListener(new ActionListener()
         {
@@ -554,5 +568,6 @@ public class JBlock extends JFrame
     private void createUIComponents()
     {
         PatternImage = new JLabel(new ImageIcon("./Images/Gill_Skirt.jpg"));
+        AnalysisImage = new JLabel(new ImageIcon("./Images/Rec_Plot.jpg"));
     }
 }

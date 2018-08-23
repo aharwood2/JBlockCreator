@@ -374,12 +374,22 @@
                       <text value="Enter measurement ID and press the 'Enter' key to set"/>
                     </properties>
                   </component>
-                  <component id="5bceb" class="javax.swing.JProgressBar" binding="progressBar1" default-binding="true">
+                  <component id="9dc2d" class="javax.swing.JLabel" binding="AnalysisImage" custom-create="true">
                     <constraints>
-                      <grid row="0" column="6" row-span="7" col-span="1" vsize-policy="6" hsize-policy="6" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+                      <grid row="3" column="6" row-span="4" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                     </constraints>
                     <properties>
-                      <orientation value="1"/>
+                      <background color="-16777216"/>
+                      <enabled value="true"/>
+                      <text value=""/>
+                    </properties>
+                  </component>
+                  <component id="c2ecc" class="javax.swing.JButton" binding="butRunAnalysis">
+                    <constraints>
+                      <grid row="0" column="6" row-span="3" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <text value="Run"/>
                     </properties>
                   </component>
                 </children>
