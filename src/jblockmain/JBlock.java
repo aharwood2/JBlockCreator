@@ -73,6 +73,7 @@ public class JBlock extends JFrame
     private static final int majVer = 1;
     private static final int minVer = 1;
 
+    // Subclass for when the run button is click
     private class RunThread extends Thread
     {
         @Override
@@ -80,7 +81,8 @@ public class JBlock extends JFrame
         {
             if (fileOutput != null && fileInput != null)
             {
-                butRunPattern.setText("Running...");
+                // Update run button text to running
+                setRunButtonText("Running...");
 
                 Measurements measurements = new Measurements(JBlock.this.fileInput.toString(),
                                                              JBlock.this.isbatchCheckbox.isSelected());
@@ -271,6 +273,7 @@ public class JBlock extends JFrame
         }
     }
 
+    // Method to update text on run buttons
     private void setRunButtonText(String text)
     {
         butRunPattern.setText(text);
