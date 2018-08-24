@@ -188,7 +188,6 @@ public class JBlock extends JFrame
         }
     }
 
-
     // Methods for when the user enters text into the rectangle plot analysis text fields
     private void enterTextRPX()
     {
@@ -232,7 +231,7 @@ public class JBlock extends JFrame
         // Choose a folder location to save the output files
         // Opens a file explorer for users to choose directory
         JFileChooser fileChooser = new JFileChooser();
-        fileChooser.setCurrentDirectory(new java.io.File(""));
+        fileChooser.setCurrentDirectory(fileOutput);
         fileChooser.setDialogTitle("Select Save Location");
         fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
         fileChooser.setAcceptAllFileFilterUsed(false);
@@ -258,6 +257,7 @@ public class JBlock extends JFrame
     {
         // Choose a folder input
         JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setCurrentDirectory(fileInput);
         if (fileChooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION)
         {
             // Prints out the input file chosen, purely for test purposes
