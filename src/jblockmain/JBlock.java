@@ -145,7 +145,10 @@ public class JBlock extends JFrame
                     if (plot != null) plot.addNewRectangle();
                 }
 
-                plot.writeToDXF(fileOutput, dxfLayersAnalysis);
+                if (plot != null)
+                {
+                    plot.writeToDXF(fileOutput, dxfLayersAnalysis);
+                }
 
                 // Write out to a text file the patterns that could not be made
                 Pattern.printMissingMeasurements(fileOutput);
@@ -579,7 +582,7 @@ public class JBlock extends JFrame
         colors.add(radioItem("Blue", listener, "color(blue)", colorgroup));
 
         // Finally, make our main window appear
-        frame.setSize(870, 350);
+        frame.setSize(960, 350);
         frame.setResizable(false);
         frame.setVisible(true);
     }

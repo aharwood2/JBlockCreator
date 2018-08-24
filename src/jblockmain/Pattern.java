@@ -57,9 +57,10 @@ public abstract class Pattern implements IPlottable
                 BufferedWriter writer2 = new BufferedWriter(writer);
                 for (String str : missingMeasurements)
                 {
-                    writer2.write(str);
+                    writer2.append(str);
                     writer2.newLine();
                 }
+                writer2.close();
                 writer.close();
             }
             catch (Exception e)
