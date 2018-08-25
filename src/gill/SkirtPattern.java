@@ -158,17 +158,18 @@ public class SkirtPattern
                                  "");
 
         // Point 10 has an if condition to allow for more accurate pattern creation
+        double frontdartwidth = (((g_BkHipArc + f_FrHipArc) - (b_BkWaistArc + a_FrWaistArc)) * 0.18);
         double pointtenif;
         if (l_SideseamUplift >= 1.25)
         {
 
-            fullBlock.addKeypoint(new Vector2D(-l_SideseamUplift, (maxY - (a_FrWaistArc / 2.0) + 0.25 + (waisthipsuppression * 0.18))));
+            fullBlock.addKeypoint(new Vector2D(-l_SideseamUplift, (maxY - (a_FrWaistArc / 2.0) + 0.25 + frontdartwidth)));
             pointtenif = -l_SideseamUplift;
         }
         else
         {
 
-            fullBlock.addKeypoint(new Vector2D(-1.25, (maxY - (a_FrWaistArc / 2.0) + 0.25 + (waisthipsuppression * 0.18))));
+            fullBlock.addKeypoint(new Vector2D(-1.25, (maxY - (a_FrWaistArc / 2.0) + 0.25 + frontdartwidth)));
             pointtenif = -1.25;
         }
 
@@ -176,35 +177,36 @@ public class SkirtPattern
         fullBlock.addKeypoint(new Vector2D(j_WaistToHip, g_BkHipArc / 2 + Arb_HemLevelY / 4.0));
 
         // Point 12 has an if condition to allow for more accurate pattern creation
+        double backdartwidth = (((g_BkHipArc + f_FrHipArc) - (b_BkWaistArc + a_FrWaistArc)) * 0.32);
         double pointtwelveif;
         if (l_SideseamUplift >= 1.25)
         {
-            fullBlock.addKeypoint(new Vector2D(-l_SideseamUplift, ((b_BkWaistArc / 2.0) + 0.25 + (waisthipsuppression * 0.32))));
+            fullBlock.addKeypoint(new Vector2D(-l_SideseamUplift, ((b_BkWaistArc / 2.0) + 0.25 + backdartwidth)));
             pointtwelveif = -l_SideseamUplift;
         }
         else
         {
-            fullBlock.addKeypoint(new Vector2D(-1.25, ((b_BkWaistArc / 2.0) + 0.25 + (waisthipsuppression * 0.32))));
+            fullBlock.addKeypoint(new Vector2D(-1.25, ((b_BkWaistArc / 2.0) + 0.25 + backdartwidth)));
             pointtwelveif = -1.25;
         }
 
         // Curve between point 10 and point 11
-        fullBlock.addCircularCurve(new Vector2D(pointtenif, (maxY - (a_FrWaistArc / 2.0) + 0.25 + (waisthipsuppression * 0.18))),
+        fullBlock.addCircularCurve(new Vector2D(pointtenif, (maxY - (a_FrWaistArc / 2.0) + 0.25 + frontdartwidth)),
                 new Vector2D(j_WaistToHip, g_BkHipArc / 2 + Arb_HemLevelY / 4.0),
                 0.5,
                 true);
 
         // Curve between point 11 and point 12
         fullBlock.addCircularCurve(new Vector2D(j_WaistToHip, g_BkHipArc / 2 + Arb_HemLevelY / 4.0),
-                new Vector2D(pointtwelveif, ((b_BkWaistArc / 2.0) + 0.25 + (waisthipsuppression * 0.32))),
+                new Vector2D(pointtwelveif, ((b_BkWaistArc / 2.0) + 0.25 + backdartwidth)),
                 0.5,
                 true);
 
         // Add front dart.
         ArrayList<Vector2D> dartEdges = fullBlock.addDart(new Vector2D(0.0, maxY),
-                new Vector2D(pointtenif, (maxY - (a_FrWaistArc / 2.0) + 0.25 + (waisthipsuppression * 0.18))),
+                new Vector2D(pointtenif, (maxY - (a_FrWaistArc / 2.0) + 0.25 + frontdartwidth)),
                 Arb_FrontDartPlacement,
-                (((g_BkHipArc + f_FrHipArc) - (b_BkWaistArc + a_FrWaistArc)) * 0.18),
+                frontdartwidth,
                 Arb_FrontDartLength,
                 true,
                 false);
@@ -212,17 +214,17 @@ public class SkirtPattern
         // Add curves either side of dart ensuring the curve intersects the joining edges at a right angle.
         fullBlock.addRightAngleCurve(new Vector2D(0.0, maxY), dartEdges.get(0));
 
-        fullBlock.addRightAngleCurve(dartEdges.get(2), new Vector2D(pointtenif, (maxY - (a_FrWaistArc / 2.0) + 0.25 + (waisthipsuppression * 0.18))));
+        fullBlock.addRightAngleCurve(dartEdges.get(2), new Vector2D(pointtenif, (maxY - (a_FrWaistArc / 2.0) + 0.25 + frontdartwidth)));
 
         // Add back dart
-        dartEdges = fullBlock.addDart(new Vector2D(pointtwelveif, ((b_BkWaistArc / 2.0) + 0.25 + (waisthipsuppression * 0.32))),
+        dartEdges = fullBlock.addDart(new Vector2D(pointtwelveif, ((b_BkWaistArc / 2.0) + 0.25 + backdartwidth)),
                 new Vector2D(0.0, 0.0),
                 Arb_BackDartPlacement,
-                (((g_BkHipArc + f_FrHipArc) - (b_BkWaistArc + a_FrWaistArc)) * 0.32),
+                backdartwidth,
                 Arb_BackDartLength, true, false);
 
         // Add curves
-        fullBlock.addRightAngleCurve(new Vector2D(pointtwelveif, ((b_BkWaistArc / 2.0) + 0.25 + (waisthipsuppression * 0.32))), dartEdges.get(0));
+        fullBlock.addRightAngleCurve(new Vector2D(pointtwelveif, ((b_BkWaistArc / 2.0) + 0.25 + backdartwidth)), dartEdges.get(0));
 
         fullBlock.addRightAngleCurve(dartEdges.get(2), new Vector2D(0.0, 0.0));
 
