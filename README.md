@@ -12,8 +12,7 @@ which may be executed directly to run the application. You may also wish to buil
 
 ## Release Notes ##
 
-**Version: 1.0**
-
+**Version: 1.0**    
 Issue #4: Batch files of scan data can now be used.    
 Issue #5: Keypoints have been added as a new layer on the DXF output files.    
 Issue #6: Construction lines have been added as a new layer on the DXF output files.    
@@ -33,10 +32,10 @@ Beazley Bond Straight Sleeve
 Aldrich Skirt    
 Gill Skirt    
 
-**Version: 0.2**
+**Version: 0.2**    
 Issue #1: Patterns can now store the name of the input file and use it when writing DXFs.    
 Issue #2: Patterns now have a 10cm square drawn on a separate layer to allow scaling.    
 Issue #3: Patterns now have their name written on a separate layer.    
 
-**Version: 0.1**
+**Version: 0.1**    
 Initial Evaluation Version
