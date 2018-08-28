@@ -145,7 +145,7 @@ public class BodicePattern
             j_AcrossFront = dataStore.getId(10).value;
             k_Shoulder = dataStore.getId(11).value;
             l_WidthBustProm = dataStore.getId(12).value;
-            //m_WidthArmhole =
+            m_WidthArmhole = dataStore.getId(36).value;
 
             // Get name
             userName = dataStore.getName();
