@@ -106,16 +106,6 @@
                       <text value="Skirt"/>
                     </properties>
                   </component>
-                  <component id="aeaba" class="javax.swing.JCheckBox" binding="checkBeazleyStraightSleeve">
-                    <constraints>
-                      <grid row="4" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false">
-                        <preferred-size width="91" height="23"/>
-                      </grid>
-                    </constraints>
-                    <properties>
-                      <text value="Straight Sleeve"/>
-                    </properties>
-                  </component>
                   <component id="d9930" class="javax.swing.JCheckBox" binding="checkBeazleyTrousers">
                     <constraints>
                       <grid row="5" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
@@ -124,17 +114,9 @@
                       <text value="Trousers"/>
                     </properties>
                   </component>
-                  <component id="dc349" class="javax.swing.JCheckBox" binding="checkBeazleyBodice">
-                    <constraints>
-                      <grid row="5" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
-                    </constraints>
-                    <properties>
-                      <text value="Bodice"/>
-                    </properties>
-                  </component>
                   <component id="c299f" class="javax.swing.JCheckBox" binding="checkGillSkirt">
                     <constraints>
-                      <grid row="6" column="1" row-span="1" col-span="2" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                      <grid row="6" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                     </constraints>
                     <properties>
                       <text value="Skirt"/>
@@ -216,6 +198,32 @@
                       <background color="-16777216"/>
                       <enabled value="true"/>
                       <text value=""/>
+                    </properties>
+                  </component>
+                  <component id="db86c" class="javax.swing.JCheckBox" binding="checkGillTrousers">
+                    <constraints>
+                      <grid row="6" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <text value="Trousers"/>
+                    </properties>
+                  </component>
+                  <component id="dc349" class="javax.swing.JCheckBox" binding="checkBeazleyBodice">
+                    <constraints>
+                      <grid row="5" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <text value="Bodice"/>
+                    </properties>
+                  </component>
+                  <component id="aeaba" class="javax.swing.JCheckBox" binding="checkBeazleyStraightSleeve">
+                    <constraints>
+                      <grid row="4" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false">
+                        <preferred-size width="91" height="23"/>
+                      </grid>
+                    </constraints>
+                    <properties>
+                      <text value="Straight Sleeve"/>
                     </properties>
                   </component>
                 </children>

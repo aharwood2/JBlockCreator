@@ -27,6 +27,7 @@ public class JBlock extends JFrame
     private JCheckBox checkAldrichSkirt;
     private JCheckBox checkBeazleySkirt;
     private JCheckBox checkGillSkirt;
+    private JCheckBox checkGillTrousers;
     private JCheckBox checkBeazleyStraightSleeve;
     private JCheckBox checkBeazleyTrousers;
     private JCheckBox checkBeazleyBodice;
@@ -133,6 +134,12 @@ public class JBlock extends JFrame
                     {
                         gill.SkirtPattern gill_skirt = new gill.SkirtPattern(measurements);
                         gill_skirt.writeToDXF(fileOutput, dxfLayerChoices);
+                    }
+
+                    if (checkGillTrousers.isSelected())
+                    {
+                        gill.TrouserPattern gill_trousers = new gill.TrouserPattern(measurements);
+                        gill_trousers.writeToDXF(fileOutput, dxfLayerChoices);
                     }
 
                     if (checkAldrichSkirt.isSelected())
