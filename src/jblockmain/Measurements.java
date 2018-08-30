@@ -97,30 +97,23 @@ public class Measurements
         userNames = new ArrayList<>();
     }
 
-    public Measurements(String scanDataFileName, boolean isBatch)
+    public Measurements(String scanDataFileName)
     {
+        // Call default constructor to create storage
         this();
 
-        // Add a new HashMap
+        // Add a new HashMap for initial individual
         storeMaps.add(new HashMap<>());
         mapNumber = 0;
 
-        // If not batch then store name in names list
-        if (!isBatch)
-        {
-            userNames.add(
-                    scanDataFileName.substring(
-                            scanDataFileName.lastIndexOf("\\", scanDataFileName.length() - 4)
-                    )
-            );
-        }
         try
         {
             // Open file and get an input stream
             FileReader file = new FileReader(scanDataFileName);
             BufferedReader fileStream = new BufferedReader(file);
 
-            assignMeasurements(fileStream, isBatch);
+            // Call utility method to assign measurements to stores
+            assignMeasurements(fileStream);
 
             fileStream.close();
         }
@@ -131,19 +124,46 @@ public class Measurements
     }
 
     // Method to inspect each line and assign a value to the variable named
-    private void assignMeasurements(BufferedReader fileStream, boolean isTabbed)
+    private void assignMeasurements(BufferedReader fileStream)
     {
-        if(!isTabbed)
-        {
-            try
-            {
-                // Read first line
-                String line;
+        // Store lines in a string
+        String line;
 
+        // Flag identifying if file is batched
+        boolean isBatched = true;
+
+        // Determine whether file is batched or not from number of lines of measurements it contains
+        try
+        {
+            // If more than one line with [] in it, assume it is not batched
+            int lineCount = 0;
+            while ((line = fileStream.readLine()) != null && lineCount < 2)
+            {
+                // Check to see if line contains measurement(s)
+                if (line.length() > 0 && line.contains("[") && line.contains("]"))
+                {
+                    // Increment counter
+                    lineCount++;
+                }
+            }
+
+            // If more than 1 line with [] in it then must be a non-batch file
+            if (lineCount == 2)
+            {
+                isBatched = false;
+                userNames.add(
+                        scanDataFileName.substring(
+                                scanDataFileName.lastIndexOf("\\", scanDataFileName.length() - 4)
+                        )
+                );
+            }
+
+            if (!isBatched)
+            {
                 while ((line = fileStream.readLine()) != null)
                 {
-                    // Only process lines that start with a 1 and contain a []
-                    if (line.length() > 0 && line.charAt(0) == '1' && line.contains("[") && line.contains("]"))
+                    // Only process lines that contain a []
+                    if (line.length() > 0 && line.contains("[") && line.contains("]"))
                     {
                         // Split the line into the id, name and the value
                         int splitPoint = line.indexOf(":");
@@ -152,19 +172,12 @@ public class Measurements
                         String id = line.substring(splitPointIdStart + 1, splitPointIdEnd);
                         String name = line.substring(splitPointIdEnd + 2, splitPoint);
                         String val = line.substring(splitPoint + 2);
-                        storeMaps.get(mapNumber).put(Integer.valueOf(id), new Store(Integer.valueOf(id), name, Double.valueOf(val)));
+                        storeMaps.get(mapNumber).put(Integer.valueOf(id),
+                                                     new Store(Integer.valueOf(id), name, Double.valueOf(val)));
                     }
                 }
             }
-            catch (IOException e)
-            {
-                e.printStackTrace();
-            }
-
-        }
-        else
-        {
-            try
+            else
             {
                 // Disregard line one as unneeded and store the second line of the input file
                 // containing measurement id's and names
@@ -180,7 +193,8 @@ public class Measurements
                 // Adds all needed chunks to a new array (i.e. the custom measurements only)
                 // TODO: possibly make this bit automatic not manual?
                 final int expectedNumCustomMeasurements = 35;
-                String[] neededChunks = Arrays.copyOfRange(dividedChunks, arrayLength - expectedNumCustomMeasurements, arrayLength);
+                String[] neededChunks = Arrays.copyOfRange(dividedChunks, arrayLength - expectedNumCustomMeasurements,
+                                                           arrayLength);
 
                 // Creates a variable corresponding to final array length
                 final int numCustomMeasurements = neededChunks.length;
@@ -210,7 +224,7 @@ public class Measurements
                 int numUsers = 0;
 
                 // While loop for batch inputs
-                while((measurementValues = fileStream.readLine()) != null)
+                while ((measurementValues = fileStream.readLine()) != null)
                 {
                     // Increment user counter
                     numUsers++;
@@ -240,26 +254,30 @@ public class Measurements
                     userNames.add(userID);
 
                     // Removes all values in the data array except the ones needed for pattern drafting
-                    String[] idValues = Arrays.copyOfRange(numbers, valueArrayLength - expectedNumCustomMeasurements, valueArrayLength);
+                    String[] idValues = Arrays.copyOfRange(numbers, valueArrayLength - expectedNumCustomMeasurements,
+                                                           valueArrayLength);
 
                     for (int i = 0; i < numCustomMeasurements; ++i)
                     {
                         if (idValues[i].equals("Unavailable") || idValues[i].equals("null"))
                         {
-                            System.out.println("Measurement " + idName[i] + " is not available for user " + userNames.get(numUsers - 1));
+                            System.out.println(
+                                    "Measurement " + idName[i] + " is not available for user " + userNames.get(
+                                            numUsers - 1));
                             idValues[i] = "0.0";
                         }
                         storeMaps.get(mapNumber).put(
-                            Integer.valueOf(idNumber[i]),
-                            new Store(Integer.valueOf(idNumber[i]), idName[i], Double.valueOf(idValues[i]))
+                                Integer.valueOf(idNumber[i]),
+                                new Store(Integer.valueOf(idNumber[i]), idName[i], Double.valueOf(idValues[i]))
                         );
                     }
                 }
+
             }
-            catch (IOException e)
-            {
-                e.printStackTrace();
-            }
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
         }
     }
 }

@@ -2,13 +2,12 @@ package jblockmain;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.ArrayList;
 
 import beazleybond.BodicePattern;
 import beazleybond.SkirtPattern;
@@ -34,7 +33,6 @@ public class JBlock extends JFrame
     private JButton butLoad;
     private JLabel openPath;
     private JLabel savePath;
-    private JCheckBox isbatchCheckbox;
     private JCheckBox scaleBoxAndUserCheckBox;
     private JCheckBox patternOutlineCheckBox;
     private JCheckBox keypointsAsCirclesCheckBox;
@@ -54,7 +52,9 @@ public class JBlock extends JFrame
     private static final int majVer = 1;
     private static final int minVer = 0;
 
-    // Method for when the save button is clicked
+    /**
+     * Method for when the save button is clicked
+     */
     private void saveClickedEvent()
     {
         // Choose a folder location to save the output files
@@ -80,7 +80,9 @@ public class JBlock extends JFrame
         }
     }
 
-    // Method for when the open button is clicked
+    /**
+     * Method for when the open button is clicked
+     */
     private void openClickedEvent()
     {
         // Choose a folder input
@@ -100,13 +102,14 @@ public class JBlock extends JFrame
         }
     }
 
-    // Method for when the run button is clicked
+    /**
+     * Method for when the run button is clicked
+     */
     private void runClickedEvent()
     {
         if (fileOutput != null && fileInput != null)
         {
-            Measurements measurements = new Measurements(fileInput.toString(),
-                    isbatchCheckbox.isSelected());
+            Measurements measurements = new Measurements(fileInput.toString());
 
             // Need to populate the boolean array
             getLayerInformation();
@@ -185,8 +188,10 @@ public class JBlock extends JFrame
                     EMsgType.Error);
         }
     }
-    
-    // Method to populate the boolean array of DXF layer configuration
+
+    /**
+     * Method to populate the boolean array of DXF layer configuration
+     */
     private void getLayerInformation()
     {
         // Class for selecting which dxf layers to show
@@ -232,41 +237,27 @@ public class JBlock extends JFrame
         }
     }
 
-    // Method containing button actionlisteners
+    /**
+     * Constructor for the JFrame object
+     */
     private JBlock()
     {
+        /* Add listeners */
+
         // Listener for the Run button
-        butRun.addActionListener(new ActionListener()
-        {
-            @Override
-            public void actionPerformed(ActionEvent e)
-            {
-                runClickedEvent();
-            }
-        });
+        butRun.addActionListener(e -> runClickedEvent());
 
         // Attach listener to open button
-        butLoad.addActionListener(new ActionListener()
-        {
-            @Override
-            public void actionPerformed(ActionEvent e)
-            {
-                openClickedEvent();
-            }
-        });
+        butLoad.addActionListener(e -> openClickedEvent());
 
         // Attach listener to save button
-        butSave.addActionListener(new ActionListener()
-        {
-            @Override
-            public void actionPerformed(ActionEvent e)
-            {
-                saveClickedEvent();
-            }
-        });
+        butSave.addActionListener(e -> saveClickedEvent());
     }
 
-    // PSVM to run the application
+    /**
+     * Entry point
+     * @param args command line arguments
+     */
     public static void main(String[] args)
     {
         // Makes the UI look like the system UI
@@ -306,34 +297,30 @@ public class JBlock extends JFrame
         frame1.getContentPane().add(panel, "Center");
 
         // Create an action listener for the menu items we will create
-        ActionListener listener = new ActionListener()
+        ActionListener listener = e ->
         {
-            @Override
-            public void actionPerformed(ActionEvent e)
+            // If statements for if the toolbar menu items are clicked
+            JMenuItem item = (JMenuItem) e.getSource();
+            String cmd = item.getActionCommand();
+            if (cmd.equals("Exit"))
             {
-                // If statements for if the toolbar menu items are clicked
-                JMenuItem item = (JMenuItem) e.getSource();
-                String cmd = item.getActionCommand();
-                if (cmd.equals("Exit"))
-                {
-                    System.exit(0);
-                }
-                if (cmd.equals("View help"))
-                {
-                    Prompts.infoBox("PLACEHOLDER", "PLACEHOLDER", EMsgType.Info);
-                }
-                if (cmd.equals("Open"))
-                {
-                    block.openClickedEvent();
-                }
-                if (cmd.equals("Save"))
-                {
-                    block.saveClickedEvent();
-                }
-                if (cmd.equals("Run"))
-                {
-                    block.runClickedEvent();
-                }
+                System.exit(0);
+            }
+            if (cmd.equals("View help"))
+            {
+                Prompts.infoBox("PLACEHOLDER", "PLACEHOLDER", EMsgType.Info);
+            }
+            if (cmd.equals("Open"))
+            {
+                block.openClickedEvent();
+            }
+            if (cmd.equals("Save"))
+            {
+                block.saveClickedEvent();
+            }
+            if (cmd.equals("Run"))
+            {
+                block.runClickedEvent();
             }
         };
 
@@ -348,24 +335,24 @@ public class JBlock extends JFrame
         file.addSeparator();
         file.add(menuItem("Exit", listener, "Exit", 'E', KeyEvent.VK_E));
 
-        JMenu edit = new JMenu("Help");
-        edit.setMnemonic('H');
-        edit.add(menuItem("View Help", listener, "View help", 'H', KeyEvent.VK_H));
+        JMenu help = new JMenu("Help");
+        help.setMnemonic('H');
+        help.add(menuItem("View Help", listener, "View help", 'H', KeyEvent.VK_H));
 
-        // Create a menubar and add these panes to it.
+        // Create a menubar and add menus
         JMenuBar menubar = new JMenuBar();
         menubar.add(file);
-        menubar.add(edit);
+        menubar.add(help);
 
-        // Add menubar to the main window.  Note special method to add menubars
+        // Add menubar to the main window
         frame.setJMenuBar(menubar);
 
         // Now create a popup menu and add the some stuff to it
         final JPopupMenu popup = new JPopupMenu();
         popup.add(menuItem("Open", listener, "open", 0, 0));
-        popup.addSeparator();                // Add a separator between items
-        JMenu colors = new JMenu("Colors");  // Create a submenu
-        popup.add(colors);                   // and add it to the popup menu
+        popup.addSeparator();                      // Add a separator between items
+        JMenu colors = new JMenu("Colors");     // Create a submenu
+        popup.add(colors);                         // and add it to the popup menu
 
         // Now fill the submenu with mutually-exclusive radio buttons
         ButtonGroup colorgroup = new ButtonGroup();
@@ -379,7 +366,15 @@ public class JBlock extends JFrame
         frame.setVisible(true);
     }
 
-    // A convenience method for creating menu items.
+    /**
+     * A utility method for creating menu items
+     * @param label             menu label
+     * @param listener          click listener
+     * @param command           name of command
+     * @param mnemonic          underlined letter
+     * @param acceleratorKey    key binding
+     * @return                  menu item
+     */
     private static JMenuItem menuItem(String label,
                                       ActionListener listener, String command,
                                       int mnemonic, int acceleratorKey)
@@ -390,11 +385,18 @@ public class JBlock extends JFrame
         if (mnemonic != 0) item.setMnemonic((char) mnemonic);
         if (acceleratorKey != 0)
             item.setAccelerator(KeyStroke.getKeyStroke(acceleratorKey,
-                    java.awt.Event.CTRL_MASK));
+                                                       InputEvent.CTRL_MASK));
         return item;
     }
 
-    // A convenience method for creating radio button menu items.
+    /**
+     * A utility method for creating radio button menu items
+     * @param label         button label
+     * @param listener      click listener
+     * @param command       name of command
+     * @param mutExGroup    group tag
+     * @return              radio button
+     */
     private static JMenuItem radioItem(String label, ActionListener listener,
                                        String command, ButtonGroup mutExGroup)
     {
