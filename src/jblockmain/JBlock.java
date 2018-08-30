@@ -25,6 +25,7 @@ public class JBlock extends JFrame
     private JLabel labBeazleyBond;
     private JLabel labGill;
     private JCheckBox checkAldrichSkirt;
+    private JCheckBox checkAldrichTrousers;
     private JCheckBox checkBeazleySkirt;
     private JCheckBox checkGillSkirt;
     private JCheckBox checkGillTrousers;
@@ -143,6 +144,12 @@ public class JBlock extends JFrame
                     {
                         aldrich.SkirtPattern aldrich_skirt = new aldrich.SkirtPattern(measurements);
                         aldrich_skirt.writeToDXF(fileOutput, dxfLayerChoices);
+                    }
+
+                    if (checkAldrichTrousers.isSelected())
+                    {
+                        aldrich.TrouserPattern aldrich_trousers = new aldrich.TrouserPattern(measurements);
+                        aldrich_trousers.writeToDXF(fileOutput, dxfLayerChoices);
                     }
 
                     // Creates analysis outputs depending on which checkboxes are ticked
@@ -543,7 +550,7 @@ public class JBlock extends JFrame
         colors.add(radioItem("Blue", listener, "color(blue)", colorgroup));
 
         // Finally, make our main window appear
-        frame.setSize(960, 350);
+        frame.setSize(790, 350);
         frame.setResizable(false);
         frame.setVisible(true);
     }
