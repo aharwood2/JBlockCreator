@@ -56,6 +56,8 @@ public class JBlock extends JFrame
     private JLabel PatternImage;
     private JLabel AnalysisImage;
     private JButton butRunAnalysis;
+    private File fileOutput = null;
+    private File fileInput = null;
     private boolean[] dxfLayerChoices = new boolean[5];
     private boolean[] dxfLayersAnalysis = new boolean[5];
     private boolean isLayeredRP;
@@ -72,23 +74,17 @@ public class JBlock extends JFrame
     private static final int majVer = 1;
     private static final int minVer = 1;
 
-
-
-     * Method for when the open button is clicked
-     */
+    private class RunThread extends Thread
     {
         @Override
         public void run()
-     * Method for when the run button is clicked
-     */
         {
             if (fileOutput != null && fileInput != null)
             {
                 // Update run button text to running
                 setRunButtonText("Running...");
 
-                Measurements measurements = new Measurements(JBlock.this.fileInput.toString(),
-                                                             JBlock.this.isbatchCheckbox.isSelected());
+                Measurements measurements = new Measurements(JBlock.this.fileInput.toString());
 
                 // Need to populate the boolean array
                 getLayerInformationPatterns();
@@ -250,7 +246,7 @@ public class JBlock extends JFrame
             // Also stores the location in the save path gui label and the fileoutput variable
             System.out.println("Current directory is: " + fileChooser.getCurrentDirectory());
             System.out.println("Save location is: " + fileChooser.getSelectedFile());
-            String file = fileChooser.getCurrentDirectory().toString();
+            String file = fileChooser.getSelectedFile().toString();
             if (file.length() > 40)
             {
                 file = file.substring(0, 40) + "...";
@@ -421,23 +417,28 @@ public class JBlock extends JFrame
         /* Add listeners */
 
         // Listener for the Run button
-        butRunPattern.addActionListener(new ActionListener()
-        {
-            @Override
-            public void actionPerformed(ActionEvent e)
-            {
-                runClickedEvent();
-            }
-        });
+        butRunPattern.addActionListener(e -> new RunThread().start());
 
         // Listener for the Run button
-        butRunAnalysis.addActionListener(new ActionListener()
+        butRunAnalysis.addActionListener(e -> new RunThread().start());
 
         // Attach listener to open button
         butLoad.addActionListener(e -> openClickedEvent());
 
         // Attach listener to save button
         butSave.addActionListener(e -> saveClickedEvent());
+
+        // Attach listener to rectangle plot x-axis text field
+        textFieldRPx.addActionListener(e -> enterTextRPX());
+
+        // Attach listener to rectangle plot y-axis
+        textFieldRPy.addActionListener(e -> enterTextRPY());
+
+        // Attach listener to rectangle plot layered checkbox
+        layeredCheckBoxRP.addActionListener(e -> layeredRectanglePlot());
+
+        // Attach listener to rectangle plot (plain) checkbox
+        rectanglePlot2MeasurementCheckBox.addActionListener(e -> rectanglePlot());
     }
 
     /**
@@ -452,44 +453,8 @@ public class JBlock extends JFrame
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         }
         catch (Exception ex)
-
-        // Attach listener to rectangle plot x-axis text field
-        textFieldRPx.addActionListener(new ActionListener()
         {
-            @Override
-            public void actionPerformed(ActionEvent e)
-            {
-                enterTextRPX();
-            }
-        });
-
-        // Attach listener to rectangle plot y-axis
-        textFieldRPy.addActionListener(new ActionListener()
-        {
-            @Override
-            public void actionPerformed(ActionEvent e)
-            {
-                enterTextRPY();
-            }
-        });
-
-        // Attach listener to rectangle plot layered checkbox
-        layeredCheckBoxRP.addActionListener(new ActionListener()
-        {
-            @Override
-            public void actionPerformed(ActionEvent e)
-            {
-                layeredRectanglePlot();
-            }
-        });
-        rectanglePlot2MeasurementCheckBox.addActionListener(new ActionListener()
-        {
-            @Override
-            public void actionPerformed(ActionEvent e)
-            {
-                rectanglePlot();
-            }
-        });
+            ex.printStackTrace();
         }
 
         // Create a JFrame instance

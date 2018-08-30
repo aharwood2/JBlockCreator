@@ -113,35 +113,13 @@ public class Measurements
         try
         {
             // Open file and get an input stream
-            FileReader file = new FileReader(scanDataFileName);
-            BufferedReader fileStream = new BufferedReader(file);
+            FileReader fileReader = new FileReader(scanDataFileName);
+            BufferedReader fileBuffer = new BufferedReader(fileReader);
 
-            // Call utility method to assign measurements to stores
-            assignMeasurements(fileStream);
-
-            fileStream.close();
-        }
-        catch (IOException e)
-        {
-            e.printStackTrace();
-        }
-    }
-
-    // Method to inspect each line and assign a value to the variable named
-    private void assignMeasurements(BufferedReader fileStream)
-    {
-        // Store lines in a string
-        String line;
-
-        // Flag identifying if file is batched
-        boolean isBatched = true;
-
-        // Determine whether file is batched or not from number of lines of measurements it contains
-        try
-        {
             // If more than one line with [] in it, assume it is not batched
             int lineCount = 0;
-            while ((line = fileStream.readLine()) != null && lineCount < 2)
+            String line;
+            while ((line = fileBuffer.readLine()) != null && lineCount < 2)
             {
                 // Check to see if line contains measurement(s)
                 if (line.length() > 0 && line.contains("[") && line.contains("]"))
@@ -152,6 +130,7 @@ public class Measurements
             }
 
             // If more than 1 line with [] in it then must be a non-batch file
+            boolean isBatched = true;
             if (lineCount == 2)
             {
                 isBatched = false;
@@ -162,6 +141,39 @@ public class Measurements
                 );
             }
 
+            // Close file
+            fileBuffer.close();
+            fileReader.close();
+
+            // Re-open the file
+            fileReader = new FileReader(scanDataFileName);
+            fileBuffer = new BufferedReader(fileReader);
+
+            // Call utility method to assign measurements to stores
+            assignMeasurements(fileReader, isBatched);
+
+            // Close the file
+            fileReader.close();
+
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+    }
+
+    // Method to inspect each line and assign a value to the variable named
+    private void assignMeasurements(FileReader fileReader, boolean isBatched)
+    {
+        // Create a buffered reader
+        BufferedReader fileStream = new BufferedReader(fileReader);
+
+        // Store lines in a string
+        String line;
+
+        try
+        {
+            // If not batched
             if (!isBatched)
             {
                 while ((line = fileStream.readLine()) != null)
@@ -206,6 +218,7 @@ public class Measurements
                     }
                 }
 
+                String[] neededChunks = Arrays.copyOfRange(dividedChunks, arrayLength - expectedNumCustomMeasurements, arrayLength);
 
                 // Creates a variable corresponding to final array length
                 final int numCustomMeasurements = neededChunks.length;
@@ -225,7 +238,7 @@ public class Measurements
                 for (int i = 0; i < numCustomMeasurements; ++i)
                 {
                     // Takes the ID name part of the array and stores it in the IDName array
-                    idName[i] = neededChunks[i].substring(6, neededChunks[i].length());
+                    idName[i] = neededChunks[i].substring(6);
                 }
 
                 // Create a null string
