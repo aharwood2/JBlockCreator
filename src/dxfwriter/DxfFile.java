@@ -31,12 +31,12 @@ public class DxfFile
     private double maxY;
 
     // Line coordinates
-    private ArrayList<Double> linesX;
-    private ArrayList<Double> linesY;
+    private ArrayList<Double> linesX = new ArrayList<>();
+    private ArrayList<Double> linesY = new ArrayList<>();
 
     // Line coordinates
-    private ArrayList<Double> ConX;
-    private ArrayList<Double> ConY;
+    private ArrayList<Double> ConX = new ArrayList<>();
+    private ArrayList<Double> ConY = new ArrayList<>();
 
     // Construction point names list
     private ArrayList<String> names;
@@ -72,8 +72,8 @@ public class DxfFile
      */
     public void addLines(ArrayList<Double> xPts, ArrayList<Double> yPts)
     {
-        this.linesX = xPts;
-        this.linesY = yPts;
+        this.linesX.addAll(xPts);
+        this.linesY.addAll(yPts);
 
         // Set the min and max
         minX = Collections.min(linesX);
@@ -90,8 +90,8 @@ public class DxfFile
      */
     public void addConstructionPoints(ArrayList<Double> xPts, ArrayList<Double> yPts, ArrayList<String> names)
     {
-        this.ConX = xPts;
-        this.ConY = yPts;
+        this.ConX.addAll(xPts);
+        this.ConY.addAll(yPts);
         this.names = names;
 
         if (ConX.size() == 0 && ConY.size() == 0 && names.size() == 0)

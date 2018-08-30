@@ -57,9 +57,10 @@ public abstract class Pattern implements IPlottable
                 BufferedWriter writer2 = new BufferedWriter(writer);
                 for (String str : missingMeasurements)
                 {
-                    writer2.write(str);
+                    writer2.append(str);
                     writer2.newLine();
                 }
+                writer2.close();
                 writer.close();
             }
             catch (Exception e)
@@ -115,7 +116,7 @@ public abstract class Pattern implements IPlottable
         return blocks.get(blockNumber).getConstructionY();
     }
 
-    public ArrayList<String> getNames(int blockNumber) throws IndexOutOfBoundsException
+    private ArrayList<String> getNames(int blockNumber) throws IndexOutOfBoundsException
     {
         rangeCheck(blockNumber);
         return blocks.get(blockNumber).getConstructionNames();
@@ -127,6 +128,7 @@ public abstract class Pattern implements IPlottable
         return blocks.size();
     }
 
+    @Override
     public void writeToDXF(File fileOutput, boolean[] dxfLayerChooser)
     {
         for (int i = 0; i < getNumberOfBlocksToPlot(); i++)

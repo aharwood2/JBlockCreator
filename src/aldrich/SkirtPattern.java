@@ -92,7 +92,7 @@ public class SkirtPattern
     @Override
     protected EMethod assignMethod()
     {
-        return EMethod.ALRICH;
+        return EMethod.ALDRICH;
     }
 
     @Override

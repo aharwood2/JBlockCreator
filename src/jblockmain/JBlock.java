@@ -9,6 +9,7 @@ import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
+import analysis.RectanglePlot;
 import beazleybond.BodicePattern;
 import beazleybond.SkirtPattern;
 import beazleybond.StraightSleevePattern;
@@ -17,6 +18,7 @@ import jblockenums.EMsgType;
 
 public class JBlock extends JFrame
 {
+
     // Declaration of used backend components
     private JPanel panelMain;
     private JLabel labAldrich;
@@ -25,10 +27,11 @@ public class JBlock extends JFrame
     private JCheckBox checkAldrichSkirt;
     private JCheckBox checkBeazleySkirt;
     private JCheckBox checkGillSkirt;
+    private JCheckBox checkGillTrousers;
     private JCheckBox checkBeazleyStraightSleeve;
     private JCheckBox checkBeazleyTrousers;
     private JCheckBox checkBeazleyBodice;
-    private JButton butRun;
+    private JButton butRunPattern;
     private JButton butSave;
     private JButton butLoad;
     private JLabel openPath;
@@ -38,9 +41,26 @@ public class JBlock extends JFrame
     private JCheckBox keypointsAsCirclesCheckBox;
     private JCheckBox keypointCoordinatesCheckBox;
     private JCheckBox constructionLinesCheckBox;
-    private File fileInput = new File(".");
-    private File fileOutput = new File(".");
+    private JTabbedPane tabbedPane;
+    private JCheckBox rectanglePlot2MeasurementCheckBox;
+    private JCheckBox layeredCheckBoxRP;
+    private JTextField textFieldRPx;
+    private JTextField textFieldRPy;
+    private JLabel xaxisID;
+    private JLabel yaxisID;
+    private JCheckBox scaleBoxAndUserCheckBoxAnalysis;
+    private JCheckBox connectingLinesCheckBox;
+    private JCheckBox keypointsAsCirclesCheckBoxAnalysis;
+    private JCheckBox keypointCoordinatesCheckBoxAnalysis;
+    private JCheckBox constructionLinesIfUsedCheckBox;
+    private JLabel PatternImage;
+    private JLabel AnalysisImage;
+    private JButton butRunAnalysis;
     private boolean[] dxfLayerChoices = new boolean[5];
+    private boolean[] dxfLayersAnalysis = new boolean[5];
+    private boolean isLayeredRP;
+    private boolean isRectangle;
+    private boolean isRunning = false;
 
     // Set a global tolerance for some operations
     public static final double tol = 10e-8;
@@ -50,16 +70,176 @@ public class JBlock extends JFrame
 
     // Version number
     private static final int majVer = 1;
-    private static final int minVer = 0;
+    private static final int minVer = 1;
 
-    /**
-     * Method for when the save button is clicked
+
+
+     * Method for when the open button is clicked
      */
+    {
+        @Override
+        public void run()
+     * Method for when the run button is clicked
+     */
+        {
+            if (fileOutput != null && fileInput != null)
+            {
+                // Update run button text to running
+                setRunButtonText("Running...");
+
+                Measurements measurements = new Measurements(JBlock.this.fileInput.toString(),
+                                                             JBlock.this.isbatchCheckbox.isSelected());
+
+                // Need to populate the boolean array
+                getLayerInformationPatterns();
+                getLayerInformationAnalysis();
+
+                // Create the plot if necessary
+                RectanglePlot plot = null;
+                if (rectanglePlot2MeasurementCheckBox.isSelected() || layeredCheckBoxRP.isSelected())
+                    plot = new RectanglePlot(measurements,
+                            Integer.parseInt(xaxisID.getText()),
+                            Integer.parseInt(yaxisID.getText()),
+                            isLayeredRP, isRectangle);
+
+                // Create patterns
+                for (int i = 0; i < measurements.getNames().size(); i++)
+                {
+                    measurements.setMapNumber(i);
+
+                    // Creates patterns depending on which checkboxes are ticked
+                    if (checkBeazleySkirt.isSelected()) {
+                        SkirtPattern bb_skirt = new SkirtPattern(measurements);
+                        bb_skirt.writeToDXF(fileOutput, dxfLayerChoices);
+                    }
+
+                    if (checkBeazleyTrousers.isSelected())
+                    {
+                        TrouserPattern bb_trouser = new TrouserPattern(measurements);
+                        bb_trouser.writeToDXF(fileOutput, dxfLayerChoices);
+                    }
+
+                    if (checkBeazleyBodice.isSelected())
+                    {
+                        BodicePattern bb_bodice = new BodicePattern(measurements);
+                        bb_bodice.writeToDXF(fileOutput, dxfLayerChoices);
+                    }
+
+                    if (checkBeazleyStraightSleeve.isSelected())
+                    {
+                        StraightSleevePattern bb_sleeve = new StraightSleevePattern(measurements);
+                        bb_sleeve.writeToDXF(fileOutput, dxfLayerChoices);
+                    }
+
+                    if (checkGillSkirt.isSelected())
+                    {
+                        gill.SkirtPattern gill_skirt = new gill.SkirtPattern(measurements);
+                        gill_skirt.writeToDXF(fileOutput, dxfLayerChoices);
+                    }
+
+                    if (checkGillTrousers.isSelected())
+                    {
+                        gill.TrouserPattern gill_trousers = new gill.TrouserPattern(measurements);
+                        gill_trousers.writeToDXF(fileOutput, dxfLayerChoices);
+                    }
+
+                    if (checkAldrichSkirt.isSelected())
+                    {
+                        aldrich.SkirtPattern aldrich_skirt = new aldrich.SkirtPattern(measurements);
+                        aldrich_skirt.writeToDXF(fileOutput, dxfLayerChoices);
+                    }
+
+                    // Creates analysis outputs depending on which checkboxes are ticked
+                    if (plot != null) plot.addNewRectangle();
+                }
+
+                if (plot != null)
+                {
+                    plot.writeToDXF(fileOutput, dxfLayersAnalysis);
+                }
+
+                // Write out to a text file the patterns that could not be made
+                Pattern.printMissingMeasurements(fileOutput);
+
+                // Prompt for finishing, two options depending on if some patterns could not be made
+                if(Files.exists(Paths.get(fileOutput + "/Failed_Outputs.txt")))
+                {
+                    // Create done prompt
+                    Prompts.infoBox("Some outputs could not be made, see output folder for details.", "Done", EMsgType.Info);
+                }
+                else
+                {
+                    // Create done prompt
+                    Prompts.infoBox("Done!", "Done", EMsgType.Info);
+                }
+            }
+
+            // Handle missing options
+            if (fileInput == null)
+            {
+                Prompts.infoBox("Please choose your input file by clicking on the \"Open\" button",
+                                "Input File Needed",
+                                EMsgType.Error);
+                isRunning = false;
+                setRunButtonText("Run");
+                return;
+            }
+            if (fileOutput == null)
+            {
+                Prompts.infoBox("Please choose a directory to write the patterns to by clicking on \"Save\"",
+                                "Output Directory Needed",
+                                EMsgType.Error);
+            }
+
+            setRunButtonText("Run");
+            isRunning = false;
+        }
+    }
+
+    // Methods for when the user enters text into the rectangle plot analysis text fields
+    private void enterTextRPX()
+    {
+        String xID = textFieldRPx.getText();
+        xaxisID.setText(xID);
+        try
+        {
+            Integer IDx = Integer.parseInt(xID);
+            if (IDx < 1 || IDx > 40)
+            {
+                Prompts.infoBox("Input must be a valid measurement ID", "Invalid ID", EMsgType.Error);
+            }
+        }
+        catch (Exception e)
+        {
+            Prompts.infoBox("Input must be a valid measurement ID", "Invalid ID", EMsgType.Error);
+        }
+    }
+
+    private void enterTextRPY()
+    {
+        String yID = textFieldRPy.getText();
+        yaxisID.setText(yID);
+        try
+        {
+            Integer IDy = Integer.parseInt(yID);
+            if (IDy < 1 || IDy > 40)
+            {
+                Prompts.infoBox("Input must be a valid measurement ID", "Invalid ID", EMsgType.Error);
+            }
+        }
+        catch (Exception e)
+        {
+            Prompts.infoBox("Input must be a valid measurement ID", "Invalid ID", EMsgType.Error);
+        }
+    }
+
+    // Method for when the save button is clicked
     private void saveClickedEvent()
     {
         // Choose a folder location to save the output files
         // Opens a file explorer for users to choose directory
-        JFileChooser fileChooser = new JFileChooser(fileOutput);
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setCurrentDirectory(fileOutput);
         fileChooser.setDialogTitle("Select Save Location");
         fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
         fileChooser.setAcceptAllFileFilterUsed(false);
@@ -67,7 +247,7 @@ public class JBlock extends JFrame
         if (fileChooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION)
         {
             // Prints out the directory chosen, purely for test purposes
-            // Also stores the location in the save path GUI label and the fileOutput variable
+            // Also stores the location in the save path gui label and the fileoutput variable
             System.out.println("Current directory is: " + fileChooser.getCurrentDirectory());
             System.out.println("Save location is: " + fileChooser.getSelectedFile());
             String file = fileChooser.getCurrentDirectory().toString();
@@ -76,22 +256,21 @@ public class JBlock extends JFrame
                 file = file.substring(0, 40) + "...";
             }
             savePath.setText(file);
-            fileOutput = fileChooser.getSelectedFile();
+            JBlock.this.fileOutput = fileChooser.getSelectedFile();
         }
     }
 
-    /**
-     * Method for when the open button is clicked
-     */
+    // Method for when the open button is clicked
     private void openClickedEvent()
     {
         // Choose a folder input
-        JFileChooser fileChooser = new JFileChooser(fileInput);
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setCurrentDirectory(fileInput);
         if (fileChooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION)
         {
             // Prints out the input file chosen, purely for test purposes
-            // Also stores the location in the input path GUI label and the fileInput variable
-            fileInput = fileChooser.getSelectedFile();
+            // Also stores the location in the input path gui label and the fileinput variable
+            JBlock.this.fileInput = fileChooser.getSelectedFile();
             System.out.println("Input file is: " + fileInput.toString());
             String file = fileChooser.getSelectedFile().toString();
             if (file.length() > 40)
@@ -102,97 +281,50 @@ public class JBlock extends JFrame
         }
     }
 
-    /**
-     * Method for when the run button is clicked
-     */
+    // Method to update text on run buttons
+    private void setRunButtonText(String text)
+    {
+        butRunPattern.setText(text);
+        butRunAnalysis.setText(text);
+    }
+
+    // Method for when the run button is clicked
     private void runClickedEvent()
     {
-        if (fileOutput != null && fileInput != null)
+        if (!isRunning)
         {
-            Measurements measurements = new Measurements(fileInput.toString());
-
-            // Need to populate the boolean array
-            getLayerInformation();
-
-            // Create patterns
-            for (int i = 0; i < measurements.getNames().size(); i++)
-            {
-                measurements.setMapNumber(i);
-
-                // Creates patterns depending on which checkboxes are ticked
-                if (checkBeazleySkirt.isSelected())
-                {
-                    SkirtPattern bb_skirt = new SkirtPattern(measurements);
-                    bb_skirt.writeToDXF(fileOutput, dxfLayerChoices);
-                }
-
-                if (checkBeazleyTrousers.isSelected())
-                {
-                    TrouserPattern bb_trouser = new TrouserPattern(measurements);
-                    bb_trouser.writeToDXF(fileOutput, dxfLayerChoices);
-                }
-
-                if (checkBeazleyBodice.isSelected())
-                {
-                    BodicePattern bb_bodice = new BodicePattern(measurements);
-                    bb_bodice.writeToDXF(fileOutput, dxfLayerChoices);
-                }
-
-                if (checkBeazleyStraightSleeve.isSelected())
-                {
-                    StraightSleevePattern bb_sleeve = new StraightSleevePattern(measurements);
-                    bb_sleeve.writeToDXF(fileOutput, dxfLayerChoices);
-                }
-
-                if (checkGillSkirt.isSelected())
-                {
-                    gill.SkirtPattern gill_skirt = new gill.SkirtPattern(measurements);
-                    gill_skirt.writeToDXF(fileOutput, dxfLayerChoices);
-                }
-
-                if (checkAldrichSkirt.isSelected())
-                {
-                    aldrich.SkirtPattern aldrich_skirt = new aldrich.SkirtPattern(measurements);
-                    aldrich_skirt.writeToDXF(fileOutput, dxfLayerChoices);
-                }
-            }
-
-            // Write out to a text file the patterns that could not be made
-            Pattern.printMissingMeasurements(fileOutput);
-
-            // Prompt for finishing, two options depending on if some patterns could not be made
-            if(Files.exists(Paths.get(fileOutput + "/Failed_Outputs.txt")))
-            {
-                // Create done prompt
-                Prompts.infoBox("Some outputs could not be made, see output folder for details.", "Done", EMsgType.Info);
-            }
-            else
-            {
-                // Create done prompt
-                Prompts.infoBox("Done!", "Done", EMsgType.Info);
-            }
-        }
-
-        // Handle missing options
-        if (fileInput == null)
-        {
-            Prompts.infoBox("Please choose your input file by clicking on the \"Open\" button",
-                    "Input File Needed",
-                    EMsgType.Error);
-            return;
-        }
-        if (fileOutput == null)
-        {
-            Prompts.infoBox("Please choose a directory to write the patterns to by clicking on \"Save\"",
-                    "Output Directory Needed",
-                    EMsgType.Error);
+            isRunning = true;
+            new RunThread().start();
         }
     }
 
-    /**
-     * Method to populate the boolean array of DXF layer configuration
-     */
-    private void getLayerInformation()
+    // Method to set ifLayeredRectanglePlot boolean
+    private void layeredRectanglePlot()
+    {
+        if (layeredCheckBoxRP.isSelected())
+        {
+            isLayeredRP = true;
+        }
+        else if (!layeredCheckBoxRP.isSelected())
+        {
+            isLayeredRP = false;
+        }
+    }
+
+    private void rectanglePlot()
+    {
+        if (rectanglePlot2MeasurementCheckBox.isSelected())
+        {
+            isRectangle = true;
+        }
+        else if (!rectanglePlot2MeasurementCheckBox.isSelected())
+        {
+            isRectangle = false;
+        }
+    }
+
+    // Method to populate the pattern boolean array of DXF layer configuration
+    private void getLayerInformationPatterns()
     {
         // Class for selecting which dxf layers to show
         if (scaleBoxAndUserCheckBox.isSelected())
@@ -237,15 +369,69 @@ public class JBlock extends JFrame
         }
     }
 
-    /**
-     * Constructor for the JFrame object
-     */
+    // Method to populate the analysis boolean array of DXF layer configuration
+    private void getLayerInformationAnalysis()
+    {
+        // Class for selecting which dxf layers to show
+        if (scaleBoxAndUserCheckBoxAnalysis.isSelected())
+        {
+            dxfLayersAnalysis[0] = true;
+        }
+        else if (!scaleBoxAndUserCheckBoxAnalysis.isSelected())
+        {
+            dxfLayersAnalysis[0] = false;
+        }
+        if (connectingLinesCheckBox.isSelected())
+        {
+            dxfLayersAnalysis[1] = true;
+        }
+        else if (!connectingLinesCheckBox.isSelected())
+        {
+            dxfLayersAnalysis[1] = false;
+        }
+        if (keypointsAsCirclesCheckBoxAnalysis.isSelected())
+        {
+            dxfLayersAnalysis[2] = true;
+        }
+        else if (!keypointsAsCirclesCheckBoxAnalysis.isSelected())
+        {
+            dxfLayersAnalysis[2] = false;
+        }
+        if (keypointCoordinatesCheckBoxAnalysis.isSelected())
+        {
+            dxfLayersAnalysis[3] = true;
+        }
+        else if (!keypointCoordinatesCheckBoxAnalysis.isSelected())
+        {
+            dxfLayersAnalysis[3] = false;
+        }
+        if (constructionLinesIfUsedCheckBox.isSelected())
+        {
+            dxfLayersAnalysis[4] = true;
+        }
+        else if (!constructionLinesIfUsedCheckBox.isSelected())
+        {
+            dxfLayersAnalysis[4] = false;
+        }
+    }
+
+    // Method containing button, text field and checkbox actionlisteners
     private JBlock()
     {
         /* Add listeners */
 
         // Listener for the Run button
-        butRun.addActionListener(e -> runClickedEvent());
+        butRunPattern.addActionListener(new ActionListener()
+        {
+            @Override
+            public void actionPerformed(ActionEvent e)
+            {
+                runClickedEvent();
+            }
+        });
+
+        // Listener for the Run button
+        butRunAnalysis.addActionListener(new ActionListener()
 
         // Attach listener to open button
         butLoad.addActionListener(e -> openClickedEvent());
@@ -266,8 +452,44 @@ public class JBlock extends JFrame
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         }
         catch (Exception ex)
+
+        // Attach listener to rectangle plot x-axis text field
+        textFieldRPx.addActionListener(new ActionListener()
         {
-            ex.printStackTrace();
+            @Override
+            public void actionPerformed(ActionEvent e)
+            {
+                enterTextRPX();
+            }
+        });
+
+        // Attach listener to rectangle plot y-axis
+        textFieldRPy.addActionListener(new ActionListener()
+        {
+            @Override
+            public void actionPerformed(ActionEvent e)
+            {
+                enterTextRPY();
+            }
+        });
+
+        // Attach listener to rectangle plot layered checkbox
+        layeredCheckBoxRP.addActionListener(new ActionListener()
+        {
+            @Override
+            public void actionPerformed(ActionEvent e)
+            {
+                layeredRectanglePlot();
+            }
+        });
+        rectanglePlot2MeasurementCheckBox.addActionListener(new ActionListener()
+        {
+            @Override
+            public void actionPerformed(ActionEvent e)
+            {
+                rectanglePlot();
+            }
+        });
         }
 
         // Create a JFrame instance
@@ -283,18 +505,12 @@ public class JBlock extends JFrame
         frame.setLocation(dim.width / 2 - frame.getSize().width / 2,
                 dim.height / 2 - frame.getSize().height / 2);
 
-        // Sets the frame as visible
-        frame.setVisible(true);
-
-        // Sets the frame size
-        frame.setSize(450, 450);
-
         /* MENU BAR SETUP */
 
         // Create a window for the menu
         JFrame frame1 = new JFrame("Menu");
-        JPanel panel = new JPanel();
-        frame1.getContentPane().add(panel, "Center");
+        JPanel panelpattern = new JPanel();
+        frame1.getContentPane().add(panelpattern, "Center");
 
         // Create an action listener for the menu items we will create
         ActionListener listener = e ->
@@ -308,7 +524,8 @@ public class JBlock extends JFrame
             }
             if (cmd.equals("View help"))
             {
-                Prompts.infoBox("PLACEHOLDER", "PLACEHOLDER", EMsgType.Info);
+                    String url = "https://github.com/aharwood2/JBlock2D/tree/development/JBlock2D%20Guide";
+                    Prompts.infoBox("Locate the guide in your program folder or go the JBlock2D github page for help", "Help", EMsgType.Info);
             }
             if (cmd.equals("Open"))
             {
@@ -361,7 +578,7 @@ public class JBlock extends JFrame
         colors.add(radioItem("Blue", listener, "color(blue)", colorgroup));
 
         // Finally, make our main window appear
-        frame.setSize(530, 350);
+        frame.setSize(960, 350);
         frame.setResizable(false);
         frame.setVisible(true);
     }
@@ -405,5 +622,11 @@ public class JBlock extends JFrame
         item.setActionCommand(command);
         mutExGroup.add(item);
         return item;
+    }
+
+    private void createUIComponents()
+    {
+        PatternImage = new JLabel(new ImageIcon("./Images/Gill_Skirt.jpg"));
+        AnalysisImage = new JLabel(new ImageIcon("./Images/Rec_Plot.jpg"));
     }
 }

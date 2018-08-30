@@ -63,6 +63,10 @@ public class Measurements
         }
     }
 
+    public String getScanDataFileName() {
+        return scanDataFileName;
+    }
+
     // Getter for name of file
     public String getName()
     {
@@ -190,11 +194,18 @@ public class Measurements
                 // Creates a variable corresponding to array length (total number of measurements)
                 int arrayLength = dividedChunks.length;
 
-                // Adds all needed chunks to a new array (i.e. the custom measurements only)
-                // TODO: possibly make this bit automatic not manual?
-                final int expectedNumCustomMeasurements = 35;
-                String[] neededChunks = Arrays.copyOfRange(dividedChunks, arrayLength - expectedNumCustomMeasurements,
-                                                           arrayLength);
+                int expectedNumCustomMeasurements = 0;
+
+                for (int i = 0; i < dividedChunks.length; i++)
+                {
+                    if (dividedChunks[i].length() > 0)
+                    {
+                        if (dividedChunks[i].charAt(0) == '[' && dividedChunks[i].charAt(1) == '0' && dividedChunks[i].charAt(4) == ']') {
+                            expectedNumCustomMeasurements += 1;
+                        }
+                    }
+                }
+
 
                 // Creates a variable corresponding to final array length
                 final int numCustomMeasurements = neededChunks.length;
