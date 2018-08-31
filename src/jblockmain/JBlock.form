@@ -3,7 +3,7 @@
   <grid id="27dc6" binding="panelMain" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
     <margin top="5" left="5" bottom="5" right="5"/>
     <constraints>
-      <xy x="20" y="25" width="946" height="518"/>
+      <xy x="20" y="25" width="959" height="518"/>
     </constraints>
     <properties/>
     <border type="none"/>
@@ -25,7 +25,7 @@
             <properties/>
             <border type="none"/>
             <children>
-              <grid id="ca398" layout-manager="GridLayoutManager" row-count="8" column-count="5" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+              <grid id="ca398" layout-manager="GridLayoutManager" row-count="10" column-count="6" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
                 <margin top="0" left="0" bottom="0" right="0"/>
                 <constraints>
                   <tabbedpane title="Patterns"/>
@@ -43,7 +43,7 @@
                   </component>
                   <component id="d2831" class="javax.swing.JLabel" binding="openPath">
                     <constraints>
-                      <grid row="0" column="1" row-span="1" col-span="2" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                      <grid row="0" column="2" row-span="1" col-span="2" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                     </constraints>
                     <properties>
                       <text value="Name of input file..."/>
@@ -59,7 +59,7 @@
                   </component>
                   <component id="e490d" class="javax.swing.JLabel" binding="savePath">
                     <constraints>
-                      <grid row="1" column="1" row-span="1" col-span="2" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                      <grid row="1" column="2" row-span="1" col-span="2" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                     </constraints>
                     <properties>
                       <text value="Save location..."/>
@@ -67,15 +67,15 @@
                   </component>
                   <component id="43d88" class="javax.swing.JLabel" binding="labAldrich">
                     <constraints>
-                      <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                      <grid row="4" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                     </constraints>
                     <properties>
-                      <text value="Aldrich"/>
+                      <text value="Aldrich:"/>
                     </properties>
                   </component>
                   <component id="9194a" class="javax.swing.JCheckBox" binding="checkAldrichSkirt">
                     <constraints>
-                      <grid row="3" column="1" row-span="1" col-span="2" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                      <grid row="4" column="2" row-span="1" col-span="2" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                     </constraints>
                     <properties>
                       <selected value="false"/>
@@ -84,15 +84,15 @@
                   </component>
                   <component id="6817c" class="javax.swing.JLabel" binding="labBeazleyBond">
                     <constraints>
-                      <grid row="4" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                      <grid row="5" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                     </constraints>
                     <properties>
-                      <text value="Beazley - Bond"/>
+                      <text value="Beazley - Bond:"/>
                     </properties>
                   </component>
                   <component id="b601a" class="javax.swing.JCheckBox" binding="checkBeazleySkirt">
                     <constraints>
-                      <grid row="4" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                      <grid row="5" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                     </constraints>
                     <properties>
                       <text value="Skirt"/>
@@ -100,7 +100,7 @@
                   </component>
                   <component id="d9930" class="javax.swing.JCheckBox" binding="checkBeazleyTrousers">
                     <constraints>
-                      <grid row="5" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                      <grid row="6" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                     </constraints>
                     <properties>
                       <text value="Trousers"/>
@@ -108,24 +108,15 @@
                   </component>
                   <component id="c299f" class="javax.swing.JCheckBox" binding="checkGillSkirt">
                     <constraints>
-                      <grid row="6" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                      <grid row="7" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                     </constraints>
                     <properties>
                       <text value="Skirt"/>
                     </properties>
                   </component>
-                  <component id="3a476" class="javax.swing.JButton" binding="butRunPattern">
-                    <constraints>
-                      <grid row="7" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
-                    </constraints>
-                    <properties>
-                      <text value="Run"/>
-                      <toolTipText value="Click button to run after setting conditions"/>
-                    </properties>
-                  </component>
                   <component id="44e74" class="javax.swing.JLabel">
                     <constraints>
-                      <grid row="0" column="4" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                      <grid row="0" column="5" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                     </constraints>
                     <properties>
                       <text value="Select DXF layers to be visible"/>
@@ -133,7 +124,7 @@
                   </component>
                   <component id="773b3" class="javax.swing.JCheckBox" binding="scaleBoxAndUserCheckBox" default-binding="true">
                     <constraints>
-                      <grid row="1" column="4" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                      <grid row="1" column="5" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                     </constraints>
                     <properties>
                       <enabled value="true"/>
@@ -141,50 +132,17 @@
                       <text value="Scale box and user ID"/>
                     </properties>
                   </component>
-                  <component id="5ceea" class="javax.swing.JCheckBox" binding="patternOutlineCheckBox" default-binding="true">
-                    <constraints>
-                      <grid row="2" column="4" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
-                    </constraints>
-                    <properties>
-                      <selected value="true"/>
-                      <text value="Pattern outline"/>
-                    </properties>
-                  </component>
-                  <component id="d25d8" class="javax.swing.JCheckBox" binding="keypointsAsCirclesCheckBox" default-binding="true">
-                    <constraints>
-                      <grid row="3" column="4" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
-                    </constraints>
-                    <properties>
-                      <text value="Keypoints as circles"/>
-                    </properties>
-                  </component>
-                  <component id="afa5a" class="javax.swing.JCheckBox" binding="keypointCoordinatesCheckBox" default-binding="true">
-                    <constraints>
-                      <grid row="4" column="4" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
-                    </constraints>
-                    <properties>
-                      <text value="Keypoint coordinates"/>
-                    </properties>
-                  </component>
-                  <component id="1d54" class="javax.swing.JCheckBox" binding="constructionLinesCheckBox" default-binding="true">
-                    <constraints>
-                      <grid row="5" column="4" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
-                    </constraints>
-                    <properties>
-                      <text value="Construction lines"/>
-                    </properties>
-                  </component>
                   <component id="ab45d" class="javax.swing.JLabel" binding="labGill">
                     <constraints>
-                      <grid row="6" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                      <grid row="7" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                     </constraints>
                     <properties>
-                      <text value="Gill"/>
+                      <text value="Gill:"/>
                     </properties>
                   </component>
                   <component id="ea87b" class="javax.swing.JLabel" binding="PatternImage" custom-create="true">
                     <constraints>
-                      <grid row="0" column="3" row-span="8" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                      <grid row="0" column="4" row-span="10" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                     </constraints>
                     <properties>
                       <background color="-16777216"/>
@@ -194,7 +152,7 @@
                   </component>
                   <component id="db86c" class="javax.swing.JCheckBox" binding="checkGillTrousers">
                     <constraints>
-                      <grid row="6" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                      <grid row="7" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                     </constraints>
                     <properties>
                       <text value="Trousers"/>
@@ -202,7 +160,7 @@
                   </component>
                   <component id="dc349" class="javax.swing.JCheckBox" binding="checkBeazleyBodice">
                     <constraints>
-                      <grid row="5" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                      <grid row="6" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                     </constraints>
                     <properties>
                       <text value="Bodice"/>
@@ -210,7 +168,7 @@
                   </component>
                   <component id="aeaba" class="javax.swing.JCheckBox" binding="checkBeazleyStraightSleeve">
                     <constraints>
-                      <grid row="4" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false">
+                      <grid row="5" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false">
                         <preferred-size width="91" height="23"/>
                       </grid>
                     </constraints>
@@ -218,9 +176,87 @@
                       <text value="Straight Sleeve"/>
                     </properties>
                   </component>
+                  <component id="5c9a5" class="javax.swing.JLabel">
+                    <constraints>
+                      <grid row="3" column="0" row-span="1" col-span="3" vsize-policy="0" hsize-policy="0" anchor="9" fill="0" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <text value="Select the patterns to be created:"/>
+                    </properties>
+                  </component>
+                  <component id="7b137" class="javax.swing.JLabel" binding="PatternUoMImage" custom-create="true">
+                    <constraints>
+                      <grid row="6" column="5" row-span="4" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <text value=""/>
+                    </properties>
+                  </component>
+                  <component id="14c2a" class="javax.swing.JSeparator">
+                    <constraints>
+                      <grid row="4" column="1" row-span="4" col-span="1" vsize-policy="6" hsize-policy="0" anchor="8" fill="2" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <orientation value="1"/>
+                    </properties>
+                  </component>
+                  <component id="ba967" class="javax.swing.JSeparator">
+                    <constraints>
+                      <grid row="8" column="0" row-span="1" col-span="4" vsize-policy="0" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties/>
+                  </component>
+                  <component id="37141" class="javax.swing.JSeparator">
+                    <constraints>
+                      <grid row="2" column="0" row-span="1" col-span="4" vsize-policy="0" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties/>
+                  </component>
+                  <component id="3a476" class="javax.swing.JButton" binding="butRunPattern">
+                    <constraints>
+                      <grid row="9" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <text value="Run"/>
+                      <toolTipText value="Click button to run after setting conditions"/>
+                    </properties>
+                  </component>
+                  <component id="5ceea" class="javax.swing.JCheckBox" binding="patternOutlineCheckBox" default-binding="true">
+                    <constraints>
+                      <grid row="2" column="5" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <selected value="true"/>
+                      <text value="Pattern outline"/>
+                    </properties>
+                  </component>
+                  <component id="d25d8" class="javax.swing.JCheckBox" binding="keypointsAsCirclesCheckBox" default-binding="true">
+                    <constraints>
+                      <grid row="3" column="5" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <text value="Keypoints as circles"/>
+                    </properties>
+                  </component>
+                  <component id="afa5a" class="javax.swing.JCheckBox" binding="keypointCoordinatesCheckBox" default-binding="true">
+                    <constraints>
+                      <grid row="4" column="5" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <text value="Keypoint coordinates"/>
+                    </properties>
+                  </component>
+                  <component id="1d54" class="javax.swing.JCheckBox" binding="constructionLinesCheckBox" default-binding="true">
+                    <constraints>
+                      <grid row="5" column="5" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <text value="Construction lines"/>
+                    </properties>
+                  </component>
                 </children>
               </grid>
-              <grid id="805e8" layout-manager="GridLayoutManager" row-count="7" column-count="8" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+              <grid id="805e8" layout-manager="GridLayoutManager" row-count="9" column-count="6" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
                 <margin top="0" left="0" bottom="0" right="0"/>
                 <constraints>
                   <tabbedpane title="Analysis"/>
@@ -228,67 +264,49 @@
                 <properties/>
                 <border type="none"/>
                 <children>
-                  <component id="1b532" class="javax.swing.JCheckBox" binding="rectanglePlot2MeasurementCheckBox" default-binding="true">
+                  <component id="6ebe" class="javax.swing.JLabel">
                     <constraints>
-                      <grid row="0" column="2" row-span="2" col-span="2" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                      <grid row="0" column="5" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                     </constraints>
                     <properties>
-                      <text value="Rectangle Plot"/>
-                    </properties>
-                  </component>
-                  <component id="262b0" class="javax.swing.JTextField" binding="textFieldRPx">
-                    <constraints>
-                      <grid row="4" column="2" row-span="2" col-span="2" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
-                        <preferred-size width="150" height="-1"/>
-                      </grid>
-                    </constraints>
-                    <properties/>
-                  </component>
-                  <component id="234a5" class="javax.swing.JCheckBox" binding="layeredCheckBoxRP">
-                    <constraints>
-                      <grid row="0" column="4" row-span="2" col-span="2" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
-                    </constraints>
-                    <properties>
-                      <text value="Layered Rectangle Plot"/>
-                    </properties>
-                  </component>
-                  <component id="76250" class="javax.swing.JLabel">
-                    <constraints>
-                      <grid row="2" column="2" row-span="2" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
-                    </constraints>
-                    <properties>
-                      <text value="Measurement ID (x-axis):"/>
-                    </properties>
-                  </component>
-                  <component id="6f211" class="javax.swing.JTextField" binding="textFieldRPy">
-                    <constraints>
-                      <grid row="4" column="4" row-span="2" col-span="2" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
-                        <preferred-size width="150" height="-1"/>
-                      </grid>
-                    </constraints>
-                    <properties>
-                      <text value=""/>
-                    </properties>
-                  </component>
-                  <component id="ec7d6" class="javax.swing.JLabel">
-                    <constraints>
-                      <grid row="2" column="4" row-span="2" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
-                    </constraints>
-                    <properties>
-                      <text value="Measurement ID (y-axis):"/>
+                      <text value="Select DXF layers to be visible"/>
                     </properties>
                   </component>
                   <component id="5b97" class="javax.swing.JLabel">
                     <constraints>
-                      <grid row="0" column="0" row-span="2" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                      <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                     </constraints>
                     <properties>
                       <text value="Analysis type:"/>
                     </properties>
                   </component>
+                  <component id="76250" class="javax.swing.JLabel">
+                    <constraints>
+                      <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <text value="X-axis ID:"/>
+                    </properties>
+                  </component>
+                  <component id="ec7d6" class="javax.swing.JLabel">
+                    <constraints>
+                      <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <text value="Y-axis ID:"/>
+                    </properties>
+                  </component>
+                  <component id="1b532" class="javax.swing.JCheckBox" binding="rectanglePlot2MeasurementCheckBox" default-binding="true">
+                    <constraints>
+                      <grid row="0" column="2" row-span="1" col-span="2" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <text value="Rectangle Plot"/>
+                    </properties>
+                  </component>
                   <component id="95e60" class="javax.swing.JLabel" binding="xaxisID">
                     <constraints>
-                      <grid row="2" column="3" row-span="2" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                      <grid row="2" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                     </constraints>
                     <properties>
                       <text value="Null"/>
@@ -296,71 +314,23 @@
                   </component>
                   <component id="dfd69" class="javax.swing.JLabel" binding="yaxisID">
                     <constraints>
-                      <grid row="2" column="5" row-span="2" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                      <grid row="3" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                     </constraints>
                     <properties>
                       <text value="Null"/>
                     </properties>
                   </component>
-                  <component id="678ad" class="javax.swing.JSeparator">
+                  <component id="416ee" class="javax.swing.JSeparator">
                     <constraints>
-                      <grid row="0" column="1" row-span="7" col-span="1" vsize-policy="6" hsize-policy="6" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+                      <grid row="0" column="1" row-span="4" col-span="1" vsize-policy="6" hsize-policy="0" anchor="8" fill="2" indent="0" use-parent-layout="false"/>
                     </constraints>
                     <properties>
                       <orientation value="1"/>
                     </properties>
                   </component>
-                  <component id="6ebe" class="javax.swing.JLabel">
+                  <component id="e39fe" class="javax.swing.JLabel" binding="AnalysisImage" custom-create="true">
                     <constraints>
-                      <grid row="0" column="7" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
-                    </constraints>
-                    <properties>
-                      <text value="Select DXF layers to be visible"/>
-                    </properties>
-                  </component>
-                  <component id="93cf9" class="javax.swing.JCheckBox" binding="scaleBoxAndUserCheckBoxAnalysis">
-                    <constraints>
-                      <grid row="1" column="7" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
-                    </constraints>
-                    <properties>
-                      <text value="Scale box and user ID"/>
-                    </properties>
-                  </component>
-                  <component id="485c4" class="javax.swing.JCheckBox" binding="connectingLinesCheckBox" default-binding="true">
-                    <constraints>
-                      <grid row="2" column="7" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
-                    </constraints>
-                    <properties>
-                      <text value="Connecting lines"/>
-                    </properties>
-                  </component>
-                  <component id="847f" class="javax.swing.JCheckBox" binding="keypointsAsCirclesCheckBoxAnalysis">
-                    <constraints>
-                      <grid row="3" column="7" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
-                    </constraints>
-                    <properties>
-                      <text value="Keypoints as circles"/>
-                    </properties>
-                  </component>
-                  <component id="f8e66" class="javax.swing.JCheckBox" binding="keypointCoordinatesCheckBoxAnalysis">
-                    <constraints>
-                      <grid row="4" column="7" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
-                    </constraints>
-                    <properties>
-                      <text value="Keypoint coordinates"/>
-                    </properties>
-                  </component>
-                  <component id="3da82" class="javax.swing.JCheckBox" binding="constructionLinesIfUsedCheckBox" default-binding="true">
-                    <constraints>
-                      <grid row="5" column="7" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
-                    </constraints>
-                    <properties>
-                      <text value="Construction lines (if used)"/>
-                    </properties>
-                  </component>
-                  <component id="33385" class="javax.swing.JLabel">
-                    <constraints>
-                      <grid row="4" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                      <grid row="0" column="4" row-span="9" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                     </constraints>
                     <properties>
                       <text value=""/>
@@ -368,28 +338,130 @@
                   </component>
                   <component id="dc1b4" class="javax.swing.JLabel">
                     <constraints>
-                      <grid row="6" column="2" row-span="1" col-span="4" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                      <grid row="4" column="0" row-span="1" col-span="4" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                     </constraints>
                     <properties>
-                      <text value="Enter measurement ID and press the 'Enter' key to set"/>
+                      <text value="Enter measurement ID's and press the 'Enter' key to set"/>
                     </properties>
                   </component>
-                  <component id="9dc2d" class="javax.swing.JLabel" binding="AnalysisImage" custom-create="true">
+                  <component id="89584" class="javax.swing.JSeparator">
                     <constraints>
-                      <grid row="3" column="6" row-span="4" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                      <grid row="5" column="0" row-span="1" col-span="4" vsize-policy="0" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties/>
+                  </component>
+                  <component id="5ecdd" class="javax.swing.JButton" binding="butLoadAnalysis">
+                    <constraints>
+                      <grid row="6" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
                     </constraints>
                     <properties>
-                      <background color="-16777216"/>
-                      <enabled value="true"/>
+                      <text value="Open"/>
+                    </properties>
+                  </component>
+                  <component id="b9eb3" class="javax.swing.JLabel" binding="openPathAnalysis">
+                    <constraints>
+                      <grid row="6" column="1" row-span="1" col-span="3" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <text value="Name of input file..."/>
+                    </properties>
+                  </component>
+                  <component id="9b41d" class="javax.swing.JButton" binding="butSaveAnalysis">
+                    <constraints>
+                      <grid row="7" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <text value="Save"/>
+                    </properties>
+                  </component>
+                  <component id="2395f" class="javax.swing.JLabel" binding="savePathAnalysis">
+                    <constraints>
+                      <grid row="7" column="1" row-span="1" col-span="3" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <text value="Save location..."/>
+                    </properties>
+                  </component>
+                  <component id="234a5" class="javax.swing.JCheckBox" binding="layeredCheckBoxRP">
+                    <constraints>
+                      <grid row="1" column="2" row-span="1" col-span="2" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <text value="Layered Rectangle Plot"/>
+                    </properties>
+                  </component>
+                  <component id="93cf9" class="javax.swing.JCheckBox" binding="scaleBoxAndUserCheckBoxAnalysis">
+                    <constraints>
+                      <grid row="1" column="5" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <text value="Scale box and user ID"/>
+                    </properties>
+                  </component>
+                  <component id="485c4" class="javax.swing.JCheckBox" binding="connectingLinesCheckBox" default-binding="true">
+                    <constraints>
+                      <grid row="2" column="5" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <text value="Connecting lines"/>
+                    </properties>
+                  </component>
+                  <component id="847f" class="javax.swing.JCheckBox" binding="keypointsAsCirclesCheckBoxAnalysis">
+                    <constraints>
+                      <grid row="3" column="5" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <text value="Keypoints as circles"/>
+                    </properties>
+                  </component>
+                  <component id="f8e66" class="javax.swing.JCheckBox" binding="keypointCoordinatesCheckBoxAnalysis">
+                    <constraints>
+                      <grid row="4" column="5" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <text value="Keypoint coordinates"/>
+                    </properties>
+                  </component>
+                  <component id="3da82" class="javax.swing.JCheckBox" binding="constructionLinesIfUsedCheckBox" default-binding="true">
+                    <constraints>
+                      <grid row="5" column="5" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <text value="Construction lines (if used)"/>
+                    </properties>
+                  </component>
+                  <component id="6f211" class="javax.swing.JTextField" binding="textFieldRPy">
+                    <constraints>
+                      <grid row="3" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false">
+                        <preferred-size width="40" height="-1"/>
+                      </grid>
+                    </constraints>
+                    <properties>
                       <text value=""/>
                     </properties>
                   </component>
+                  <component id="262b0" class="javax.swing.JTextField" binding="textFieldRPx">
+                    <constraints>
+                      <grid row="2" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false">
+                        <preferred-size width="40" height="-1"/>
+                      </grid>
+                    </constraints>
+                    <properties/>
+                  </component>
                   <component id="c2ecc" class="javax.swing.JButton" binding="butRunAnalysis">
                     <constraints>
-                      <grid row="0" column="6" row-span="3" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                      <grid row="8" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
                     </constraints>
                     <properties>
                       <text value="Run"/>
+                    </properties>
+                  </component>
+                  <component id="c3309" class="javax.swing.JLabel" binding="AnalysisUoMImage" custom-create="true">
+                    <constraints>
+                      <grid row="6" column="5" row-span="3" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <text value=""/>
                     </properties>
                   </component>
                 </children>
