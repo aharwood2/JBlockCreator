@@ -57,6 +57,10 @@ public class TrouserPattern
     private double Arb_BackDartWidth;
     private double Arb_BackDartLength;
 
+    // Arb measurements for the back dart
+    private double Arb_FrontDartWidth;
+    private double Arb_FrontDartLength;
+
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     /* Methods */
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -523,10 +527,10 @@ public class TrouserPattern
         fullBlock.addKeypoint(new Vector2D(Arb_TwoInches, ((stepTwentyThreeY / 2.0) - (((b_ThighCircR + 5.5) - 2) / 4.0))));
 
         // Adding Step 26
-        fullBlock.addKeypoint(new Vector2D((n_CrotchHeight - m_KneeCRHeight), ((stepTwentyThreeY / 2.0) - (((c_KneeCircR + 5.5) - 2.0) / 4.0))));
+        fullBlock.addKeypoint(new Vector2D((n_CrotchHeight - m_KneeCRHeight), ((stepTwentyThreeY / 2.0) - (((c_KneeCircR + 5.5) - 2.0) / 2.0))));
 
         // Adding Step 27
-        fullBlock.addKeypoint(new Vector2D((n_CrotchHeight - l_AnkleCRHeight), ((stepTwentyThreeY / 2.0) - (((d_AnkleCircleR + 5.5) - 2.0) / 4.0))));
+        fullBlock.addKeypoint(new Vector2D((n_CrotchHeight - l_AnkleCRHeight), ((stepTwentyThreeY / 2.0) - (((d_AnkleCircleR + 5.5) - 2.0) / 2.0))));
 
         // Adding Step 28
         fullBlock.addKeypoint(new Vector2D((n_CrotchHeight - l_AnkleCRHeight), ((stepTwentyThreeY / 2.0) + (((d_AnkleCircleR + 5.5) - 2.0) / 4.0))));
@@ -535,9 +539,85 @@ public class TrouserPattern
         fullBlock.addKeypoint(new Vector2D((n_CrotchHeight - m_KneeCRHeight), ((stepTwentyThreeY / 2.0) + (((c_KneeCircR + 5.5) - 2.0) / 4.0))));
 
         // Adding Step 30
-        fullBlock.addKeypoint(new Vector2D(Arb_TwoInches, (-(stepTwentyThreeY / 2.0) - (((b_ThighCircR + 5.5) - 2) / 4.0))));
+        fullBlock.addKeypoint(new Vector2D(Arb_TwoInches, ((stepTwentyThreeY / 2.0) + (((b_ThighCircR + 5.5) - 2) / 4.0))));
 
         // Adding Step 31
         fullBlock.addKeypoint(new Vector2D(0.0, 0.0));
+
+        // Add front dart
+        Vector2D startSegment2 = new Vector2D(-k_BodyRise, stepTwentyY);
+        Vector2D endSegment2 = new Vector2D(-k_BodyRise, stepTwentyOneY);
+        double positionTopDart2 = 1.0 / 3.0;
+        Arb_FrontDartWidth = (0.18 * (((h_FrHipArc + i_BkHipArc) / 2.0) - ((e_FrWaistArc + f_BkWaistArc) / 2.0)));
+        Arb_FrontDartLength = j_WaistToSeat - 1.5;
+        ArrayList<Vector2D> dartPoints2 = fullBlock.addDart(startSegment2,
+                endSegment2,
+                positionTopDart2,
+                Arb_BackDartWidth,
+                Arb_BackDartLength,
+                true, false);
+
+        // Adding curve from 17 --> 18
+        fullBlock.addCircularCurve(new Vector2D(0.0, 0.0),
+                new Vector2D((-(k_BodyRise - a_WaistToHip)), stepEighteenY),
+                0.5,
+                false
+        );
+
+        // Adding curve from 18 --> 19
+        fullBlock.addCircularCurve(new Vector2D((-(k_BodyRise - a_WaistToHip)), stepEighteenY),
+                new Vector2D((-(k_BodyRise - j_WaistToSeat)), stepNineteenY),
+                0.5,
+                false
+        );
+
+        // Adding curve from 21 --> 22
+        fullBlock.addCircularCurve(new Vector2D(-k_BodyRise, stepTwentyOneY),
+                new Vector2D((-(k_BodyRise - j_WaistToSeat)), stepTwentyTwoY),
+                0.5,
+                true
+        );
+
+        // Adding curve from 22 --> 23
+        fullBlock.addCircularCurve(new Vector2D((-(k_BodyRise - j_WaistToSeat)), stepTwentyTwoY),
+                new Vector2D((-(k_BodyRise - a_WaistToHip)), stepTwentyThreeY),
+                0.5,
+                true
+        );
+
+        // Adding curve from 23 --> 24
+        fullBlock.addCircularCurve(new Vector2D((-(k_BodyRise - a_WaistToHip)), stepTwentyThreeY),
+                new Vector2D(0.0, stepTwentyThreeY),
+                0.5,
+                true
+        );
+
+        // Adding curve from 24 --> 25
+        fullBlock.addCircularCurve(new Vector2D(0.0, stepTwentyThreeY),
+                new Vector2D(Arb_TwoInches, ((stepTwentyThreeY / 2.0) - (((b_ThighCircR + 5.5) - 2) / 4.0))),
+                0.5,
+                true
+        );
+
+        // Adding curve from 25 --> 26
+        fullBlock.addCircularCurve(new Vector2D(Arb_TwoInches, ((stepTwentyThreeY / 2.0) - (((b_ThighCircR + 5.5) - 2) / 4.0))),
+                new Vector2D((n_CrotchHeight - m_KneeCRHeight), ((stepTwentyThreeY / 2.0) - (((c_KneeCircR + 5.5) - 2.0) / 2.0))),
+                0.5,
+                true
+        );
+
+        // Adding curve from 29 --> 30
+        fullBlock.addCircularCurve(new Vector2D((n_CrotchHeight - m_KneeCRHeight), ((stepTwentyThreeY / 2.0) + (((c_KneeCircR + 5.5) - 2.0) / 4.0))),
+                new Vector2D(Arb_TwoInches, ((stepTwentyThreeY / 2.0) + (((b_ThighCircR + 5.5) - 2) / 4.0))),
+                0.5,
+                false
+        );
+
+        // Adding curve from 30 --> 31
+        fullBlock.addCircularCurve(new Vector2D(Arb_TwoInches, ((stepTwentyThreeY / 2.0) + (((b_ThighCircR + 5.5) - 2) / 4.0))),
+                new Vector2D(0.0, 0.0),
+                0.5,
+                false
+        );
     }
 }
