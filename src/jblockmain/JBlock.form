@@ -75,7 +75,7 @@
                   </component>
                   <component id="9194a" class="javax.swing.JCheckBox" binding="checkAldrichSkirt">
                     <constraints>
-                      <grid row="3" column="1" row-span="1" col-span="2" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                      <grid row="3" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                     </constraints>
                     <properties>
                       <selected value="false"/>
@@ -112,15 +112,6 @@
                     </constraints>
                     <properties>
                       <text value="Skirt"/>
-                    </properties>
-                  </component>
-                  <component id="3a476" class="javax.swing.JButton" binding="butRunPattern">
-                    <constraints>
-                      <grid row="7" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
-                    </constraints>
-                    <properties>
-                      <text value="Run"/>
-                      <toolTipText value="Click button to run after setting conditions"/>
                     </properties>
                   </component>
                   <component id="44e74" class="javax.swing.JLabel">
@@ -192,20 +183,12 @@
                       <text value=""/>
                     </properties>
                   </component>
-                  <component id="db86c" class="javax.swing.JCheckBox" binding="checkGillTrousers">
+                  <component id="4b08e" class="javax.swing.JCheckBox" binding="checkAldrichTrousers">
                     <constraints>
-                      <grid row="6" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                      <grid row="3" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                     </constraints>
                     <properties>
                       <text value="Trousers"/>
-                    </properties>
-                  </component>
-                  <component id="dc349" class="javax.swing.JCheckBox" binding="checkBeazleyBodice">
-                    <constraints>
-                      <grid row="5" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
-                    </constraints>
-                    <properties>
-                      <text value="Bodice"/>
                     </properties>
                   </component>
                   <component id="aeaba" class="javax.swing.JCheckBox" binding="checkBeazleyStraightSleeve">
@@ -216,6 +199,31 @@
                     </constraints>
                     <properties>
                       <text value="Straight Sleeve"/>
+                    </properties>
+                  </component>
+                  <component id="dc349" class="javax.swing.JCheckBox" binding="checkBeazleyBodice">
+                    <constraints>
+                      <grid row="5" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <text value="Bodice"/>
+                    </properties>
+                  </component>
+                  <component id="db86c" class="javax.swing.JCheckBox" binding="checkGillTrousers">
+                    <constraints>
+                      <grid row="6" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <text value="Trousers"/>
+                    </properties>
+                  </component>
+                  <component id="3a476" class="javax.swing.JButton" binding="butRunPattern">
+                    <constraints>
+                      <grid row="7" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <text value="Run"/>
+                      <toolTipText value="Click button to run after setting conditions"/>
                     </properties>
                   </component>
                 </children>
