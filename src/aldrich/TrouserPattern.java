@@ -73,10 +73,10 @@ public class TrouserPattern
         try
         {
             // Based on measurements for this pattern we can read the following from the scan
-            b_Hips = dataStore.getId(31).value + dataStore.getId(32).value;
-            c_WaistToHip = dataStore.getId(15).value;
-            d_BodyRise = dataStore.getId(38).value;
-            g_HipCHeight = dataStore.getId(44).value;
+            b_Hips = dataStore.getMeasurement("A31").value + dataStore.getMeasurement("A32").value;
+            c_WaistToHip = dataStore.getMeasurement("A15").value;
+            d_BodyRise = dataStore.getMeasurement("A38").value;
+            g_HipCHeight = dataStore.getMeasurement("A44").value;
 
 
             // Get name
@@ -86,7 +86,7 @@ public class TrouserPattern
         }
         catch(MeasurementNotFoundException e)
         {
-            Pattern.addMissingMeasurement(dataStore.getName(), method.toString(), garment.toString());
+            addMissingMeasurement(dataStore.getName(), e.getMeasurementId());
             return false;
         }
     }

@@ -21,21 +21,41 @@ public abstract class Pattern implements IPlottable
      */
     protected double Arb_Con = 2.0;
 
-    // User associated with the pattern
+    /**
+     * User associated with the pattern
+     */
     protected String userName;
 
-    // Method associated with pattern
+    /**
+     * Method associated with pattern
+     */
     protected final EMethod method;
+
+    /**
+     * Type of garment pattern represents
+     */
     protected final EGarment garment;
 
-    // Abstract method to assign final method type
+    /**
+     * Abstract method to assign final method type.
+     * @return method type to assign to the method field.
+     */
     protected abstract EMethod assignMethod();
+
+    /**
+     * Abstract method to assign final garment type.
+     * @return method type to assign to the garment field.
+     */
     protected abstract EGarment assignGarment();
 
-    // Arraylist for missing measurements
+    /**
+     * Common store of missing measurements.
+     */
     protected static ArrayList<String> missingMeasurements = new ArrayList<String>();
 
-    // Constructor to initialise variables
+    /**
+     * Constructor
+     */
     public Pattern()
     {
         blocks = new ArrayList<Block>();
@@ -43,12 +63,20 @@ public abstract class Pattern implements IPlottable
         garment = assignGarment();
     }
 
-    // Method for storing data of patterns that could not be created
-    protected static void addMissingMeasurement(String userid, String method, String pattern)
+    /**
+     * Method to add information about a failed pattern creation due to missing measurements.
+     * @param userid    name of the user concerned.
+     * @param id        ID of the measurement which caused the failure.
+     */
+    protected void addMissingMeasurement(String userid, String id)
     {
-        missingMeasurements.add(userid + "/" + method + "/" + pattern);
+        missingMeasurements.add(userid + "/" + method + "/" + garment + " : Measurement ID = " + id);
     }
 
+    /**
+     * Method to print the missing measurements record to a file.
+     * @param fileoutput    path to file.
+     */
     protected static void printMissingMeasurements(File fileoutput)
     {
         if (missingMeasurements.size() > 0)
@@ -72,24 +100,38 @@ public abstract class Pattern implements IPlottable
         }
     }
 
-    // Blocks that comprise the pattern
+    /**
+     * Blocks that comprise the pattern
+     */
     protected ArrayList<Block> blocks;
 
-    // Obtain measurements from the body scan required by the pattern
+    /**
+     * Obtain measurements from the measurements hashmap as required by the pattern.
+     * @param dataStore the object holding all acquired measurement data.
+     * @return  inidication as to whether reading was successful.
+     */
     protected abstract boolean readMeasurements(Measurements dataStore);
 
-    // Modify any measurements read from the scan by adding ease
+    /**
+     * Modify any measurements by adding easement.
+     */
     protected abstract void addEasement();
 
-    // Start the creation of the blocks for the pattern
+    /**
+     * Create the blocks for this pattern.
+     */
     protected abstract void createBlocks();
 
-    /* Interface implementation */
+    /**
+     * Method to check that a block number index is within the range of blocks stored in the pattern.
+     * @param blockNumber   number to check.
+     */
     private void rangeCheck(int blockNumber)
     {
         if (blockNumber > blocks.size()) throw new IndexOutOfBoundsException("Accessing out of range of number of blocks!");
     }
 
+    /* Interface implementation */
     @Override
     public ArrayList<Double> getXPoints(int blockNumber) throws IndexOutOfBoundsException
     {

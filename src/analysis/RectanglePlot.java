@@ -22,8 +22,8 @@ public class RectanglePlot implements IPlottable
     private final EAnalysis analysis = EAnalysis.RECTANGLEPLOT;
 
     // Variables for x,y axis measurement ID
-    private final int xAxisID;
-    private final int yAxisID;
+    private final String xAxisID;
+    private final String yAxisID;
     private final String measurementFileName;
     private final boolean isLayered;
     private final boolean isRect;
@@ -31,7 +31,8 @@ public class RectanglePlot implements IPlottable
     private final Measurements measurements;
 
     // Constructor
-    public RectanglePlot(Measurements _measurements, int measurementIdX, int measurementIdY, boolean isLayeredPlot, boolean isRectangle)
+    public RectanglePlot(Measurements _measurements, String measurementIdX, String measurementIdY,
+                         boolean isLayeredPlot, boolean isRectangle)
     {
         measurements = _measurements;
         rectangles = new ArrayList<>();
@@ -52,8 +53,8 @@ public class RectanglePlot implements IPlottable
                 new Rectangle(
                         0.0,
                         0.0,
-                        measurements.getId(xAxisID).value,
-                        measurements.getId(yAxisID).value
+                        measurements.getMeasurement(xAxisID).value,
+                        measurements.getMeasurement(yAxisID).value
                 )
         );
 

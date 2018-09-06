@@ -1,8 +1,6 @@
 package jblockmain;
 
 import javax.swing.*;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
@@ -23,7 +21,9 @@ import jblockenums.EMsgType;
 public class JBlock extends JFrame
 {
 
-    // Declaration of backend components //
+    /**
+     * Declaration of backend components.
+     */
 
     // Panels
     private JPanel panelMain;
@@ -117,7 +117,7 @@ public class JBlock extends JFrame
     public static void main(String[] args)
     {
         // Create a JFrame instance
-        JFrame frame = new JFrame(bundle.getString("app_name") + " -- v"
+        JFrame frame = new JFrame(bundle.getString("app_name") + " - v"
                                           + bundle.getString("maj_ver") + "."
                                           + bundle.getString("min_ver"));
         final JBlock block = new JBlock();
@@ -233,14 +233,14 @@ public class JBlock extends JFrame
                     RectanglePlot plot = null;
                     if (checkRectanglePlot.isSelected() || checkLayeredRectPlot.isSelected())
                         plot = new RectanglePlot(measurements,
-                                                 Integer.parseInt(labXID.getText()),
-                                                 Integer.parseInt(labYID.getText()),
+                                                 labXID.getText(),
+                                                 labYID.getText(),
                                                  isLayeredRectPlot, isRectanglePlot);
 
                     // Create patterns
                     for (int i = 0; i < measurements.getNames().size(); i++)
                     {
-                        measurements.setMapNumber(i);
+                        measurements.setCurrentUser(i);
 
                         // Creates patterns depending on which checkboxes are ticked
                         if (checkBeazleySkirt.isSelected())
@@ -309,7 +309,7 @@ public class JBlock extends JFrame
                     {
                         // Create done prompt
                         Prompts.infoBox(
-                                "failed_output_msg",
+                                bundle.getString("failed_output_msg"),
                                 "Done", EMsgType.Warning);
                     }
                     else
@@ -330,38 +330,43 @@ public class JBlock extends JFrame
         }
     }
 
-    // TODO: Needs updating for new measurement ID system
-    // Methods for when the user enters text into the rectangle plot analysis text fields
+    /**
+     * Event method for updating dynamic text on UI when X ID changed
+     */
     private void onXIdEntered()
     {
-        String xID = textFieldPlotXID.getText();
-        if(checkIdFormat(xID)) labXID.setText(xID);
+        onIdEntered(textFieldPlotXID, labXID);
     }
 
+    /**
+     * Event method for updating dynamic text on UI when Y ID changed
+     */
     private void onYIdEntered()
     {
-        String yID = textFieldPlotYID.getText();
-        if(checkIdFormat(yID)) labYID.setText(yID);
+        onIdEntered(textFieldPlotYID, labYID);
     }
 
-    private boolean checkIdFormat(String text)
+    /**
+     * Event method for updating dynamic text on UI when X or Y ID changed
+     */
+    private void onIdEntered(JTextField textBox, JLabel outLabel)
     {
+        String id = textBox.getText();
         try
         {
-            // If blank then do nothing
-            if (text.length() == 0) return false;
-
-            // TODO: Do something here to check the format
-
-            return true;
-
+            if (id.length() == 0)
+            {
+                outLabel.setText("None");
+                return;
+            }
+            if(Measurements.checkIdFormat(id)) outLabel.setText(id);
+            else throw new Exception();
         }
         catch (Exception e)
         {
-            Prompts.infoBox("Input must follow the tag format [Capital Letter][3-digit Number]", "Invalid ID", EMsgType.Error);
+            textBox.setText("");
+            Prompts.infoBox(bundle.getString("format_msg"), "Invalid ID", EMsgType.Error);
         }
-
-        return false;
     }
 
     /**
@@ -665,8 +670,8 @@ public class JBlock extends JFrame
      */
     private void createUIComponents()
     {
-        imagePatternSample = new JLabel(new ImageIcon("./images/Gill_Skirt.jpg"));
-        imageAnalysisSample = new JLabel(new ImageIcon("./images/Rec_Plot.jpg"));
-        imageUomLogo = new JLabel(new ImageIcon("./images/UoM GUI.jpg"));
+        imagePatternSample = new JLabel(new ImageIcon("./images/sample_pattern.jpg"));
+        imageAnalysisSample = new JLabel(new ImageIcon("./images/sample_analysis.jpg"));
+        imageUomLogo = new JLabel(new ImageIcon("./images/logo_small.jpg"));
     }
 }

@@ -69,10 +69,10 @@ public class StraightSleevePattern
     {
         try {
             // Based on measurements for this pattern we can read the following from the scan:
-            a_UpperArmGirth = dataStore.getId(24).value;
-            b_FullLength = dataStore.getId(23).value;
-            c_DepthOfSleeveHead = dataStore.getId(35).value;
-            d_SleeveHeadToElbow = dataStore.getId(25).value;
+            a_UpperArmGirth = dataStore.getMeasurement("A24").value;
+            b_FullLength = dataStore.getMeasurement("A23").value;
+            c_DepthOfSleeveHead = dataStore.getMeasurement("A35").value;
+            d_SleeveHeadToElbow = dataStore.getMeasurement("A25").value;
 
             // Get name
             userName = dataStore.getName();
@@ -81,7 +81,7 @@ public class StraightSleevePattern
         }
         catch(MeasurementNotFoundException e)
         {
-            Pattern.addMissingMeasurement(dataStore.getName(), method.toString(), garment.toString());
+            addMissingMeasurement(dataStore.getName(), e.getMeasurementId());
             return false;
         }
     }

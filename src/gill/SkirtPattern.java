@@ -88,18 +88,18 @@ public class SkirtPattern
     {
         try {
             // Based on measurements for this pattern we can read the following from the scan:
-            a_FrWaistArc = dataStore.getId(26).value;
-            b_BkWaistArc = dataStore.getId(27).value;
-            c_FrAbdomenArc = dataStore.getId(28).value;
-            d_BkAbdomenArc = dataStore.getId(29).value;
-            e_BkSeatArc = dataStore.getId(30).value;
-            f_FrHipArc = dataStore.getId(31).value;
-            g_BkHipArc = dataStore.getId(32).value;
-            h_WaistToAbdomen = dataStore.getId(33).value;
-            i_WaistToSeat = dataStore.getId(34).value;
-            j_WaistToHip = dataStore.getId(15).value;
-            k_WaistToKnee = dataStore.getId(14).value;
-            l_SideseamUplift = dataStore.getId(37).value;
+            a_FrWaistArc = dataStore.getMeasurement("A26").value;
+            b_BkWaistArc = dataStore.getMeasurement("A27").value;
+            c_FrAbdomenArc = dataStore.getMeasurement("A28").value;
+            d_BkAbdomenArc = dataStore.getMeasurement("A29").value;
+            e_BkSeatArc = dataStore.getMeasurement("A30").value;
+            f_FrHipArc = dataStore.getMeasurement("A31").value;
+            g_BkHipArc = dataStore.getMeasurement("A32").value;
+            h_WaistToAbdomen = dataStore.getMeasurement("A33").value;
+            i_WaistToSeat = dataStore.getMeasurement("A34").value;
+            j_WaistToHip = dataStore.getMeasurement("A15").value;
+            k_WaistToKnee = dataStore.getMeasurement("A14").value;
+            l_SideseamUplift = dataStore.getMeasurement("A37").value;
 
             // Get name
             userName = dataStore.getName();
@@ -108,7 +108,7 @@ public class SkirtPattern
         }
         catch(MeasurementNotFoundException e)
         {
-            Pattern.addMissingMeasurement(dataStore.getName(), method.toString(), garment.toString());
+            addMissingMeasurement(dataStore.getName(), e.getMeasurementId());
             return false;
         }
     }

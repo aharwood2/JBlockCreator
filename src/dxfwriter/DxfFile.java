@@ -14,31 +14,49 @@ import java.util.Date;
  */
 public class DxfFile
 {
-    // Flag indicating whether file is ready
+    /**
+     * Flag indicating whether file is ready
+     */
     private boolean bIsOpen;
 
-    // Handle to file and printer
+    /**
+     * File writer
+     */
     private FileWriter file;
+
+    /**
+     * Printer
+     */
     private PrintWriter printer;
 
-    // Creation time
+    /**
+     * Creation time
+     */
     private String cDate;
 
-    // Extremes of the drawing
+    /**
+     * Extremes of the drawing
+     */
     private double minX;
     private double maxX;
     private double minY;
     private double maxY;
 
-    // Line coordinates
+    /**
+     * Keypoint line coordinates
+     */
     private ArrayList<Double> linesX = new ArrayList<>();
     private ArrayList<Double> linesY = new ArrayList<>();
 
-    // Line coordinates
+    /**
+     * Construction line coordinates
+     */
     private ArrayList<Double> ConX = new ArrayList<>();
     private ArrayList<Double> ConY = new ArrayList<>();
 
-    // Construction point names list
+    /**
+     * Construction point names list
+     */
     private ArrayList<String> names;
 
 

@@ -104,32 +104,32 @@ public class TrouserPattern
         try
         {
             // Based on measurements for this pattern we can read the following from the scan
-            a_WaistToHip = dataStore.getId(15).value;            // Measurement [015]
-            b_ThighCircR = dataStore.getId(17).value;            // Measurement [017]
-            c_KneeCircR = dataStore.getId(18).value;             // Measurement [018]
-            d_AnkleCircleR = dataStore.getId(19).value;          // Measurement [019]
-            e_FrWaistArc = dataStore.getId(26).value;            // Measurement [026]
-            f_BkWaistArc = dataStore.getId(27).value;            // Measurement [027]
-            g_BkSeatArc = dataStore.getId(30).value;             // Measurement [030]
-            h_FrHipArc = dataStore.getId(31).value;              // Measurement [031]
-            i_BkHipArc = dataStore.getId(32).value;              // Measurement [032]
-            j_WaistToSeat = dataStore.getId(34).value;           // Measurement [034]
-            k_BodyRise = dataStore.getId(38).value;              // Measurement [038]
-            l_AnkleCRHeight = dataStore.getId(41).value;         // Measurement [041]
-            m_KneeCRHeight = dataStore.getId(42).value;          // Measurement [042]
-            n_CrotchHeight = dataStore.getId(43).value;          // Measurement [043]
-            o_HipCHeight = dataStore.getId(44).value;            // Measurement [044]
-            p_SeatCHeight = dataStore.getId(45).value;           // Measurement [045]
-            q_FrSeatArc = dataStore.getId(46).value;             // Measurement [046]
-            r_CrotchZ = dataStore.getId(47).value;               // Measurement [047]
-            s_HipFrZ = dataStore.getId(48).value;                // Measurement [048]
-            t_HipBkZ = dataStore.getId(49).value;                // Measurement [049]
-            u_SeatFrZ = dataStore.getId(50).value;               // Measurement [050]
-            v_SeatBkZ = dataStore.getId(51).value;               // Measurement [051]
-            w_WaistFrZ = dataStore.getId(52).value;              // Measurement [052]
-            x_WaistBkZ = dataStore.getId(53).value;              // Measurement [053]
-            y_FrCrotchLength = dataStore.getId(54).value;        // Measurement [054]
-            z_BkCrotchLength = dataStore.getId(55).value;        // Measurement [055]
+            a_WaistToHip = dataStore.getMeasurement("A15").value;            // Measurement [015]
+            b_ThighCircR = dataStore.getMeasurement("A17").value;            // Measurement [017]
+            c_KneeCircR = dataStore.getMeasurement("A18").value;             // Measurement [018]
+            d_AnkleCircleR = dataStore.getMeasurement("A19").value;          // Measurement [019]
+            e_FrWaistArc = dataStore.getMeasurement("A26").value;            // Measurement [026]
+            f_BkWaistArc = dataStore.getMeasurement("A27").value;            // Measurement [027]
+            g_BkSeatArc = dataStore.getMeasurement("A30").value;             // Measurement [030]
+            h_FrHipArc = dataStore.getMeasurement("A31").value;              // Measurement [031]
+            i_BkHipArc = dataStore.getMeasurement("A32").value;              // Measurement [032]
+            j_WaistToSeat = dataStore.getMeasurement("A34").value;           // Measurement [034]
+            k_BodyRise = dataStore.getMeasurement("A38").value;              // Measurement [038]
+            l_AnkleCRHeight = dataStore.getMeasurement("A41").value;         // Measurement [041]
+            m_KneeCRHeight = dataStore.getMeasurement("A42").value;          // Measurement [042]
+            n_CrotchHeight = dataStore.getMeasurement("A43").value;          // Measurement [043]
+            o_HipCHeight = dataStore.getMeasurement("A44").value;            // Measurement [044]
+            p_SeatCHeight = dataStore.getMeasurement("A45").value;           // Measurement [045]
+            q_FrSeatArc = dataStore.getMeasurement("A46").value;             // Measurement [046]
+            r_CrotchZ = dataStore.getMeasurement("A47").value;               // Measurement [047]
+            s_HipFrZ = dataStore.getMeasurement("A48").value;                // Measurement [048]
+            t_HipBkZ = dataStore.getMeasurement("A49").value;                // Measurement [049]
+            u_SeatFrZ = dataStore.getMeasurement("A50").value;               // Measurement [050]
+            v_SeatBkZ = dataStore.getMeasurement("A51").value;               // Measurement [051]
+            w_WaistFrZ = dataStore.getMeasurement("A52").value;              // Measurement [052]
+            x_WaistBkZ = dataStore.getMeasurement("A53").value;              // Measurement [053]
+            y_FrCrotchLength = dataStore.getMeasurement("A54").value;        // Measurement [054]
+            z_BkCrotchLength = dataStore.getMeasurement("A55").value;        // Measurement [055]
 
             // Get name
             userName = dataStore.getName();
@@ -138,7 +138,7 @@ public class TrouserPattern
         }
         catch(MeasurementNotFoundException e)
         {
-            Pattern.addMissingMeasurement(dataStore.getName(), method.toString(), garment.toString());
+            addMissingMeasurement(dataStore.getName(), e.getMeasurementId());
             return false;
         }
     }

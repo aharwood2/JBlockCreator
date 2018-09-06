@@ -385,7 +385,7 @@ public class Block
     public ArrayList<Vector2D> addDart(Vector2D lineStart, Vector2D lineEnd, double position,
                                        double width, Vector2D apex, boolean straightSide)
     {
-        // TODO: Really need to generalise this and the version above as they share al lot of the same code
+        // TODO: Really need to generalise this and the version above as they share a lot of the same code
 
         // Find the equation of the line
         Vector2D direction = new Vector2D(lineEnd.subtract(lineStart));

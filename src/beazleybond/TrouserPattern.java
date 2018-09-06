@@ -137,17 +137,17 @@ public class TrouserPattern
     {
         try {
             // Get measurements from the scan data store
-            a_Waist = dataStore.getId(2).value;
-            b_UpperHip = dataStore.getId(13).value;
-            c_Hip = dataStore.getId(3).value;
-            d_Thigh = dataStore.getId(17).value;
-            e_KneeStraight = dataStore.getId(18).value;
-            f_Ankle = dataStore.getId(19).value;
-            h_Hip = dataStore.getId(15).value;
-            i_Crutch = dataStore.getId(20).value;
-            j_Knee = dataStore.getId(14).value;
-            k_OutsideLegToAnkle = dataStore.getId(21).value;
-            l_InsideLegToAnkle = dataStore.getId(22).value;
+            a_Waist = dataStore.getMeasurement("A02").value;
+            b_UpperHip = dataStore.getMeasurement("A13").value;
+            c_Hip = dataStore.getMeasurement("A03").value;
+            d_Thigh = dataStore.getMeasurement("A17").value;
+            e_KneeStraight = dataStore.getMeasurement("A18").value;
+            f_Ankle = dataStore.getMeasurement("A19").value;
+            h_Hip = dataStore.getMeasurement("A15").value;
+            i_Crutch = dataStore.getMeasurement("A20").value;
+            j_Knee = dataStore.getMeasurement("A14").value;
+            k_OutsideLegToAnkle = dataStore.getMeasurement("A21").value;
+            l_InsideLegToAnkle = dataStore.getMeasurement("A22").value;
 
             // Get name
             userName = dataStore.getName();
@@ -156,7 +156,7 @@ public class TrouserPattern
         }
         catch(MeasurementNotFoundException e)
         {
-            Pattern.addMissingMeasurement(dataStore.getName(), method.toString(), garment.toString());
+            addMissingMeasurement(dataStore.getName(), e.getMeasurementId());
             return false;
         }
     }

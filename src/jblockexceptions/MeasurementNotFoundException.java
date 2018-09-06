@@ -5,13 +5,28 @@ package jblockexceptions;
  */
 public class MeasurementNotFoundException extends NullPointerException
 {
-    public MeasurementNotFoundException()
+    /**
+     * Measurement ID which triggered the exception.
+     */
+    private String measurementId;
+
+    /**
+     * Constructor
+     * @param _measurementIdTrigger     ID of the measurement which trigger the exception.
+     */
+    public MeasurementNotFoundException(String _measurementIdTrigger)
     {
-        super();
+        super("Measurement " + _measurementIdTrigger +
+                      " not found in the measurement store. Is it missing from the input file?");
+        measurementId = _measurementIdTrigger;
     }
 
-    public MeasurementNotFoundException(String s)
+    /**
+     * Get the measurement ID which triggered the exception.
+     * @return  measurement ID
+     */
+    public String getMeasurementId()
     {
-        super(s);
+        return measurementId;
     }
 }

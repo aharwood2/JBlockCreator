@@ -133,19 +133,19 @@ public class BodicePattern
         try
         {
             // Get measurements from the scan data store
-            a_Bust = dataStore.getId(1).value;
-            b_Waist = dataStore.getId(2).value;
-            c_Neck = dataStore.getId(5).value;
+            a_Bust = dataStore.getMeasurement("A01").value;
+            b_Waist = dataStore.getMeasurement("A02").value;
+            c_Neck = dataStore.getMeasurement("A05").value;
             //d_BackNeckRise =
-            e_NapeToWaist = dataStore.getId(4).value;
-            f_ArmholeDepth = dataStore.getId(6).value;
-            g_FrNeckToBust = dataStore.getId(7).value;
-            h_FrNeckToWaist = dataStore.getId(8).value;
-            i_AcrossBack = dataStore.getId(9).value;
-            j_AcrossFront = dataStore.getId(10).value;
-            k_Shoulder = dataStore.getId(11).value;
-            l_WidthBustProm = dataStore.getId(12).value;
-            m_WidthArmhole = dataStore.getId(36).value;
+            e_NapeToWaist = dataStore.getMeasurement("A04").value;
+            f_ArmholeDepth = dataStore.getMeasurement("A06").value;
+            g_FrNeckToBust = dataStore.getMeasurement("A07").value;
+            h_FrNeckToWaist = dataStore.getMeasurement("A08").value;
+            i_AcrossBack = dataStore.getMeasurement("A09").value;
+            j_AcrossFront = dataStore.getMeasurement("A10").value;
+            k_Shoulder = dataStore.getMeasurement("A11").value;
+            l_WidthBustProm = dataStore.getMeasurement("A12").value;
+            m_WidthArmhole = dataStore.getMeasurement("A36").value;
 
             // Get name
             userName = dataStore.getName();
@@ -154,7 +154,7 @@ public class BodicePattern
         }
         catch(MeasurementNotFoundException e)
         {
-            Pattern.addMissingMeasurement(dataStore.getName(), method.toString(), garment.toString());
+            addMissingMeasurement(dataStore.getName(), e.getMeasurementId());
             return false;
         }
 
