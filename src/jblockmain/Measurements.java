@@ -9,8 +9,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 
-// TODO: Complete javadoc
-
 /**
  * Class to hold the measurements used by the block packages.
  * For now this essentially encapsulates the input data files which follow the prescribed format.
