@@ -16,7 +16,9 @@ import java.io.FileWriter;
 /** Interface to be implemented by every pattern added to the module. */
 public abstract class Pattern implements IPlottable
 {
-    // Offset used for drawing of construction lines
+    /**
+     * Offset used for drawing of construction lines
+     */
     protected double Arb_Con = 2.0;
 
     // User associated with the pattern
@@ -53,7 +55,7 @@ public abstract class Pattern implements IPlottable
         {
             try
             {
-                FileWriter writer = new FileWriter(fileoutput + "/Failed_Outputs.txt");
+                FileWriter writer = new FileWriter(fileoutput + "/" + JBlock.failedOutputsFilename);
                 BufferedWriter writer2 = new BufferedWriter(writer);
                 for (String str : missingMeasurements)
                 {

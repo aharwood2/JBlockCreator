@@ -18,6 +18,11 @@ import static jblockmain.JBlock.tol;
 public class Block
 {
     /**
+     * Global resolution for some curves (points per cm)
+     */
+    private static final double res = 1;
+
+    /**
      * Name of the block.
      */
     private String name;
@@ -505,7 +510,7 @@ public class Block
         }
 
         double dcircum = Math.abs(th2 - th1) * radius;
-        int numPts = (int)Math.ceil(dcircum * JBlock.res);
+        int numPts = (int)Math.ceil(dcircum * res);
 
         // Specify in polar coordinates then convert to Cartesian
         Vector2D tmp;
@@ -736,7 +741,7 @@ public class Block
         }
 
         // Discretise by specified amount
-        int numPts = (int)Math.ceil(refEnd.subtract(refStart).norm() * JBlock.res);
+        int numPts = (int)Math.ceil(refEnd.subtract(refStart).norm() * res);
 
         // Find points on the curve by seeding x
         // might not always be robust -- should use a local curvilinear coordinate system really.
