@@ -56,7 +56,13 @@ public class JBlock extends JFrame
     private JCheckBox constructionLinesIfUsedCheckBox;
     private JLabel PatternImage;
     private JLabel AnalysisImage;
+    private JLabel PatternUoMImage;
+    private JLabel AnalysisUoMImage;
     private JButton butRunAnalysis;
+    private JButton butLoadAnalysis;
+    private JButton butSaveAnalysis;
+    private JLabel openPathAnalysis;
+    private JLabel savePathAnalysis;
     private File fileOutput = null;
     private File fileInput = null;
     private boolean[] dxfLayerChoices = new boolean[5];
@@ -259,6 +265,7 @@ public class JBlock extends JFrame
                 file = file.substring(0, 40) + "...";
             }
             savePath.setText(file);
+            savePathAnalysis.setText(file);
             JBlock.this.fileOutput = fileChooser.getSelectedFile();
         }
     }
@@ -281,6 +288,7 @@ public class JBlock extends JFrame
                 file = file.substring(0, 40) + "...";
             }
             openPath.setText(file);
+            openPathAnalysis.setText(file);
         }
     }
 
@@ -435,6 +443,12 @@ public class JBlock extends JFrame
         // Attach listener to save button
         butSave.addActionListener(e -> saveClickedEvent());
 
+        // Attach listener to open button
+        butLoadAnalysis.addActionListener(e -> openClickedEvent());
+
+        // Attach listener to save button
+        butSaveAnalysis.addActionListener(e -> saveClickedEvent());
+
         // Attach listener to rectangle plot x-axis text field
         textFieldRPx.addActionListener(e -> enterTextRPX());
 
@@ -454,16 +468,6 @@ public class JBlock extends JFrame
      */
     public static void main(String[] args)
     {
-        // Makes the UI look like the system UI
-        try
-        {
-            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-        }
-        catch (Exception ex)
-        {
-            ex.printStackTrace();
-        }
-
         // Create a JFrame instance
         JFrame frame = new JFrame("JBlock2D - Custom Pattern Drafting (Version "
                 + majVer + "." + minVer + ")");
@@ -550,6 +554,7 @@ public class JBlock extends JFrame
         colors.add(radioItem("Blue", listener, "color(blue)", colorgroup));
 
         // Finally, make our main window appear
+        frame.setSize(870, 350);
         frame.setSize(790, 350);
         frame.setResizable(false);
         frame.setVisible(true);
@@ -600,5 +605,7 @@ public class JBlock extends JFrame
     {
         PatternImage = new JLabel(new ImageIcon("./Images/Gill_Skirt.jpg"));
         AnalysisImage = new JLabel(new ImageIcon("./Images/Rec_Plot.jpg"));
+        PatternUoMImage = new JLabel(new ImageIcon("./Images/UoM GUI.jpg"));
+        AnalysisUoMImage = new JLabel(new ImageIcon("./Images/UoM GUI.jpg"));
     }
 }
