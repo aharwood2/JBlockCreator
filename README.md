@@ -12,6 +12,17 @@ which may be executed directly to run the application. You may also wish to buil
 
 ## Release Notes ##
 
+**Version: 1.1**    
+Issue #41: Added more input files to the input folder for users to test behaviour.    
+Issue #39: Menu bar added to UI to provide alternative navigation.    
+Issue #35: Added option to choose the information layers written out to the DXF files.    
+Issue #46: File chooser has been made easier to use and folders are now remembered.    
+Issue #40: Measurements which are marked as "unavailable" by computer-generated data files are now handled correctly.    
+Issue #36: A help button has been added to GUI.    
+Issue #38: Run button now shows "running" when in progress and dialog box alerts user on completion. Also moved execution to a background thread to stop UI locking.    
+Issue #51: Analysis tab added which allows pairs of measurements to be comapred in rectangle plots.    
+Issue #37: Some visual guide to what the output will look like added to the UI.    
+
 **Version: 1.0**    
 Issue #4: Batch files of scan data can now be used.    
 Issue #5: Keypoints have been added as a new layer on the DXF output files.    
@@ -25,6 +36,7 @@ Issue #21: Batch files of any size now work as intended.
 Issue #23: Output DXF files are now organised in a Method/Pattern/ file directory system.    
 Issue #30: All custom measurements needed for the Beazley Bond sleeve now available.    
 Issue #34: File input and outputs for the GUI fixed so they work as intended.    
+Issue #42: Created a user guide for v1.0.
 
 Patterns added:    
 
