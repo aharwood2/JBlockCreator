@@ -75,7 +75,7 @@
                   </component>
                   <component id="9194a" class="javax.swing.JCheckBox" binding="checkAldrichSkirt">
                     <constraints>
-                      <grid row="4" column="2" row-span="1" col-span="2" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                      <grid row="3" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                     </constraints>
                     <properties>
                       <selected value="false"/>
@@ -192,15 +192,25 @@
                       <text value=""/>
                     </properties>
                   </component>
-                  <component id="14c2a" class="javax.swing.JSeparator">
+                  <component id="4b08e" class="javax.swing.JCheckBox" binding="checkAldrichTrousers">
                     <constraints>
-                      <grid row="4" column="1" row-span="4" col-span="1" vsize-policy="6" hsize-policy="0" anchor="8" fill="2" indent="0" use-parent-layout="false"/>
+                      <grid row="3" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                     </constraints>
                     <properties>
                       <orientation value="1"/>
                     </properties>
                   </component>
-                  <component id="ba967" class="javax.swing.JSeparator">
+                  <component id="aeaba" class="javax.swing.JCheckBox" binding="checkBeazleyStraightSleeve">
+                    <constraints>
+                      <grid row="4" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false">
+                        <preferred-size width="91" height="23"/>
+                      </grid>
+                    </constraints>
+                    <properties>
+                      <text value="Straight Sleeve"/>
+                    </properties>
+                  </component>
+                  <component id="dc349" class="javax.swing.JCheckBox" binding="checkBeazleyBodice">
                     <constraints>
                       <grid row="8" column="0" row-span="1" col-span="4" vsize-policy="0" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
                     </constraints>
