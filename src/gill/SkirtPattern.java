@@ -154,8 +154,8 @@ public class SkirtPattern
 
         // Construction lines for front/back block separation
         fullBlock.addConstructionPoint(new Vector2D(-1.25 - Arb_Con, g_BkHipArc / 2 + Arb_HemLevelY / 4),
-                                       new Vector2D(k_WaistToKnee + Arb_HemLevelX + Arb_Con, g_BkHipArc / 2 + Arb_HemLevelY / 4),
-                                 "");
+                new Vector2D(k_WaistToKnee + Arb_HemLevelX + Arb_Con, g_BkHipArc / 2 + Arb_HemLevelY / 4),
+                "");
 
         // Point 10 has an if condition to allow for more accurate pattern creation
         double frontdartwidth = ((((g_BkHipArc + f_FrHipArc) / 2.0) - ((b_BkWaistArc + a_FrWaistArc)) / 2.0) * 0.18);
