@@ -23,6 +23,7 @@ public class TrouserPattern
 
     // Custom measurement used for block creation
     private double g_HipCHeight;                // Actually used
+    private double h_CrotchHeight;              // Actually used
 
     /* Arbitrary Measurements */
 
@@ -77,7 +78,7 @@ public class TrouserPattern
             c_WaistToHip = dataStore.getMeasurement("A15").value;
             d_BodyRise = dataStore.getMeasurement("A38").value;
             g_HipCHeight = dataStore.getMeasurement("A44").value;
-
+            h_CrotchHeight = dataStore.getMeasurement("A43").value;
 
             // Get name
             userName = dataStore.getName();
@@ -112,7 +113,7 @@ public class TrouserPattern
         frontblock.addKeypoint(new Vector2D(d_BodyRise, -(((b_Hips / 12.0) + 2.0) + ((b_Hips / 16.0) + 1.0))));
 
         // Step 15
-        frontblock.addKeypoint(new Vector2D(((c_WaistToHip + g_HipCHeight) / 2.0), -((Arb_HemWidth / 2.0) - 0.5 + 1.3)));
+        frontblock.addKeypoint(new Vector2D((d_BodyRise + ((h_CrotchHeight / 2.0) - 5.0)), -((Arb_HemWidth / 2.0) - 0.5 + 1.3)));
 
         // Step 14
         frontblock.addKeypoint(new Vector2D((c_WaistToHip + g_HipCHeight), -((Arb_HemWidth / 2.0) - 0.5)));
@@ -121,7 +122,7 @@ public class TrouserPattern
         frontblock.addKeypoint(new Vector2D((c_WaistToHip + g_HipCHeight), ((Arb_HemWidth / 2.0) - 0.5)));
 
         // Step 13
-        frontblock.addKeypoint(new Vector2D((c_WaistToHip + g_HipCHeight) / 2.0, ((Arb_HemWidth / 2.0) - 0.5 + 1.3)));
+        frontblock.addKeypoint(new Vector2D((d_BodyRise + ((h_CrotchHeight / 2.0) - 5.0)), ((Arb_HemWidth / 2.0) - 0.5 + 1.3)));
 
         // Step 8
         frontblock.addKeypoint(new Vector2D(c_WaistToHip, ((b_Hips / 4.0) + 0.5) - ((b_Hips / 12) + 2)));
@@ -155,13 +156,13 @@ public class TrouserPattern
 
         // Adding curve from Step 9 --> 15
         frontblock.addCircularCurve(new Vector2D(d_BodyRise, -(((b_Hips / 12.0) + 2.0) + ((b_Hips / 16.0) + 1.0))),
-                new Vector2D(((c_WaistToHip + g_HipCHeight) / 2.0), -((Arb_HemWidth / 2.0) - 0.5 + 1.3)),
+                new Vector2D((d_BodyRise + ((h_CrotchHeight / 2.0) - 5.0)), -((Arb_HemWidth / 2.0) - 0.5 + 1.3)),
                 1.5,
                 false
         );
 
         // Adding curve from Step 13 --> 8
-        frontblock.addCircularCurve(new Vector2D((c_WaistToHip + g_HipCHeight) / 2.0, ((Arb_HemWidth / 2.0) - 0.5 + 1.3)),
+        frontblock.addCircularCurve(new Vector2D((d_BodyRise + ((h_CrotchHeight / 2.0) - 5.0)), ((Arb_HemWidth / 2.0) - 0.5 + 1.3)),
                 new Vector2D(c_WaistToHip, ((b_Hips / 4.0) + 0.5) - ((b_Hips / 12) + 2)),
                 0.5,
                 true
@@ -192,8 +193,8 @@ public class TrouserPattern
                 "Crutch Depth");
 
         // Add construction keypoints for Knee Line
-        frontblock.addConstructionPoint(new Vector2D(((c_WaistToHip + g_HipCHeight) / 2.0), ((Arb_HemWidth / 2.0) - 0.5 + 1.3) + Arb_Con),
-                new Vector2D(((c_WaistToHip + g_HipCHeight) / 2.0), -((Arb_HemWidth / 2.0) - 0.5 + 1.3) - Arb_Con),
+        frontblock.addConstructionPoint(new Vector2D((d_BodyRise + ((h_CrotchHeight / 2.0) - 5.0)), ((Arb_HemWidth / 2.0) - 0.5 + 1.3) + Arb_Con),
+                new Vector2D((d_BodyRise + ((h_CrotchHeight / 2.0) - 5.0)), -((Arb_HemWidth / 2.0) - 0.5 + 1.3) - Arb_Con),
                 "Knee Line");
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -208,7 +209,7 @@ public class TrouserPattern
         backblock.addKeypoint(new Vector2D((d_BodyRise + 0.5), (-((((b_Hips / 12) + 2.0) + ((b_Hips / 16.0) + 1.0) + ((b_Hips / 16.0) + 1.0)) / 2.0 + 0.8))));
 
         // Adding Step 29
-        backblock.addKeypoint(new Vector2D(((c_WaistToHip + g_HipCHeight) / 2.0), -((Arb_HemWidth / 2.0) - 0.5 + 1.3) - 1.0));
+        backblock.addKeypoint(new Vector2D((d_BodyRise + ((h_CrotchHeight / 2.0) - 5.0)), -((Arb_HemWidth / 2.0) - 0.5 + 1.3) - 1.0));
 
         // Adding Step 28
         backblock.addKeypoint(new Vector2D((c_WaistToHip + g_HipCHeight), -((Arb_HemWidth / 2.0) - 0.5) - 1.0));
@@ -220,7 +221,7 @@ public class TrouserPattern
         backblock.addKeypoint(new Vector2D((c_WaistToHip + g_HipCHeight),((Arb_HemWidth / 2.0) - 0.5) + 1.0));
 
         // Adding Step 27
-        backblock.addKeypoint(new Vector2D(((c_WaistToHip + g_HipCHeight) / 2.0),((Arb_HemWidth / 2.0) - 0.5 + 1.3) + 1.0));
+        backblock.addKeypoint(new Vector2D((d_BodyRise + ((h_CrotchHeight / 2.0) - 5.0)),((Arb_HemWidth / 2.0) - 0.5 + 1.3) + 1.0));
 
         // Adding Step 25
         backblock.addKeypoint(new Vector2D(c_WaistToHip, (((b_Hips / 4.0) + 4.0) - ((b_Hips / 12.0) + 2.0) - (((b_Hips / 12.0) + 2.0) / 4.0))));
@@ -269,7 +270,7 @@ public class TrouserPattern
 
         // Adding curve from Step 24 --> 29
         backblock.addCircularCurve(new Vector2D((d_BodyRise + 0.5), (-((((b_Hips / 12) + 2.0) + ((b_Hips / 16.0) + 1.0) + ((b_Hips / 16.0) + 1.0)) / 2.0 + 0.8))),
-                new Vector2D(((c_WaistToHip + g_HipCHeight) / 2.0), -((Arb_HemWidth / 2.0) - 0.5 + 1.3) - 1.0),
+                new Vector2D((d_BodyRise + ((h_CrotchHeight / 2.0) - 5.0)), -((Arb_HemWidth / 2.0) - 0.5 + 1.3) - 1.0),
                 0.5,
                 false
         );
@@ -289,7 +290,7 @@ public class TrouserPattern
         );
 
         // Adding curve from Step 27 --> 25
-        backblock.addCircularCurve(new Vector2D(((c_WaistToHip + g_HipCHeight) / 2.0),((Arb_HemWidth / 2.0) - 0.5 + 1.3) + 1.0),
+        backblock.addCircularCurve(new Vector2D((d_BodyRise + ((h_CrotchHeight / 2.0) - 5.0)),((Arb_HemWidth / 2.0) - 0.5 + 1.3) + 1.0),
                 new Vector2D(c_WaistToHip, (((b_Hips / 4.0) + 4.0) - ((b_Hips / 12.0) + 2.0) - (((b_Hips / 12.0) + 2.0) / 4.0))),
                 0.5,
                 true
@@ -320,8 +321,8 @@ public class TrouserPattern
                 "Crutch Depth");
 
         // Add construction keypoints for Knee Line
-        backblock.addConstructionPoint(new Vector2D(((c_WaistToHip + g_HipCHeight) / 2.0),((Arb_HemWidth / 2.0) - 0.5 + 1.3) + 1.0 + Arb_Con),
-                new Vector2D(((c_WaistToHip + g_HipCHeight) / 2.0), -((Arb_HemWidth / 2.0) - 0.5 + 1.3) - 1.0 - Arb_Con),
+        backblock.addConstructionPoint(new Vector2D((d_BodyRise + ((h_CrotchHeight / 2.0) - 5.0)),((Arb_HemWidth / 2.0) - 0.5 + 1.3) + 1.0 + Arb_Con),
+                new Vector2D((d_BodyRise + ((h_CrotchHeight / 2.0) - 5.0)), -((Arb_HemWidth / 2.0) - 0.5 + 1.3) - 1.0 - Arb_Con),
                 "Knee Line");
     }
 }
