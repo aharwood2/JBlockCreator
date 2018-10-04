@@ -190,7 +190,7 @@ public class DxfFile
 
             // Some kind of header???
             writeDxfLine("2", "LTYPE");
-            writeDxfLine("70", "1");            // Code translates as standard bit code???
+            writeDxfLine("70", "1");            // A set of flags of some kind (bit code)
             writeDxfLine("0", "LTYPE");
 
             // Write line type spec
@@ -221,25 +221,25 @@ public class DxfFile
             writeDxfLine("0", "LAYER");
 
             // Spec of layer 1
-            writeDxfLine("2", "Line");                  // Layer name
+            writeDxfLine("2", "Line");          // Layer name
             writeDxfLine("70", "64");
             writeDxfLine("62", "7");            // Colour number?
             writeDxfLine("6", "CONTINUOUS");    // Linetype name (as specified above?)
 
             // Spec of layer 2
-            writeDxfLine("2", "Extras");                // Layer name
+            writeDxfLine("2", "Extras");        // Layer name
             writeDxfLine("70", "64");
             writeDxfLine("62", "8");            // Colour number?
             writeDxfLine("6", "DASHED");        // Linetype name (as specified above?)
 
             // Spec of layer 3
-            writeDxfLine("2", "Keypoints");                 // Layer name
+            writeDxfLine("2", "Keypoints");     // Layer name
             writeDxfLine("70", "64");
             writeDxfLine("62", "9");            // Colour number?
             writeDxfLine("6", "DASHED");        // Linetype name (as specified above?)
 
             // Spec of layer 4
-            writeDxfLine("2", "Coordinates");               // Layer name
+            writeDxfLine("2", "Coordinates");   // Layer name
             writeDxfLine("70", "64");
             writeDxfLine("62", "9");            // Colour number?
             writeDxfLine("6", "DASHED");        // Linetype name (as specified above?)
@@ -277,17 +277,22 @@ public class DxfFile
 
             if (dxfLayerChooser[1] == true)
             {
-                // Add line entities one at a time
-                for (int i = 0; i < linesX.size() - 1; i++)
+                // Start of polyline
+                writeDxfLine("0","POLYLINE");
+                writeDxfLine("8", "1");     // Layer on which to draw line (layer 1)
+                writeDxfLine("66","1");     // Closed polyline flag
+
+                // Add vertices to polyline
+                for (int i = 0; i < linesX.size(); i++)
                 {
-                    writeDxfLine("0", "LINE");
-                    writeDxfLine("8", "Pattern");     // Layer on which to draw line (layer 1)
-                    writeDxfLine("62", "255");  // Colour of line using index colour (255 = black)
+                    writeDxfLine("0", "VERTEX");
+                    writeDxfLine("8","1");  // Write on layer 1
                     writeDxfLine("10", Double.toString(linesX.get(i))); // X coordinate start
                     writeDxfLine("20", Double.toString(linesY.get(i))); // Y coordinate start
-                    writeDxfLine("11", Double.toString(linesX.get(i + 1))); // X coordinate end
-                    writeDxfLine("21", Double.toString(linesY.get(i + 1))); // Y coordinate end
                 }
+
+                // End the polyline
+                writeDxfLine("0","SEQEND");
             }
 
             if (dxfLayerChooser[4] == true)
