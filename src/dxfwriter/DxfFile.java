@@ -94,10 +94,10 @@ public class DxfFile
         this.linesY.addAll(yPts);
 
         // Set the min and max
-        minX = Collections.min(linesX);
-        maxX = Collections.max(linesX);
-        minY = Collections.min(linesY);
-        maxY = Collections.max(linesY);
+        minX = Collections.min(linesX) < minX ? Collections.min(linesX) : minX;
+        maxX = Collections.max(linesX) > maxX ? Collections.max(linesX) : maxX;
+        minY = Collections.min(linesY) < minY ? Collections.min(linesY) : minY;
+        maxY = Collections.max(linesY) > maxY ? Collections.max(linesY) : maxY;
     }
 
     /**
@@ -112,20 +112,13 @@ public class DxfFile
         this.ConY.addAll(yPts);
         this.names = names;
 
-        if (ConX.size() == 0 && ConY.size() == 0 && names.size() == 0)
-        {
-            minX = 0;
-            maxX = 0;
-            minY = 0;
-            maxY = 0;
-        }
-        else
+        if (ConX.size() != 0 && ConY.size() != 0 && names.size() != 0)
         {
             // Set the min and max
-            minX = Collections.min(ConX);
-            maxX = Collections.max(ConX);
-            minY = Collections.min(ConY);
-            maxY = Collections.max(ConY);
+            minX = Collections.min(ConX) < minX ? Collections.min(ConX) : minX;
+            maxX = Collections.max(ConX) > maxX ? Collections.max(ConX) : maxX;
+            minY = Collections.min(ConY) < minY ? Collections.min(ConY) : minY;
+            maxY = Collections.max(ConY) > maxY ? Collections.max(ConY) : maxY;
         }
     }
 
