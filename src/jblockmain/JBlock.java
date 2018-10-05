@@ -225,81 +225,101 @@ public class JBlock extends JFrame
                     // Create a new measurements instance from the input file selected
                     Measurements measurements = new Measurements(JBlock.this.fileInput.toString());
 
-                    // Populate the boolean arrays from the chosen output options
-                    getLayerInformationPatterns();
-                    getLayerInformationAnalysis();
+                    /* START HACK */
 
-                    // Create the plot if necessary
-                    RectanglePlot plot = null;
-                    if (checkRectanglePlot.isSelected() || checkLayeredRectPlot.isSelected())
-                        plot = new RectanglePlot(measurements,
-                                                 labXID.getText(),
-                                                 labYID.getText(),
-                                                 isLayeredRectPlot, isRectanglePlot);
-
-                    // Create patterns
-                    for (int i = 0; i < measurements.getNames().size(); i++)
+                    // Generate bitcode
+                    for (int code = 0; code < 32; code++)
                     {
-                        measurements.setCurrentUser(i);
+                        // Convert to binary
+                        String bitCodeString = Integer.toBinaryString(code);
 
-                        // Creates patterns depending on which checkboxes are ticked
-                        if (checkBeazleySkirt.isSelected())
+                        // Reset the bit codes
+                        for (int bit = 0; bit < 5; bit++) dxfLayerChoices[bit] = false;
+
+                        // Convert to boolean array
+                        for (int bit = bitCodeString.length() - 1; bit >= 0; bit--)
                         {
-                            SkirtPattern bb_skirt = new SkirtPattern(measurements);
-                            bb_skirt.writeToDXF(fileOutput, dxfLayerChoices);
+                            int bitString = Integer.valueOf(String.valueOf(bitCodeString.charAt(bit)));
+                            dxfLayerChoices[bitCodeString.length() - 1 - bit] = bitString != 0;
                         }
 
-                        if (checkBeazleyTrousers.isSelected())
+                        // Populate the boolean arrays from the chosen output options
+//                    getLayerInformationPatterns();
+//                    getLayerInformationAnalysis();
+
+                        // Create the plot if necessary
+                        RectanglePlot plot = null;
+                        if (checkRectanglePlot.isSelected() || checkLayeredRectPlot.isSelected())
+                            plot = new RectanglePlot(measurements,
+                                                     labXID.getText(),
+                                                     labYID.getText(),
+                                                     isLayeredRectPlot, isRectanglePlot);
+
+                        // Create patterns
+                        for (int i = 0; i < measurements.getNames().size(); i++)
                         {
-                            TrouserPattern bb_trouser = new TrouserPattern(measurements);
-                            bb_trouser.writeToDXF(fileOutput, dxfLayerChoices);
+                            measurements.setCurrentUser(i);
+
+                            // Creates patterns depending on which checkboxes are ticked
+                            if (checkBeazleySkirt.isSelected())
+                            {
+                                SkirtPattern bb_skirt = new SkirtPattern(measurements);
+                                bb_skirt.writeToDXF(fileOutput, dxfLayerChoices);
+                            }
+
+                            if (checkBeazleyTrousers.isSelected())
+                            {
+                                TrouserPattern bb_trouser = new TrouserPattern(measurements);
+                                bb_trouser.writeToDXF(fileOutput, dxfLayerChoices);
+                            }
+
+                            if (checkBeazleyBodice.isSelected())
+                            {
+                                BodicePattern bb_bodice = new BodicePattern(measurements);
+                                bb_bodice.writeToDXF(fileOutput, dxfLayerChoices);
+                            }
+
+                            if (checkBeazleyStraightSleeve.isSelected())
+                            {
+                                StraightSleevePattern bb_sleeve = new StraightSleevePattern(measurements);
+                                bb_sleeve.writeToDXF(fileOutput, dxfLayerChoices);
+                            }
+
+                            if (checkGillSkirt.isSelected())
+                            {
+                                gill.SkirtPattern gill_skirt = new gill.SkirtPattern(measurements);
+                                gill_skirt.writeToDXF(fileOutput, dxfLayerChoices);
+                            }
+
+                            if (checkGillTrousers.isSelected())
+                            {
+                                gill.TrouserPattern gill_trousers = new gill.TrouserPattern(measurements);
+                                gill_trousers.writeToDXF(fileOutput, dxfLayerChoices);
+                            }
+
+                            if (checkAldrichSkirt.isSelected())
+                            {
+                                aldrich.SkirtPattern aldrich_skirt = new aldrich.SkirtPattern(measurements);
+                                aldrich_skirt.writeToDXF(fileOutput, dxfLayerChoices);
+                            }
+
+                            if (checkAldrichTrousers.isSelected())
+                            {
+                                aldrich.TrouserPattern aldrich_trousers = new aldrich.TrouserPattern(measurements);
+                                aldrich_trousers.writeToDXF(fileOutput, dxfLayerChoices);
+                            }
+
+                            // Creates analysis outputs depending on which checkboxes are ticked
+                            if (plot != null) plot.addNewRectangle();
                         }
 
-                        if (checkBeazleyBodice.isSelected())
+                        // Write the plot if we created one
+                        if (plot != null)
                         {
-                            BodicePattern bb_bodice = new BodicePattern(measurements);
-                            bb_bodice.writeToDXF(fileOutput, dxfLayerChoices);
+                            plot.writeToDXF(fileOutput, dxfLayersAnalysis);
                         }
-
-                        if (checkBeazleyStraightSleeve.isSelected())
-                        {
-                            StraightSleevePattern bb_sleeve = new StraightSleevePattern(measurements);
-                            bb_sleeve.writeToDXF(fileOutput, dxfLayerChoices);
-                        }
-
-                        if (checkGillSkirt.isSelected())
-                        {
-                            gill.SkirtPattern gill_skirt = new gill.SkirtPattern(measurements);
-                            gill_skirt.writeToDXF(fileOutput, dxfLayerChoices);
-                        }
-
-                        if (checkGillTrousers.isSelected())
-                        {
-                            gill.TrouserPattern gill_trousers = new gill.TrouserPattern(measurements);
-                            gill_trousers.writeToDXF(fileOutput, dxfLayerChoices);
-                        }
-
-                        if (checkAldrichSkirt.isSelected())
-                        {
-                            aldrich.SkirtPattern aldrich_skirt = new aldrich.SkirtPattern(measurements);
-                            aldrich_skirt.writeToDXF(fileOutput, dxfLayerChoices);
-                        }
-
-                        if (checkAldrichTrousers.isSelected())
-                        {
-                            aldrich.TrouserPattern aldrich_trousers = new aldrich.TrouserPattern(measurements);
-                            aldrich_trousers.writeToDXF(fileOutput, dxfLayerChoices);
-                        }
-
-                        // Creates analysis outputs depending on which checkboxes are ticked
-                        if (plot != null) plot.addNewRectangle();
                     }
-
-                    // Write the plot if we created one
-                    if (plot != null)
-                    {
-                        plot.writeToDXF(fileOutput, dxfLayersAnalysis);
-                    }
+                    /* END HACK */
 
                     // Write out to a text file the patterns that could not be made
                     Pattern.printMissingMeasurements(fileOutput);

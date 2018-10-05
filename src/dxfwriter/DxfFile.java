@@ -331,7 +331,7 @@ public class DxfFile
                     writeDxfLine("0", "CIRCLE");
                     writeDxfLine("8", "Keypoints");     // Layer on which to draw (layer 3)
                     writeDxfLine("40", "0.25");
-                    writeDxfLine("62", "60");  // Colour of points using index colour)
+                    writeDxfLine("62", "3");  // Colour of points using index colour)
                     writeDxfLine("10", Double.toString(linesX.get(i))); // X coordinate start
                     writeDxfLine("20", Double.toString(linesY.get(i))); // Y coordinate start
                     writeDxfLine("11", Double.toString(linesX.get(i + 1))); // X coordinate end
