@@ -190,19 +190,8 @@ public abstract class Pattern implements IPlottable
                 System.err.println("Cannot create directories - " + e);
             }
 
-
-            /* START HACK */
-
             // Create new DXF file
-            DxfFile file = new DxfFile(path.toString() + "/PatternSample_" +
-                                               Integer.toString(dxfLayerChooser[0] ? 1 : 0) +
-                                               Integer.toString(dxfLayerChooser[1] ? 1 : 0) +
-                                               Integer.toString(dxfLayerChooser[2] ? 1 : 0) +
-                                               Integer.toString(dxfLayerChooser[3] ? 1 : 0) +
-                                               Integer.toString(dxfLayerChooser[4] ? 1 : 0)
-            );
-
-            /* END OF HACK */
+            DxfFile file = new DxfFile(path.toString() + blocks.get(i).getName());
 
             try
             {

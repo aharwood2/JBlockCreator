@@ -6,6 +6,7 @@ import java.awt.event.*;
 import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 import analysis.RectanglePlot;
@@ -77,13 +78,16 @@ public class JBlock extends JFrame
     private JTextField textFieldPlotYID;
 
     // Images
-    private JLabel imagePatternSample;
     private JLabel imageAnalysisSample;
     private JLabel imageUomLogo;
     private JPanel panelPatternsWrapper;
     private JPanel imagePatternWrapper;
     private JPanel panelAnalysisWrapper;
     private JPanel imageAnalysisWrapper;
+    private JLayeredPane stackedPatternSample;
+
+    // Layers
+    private ArrayList<Component> patternLayers;
 
     // Internal fields
     private File fileOutput = null;
@@ -150,7 +154,7 @@ public class JBlock extends JFrame
             if (cmd.equals("View help"))
             {
                 String url = bundle.getString("guide_url");
-                Prompts.infoBox(bundle.getString("help_text"), "Help", EMsgType.Info);
+                Prompts.infoBox(bundle.getString("help_text") + "See: " + url, "Help", EMsgType.Info);
             }
             if (cmd.equals("Open"))
             {
@@ -225,102 +229,81 @@ public class JBlock extends JFrame
                     // Create a new measurements instance from the input file selected
                     Measurements measurements = new Measurements(JBlock.this.fileInput.toString());
 
-                    /* START HACK */
+                    // Populate the boolean arrays from the chosen output options
+                    getLayerInformationPatterns();
+                    getLayerInformationAnalysis();
 
-                    // Generate bitcode
-                    for (int code = 0; code < 32; code++)
+                    // Create the plot if necessary
+                    RectanglePlot plot = null;
+                    if (checkRectanglePlot.isSelected() || checkLayeredRectPlot.isSelected())
+                        plot = new RectanglePlot(measurements,
+                                                 labXID.getText(),
+                                                 labYID.getText(),
+                                                 isLayeredRectPlot, isRectanglePlot);
+
+                    // Create patterns
+                    for (int i = 0; i < measurements.getNames().size(); i++)
                     {
-                        // Convert to binary
-                        String bitCodeString = Integer.toBinaryString(code);
+                        measurements.setCurrentUser(i);
 
-                        // Reset the bit codes
-                        for (int bit = 0; bit < 5; bit++) dxfLayerChoices[bit] = false;
-
-                        // Convert to boolean array
-                        for (int bit = bitCodeString.length() - 1; bit >= 0; bit--)
+                        // Creates patterns depending on which checkboxes are ticked
+                        if (checkBeazleySkirt.isSelected())
                         {
-                            int bitString = Integer.valueOf(String.valueOf(bitCodeString.charAt(bit)));
-                            dxfLayerChoices[bitCodeString.length() - 1 - bit] = bitString != 0;
-                            dxfLayersAnalysis[bitCodeString.length() - 1 - bit] = bitString != 0;
+                            SkirtPattern bb_skirt = new SkirtPattern(measurements);
+                            bb_skirt.writeToDXF(fileOutput, dxfLayerChoices);
                         }
 
-                        // Populate the boolean arrays from the chosen output options
-//                    getLayerInformationPatterns();
-//                    getLayerInformationAnalysis();
-
-                        // Create the plot if necessary
-                        RectanglePlot plot = null;
-                        if (checkRectanglePlot.isSelected() || checkLayeredRectPlot.isSelected())
-                            plot = new RectanglePlot(measurements,
-                                                     labXID.getText(),
-                                                     labYID.getText(),
-                                                     isLayeredRectPlot, isRectanglePlot);
-
-                        // Create patterns
-                        for (int i = 0; i < measurements.getNames().size(); i++)
+                        if (checkBeazleyTrousers.isSelected())
                         {
-                            measurements.setCurrentUser(i);
-
-                            // Creates patterns depending on which checkboxes are ticked
-                            if (checkBeazleySkirt.isSelected())
-                            {
-                                SkirtPattern bb_skirt = new SkirtPattern(measurements);
-                                bb_skirt.writeToDXF(fileOutput, dxfLayerChoices);
-                            }
-
-                            if (checkBeazleyTrousers.isSelected())
-                            {
-                                TrouserPattern bb_trouser = new TrouserPattern(measurements);
-                                bb_trouser.writeToDXF(fileOutput, dxfLayerChoices);
-                            }
-
-                            if (checkBeazleyBodice.isSelected())
-                            {
-                                BodicePattern bb_bodice = new BodicePattern(measurements);
-                                bb_bodice.writeToDXF(fileOutput, dxfLayerChoices);
-                            }
-
-                            if (checkBeazleyStraightSleeve.isSelected())
-                            {
-                                StraightSleevePattern bb_sleeve = new StraightSleevePattern(measurements);
-                                bb_sleeve.writeToDXF(fileOutput, dxfLayerChoices);
-                            }
-
-                            if (checkGillSkirt.isSelected())
-                            {
-                                gill.SkirtPattern gill_skirt = new gill.SkirtPattern(measurements);
-                                gill_skirt.writeToDXF(fileOutput, dxfLayerChoices);
-                            }
-
-                            if (checkGillTrousers.isSelected())
-                            {
-                                gill.TrouserPattern gill_trousers = new gill.TrouserPattern(measurements);
-                                gill_trousers.writeToDXF(fileOutput, dxfLayerChoices);
-                            }
-
-                            if (checkAldrichSkirt.isSelected())
-                            {
-                                aldrich.SkirtPattern aldrich_skirt = new aldrich.SkirtPattern(measurements);
-                                aldrich_skirt.writeToDXF(fileOutput, dxfLayerChoices);
-                            }
-
-                            if (checkAldrichTrousers.isSelected())
-                            {
-                                aldrich.TrouserPattern aldrich_trousers = new aldrich.TrouserPattern(measurements);
-                                aldrich_trousers.writeToDXF(fileOutput, dxfLayerChoices);
-                            }
-
-                            // Creates analysis outputs depending on which checkboxes are ticked
-                            if (plot != null) plot.addNewRectangle();
+                            TrouserPattern bb_trouser = new TrouserPattern(measurements);
+                            bb_trouser.writeToDXF(fileOutput, dxfLayerChoices);
                         }
 
-                        // Write the plot if we created one
-                        if (plot != null)
+                        if (checkBeazleyBodice.isSelected())
                         {
-                            plot.writeToDXF(fileOutput, dxfLayersAnalysis);
+                            BodicePattern bb_bodice = new BodicePattern(measurements);
+                            bb_bodice.writeToDXF(fileOutput, dxfLayerChoices);
                         }
+
+                        if (checkBeazleyStraightSleeve.isSelected())
+                        {
+                            StraightSleevePattern bb_sleeve = new StraightSleevePattern(measurements);
+                            bb_sleeve.writeToDXF(fileOutput, dxfLayerChoices);
+                        }
+
+                        if (checkGillSkirt.isSelected())
+                        {
+                            gill.SkirtPattern gill_skirt = new gill.SkirtPattern(measurements);
+                            gill_skirt.writeToDXF(fileOutput, dxfLayerChoices);
+                        }
+
+                        if (checkGillTrousers.isSelected())
+                        {
+                            gill.TrouserPattern gill_trousers = new gill.TrouserPattern(measurements);
+                            gill_trousers.writeToDXF(fileOutput, dxfLayerChoices);
+                        }
+
+                        if (checkAldrichSkirt.isSelected())
+                        {
+                            aldrich.SkirtPattern aldrich_skirt = new aldrich.SkirtPattern(measurements);
+                            aldrich_skirt.writeToDXF(fileOutput, dxfLayerChoices);
+                        }
+
+                        if (checkAldrichTrousers.isSelected())
+                        {
+                            aldrich.TrouserPattern aldrich_trousers = new aldrich.TrouserPattern(measurements);
+                            aldrich_trousers.writeToDXF(fileOutput, dxfLayerChoices);
+                        }
+
+                        // Creates analysis outputs depending on which checkboxes are ticked
+                        if (plot != null) plot.addNewRectangle();
                     }
-                    /* END HACK */
+
+                    // Write the plot if we created one
+                    if (plot != null)
+                    {
+                        plot.writeToDXF(fileOutput, dxfLayersAnalysis);
+                    }
 
                     // Write out to a text file the patterns that could not be made
                     Pattern.printMissingMeasurements(fileOutput);
@@ -619,7 +602,6 @@ public class JBlock extends JFrame
             @Override
             public void focusGained(FocusEvent e)
             {
-
             }
 
             @Override
@@ -634,7 +616,6 @@ public class JBlock extends JFrame
             @Override
             public void focusGained(FocusEvent e)
             {
-
             }
 
             @Override
@@ -642,6 +623,28 @@ public class JBlock extends JFrame
             {
                 onYIdEntered();
             }
+        });
+
+        // Attach listener to DXF layer checkboxes
+        checkScaleBoxAndUser.addActionListener(e -> {
+            if (!checkScaleBoxAndUser.isSelected()) stackedPatternSample.setLayer(patternLayers.get(5), 0);
+            else stackedPatternSample.setLayer(patternLayers.get(5), 1);
+        });
+        checkPatternOutline.addActionListener(e -> {
+            if (!checkPatternOutline.isSelected()) stackedPatternSample.setLayer(patternLayers.get(4), 0);
+            else stackedPatternSample.setLayer(patternLayers.get(4), 1);
+        });
+        checkKeypointsAsCircles.addActionListener(e -> {
+            if (!checkKeypointsAsCircles.isSelected()) stackedPatternSample.setLayer(patternLayers.get(3), 0);
+            else stackedPatternSample.setLayer(patternLayers.get(3), 1);
+        });
+        checkKeypointCoordinates.addActionListener(e -> {
+            if (!checkKeypointCoordinates.isSelected()) stackedPatternSample.setLayer(patternLayers.get(2), 0);
+            else stackedPatternSample.setLayer(patternLayers.get(2), 1);
+        });
+        checkConstructionLines.addActionListener(e -> {
+            if (!checkConstructionLines.isSelected()) stackedPatternSample.setLayer(patternLayers.get(1), 0);
+            else stackedPatternSample.setLayer(patternLayers.get(1), 1);
         });
     }
 
@@ -687,11 +690,55 @@ public class JBlock extends JFrame
     }
 
     /**
+     * Method to create an initialise a layer in the layered pane
+     * @param filename  name of image file to load
+     * @param size      size of the layer
+     * @return          image as a JLabel
+     */
+    private JLabel createLayer(String filename, Dimension size)
+    {
+        // Get scaled image icon
+        ImageIcon imageIcon = new ImageIcon(filename);
+        Image origImg = imageIcon.getImage();
+        Image newImg = origImg.getScaledInstance(size.width, size.height, Image.SCALE_SMOOTH);
+
+        // TODO: Something going on with sizing here
+
+        // Create the JLabel as the layer
+        JLabel imagePatternSampleLayer = new JLabel(new ImageIcon(newImg));
+
+        // No layout manager so initialise this stuff myself
+        imagePatternSampleLayer.setVerticalAlignment(JLabel.TOP);
+        imagePatternSampleLayer.setHorizontalAlignment(JLabel.CENTER);
+        imagePatternSampleLayer.setOpaque(true);
+        imagePatternSampleLayer.setForeground(Color.black);
+        imagePatternSampleLayer.setBorder(BorderFactory.createLineBorder(Color.black));
+        imagePatternSampleLayer.setPreferredSize(size);
+        imagePatternSampleLayer.setBounds(0, 0, size.width, size.height);
+        imagePatternSampleLayer.setBackground(new Color(0,0,0,0));  // Important for transparency to work!
+
+        // Add to layer list
+        if (patternLayers == null) patternLayers = new ArrayList<>();
+        patternLayers.add(imagePatternSampleLayer);
+
+        return imagePatternSampleLayer;
+    }
+
+    /**
      * Method to add assets to image components of UI
      */
     private void createUIComponents()
     {
-        imagePatternSample = new JLabel(new ImageIcon("./images/sample_pattern.jpg"));
+        // Setup the layered images and stash
+        stackedPatternSample = new JLayeredPane();
+        stackedPatternSample.setPreferredSize(new Dimension(435, 435));
+        stackedPatternSample.add(createLayer("./images/PatternSample_00000.png", stackedPatternSample.getPreferredSize()), 0);
+        stackedPatternSample.add(createLayer("./images/PatternSample_00001.png", stackedPatternSample.getPreferredSize()), 0);
+        stackedPatternSample.add(createLayer("./images/PatternSample_00010.png", stackedPatternSample.getPreferredSize()), 0);
+        stackedPatternSample.add(createLayer("./images/PatternSample_00100.png", stackedPatternSample.getPreferredSize()), 0);
+        stackedPatternSample.add(createLayer("./images/PatternSample_01000.png", stackedPatternSample.getPreferredSize()), 0);
+        stackedPatternSample.add(createLayer("./images/PatternSample_10000.png", stackedPatternSample.getPreferredSize()), 0);
+
         imageAnalysisSample = new JLabel(new ImageIcon("./images/sample_analysis.jpg"));
         imageUomLogo = new JLabel(new ImageIcon("./images/logo_small.jpg"));
     }
