@@ -125,11 +125,23 @@ public class RectanglePlot implements IPlottable
         if (isRect)
         {
             ArrayList<String> names = measurements.getNames();
-            for (int i = 0; i < rectangles.size(); i++) {
+            for (int i = 0; i < rectangles.size(); i++)
+            {
+                // Compose filename
+                String filename = "Layered_" + xAxisID + "_" + yAxisID + "_Rectangle_Plot";
+
+                /* START HACK */
 
                 // Create new DXF file
-                String filename = names.get(i) + "_" + xAxisID + "_" + yAxisID + "_Rectangle_Plot";
-                DxfFile file = new DxfFile(path.toString() + "/" + filename);
+                DxfFile file = new DxfFile(path.toString() + "/AnalysisSample_" +
+                                                   Integer.toString(dxfLayerChooser[0] ? 1 : 0) +
+                                                   Integer.toString(dxfLayerChooser[1] ? 1 : 0) +
+                                                   Integer.toString(dxfLayerChooser[2] ? 1 : 0) +
+                                                   Integer.toString(dxfLayerChooser[3] ? 1 : 0) +
+                                                   Integer.toString(dxfLayerChooser[4] ? 1 : 0)
+                );
+
+                /* END OF HACK */
 
                 try {
                     file.addLines(getXPoints(i), getYPoints(i));

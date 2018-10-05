@@ -241,6 +241,7 @@ public class JBlock extends JFrame
                         {
                             int bitString = Integer.valueOf(String.valueOf(bitCodeString.charAt(bit)));
                             dxfLayerChoices[bitCodeString.length() - 1 - bit] = bitString != 0;
+                            dxfLayersAnalysis[bitCodeString.length() - 1 - bit] = bitString != 0;
                         }
 
                         // Populate the boolean arrays from the chosen output options
