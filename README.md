@@ -12,6 +12,10 @@ which may be executed directly to run the application. You may also wish to buil
 
 ## Release Notes ##
 
+** Version: X.X **
+Small fixes to Aldrich trouser pattern and Gill skirt pattern.
+Issue #37: Added dynamic preview capability as output options are selected with checkbox. Removed redundant box on analysis pane.
+
 **Version: 1.1**    
 Issue #41: Added more input files to the input folder for users to test behaviour.    
 Issue #39: Menu bar added to UI to provide alternative navigation.    

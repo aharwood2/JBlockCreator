@@ -191,7 +191,7 @@ public abstract class Pattern implements IPlottable
             }
 
             // Create new DXF file
-            DxfFile file = new DxfFile(path.toString() + blocks.get(i).getName());
+            DxfFile file = new DxfFile(path.toString() + "/" + blocks.get(i).getName());
 
             try
             {

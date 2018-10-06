@@ -268,7 +268,7 @@ public class DxfFile
             writeDxfLine("0", "SECTION");
             writeDxfLine("2", "ENTITIES");
 
-            if (dxfLayerChooser[1] == true)
+            if (dxfLayerChooser.length > 1 && dxfLayerChooser[1])
             {
                 // Start of polyline
                 writeDxfLine("0","POLYLINE");
@@ -288,7 +288,7 @@ public class DxfFile
                 writeDxfLine("0","SEQEND");
             }
 
-            if (dxfLayerChooser[4] == true)
+            if (dxfLayerChooser.length > 4 && dxfLayerChooser[4])
             {
                 // Add construction line entities one at a time
                 for (int i = 0; i < ConX.size() - 1; i++)
@@ -321,7 +321,7 @@ public class DxfFile
                 }
             }
 
-            if (dxfLayerChooser[2] == true)
+            if (dxfLayerChooser.length > 2 && dxfLayerChooser[2])
             {
                 // Marks the keypoints used as individual circles on a separate layer
                 for (int i = 0; i < linesX.size() - 1; i++)
@@ -337,7 +337,7 @@ public class DxfFile
                 }
             }
 
-            if (dxfLayerChooser[3] == true)
+            if (dxfLayerChooser.length > 3 && dxfLayerChooser[3])
             {
                 // Add point coordinates one at a time
                 for (int i = 0; i < linesX.size() - 1; i++)
@@ -355,7 +355,7 @@ public class DxfFile
                 }
             }
 
-            if (dxfLayerChooser[0] == true)
+            if (dxfLayerChooser.length > 0 && dxfLayerChooser[0])
             {
                 // Write lines to create a 10 x 10 cm square off to bottom left of pattern
                 float[] scaleSqX = {-5.0f, -5.0f, 5.0f, 5.0f};

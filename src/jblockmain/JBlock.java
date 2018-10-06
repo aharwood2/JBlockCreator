@@ -63,7 +63,6 @@ public class JBlock extends JFrame
     private JCheckBox checkConnectingLinesAnalysis;
     private JCheckBox checkKeypointsAsCirclesAnalysis;
     private JCheckBox checkKeypointCoordinatesAnalysis;
-    private JCheckBox checkConstructionLinesAnalysis;
 
     // Buttons
     private JButton butRun;
@@ -78,22 +77,22 @@ public class JBlock extends JFrame
     private JTextField textFieldPlotYID;
 
     // Images
-    private JLabel imageAnalysisSample;
     private JLabel imageUomLogo;
     private JPanel panelPatternsWrapper;
     private JPanel imagePatternWrapper;
     private JPanel panelAnalysisWrapper;
     private JPanel imageAnalysisWrapper;
     private JLayeredPane stackedPatternSample;
+    private JLayeredPane stackedAnalysisSample;
 
     // Layers
-    private ArrayList<Component> patternLayers;
+    private ArrayList<Component> paneLayers;
 
     // Internal fields
     private File fileOutput = null;
     private File fileInput = null;
     private boolean[] dxfLayerChoices = new boolean[5];
-    private boolean[] dxfLayersAnalysis = new boolean[5];
+    private boolean[] dxfLayersAnalysis = new boolean[4];
     private boolean isLayeredRectPlot;
     private boolean isRectanglePlot;
     private boolean isRunning = false;
@@ -477,47 +476,11 @@ public class JBlock extends JFrame
      */
     private void getLayerInformationPatterns()
     {
-        // Class for selecting which dxf layers to show
-        if (checkScaleBoxAndUser.isSelected())
-        {
-            dxfLayerChoices[0] = true;
-        }
-        else if (!checkScaleBoxAndUser.isSelected())
-        {
-            dxfLayerChoices[0] = false;
-        }
-        if (checkPatternOutline.isSelected())
-        {
-            dxfLayerChoices[1] = true;
-        }
-        else if (!checkPatternOutline.isSelected())
-        {
-            dxfLayerChoices[1] = false;
-        }
-        if (checkKeypointsAsCircles.isSelected())
-        {
-            dxfLayerChoices[2] = true;
-        }
-        else if (!checkKeypointsAsCircles.isSelected())
-        {
-            dxfLayerChoices[2] = false;
-        }
-        if (checkKeypointCoordinates.isSelected())
-        {
-            dxfLayerChoices[3] = true;
-        }
-        else if (!checkKeypointCoordinates.isSelected())
-        {
-            dxfLayerChoices[3] = false;
-        }
-        if (checkConstructionLines.isSelected())
-        {
-            dxfLayerChoices[4] = true;
-        }
-        else if (!checkConstructionLines.isSelected())
-        {
-            dxfLayerChoices[4] = false;
-        }
+        dxfLayerChoices[0] = checkScaleBoxAndUser.isSelected();
+        dxfLayerChoices[1] = checkPatternOutline.isSelected();
+        dxfLayerChoices[2] = checkKeypointsAsCircles.isSelected();
+        dxfLayerChoices[3] = checkKeypointCoordinates.isSelected();
+        dxfLayerChoices[4] = checkConstructionLines.isSelected();
     }
 
     /**
@@ -525,47 +488,10 @@ public class JBlock extends JFrame
      */
     private void getLayerInformationAnalysis()
     {
-        // Class for selecting which dxf layers to show
-        if (checkScaleBoxAndUserAnalysis.isSelected())
-        {
-            dxfLayersAnalysis[0] = true;
-        }
-        else if (!checkScaleBoxAndUserAnalysis.isSelected())
-        {
-            dxfLayersAnalysis[0] = false;
-        }
-        if (checkConnectingLinesAnalysis.isSelected())
-        {
-            dxfLayersAnalysis[1] = true;
-        }
-        else if (!checkConnectingLinesAnalysis.isSelected())
-        {
-            dxfLayersAnalysis[1] = false;
-        }
-        if (checkKeypointsAsCirclesAnalysis.isSelected())
-        {
-            dxfLayersAnalysis[2] = true;
-        }
-        else if (!checkKeypointsAsCirclesAnalysis.isSelected())
-        {
-            dxfLayersAnalysis[2] = false;
-        }
-        if (checkKeypointCoordinatesAnalysis.isSelected())
-        {
-            dxfLayersAnalysis[3] = true;
-        }
-        else if (!checkKeypointCoordinatesAnalysis.isSelected())
-        {
-            dxfLayersAnalysis[3] = false;
-        }
-        if (checkConstructionLinesAnalysis.isSelected())
-        {
-            dxfLayersAnalysis[4] = true;
-        }
-        else if (!checkConstructionLinesAnalysis.isSelected())
-        {
-            dxfLayersAnalysis[4] = false;
-        }
+        dxfLayersAnalysis[0] = checkScaleBoxAndUserAnalysis.isSelected();
+        dxfLayersAnalysis[1] = checkConnectingLinesAnalysis.isSelected();
+        dxfLayersAnalysis[2] = checkKeypointsAsCirclesAnalysis.isSelected();
+        dxfLayersAnalysis[3] = checkKeypointCoordinatesAnalysis.isSelected();
     }
 
     /**
@@ -625,26 +551,46 @@ public class JBlock extends JFrame
             }
         });
 
-        // Attach listener to DXF layer checkboxes
+        // Attach listener to DXF layer checkboxes //
+
+        // Pattern pane
         checkScaleBoxAndUser.addActionListener(e -> {
-            if (!checkScaleBoxAndUser.isSelected()) stackedPatternSample.setLayer(patternLayers.get(5), 0);
-            else stackedPatternSample.setLayer(patternLayers.get(5), 1);
+            if (!checkScaleBoxAndUser.isSelected()) stackedPatternSample.setLayer(paneLayers.get(5), 0);
+            else stackedPatternSample.setLayer(paneLayers.get(5), 1);
         });
         checkPatternOutline.addActionListener(e -> {
-            if (!checkPatternOutline.isSelected()) stackedPatternSample.setLayer(patternLayers.get(4), 0);
-            else stackedPatternSample.setLayer(patternLayers.get(4), 1);
+            if (!checkPatternOutline.isSelected()) stackedPatternSample.setLayer(paneLayers.get(4), 0);
+            else stackedPatternSample.setLayer(paneLayers.get(4), 1);
         });
         checkKeypointsAsCircles.addActionListener(e -> {
-            if (!checkKeypointsAsCircles.isSelected()) stackedPatternSample.setLayer(patternLayers.get(3), 0);
-            else stackedPatternSample.setLayer(patternLayers.get(3), 1);
+            if (!checkKeypointsAsCircles.isSelected()) stackedPatternSample.setLayer(paneLayers.get(3), 0);
+            else stackedPatternSample.setLayer(paneLayers.get(3), 1);
         });
         checkKeypointCoordinates.addActionListener(e -> {
-            if (!checkKeypointCoordinates.isSelected()) stackedPatternSample.setLayer(patternLayers.get(2), 0);
-            else stackedPatternSample.setLayer(patternLayers.get(2), 1);
+            if (!checkKeypointCoordinates.isSelected()) stackedPatternSample.setLayer(paneLayers.get(2), 0);
+            else stackedPatternSample.setLayer(paneLayers.get(2), 1);
         });
         checkConstructionLines.addActionListener(e -> {
-            if (!checkConstructionLines.isSelected()) stackedPatternSample.setLayer(patternLayers.get(1), 0);
-            else stackedPatternSample.setLayer(patternLayers.get(1), 1);
+            if (!checkConstructionLines.isSelected()) stackedPatternSample.setLayer(paneLayers.get(1), 0);
+            else stackedPatternSample.setLayer(paneLayers.get(1), 1);
+        });
+
+        // Analysis pane
+        checkScaleBoxAndUserAnalysis.addActionListener(e -> {
+            if (!checkScaleBoxAndUserAnalysis.isSelected()) stackedAnalysisSample.setLayer(paneLayers.get(10), 0);
+            else stackedAnalysisSample.setLayer(paneLayers.get(10), 1);
+        });
+        checkConnectingLinesAnalysis.addActionListener(e -> {
+            if (!checkConnectingLinesAnalysis.isSelected()) stackedAnalysisSample.setLayer(paneLayers.get(9), 0);
+            else stackedAnalysisSample.setLayer(paneLayers.get(9), 1);
+        });
+        checkKeypointsAsCirclesAnalysis.addActionListener(e -> {
+            if (!checkKeypointsAsCirclesAnalysis.isSelected()) stackedAnalysisSample.setLayer(paneLayers.get(8), 0);
+            else stackedAnalysisSample.setLayer(paneLayers.get(8), 1);
+        });
+        checkKeypointCoordinatesAnalysis.addActionListener(e -> {
+            if (!checkKeypointCoordinatesAnalysis.isSelected()) stackedAnalysisSample.setLayer(paneLayers.get(7), 0);
+            else stackedAnalysisSample.setLayer(paneLayers.get(7), 1);
         });
     }
 
@@ -702,26 +648,24 @@ public class JBlock extends JFrame
         Image origImg = imageIcon.getImage();
         Image newImg = origImg.getScaledInstance(size.width, size.height, Image.SCALE_SMOOTH);
 
-        // TODO: Something going on with sizing here
-
-        // Create the JLabel as the layer
-        JLabel imagePatternSampleLayer = new JLabel(new ImageIcon(newImg));
+        // Create the JLabel as a layer
+        JLabel layer = new JLabel(new ImageIcon(newImg));
 
         // No layout manager so initialise this stuff myself
-        imagePatternSampleLayer.setVerticalAlignment(JLabel.TOP);
-        imagePatternSampleLayer.setHorizontalAlignment(JLabel.CENTER);
-        imagePatternSampleLayer.setOpaque(true);
-        imagePatternSampleLayer.setForeground(Color.black);
-        imagePatternSampleLayer.setBorder(BorderFactory.createLineBorder(Color.black));
-        imagePatternSampleLayer.setPreferredSize(size);
-        imagePatternSampleLayer.setBounds(0, 0, size.width, size.height);
-        imagePatternSampleLayer.setBackground(new Color(0,0,0,0));  // Important for transparency to work!
+        layer.setVerticalAlignment(JLabel.TOP);
+        layer.setHorizontalAlignment(JLabel.CENTER);
+        layer.setOpaque(true);
+        layer.setForeground(Color.black);
+        layer.setBorder(BorderFactory.createLineBorder(Color.black));
+        layer.setPreferredSize(size);
+        layer.setBounds(0, 0, size.width, size.height);
+        layer.setBackground(new Color(0,0,0,0));  // Important for transparency to work!
 
         // Add to layer list
-        if (patternLayers == null) patternLayers = new ArrayList<>();
-        patternLayers.add(imagePatternSampleLayer);
+        if (paneLayers == null) paneLayers = new ArrayList<>();
+        paneLayers.add(layer);
 
-        return imagePatternSampleLayer;
+        return layer;
     }
 
     /**
@@ -730,6 +674,8 @@ public class JBlock extends JFrame
     private void createUIComponents()
     {
         // Setup the layered images and stash
+
+        // Pattern pane
         stackedPatternSample = new JLayeredPane();
         stackedPatternSample.setPreferredSize(new Dimension(435, 435));
         stackedPatternSample.add(createLayer("./images/PatternSample_00000.png", stackedPatternSample.getPreferredSize()), 0);
@@ -739,7 +685,16 @@ public class JBlock extends JFrame
         stackedPatternSample.add(createLayer("./images/PatternSample_01000.png", stackedPatternSample.getPreferredSize()), 0);
         stackedPatternSample.add(createLayer("./images/PatternSample_10000.png", stackedPatternSample.getPreferredSize()), 0);
 
-        imageAnalysisSample = new JLabel(new ImageIcon("./images/sample_analysis.jpg"));
+        // Analysis pane
+        stackedAnalysisSample = new JLayeredPane();
+        stackedAnalysisSample.setPreferredSize(stackedPatternSample.getPreferredSize());
+        stackedAnalysisSample.add(createLayer("./images/AnalysisSample_0000.png", stackedPatternSample.getPreferredSize()), 0);
+        stackedAnalysisSample.add(createLayer("./images/AnalysisSample_0001.png", stackedPatternSample.getPreferredSize()), 0);
+        stackedAnalysisSample.add(createLayer("./images/AnalysisSample_0010.png", stackedPatternSample.getPreferredSize()), 0);
+        stackedAnalysisSample.add(createLayer("./images/AnalysisSample_0100.png", stackedPatternSample.getPreferredSize()), 0);
+        stackedAnalysisSample.add(createLayer("./images/AnalysisSample_1000.png", stackedPatternSample.getPreferredSize()), 0);
+
+        // Create logo
         imageUomLogo = new JLabel(new ImageIcon("./images/logo_small.jpg"));
     }
 }
