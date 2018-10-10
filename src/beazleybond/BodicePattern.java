@@ -359,7 +359,7 @@ public class BodicePattern
                              Arb_SideSeamFromCentreBack + (Arb_SideSeamWaistDartWidth / 2.0));
 
         // Need to shift so point doesn't coincide with an existing keypoint
-        apex = new Vector2D(f_ArmholeDepth + JBlock.tol, Arb_SideSeamFromCentreBack);
+        apex = new Vector2D(f_ArmholeDepth + JBlockCreator.tol, Arb_SideSeamFromCentreBack);
 
         // 13. Add side seam dart
         ArrayList<Vector2D> dartPts2 = mainBlock.addDart(startPt, endPt, apex, dartPts1.get(0),EPosition.BEFORE);

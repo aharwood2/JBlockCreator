@@ -83,7 +83,7 @@ public abstract class Pattern implements IPlottable
         {
             try
             {
-                FileWriter writer = new FileWriter(fileoutput + "/" + JBlock.failedOutputsFilename);
+                FileWriter writer = new FileWriter(fileoutput + "/" + JBlockCreator.failedOutputsFilename);
                 BufferedWriter writer2 = new BufferedWriter(writer);
                 for (String str : missingMeasurements)
                 {
@@ -108,7 +108,7 @@ public abstract class Pattern implements IPlottable
     /**
      * Obtain measurements from the measurements hashmap as required by the pattern.
      * @param dataStore the object holding all acquired measurement data.
-     * @return  inidication as to whether reading was successful.
+     * @return          indication as to whether reading was successful.
      */
     protected abstract boolean readMeasurements(Measurements dataStore);
 

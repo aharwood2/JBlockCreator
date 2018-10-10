@@ -19,7 +19,8 @@ import jblockenums.EMsgType;
 /**
  * Class bound the GUI form
  */
-public class JBlock extends JFrame
+public class JBlockCreator
+        extends JFrame
 {
 
     /**
@@ -96,7 +97,7 @@ public class JBlock extends JFrame
     private boolean isLayeredRectPlot;
     private boolean isRectanglePlot;
     private boolean isRunning = false;
-    private static ResourceBundle bundle = ResourceBundle.getBundle("strings");
+    public static ResourceBundle bundle = ResourceBundle.getBundle("strings");
 
     /**
      * Name of failed output file
@@ -123,7 +124,7 @@ public class JBlock extends JFrame
         JFrame frame = new JFrame(bundle.getString("app_name") + " - v"
                                           + bundle.getString("maj_ver") + "."
                                           + bundle.getString("min_ver"));
-        final JBlock block = new JBlock();
+        final JBlockCreator block = new JBlockCreator();
         frame.setContentPane(block.panelMain);
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         frame.pack();
@@ -226,7 +227,7 @@ public class JBlock extends JFrame
                     setRunButtonText("Running...");
 
                     // Create a new measurements instance from the input file selected
-                    Measurements measurements = new Measurements(JBlock.this.fileInput.toString());
+                    Measurements measurements = new Measurements(JBlockCreator.this.fileInput.toString());
 
                     // Populate the boolean arrays from the chosen output options
                     getLayerInformationPatterns();
@@ -394,7 +395,7 @@ public class JBlock extends JFrame
                 filepath = filepath.substring(0, charDisplayLimit) + "...";
             }
             labSavePath.setText(filepath);
-            JBlock.this.fileOutput = fileChooser.getSelectedFile();
+            JBlockCreator.this.fileOutput = fileChooser.getSelectedFile();
         }
     }
 
@@ -410,7 +411,7 @@ public class JBlock extends JFrame
         if (fileChooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION)
         {
             // Store input file name and path
-            JBlock.this.fileInput = fileChooser.getSelectedFile();
+            JBlockCreator.this.fileInput = fileChooser.getSelectedFile();
             String filename = fileChooser.getSelectedFile().toString();
             if (filename.length() > charDisplayLimit)
             {
@@ -497,7 +498,7 @@ public class JBlock extends JFrame
     /**
      * Private constructor for the form-bound class
      */
-    private JBlock()
+    private JBlockCreator()
     {
         /* Add listeners */
 

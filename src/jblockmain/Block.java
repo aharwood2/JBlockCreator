@@ -8,7 +8,7 @@ import mathcontainers.VectorND;
 
 import java.util.ArrayList;
 
-import static jblockmain.JBlock.tol;
+import static jblockmain.JBlockCreator.tol;
 
 /**
  * Class that represents a block as a series of connected keypoints.
