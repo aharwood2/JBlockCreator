@@ -15,7 +15,7 @@ which may be executed directly to run the application. You may also wish to buil
 **Version: X.X**        
 Issue #37: Added dynamic preview capability as output options are selected with checkbox. Removed redundant box on analysis pane.    
 Issue #57: Reworked output to conform to ASTM standard. Testing shows it can be read into Lectra as an AAMA file so there is still a deficiency in the output and issue remains open.    
-TEST
+
 Small fixes to Aldrich trouser pattern and Gill skirt pattern.
 Proprietary pattern information removed for future releases prior to open source publication.    
 
