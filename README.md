@@ -1,5 +1,5 @@
 # About #
-JBlock 2D is an open-source framework for custom pattern drafting and fit analysis. Framework is based on a high-level `Block` class
+JBlockCreator is an open-source framework for custom pattern drafting and fit analysis. Framework is based on a high-level `Block` class
 which contains geometric elements necessary for recreating pattern drafting techniques digitally. Software also reads
 measurements from input files exported from body scanning cameras to facilitate custom fit. It is compatible with the SizeStream scanning system output format at present.    
 A selection of existing drafting methods will be shipped with the source code, the framework allows the creation of
@@ -13,8 +13,9 @@ which may be executed directly to run the application. You may also wish to buil
 ## Release Notes ##
 
 ** Version: X.X **
-Small fixes to Aldrich trouser pattern and Gill skirt pattern.
-Issue #37: Added dynamic preview capability as output options are selected with checkbox. Removed redundant box on analysis pane.
+Small fixes to Aldrich trouser pattern and Gill skirt pattern.    
+Issue #37: Added dynamic preview capability as output options are selected with checkbox. Removed redundant box on analysis pane.    
+Issue #57: Reworked output to conform to ASTM standard. Testing shows it can be read into Lectra as an AAMA file so there is still a deficiency in the output and issue remains open.    
 
 **Version: 1.1**    
 Issue #41: Added more input files to the input folder for users to test behaviour.    
