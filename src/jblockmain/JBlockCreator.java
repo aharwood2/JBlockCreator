@@ -38,7 +38,6 @@ public class JBlockCreator
     // Labels
     private JLabel labAldrich;
     private JLabel labBeazleyBond;
-    private JLabel labGill;
     private JLabel labOpenPath;
     private JLabel labSavePath;
     private JLabel labXID;
@@ -48,8 +47,6 @@ public class JBlockCreator
     private JCheckBox checkAldrichSkirt;
     private JCheckBox checkAldrichTrousers;
     private JCheckBox checkBeazleySkirt;
-    private JCheckBox checkGillSkirt;
-    private JCheckBox checkGillTrousers;
     private JCheckBox checkBeazleyStraightSleeve;
     private JCheckBox checkBeazleyTrousers;
     private JCheckBox checkBeazleyBodice;
@@ -269,18 +266,6 @@ public class JBlockCreator
                         {
                             StraightSleevePattern bb_sleeve = new StraightSleevePattern(measurements);
                             bb_sleeve.writeToDXF(fileOutput, dxfLayerChoices);
-                        }
-
-                        if (checkGillSkirt.isSelected())
-                        {
-                            gill.SkirtPattern gill_skirt = new gill.SkirtPattern(measurements);
-                            gill_skirt.writeToDXF(fileOutput, dxfLayerChoices);
-                        }
-
-                        if (checkGillTrousers.isSelected())
-                        {
-                            gill.TrouserPattern gill_trousers = new gill.TrouserPattern(measurements);
-                            gill_trousers.writeToDXF(fileOutput, dxfLayerChoices);
                         }
 
                         if (checkAldrichSkirt.isSelected())

@@ -106,7 +106,7 @@
                 <properties/>
                 <border type="none"/>
                 <children>
-                  <grid id="64c5b" binding="panelPatterns" layout-manager="GridLayoutManager" row-count="3" column-count="5" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+                  <grid id="64c5b" binding="panelPatterns" layout-manager="GridLayoutManager" row-count="2" column-count="5" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
                     <margin top="0" left="0" bottom="0" right="0"/>
                     <constraints>
                       <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
@@ -147,14 +147,6 @@
                           <text value="Beazley - Bond:"/>
                         </properties>
                       </component>
-                      <component id="ab45d" class="javax.swing.JLabel" binding="labGill">
-                        <constraints>
-                          <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
-                        </constraints>
-                        <properties>
-                          <text value="Gill:"/>
-                        </properties>
-                      </component>
                       <component id="b601a" class="javax.swing.JCheckBox" binding="checkBeazleySkirt">
                         <constraints>
                           <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
@@ -187,22 +179,6 @@
                         </constraints>
                         <properties>
                           <text value="Straight Sleeve"/>
-                        </properties>
-                      </component>
-                      <component id="c299f" class="javax.swing.JCheckBox" binding="checkGillSkirt">
-                        <constraints>
-                          <grid row="2" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
-                        </constraints>
-                        <properties>
-                          <text value="Skirt"/>
-                        </properties>
-                      </component>
-                      <component id="db86c" class="javax.swing.JCheckBox" binding="checkGillTrousers">
-                        <constraints>
-                          <grid row="2" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
-                        </constraints>
-                        <properties>
-                          <text value="Trousers"/>
                         </properties>
                       </component>
                     </children>
