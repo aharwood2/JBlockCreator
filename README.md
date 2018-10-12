@@ -1,9 +1,10 @@
 # About #
-JBlockCreator is an open-source framework for custom pattern drafting and fit analysis. Framework is based on a high-level `Block` class
-which contains geometric elements necessary for recreating pattern drafting techniques digitally. Software also reads
-measurements from input files exported from body scanning cameras to facilitate custom fit. It is compatible with the SizeStream scanning system output format at present.    
-A selection of existing drafting methods will be shipped with the source code, the framework allows the creation of
-custom methods as desired. Software copyright is retained by the The University of Manchester.
+JBlockCreator is an open-source framework for custom pattern drafting and fit analysis. Framework is based on a 
+high-level `Block` class which contains geometric elements necessary for recreating pattern drafting techniques 
+digitally. Software also reads measurements from input files exported from body scanning cameras to facilitate custom 
+fit. A selection of existing drafting methods are shipped with the source code, but the framework allows the creation of
+custom methods as desired by extending the `Pattern` class and adding the relevant UI code. Software copyright is 
+retained by the The University of Manchester.
 
 # Compiling and Running #
 Release builds are available from the master branch at tagged commits. These releases are shipped with *.jar
@@ -12,7 +13,7 @@ which may be executed directly to run the application. You may also wish to buil
 
 # Release Notes #
 
-**Version: X.X**        
+**Version: 1.2**        
 Issue #37: Added dynamic preview capability as output options are selected with checkbox. Removed redundant box on analysis pane.    
 Issue #57: Reworked output to conform to ASTM standard. Testing shows it can be read into Lectra as an AAMA file so there is still a deficiency in the output and issue remains open.    
 
