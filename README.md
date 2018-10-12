@@ -10,12 +10,14 @@ Release builds are available from the master branch at tagged commits. These rel
 which may be executed directly to run the application. You may also wish to build from source which you can do using
 `javac` from the command line.
 
-## Release Notes ##
+# Release Notes #
 
-** Version: X.X **
-Small fixes to Aldrich trouser pattern and Gill skirt pattern.    
+**Version: X.X**        
 Issue #37: Added dynamic preview capability as output options are selected with checkbox. Removed redundant box on analysis pane.    
 Issue #57: Reworked output to conform to ASTM standard. Testing shows it can be read into Lectra as an AAMA file so there is still a deficiency in the output and issue remains open.    
+
+Small fixes to Aldrich trouser pattern and Gill skirt pattern.
+Proprietary pattern information removed for future releases prior to open source publication.    
 
 **Version: 1.1**    
 Issue #41: Added more input files to the input folder for users to test behaviour.    
@@ -43,15 +45,14 @@ Issue #30: All custom measurements needed for the Beazley Bond sleeve now availa
 Issue #34: File input and outputs for the GUI fixed so they work as intended.    
 Issue #42: Created a user guide for v1.0.
 
-Patterns added:    
-
+New patterns added include:    
 Beazley Bond Straight Sleeve    
 Aldrich Skirt    
 Gill Skirt    
 
 **Version: 0.2**    
 Issue #1: Patterns can now store the name of the input file and use it when writing DXFs.    
-Issue #2: Patterns now have a 10cm square drawn on a separate layer to allow scaling.    
+Issue #2: Patterns now have a 10cm square drawn on a separate layer to indicate scaling.    
 Issue #3: Patterns now have their name written on a separate layer.    
 
 **Version: 0.1**    
