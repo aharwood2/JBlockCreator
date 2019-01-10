@@ -72,6 +72,11 @@ public class BodicePattern
     {
         if (!readMeasurements(dataStore)) return;
         addEasement();
+        
+        // Rule for armhole width
+        double ratio = m_WidthArmhole / a_Bust;
+        if (a_Bust * ratio > m_WidthArmhole) m_WidthArmhole = a_Bust * ratio;
+        
 
         // Populate arbitrary measurements
         /* Arbitrary Measurements */
@@ -131,7 +136,7 @@ public class BodicePattern
     protected boolean readMeasurements(Measurements dataStore)
     {
         try
-        {
+        {        
             // Get measurements from the scan data store
             a_Bust = dataStore.getMeasurement("A01").value;
             b_Waist = dataStore.getMeasurement("A02").value;
@@ -145,7 +150,6 @@ public class BodicePattern
             j_AcrossFront = dataStore.getMeasurement("A10").value;
             k_Shoulder = dataStore.getMeasurement("A11").value;
             l_WidthBustProm = dataStore.getMeasurement("A12").value;
-            m_WidthArmhole = dataStore.getMeasurement("A36").value;
 
             // Get name
             userName = dataStore.getName();
