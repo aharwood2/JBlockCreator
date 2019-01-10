@@ -78,7 +78,7 @@ public class BodicePattern
 
         Arb_BackWaistDartSuppression = 1.5;
         Arb_AcrossBackLevel = f_ArmholeDepth / 2.0;
-        Arb_SideSeamFromCentreBack = (a_Bust / 4.0) + 1.5;
+        Arb_SideSeamFromCentreBack = ((a_Bust - 6.0) / 4.0) + 1.5;  // Deducted 6.0 ease from bust measurement in this case
         Arb_HalfFrontNeckWidth = (c_Neck / 5.0) - 1.5;
         Arb_FrontNeckDepth = c_Neck / 5.0;
         Arb_HalfBackNeckWidth = (c_Neck / 5.0) - 0.5;
