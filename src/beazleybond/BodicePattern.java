@@ -31,10 +31,11 @@ public class BodicePattern
     private double m_WidthArmhole   = 10.0;
     
     /* Ease */
-    private double a_Bust_Ease = 6.0;
+    private final double a_Bust_Ease = 6.0;
+    private final double m_WidthArmhole_Ease = 1.5;
 
     // Width of armhole ease
-    m_WidthArmhole_Ease = 1.5;
+
 
     /* Arbitrary Measurements */
     
@@ -83,7 +84,7 @@ public class BodicePattern
         addEasement();
         
         // Rule for armhole width (applied after ease)
-        if (a_Bust * ratio > m_WidthArmhole) m_WidthArmhole = a_Bust * ratio;        
+        if (a_Bust * Arb_ArmholeRatio > m_WidthArmhole) m_WidthArmhole = a_Bust * Arb_ArmholeRatio;
 
         // Populate arbitrary measurements
         /* Arbitrary Measurements */
@@ -148,7 +149,6 @@ public class BodicePattern
             a_Bust = dataStore.getMeasurement("A01").value;
             b_Waist = dataStore.getMeasurement("A02").value;
             c_Neck = dataStore.getMeasurement("A05").value;
-            //d_BackNeckRise =
             e_NapeToWaist = dataStore.getMeasurement("A04").value;
             f_ArmholeDepth = dataStore.getMeasurement("A06").value;
             g_FrNeckToBust = dataStore.getMeasurement("A07").value;
