@@ -33,7 +33,13 @@ public class BodicePattern
     /* Ease */
     private double a_Bust_Ease = 6.0;
 
+    // Width of armhole ease
+    m_WidthArmhole_Ease = 1.5;
+
     /* Arbitrary Measurements */
+    
+    // Use default (size 12) values of m_WidthArmhole and a_Bust to compute a ratio
+    private final double Arb_ArmholeRatio = (m_WidthArmhole + m_WidthArmhole_Ease) / (a_Bust + a_Bust_Ease);
 
     // This relates to the height of the basic rectangle which includes this amount for suppression of back waist dart
     // and the side seam.
@@ -75,6 +81,9 @@ public class BodicePattern
     {
         if (!readMeasurements(dataStore)) return;
         addEasement();
+        
+        // Rule for armhole width (applied after ease)
+        if (a_Bust * ratio > m_WidthArmhole) m_WidthArmhole = a_Bust * ratio;        
 
         // Populate arbitrary measurements
         /* Arbitrary Measurements */
@@ -127,14 +136,14 @@ public class BodicePattern
         f_ArmholeDepth += 3.0;
         i_AcrossBack += 2.0;
         j_AcrossFront += 1.0;
-        m_WidthArmhole += 1.5;
+        m_WidthArmhole += m_WidthArmhole_Ease;
     }
 
     @Override
     protected boolean readMeasurements(Measurements dataStore)
     {
         try
-        {
+        {        
             // Get measurements from the scan data store
             a_Bust = dataStore.getMeasurement("A01").value;
             b_Waist = dataStore.getMeasurement("A02").value;
@@ -148,7 +157,6 @@ public class BodicePattern
             j_AcrossFront = dataStore.getMeasurement("A10").value;
             k_Shoulder = dataStore.getMeasurement("A11").value;
             l_WidthBustProm = dataStore.getMeasurement("A12").value;
-            m_WidthArmhole = dataStore.getMeasurement("A36").value;
 
             // Get name
             userName = dataStore.getName();
