@@ -29,6 +29,9 @@ public class BodicePattern
     private double k_Shoulder       = 13.0;
     private double l_WidthBustProm  = 19.0;
     private double m_WidthArmhole   = 10.0;
+    
+    /* Ease */
+    private double a_Bust_Ease = 6.0;
 
     /* Arbitrary Measurements */
 
@@ -78,7 +81,7 @@ public class BodicePattern
 
         Arb_BackWaistDartSuppression = 1.5;
         Arb_AcrossBackLevel = f_ArmholeDepth / 2.0;
-        Arb_SideSeamFromCentreBack = ((a_Bust - 6.0) / 4.0) + 1.5;  // Deducted 6.0 ease from bust measurement in this case
+        Arb_SideSeamFromCentreBack = ((a_Bust - a_Bust_Ease) / 4.0) + 1.5;  // Deducted ease from bust measurement in this case
         Arb_HalfFrontNeckWidth = (c_Neck / 5.0) - 1.5;
         Arb_FrontNeckDepth = c_Neck / 5.0;
         Arb_HalfBackNeckWidth = (c_Neck / 5.0) - 0.5;
@@ -118,7 +121,7 @@ public class BodicePattern
     protected void addEasement()
     {
         // Size 12 for now
-        a_Bust += 6.0;
+        a_Bust += a_Bust_Ease;
         b_Waist += 4.0;
         c_Neck += 2.0;
         f_ArmholeDepth += 3.0;
