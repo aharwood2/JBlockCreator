@@ -171,7 +171,7 @@ public class TrouserPattern
         // for plotting. The bottom left corner of the space to be the origin.
 
         // Create front block first
-        blocks.add(new Block(userName + "_Trousers_Front_Block"));
+        blocks.add(new Block(userName + "_BB_Trousers_Front_Block"));
         Block frontBlock = blocks.get(blocks.size() - 1);
 
         // Start keypoint placement from bottom left
@@ -352,6 +352,13 @@ public class TrouserPattern
                 new double[] {0.0, 75.0},
                 new int[] {-1, -1}
         );
+
+        // Add a curve instead of of straight line for the hip to waist line -- approximate angle at the waist
+        // TODO: should make it pass through a point midway between hip and waist or hip and upper hip whichever is higher
+        backBlock.addDirectedCurve(new Vector2D(h_Hip, Arb_BackWidthOfBlock),
+                                   new Vector2D(0.0, Arb_CentreBackFromInsideLeg + 2.0 + yOffset),
+                                   new double[] {0.0, 115.0});
+
 
         // Add construction keypoints for Upper Hip Level
         backBlock.addConstructionPoint(new Vector2D((g_UpperHip), 0.0 - Arb_Con),

@@ -48,6 +48,7 @@ public class BodicePattern
 
     // Level corresponding to the across back measurement is chosen as halfway between the armhole level and the neck
     private double Arb_AcrossBackLevel;
+    private double Arb_BackArmholeTouchX;
 
     // Setting of side seam position from the centre back (CB) at base of rectangle plus arbitrary 1.5cm
     private double Arb_SideSeamFromCentreBack;
@@ -91,6 +92,7 @@ public class BodicePattern
 
         Arb_BackWaistDartSuppression = 1.5;
         Arb_AcrossBackLevel = f_ArmholeDepth / 2.0;
+        Arb_BackArmholeTouchX = Arb_AcrossBackLevel + 2.0;
         Arb_SideSeamFromCentreBack = ((a_Bust - a_Bust_Ease) / 4.0) + 1.5;  // Deducted ease from bust measurement in this case
         Arb_HalfFrontNeckWidth = (c_Neck / 5.0) - 1.5;
         Arb_FrontNeckDepth = c_Neck / 5.0;
@@ -238,6 +240,7 @@ public class BodicePattern
                                                   new int[] {-1, -1});
 
         // 9. Add front shoulder dart
+        ArrayList<Vector2D> frontDartPoints =
         mainBlock.addDart(new Vector2D(0.0, refTopLeft.getY() - Arb_HalfFrontNeckWidth),
                           new Vector2D(frontShoulderLineX, refTopLeft.getY() - Arb_HalfFrontNeckWidth - frontShoulderLineY),
                           0.5,
@@ -281,19 +284,20 @@ public class BodicePattern
         // 11. Add armhole as four separate curves
 
         // Get touching point at back (use across back measurement)
-        Vector2D touchBack = new Vector2D(Arb_AcrossBackLevel, i_AcrossBack / 2.0);
+        Vector2D touchBack = new Vector2D(Arb_BackArmholeTouchX, i_AcrossBack / 2.0);
 
-        // Get touching point at front first from touchBack
-        Vector2D touchFront = new Vector2D(touchBack.add(new Vector2D(0.0, m_WidthArmhole)));
+        // Get touching point at front
+        Vector2D touchFront = new Vector2D(
+                frontShoulderLineX + (2.0 / 3.0) * (f_ArmholeDepth - frontShoulderLineX),
+                touchBack.getY() + m_WidthArmhole);
 
         // Get start point for first curve
         Vector2D startPt = new Vector2D(frontShoulderLineX,
                                         refTopLeft.getY() - Arb_HalfFrontNeckWidth - frontShoulderLineY);
-        Vector2D preStartPt = new Vector2D(0.0, refTopLeft.getY() - Arb_HalfFrontNeckWidth);
+        Vector2D preStartPt = frontDartPoints.get(2);
 
         // Compute end point for first curve
-        Vector2D endPt = new Vector2D((2.0 / 3.0) * (f_ArmholeDepth - frontShoulderLineX),
-                                      touchFront.getY());
+        Vector2D endPt = new Vector2D(touchFront);
 
         // a. Add first curve plus its end point as a keypoint
         Vector2D adjPoint = mainBlock.addDirectedCurve(startPt,

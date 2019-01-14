@@ -641,44 +641,12 @@ public class Block
                                  Vector2D dirStart, Vector2D dirEnd,
                                  double[] angleAtEnds)
     {
-        // To ensure the process is more robust we first map the two end points and their side directions onto a
-        // reference X axis. This is done by first shifting the start point to the reference origin then rotating the
-        // points and directions such that the start bounding line is coincident with the reference Y axis.
-
-        // Shift the start and end points
-        Vector2D refStart = new Vector2D(startPoint.subtract(startPoint));
-        Vector2D refEnd = new Vector2D(endPoint.subtract(startPoint));
-
-        // Find rotation angle such that curve will start parallel to X axis:
-        double rotang = Math.acos(dirStart.getY() / dirStart.norm()) - (Math.PI * (90.0 - angleAtEnds[0]) / 180.0);
-
-        // TODO: Can we use the getAngleToYAxis for this? Or create a getAngleToXAxis version?
-
-        // Check we have the correct rotation -- dirStart should map to X axis if correct i.e. Y = 0
-        double testY = Math.sin(rotang) * dirStart.getX() + Math.cos(rotang) * dirStart.getY();
-        if (Math.abs(testY) > tol) rotang = -rotang;
-
-        // Construct rotation matrix
-        Matrix2D R = new Matrix2D(2, 2,
-                                  new double[][]{
-                                          {Math.cos(rotang), -Math.sin(rotang)},
-                                          {Math.sin(rotang), Math.cos(rotang)}
-                                  }
-        );
-
-        // And reverse for later
-        Matrix2D Ri = new Matrix2D(2, 2,
-                                   new double[][]{
-                                           {Math.cos(-rotang), -Math.sin(-rotang)},
-                                           {Math.sin(-rotang), Math.cos(-rotang)}
-                                   }
-        );
+        // Construct the reference frame
+        ReferenceFrame f = new ReferenceFrame(startPoint, endPoint, dirStart, angleAtEnds[0]);
 
         // Rotate direction and position vectors
-        Vector2D refDirStart = new Vector2D(R.postMultiply(dirStart));
-        Vector2D refDirEnd = new Vector2D(R.postMultiply(dirEnd));
-        refStart = new Vector2D(R.postMultiply(refStart));
-        refEnd = new Vector2D(R.postMultiply(refEnd));
+        Vector2D refDirStart = new Vector2D(f.R.postMultiply(dirStart));
+        Vector2D refDirEnd = new Vector2D(f.R.postMultiply(dirEnd));
 
         // Compute curve start and end direction vectors and hence gradients in reference system
         Vector2D refCurveStart;
@@ -714,17 +682,84 @@ public class Block
         // ax^3 + bx^2 + cx + d
         // By using two end point conditions and two gradient conditions to define a set of simultaneous equations.
         final VectorND constants =
-                new VectorND(4, new double[] {refStart.getY(), refEnd.getY(), refDxDyStart, refDxDyEnd});
+                new VectorND(4, new double[] {f.refStart.getY(), f.refEnd.getY(), refDxDyStart, refDxDyEnd});
         final Matrix2D mat = new Matrix2D(4, 4,
                                           new double[][] {
-                                                  {Math.pow(refStart.getX(),3), Math.pow(refStart.getX(),2), refStart.getX(), 1.0},
-                                                  {Math.pow(refEnd.getX(),3), Math.pow(refEnd.getX(),2), refEnd.getX(), 1.0},
-                                                  {3.0 * Math.pow(refStart.getX(),2), 2.0 * refStart.getX(), 1.0, 0.0},
-                                                  {3.0 * Math.pow(refEnd.getX(),2), 2.0 * refEnd.getX(), 1.0, 0.0}
+                                                  {Math.pow(f.refStart.getX(),3), Math.pow(f.refStart.getX(),2), f.refStart.getX(), 1.0},
+                                                  {Math.pow(f.refEnd.getX(),3), Math.pow(f.refEnd.getX(),2), f.refEnd.getX(), 1.0},
+                                                  {3.0 * Math.pow(f.refStart.getX(),2), 2.0 * f.refStart.getX(), 1.0, 0.0},
+                                                  {3.0 * Math.pow(f.refEnd.getX(),2), 2.0 * f.refEnd.getX(), 1.0, 0.0}
                                           }
         );
 
         // Solve to get coefficients
+        PolyCoeffs coeffs = solveForCoefficients(mat, constants);
+
+        // Add keypoints
+        return addDiscretisedPoints(f.refStart, f.refEnd, f.Ri, startPoint, coeffs);
+    }
+
+    /**
+     * Class encapsulating the reference frame mapping
+     */
+    private class ReferenceFrame
+    {
+        final Matrix2D R;
+        final Matrix2D Ri;
+        private double rotang;
+        final Vector2D refStart;
+        final Vector2D refEnd;
+
+        /**
+         * Constructor
+         * @param startPoint    start point in physical space
+         * @param endPoint      end point in physical space
+         * @param dirStart      direction vector at the start in physical space
+         * @param angleAtStart  angle of curve at start point
+         */
+        public ReferenceFrame(Vector2D startPoint, Vector2D endPoint, Vector2D dirStart, double angleAtStart)
+        {
+            // To ensure the process is more robust we first map the two end points and their side directions onto a
+            // reference X axis. This is done by first shifting the start point to the reference origin then rotating the
+            // points and directions such that the start bounding line is coincident with the reference Y axis.
+
+            // Find rotation angle such that curve will start parallel to X axis:
+            rotang = Math.acos(dirStart.getY() / dirStart.norm()) - (Math.PI * (90.0 - angleAtStart) / 180.0);
+
+            // Check we have the correct rotation -- dirStart should map to X axis if correct i.e. Y = 0
+            double testY = Math.sin(rotang) * dirStart.getX() + Math.cos(rotang) * dirStart.getY();
+            if (Math.abs(testY) > tol) rotang = -rotang;
+
+            // Construct rotation matrix
+            R = new Matrix2D(2, 2,
+                             new double[][]{
+                                     {Math.cos(rotang), -Math.sin(rotang)},
+                                     {Math.sin(rotang), Math.cos(rotang)}
+                             }
+            );
+
+            // And reverse for later
+            Ri = new Matrix2D(2, 2,
+                              new double[][]{
+                                      {Math.cos(-rotang), -Math.sin(-rotang)},
+                                      {Math.sin(-rotang), Math.cos(-rotang)}
+                              }
+            );
+
+            //  Shift and rotate to get the reference start and end vectors
+            refStart = new Vector2D(R.postMultiply(startPoint.subtract(startPoint)));
+            refEnd = new Vector2D(R.postMultiply(endPoint.subtract(startPoint)));
+        }
+    }
+
+    /**
+     * Solver for getting coefficients of the cubic spline
+     * @param mat       matrix based on equations constraining spline
+     * @param constants right hand side of the system
+     * @return          coefficients of the cubic spline
+     */
+    private PolyCoeffs solveForCoefficients(Matrix2D mat, VectorND constants)
+    {
         final Matrix2D inverse = mat.invert();
         VectorND coVec = new VectorND(inverse.postMultiply(constants));
         PolyCoeffs coeffs = new PolyCoeffs(coVec);
@@ -739,7 +774,20 @@ public class Block
                 System.out.println("Cubic spline solver is potentially inaccurate!");
             }
         }
+        return coeffs;
+    }
 
+    /**
+     * Method to add points according to a cubic spline in the reference frame then transform back to physical space
+     * @param refStart      start point in the reference frame
+     * @param refEnd        end point in the reference frame
+     * @param Ri            inverse matrix transform back to physical space
+     * @param startPoint    start point in physical space
+     * @param coeffs        spline coefficients
+     * @return              last point added
+     */
+    private Vector2D addDiscretisedPoints(Vector2D refStart, Vector2D refEnd, Matrix2D Ri, Vector2D startPoint, PolyCoeffs coeffs)
+    {
         // Discretise by specified amount
         int numPts = (int)Math.ceil(refEnd.subtract(refStart).norm() * res);
 
