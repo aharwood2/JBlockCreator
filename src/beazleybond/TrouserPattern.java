@@ -201,8 +201,8 @@ public class TrouserPattern
         // Add keypoint at outside leg at the hip level
         frontBlock.addKeypoint(new Vector2D(h_Hip, Arb_FrontWidthOfBlock));
 
-        // Add keypoint at outside leg and upper hip level
-        frontBlock.addKeypoint(new Vector2D(g_UpperHip, Arb_CentreFrontFromInsideLeg + (b_UpperHip / 4.0)));
+        // Add keypoint at outside leg and upper hip level -- changed this feature (see below)
+        //frontBlock.addKeypoint(new Vector2D(g_UpperHip, Arb_CentreFrontFromInsideLeg + (b_UpperHip / 4.0)));
 
         // Add keypoint at outside leg and waist level
         frontBlock.addKeypoint(new Vector2D(0.0, Arb_CentreFrontFromInsideLeg + (a_Waist / 4.0) + Arb_FrontDartSuppression));
@@ -245,6 +245,15 @@ public class TrouserPattern
                            Arb_FrontDartWidth,
                            Arb_FrontDartLength,
                            true, false);
+
+        // Add a curve instead of of straight line for the hip to waist line -- using a point at the upper hip level
+        // positioned midway between the point at the hip and the point at the waist as an intermediate point
+        Vector2D frontHipWaistStart = new Vector2D(h_Hip, Arb_FrontWidthOfBlock);
+        Vector2D frontHipWaistEnd = new Vector2D(0.0, Arb_CentreFrontFromInsideLeg + (a_Waist / 4.0) + Arb_FrontDartSuppression);
+        double frontHipWaistY = (frontHipWaistStart.getY() - frontHipWaistEnd.getY()) / 2.0;
+        Vector2D frontHipWaistInt = new Vector2D(Arb_UpperHipLevel, frontHipWaistEnd.getY() + frontHipWaistY);
+        frontBlock.addDirectedCurve(frontHipWaistStart, frontHipWaistEnd, frontHipWaistInt, 0.0);
+
 
         // Add construction keypoints for Upper Hip Level
         frontBlock.addConstructionPoint(new Vector2D((g_UpperHip), 0.0 - Arb_Con),
@@ -353,12 +362,12 @@ public class TrouserPattern
                 new int[] {-1, -1}
         );
 
-        // Add a curve instead of of straight line for the hip to waist line -- approximate angle at the waist
-        // TODO: should make it pass through a point midway between hip and waist or hip and upper hip whichever is higher
-        backBlock.addDirectedCurve(new Vector2D(h_Hip, Arb_BackWidthOfBlock),
-                                   new Vector2D(0.0, Arb_CentreBackFromInsideLeg + 2.0 + yOffset),
-                                   new double[] {0.0, 115.0});
-
+        // Add a curve instead of of straight line for the hip to waist line
+        Vector2D backHipWaistStart = new Vector2D(h_Hip, Arb_BackWidthOfBlock);
+        Vector2D backHipWaistEnd = new Vector2D(0.0, Arb_CentreBackFromInsideLeg + 2.0 + yOffset);
+        double backHipWaistY = (backHipWaistStart.getY() - backHipWaistEnd.getY()) / 2.0;
+        Vector2D backHipWaistInt = new Vector2D(Arb_UpperHipLevel, backHipWaistEnd.getY() + backHipWaistY);
+        backBlock.addDirectedCurve(backHipWaistStart, backHipWaistEnd, backHipWaistInt, 0.0);
 
         // Add construction keypoints for Upper Hip Level
         backBlock.addConstructionPoint(new Vector2D((g_UpperHip), 0.0 - Arb_Con),
