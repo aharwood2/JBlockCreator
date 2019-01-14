@@ -30,7 +30,13 @@ public class BodicePattern
     private double l_WidthBustProm  = 19.0;
     private double m_WidthArmhole   = 10.0;
 
+    // Width of armhole ease
+    m_WidthArmhole_Ease = 1.5;
+
     /* Arbitrary Measurements */
+    
+    // Use default (size 12) values of m_WidthArmhole and a_Bust to compute a ratio
+    private final double Arb_ArmholeRatio = (m_WidthArmhole + m_WidthArmhole_Ease) / (a_Bust + a_Bust_Ease);
 
     // This relates to the height of the basic rectangle which includes this amount for suppression of back waist dart
     // and the side seam.
@@ -73,10 +79,8 @@ public class BodicePattern
         if (!readMeasurements(dataStore)) return;
         addEasement();
         
-        // Rule for armhole width
-        double ratio = m_WidthArmhole / a_Bust;
-        if (a_Bust * ratio > m_WidthArmhole) m_WidthArmhole = a_Bust * ratio;
-        
+        // Rule for armhole width (applied after ease)
+        if (a_Bust * ratio > m_WidthArmhole) m_WidthArmhole = a_Bust * ratio;        
 
         // Populate arbitrary measurements
         /* Arbitrary Measurements */
@@ -129,7 +133,7 @@ public class BodicePattern
         f_ArmholeDepth += 3.0;
         i_AcrossBack += 2.0;
         j_AcrossFront += 1.0;
-        m_WidthArmhole += 1.5;
+        m_WidthArmhole += m_WidthArmhole_Ease;
     }
 
     @Override
