@@ -8,8 +8,9 @@ retained by the The University of Manchester.
 
 # Compiling and Running #
 Release builds are available from the master branch at tagged commits. These releases are shipped with *.jar
-which may be executed directly to run the application. You may also wish to build from source which you can do using
-`javac` from the command line or by importing the code into a suitable IDE.
+which may be executed directly to run the application. Images are not embedded so the *.jar file must be in the same
+directory as the `images` directory. If you wish to build form the latest source code, since v1.4 we now provide Maven 
+configuration files to allow users to build using Maven. Instructions are available on the Wiki.
 
 # Known Issues #
 The current release has no known bugs, however testing has identified a
@@ -17,12 +18,16 @@ number of limitations which are recorded on the issue tracker where appropriate.
 
 # Release Notes #
 
-**Version 1.3**
-Issue #59: Additional armhole width rule added to fix an issue with armhole being too wide.
-Issue #63: Issues with the hip to waist curve on the BB trouser pattern have been replaced with a new solution.
-Issue #7: Fixed an issue with the touch point placements on the armhole which affected the reliability of the curves.
+**Version 1.4**    
+Addition of the Gill experimental patterns fr public consumption.     
+New Maven build files added and wiki material to assist with building from source.    
 
-**Version: 1.2**        
+**Version 1.3**    
+Issue #59: Additional armhole width rule added to fix an issue with armhole being too wide.    
+Issue #63: Issues with the hip to waist curve on the BB trouser pattern have been replaced with a new solution.    
+Issue #7: Fixed an issue with the touch point placements on the armhole which affected the reliability of the curves.    
+
+**Version: 1.2**            
 Issue #37: Added dynamic preview capability as output options are selected with checkbox. Removed redundant box on analysis pane.    
 Issue #57: Reworked output to conform to ASTM standard. Testing shows it can be read into Lectra as an AAMA file so there is still a deficiency in the output and issue remains open.    
 
