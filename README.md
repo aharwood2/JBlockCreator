@@ -9,18 +9,18 @@ retained by the The University of Manchester.
 # Compiling and Running #
 Release builds are available from the master branch at tagged commits. These releases are shipped with *.jar
 which may be executed directly to run the application. Images are not embedded so the *.jar file must be in the same
-directory as the `images` directory. If you wish to build form the latest source code, since v1.4 we now provide Maven 
-configuration files to allow users to build using Maven. Instructions are available on the Wiki.
+directory as the `images` directory. If you wish to build form the latest source code, since v1.4 we now provide Ant 
+configuration files and a build script to allow users to build from source. Instructions are available on the Wiki.
 
 # Known Issues #
-The current release has no known bugs, however testing has identified a
-number of limitations which are recorded on the issue tracker where appropriate.
+The current release has no known bugs, however testing has identified a number of limitations which are recorded on the 
+issue tracker where appropriate.
 
 # Release Notes #
 
 **Version 1.4**    
 Addition of the Gill experimental patterns fr public consumption.     
-New Maven build files added and wiki material to assist with building from source.    
+New Ant build files added and wiki material to assist with building from source.    
 
 **Version 1.3**    
 Issue #59: Additional armhole width rule added to fix an issue with armhole being too wide.    
