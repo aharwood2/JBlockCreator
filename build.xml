@@ -229,7 +229,7 @@
   </target>
   
   <!-- Run Target -->
-  <target name="run" depends="artifact.jblockcreator:jar">
+  <target name="run" depends="all">
 	<java jar="${artifact.output.jblockcreator:jar}/JBlockCreator.jar" fork="true"/>
   </target>
   
