@@ -157,21 +157,32 @@ public class TrouserPattern extends Pattern
 
         //point 2
         Vector2D point2 = new Vector2D(kneeXPosition,-(((kneeCircumR+kneeEase)/4)-0.75));
-        frontBlock.addQuadraticBezierCurve(point1,new Vector2D(point1.getX(),point2.getY()),point2);
-
         frontBlock.addKeypoint(point2);
 
+        frontBlock.addCircularCurve(point1,point2,point2.getY()-(new Vector2D(point1.add(point2.subtract(point1).divide(2)))).getY()-0.4,false);
+
         /*
-        Vector2D tangCorn12 = new Vector2D(point1.getX(),point2.getY());
-        frontBlock.addDirectedCurveWithApexTangent(point1,point2,tangCorn12,5,
-                new double[]{-30,0},new int []{1,-1});
+        frontBlock.addKeypoint(point2);
+        frontBlock.addDirectedCurveWithApexTangent(point1,point2,new Vector2D(point1.getX(),point2.getY()),4.6,
+                new double[]{-90,0},new int []{1,-1});
+
          */
 
+        /*
+        frontBlock.addQuadraticBezierCurve(point1,new Vector2D(point1.getX(),point2.getY()),point2);
+        frontBlock.addKeypoint(point2);
+        &/
+         */
+
+
+
         //point 3
-        frontBlock.addKeypoint(new Vector2D(ankleXPosition,-(((ankleCircumR+ankleEase)/4)-0.75)));
+        Vector2D point3 = new Vector2D(new Vector2D(ankleXPosition,-(((ankleCircumR+ankleEase)/4)-0.75)));
+        frontBlock.addKeypoint(point3);
 
         //point 4
-        frontBlock.addKeypoint(new Vector2D(ankleXPosition,((ankleCircumR+ankleEase)/4)-0.75));
+        Vector2D point4 = new Vector2D(ankleXPosition,((ankleCircumR+ankleEase)/4)-0.75);
+        frontBlock.addKeypoint(point4);
 
         //point 5
         Vector2D point5 = new Vector2D(kneeXPosition,((kneeCircumR+kneeEase)/4)-0.75);
@@ -182,13 +193,21 @@ public class TrouserPattern extends Pattern
         frontBlock.addKeypoint(point6);
 
         //point 7
-        Vector2D point7 = new Vector2D(hipXPosition, (frontHipArc/2+(double)hipEase/4+frontCrotchExtension)-halfFrontCreaselineFromHipPoint);
-        frontBlock.addKeypoint(point7);
+        Vector2D point7 = new Vector2D(hipXPosition, ((frontHipArc/2+(double)hipEase/4+frontCrotchExtension)-halfFrontCreaselineFromHipPoint));
+
+        frontBlock.addDirectedCurve(point5,point6,new Vector2D(point5.subtract(point4)),new Vector2D(point7.subtract(point6)),new double[]{0,0});
+
+
+
+
 
         //point 8
         //first calculate front seat extension
         double frontSeatExtension = (seatDepth-6)*0.38;
+
         Vector2D point8 = new Vector2D(seatXPosition,(frontSeatArc/2+(double)seatEase/4+frontSeatExtension)-halfFrontCreaselineFromHipPoint);
+        frontBlock.addKeypoint(point8);
+        frontBlock.addDirectedCurve(point6,point8,point7,new Vector2D(point7.subtract(point6)),0);
 
 
         //need to calculate front sideseam shaping first
@@ -203,14 +222,23 @@ public class TrouserPattern extends Pattern
         Vector2D point9 = new Vector2D(waistXPosition-sideStreamUpliftR,halfFrontCreaselineFromHipPoint-3.3);
         frontBlock.addKeypoint(point9);
 
+
+
         //point 10
-        frontBlock.addKeypoint(new Vector2D(waistXPosition,-(halfFrontCreaselineFromHipPoint-(frontSeatExtension+halfOverallDiffFrHipToFrWaistWithEase*interimCBShaping/sumInterims))));
+        Vector2D point10 = new Vector2D(new Vector2D(waistXPosition,-(halfFrontCreaselineFromHipPoint-
+                (frontSeatExtension+halfOverallDiffFrHipToFrWaistWithEase*interimCBShaping/sumInterims))));
+        frontBlock.addKeypoint(point10);
+
+        frontBlock.addDirectedCurve(point8,point9,new Vector2D(point8.subtract(point7)),new Vector2D(point10.subtract(point9)),new double[]{0,100});
 
         //point 11
         frontBlock.addKeypoint(new Vector2D(seatXPosition,-(halfFrontCreaselineFromHipPoint-frontSeatExtension)));
 
         //point 12
-        frontBlock.addKeypoint(new Vector2D(hipXPosition,-(halfFrontCreaselineFromHipPoint-frontCrotchExtension)));
+        Vector2D point12 = new Vector2D(hipXPosition,-(halfFrontCreaselineFromHipPoint-frontCrotchExtension));
+        frontBlock.addKeypoint(point12);
+
+
 
         //blended curve between point 5 and 6
 

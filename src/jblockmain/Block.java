@@ -1056,7 +1056,7 @@ public class Block
      * @param adjacency connecting point from which to infer direction.
      * @return  normalised direction vector.
      */
-    private Vector2D getDirectionAtKeypoint(Vector2D keypoint, EPosition adjacency)
+    public Vector2D getDirectionAtKeypoint(Vector2D keypoint, EPosition adjacency)
     {
         try
         {
@@ -1132,7 +1132,6 @@ public class Block
             double x = quadraticXBezier(t,start,intermediate,end);
             double y = quadraticYBezier(t,start,intermediate,end);
 
-            // Add point reversing rotation and shift (exc. first and last)
             tmp = new Vector2D(x,y);
             addKeypointNextTo(tmp, tmp2, EPosition.AFTER);
             tmp2 = new Vector2D(tmp);
@@ -1173,12 +1172,14 @@ public class Block
 
     private double quadraticXBezier(double t, Vector2D start, Vector2D intermediate, Vector2D end )
     {
-        return start.getX()*(1-t)*(1-t)+2*intermediate.getX()*t*(1-t)+end.getX()*t*t;
+        return (start.getX()*((1-t)*(1-t)))
+                +(2*intermediate.getX()*(t*(1-t)))
+                +(end.getX()*(t*t));
     }
 
     private double quadraticYBezier(double t, Vector2D start, Vector2D intermediate, Vector2D end )
     {
-        return start.getY()*(1-t)*(1-t)*+2*intermediate.getY()*t*(1-t)+end.getY()*t*t;
+        return (start.getY()*(1-t)*(1-t))+((2*intermediate.getY()*t*(1-t)))+(end.getY()*t*t);
     }
 
     private double cubicXBezier(double t, Vector2D start, Vector2D intermediate1,Vector2D intermediate2, Vector2D end )
