@@ -195,6 +195,7 @@ public class TrouserPattern extends Pattern
         frontBlock.addCircularCurve(point1,point2,(point2.getY()-(new Vector2D(point1.add(point2.subtract(point1).divide(2)))).getY())/2,false);
         //
 
+        //need to figure out why ~5 gives best curve
         /*
         frontBlock.addKeypoint(point2);
         frontBlock.addDirectedCurveWithApexTangent(point1,point2,new Vector2D(point1.getX(),point2.getY()),4.6,
@@ -288,30 +289,47 @@ public class TrouserPattern extends Pattern
         frontBlock.addDirectedCurve(point11,point1,point12,0);
 
 
-        //blended curve between point 5 and 6
-
-        /*
         Block backBlock = new Block(userName + "_Gill_BackBlock");
         blocks.add(backBlock);
 
         //start from point 13 going anti-clockwise
         //need to calculate halfCreaselineFromHipPoint
         double backCrotchExtension = (hipDepth-6)*0.62;
+        //Height from origin to point 13
+        //(A32 + Ease/2)/2+ crotch extension
         double halfBackCreaselineFromHipPoint = (((backHipArc+(double)seatEase/2)/2)+backCrotchExtension)/2;
 
+        //back shaping
+        double halfOverallDiffBkHipToBkWaistInclEase = (backHipArc+(double)hipEase/2)-(backWaistArc+(double)waistEase/2);
+        //interim values
+        double interimBackSideSeamShaping = (hipWidth-waistWidth)/2;
+        double interimBackDartWidth = (backSeatArc-backWaistArc)/2;
+        double interimBackCBShaping = Math.abs(seatBKZ-backWaistZ);
+        double backSumInterms = interimBackCBShaping+interimBackDartWidth+interimBackSideSeamShaping;
+        //calculation for Y position of point 18
+        //get height of position 15 and subtract it from width of points 18 and 15
+        double backSeatExtension = (seatDepth - 6)*0.62;//calculation of CELL G25
+
+
         Vector2D point13 = new Vector2D(centreXpoint+1,halfBackCreaselineFromHipPoint);
+        Vector2D point14 = new Vector2D(hipXPosition,halfBackCreaselineFromHipPoint-backCrotchExtension);
+        Vector2D point15 = new Vector2D(seatXPosition,halfBackCreaselineFromHipPoint-backSeatExtension);
+        Vector2D point16 = new Vector2D(0,0); //TODO needs to be redone incorporating length of the whole crotch -> calculate length of cubic splines
+        Vector2D point17 = new Vector2D(waistXPosition-sideStreamUpliftR,-(halfBackCreaselineFromHipPoint-(halfOverallDiffBkHipToBkWaistInclEase/2*(interimBackSideSeamShaping/backSumInterms))));
+        Vector2D point18 = new Vector2D(seatXPosition,-((backSeatArc/2+(double)seatEase/4)-(halfBackCreaselineFromHipPoint-backSeatExtension))); //y:A30/2 + SeatEase/4 ) - (crotch height - CELL g25)
+        Vector2D point19 = new Vector2D(hipXPosition,-(((backHipArc/2)+(double)hipEase/4)-(halfBackCreaselineFromHipPoint-backCrotchExtension)));
+        Vector2D point20 = new Vector2D(centreXpoint,0);
+
         backBlock.addKeypoint(point13);
 
-        Vector2D point14 = new Vector2D(hipXPosition,halfBackCreaselineFromHipPoint-backCrotchExtension);
+
         backBlock.addKeypoint(point14);
 
-        Vector2D point15 = new Vector2D(seatXPosition,halfBackCreaselineFromHipPoint-(seatDepth-6)*0.62);
+
         backBlock.addKeypoint(point15);
 
-        Vector2D point16 = new Vector2D(0,0); //TODO needs to be redone incorporating length of the whole crotch -> calculate length of cubic splinesssss
 
-        Vector2D point17 = new Vector2D(waistXPosition-sideStreamUpliftR,)
-        */
+
 
 
     }
