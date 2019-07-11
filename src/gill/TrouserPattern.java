@@ -184,6 +184,8 @@ public class TrouserPattern extends Pattern
         //cell G32
         double halfFrontCreaselineFromHipPoint = (((frontHipArc+(double)seatEase/2)/2)+frontCrotchExtension)/2;
 
+        double frontSeatExtension = (seatDepth-6)*0.38;
+
         //point 1
         Vector2D point1 = new Vector2D(centreXpoint,-halfFrontCreaselineFromHipPoint);
         frontBlock.addKeypoint(point1);
@@ -193,7 +195,6 @@ public class TrouserPattern extends Pattern
         frontBlock.addKeypoint(point2);
 
         frontBlock.addCircularCurve(point1,point2,(point2.getY()-(new Vector2D(point1.add(point2.subtract(point1).divide(2)))).getY())/2,false);
-        //
 
         //need to figure out why ~5 gives best curve
         /*
@@ -229,22 +230,19 @@ public class TrouserPattern extends Pattern
 
         //point 7
         Vector2D point7 = new Vector2D(hipXPosition, ((frontHipArc/2+(double)hipEase/4+frontCrotchExtension)-halfFrontCreaselineFromHipPoint));
+        frontBlock.addKeypoint(point7);
 
         frontBlock.addDirectedCurve(point5,point6,new Vector2D(point5.subtract(point4)),new Vector2D(point7.subtract(point6)),new double[]{0,0});
 
-
-
-
-
         //point 8
         //first calculate front seat extension
-        double frontSeatExtension = (seatDepth-6)*0.38;
+
 
         Vector2D point8 = new Vector2D(seatXPosition,(frontSeatArc/2+(double)seatEase/4+frontSeatExtension)-halfFrontCreaselineFromHipPoint);
         frontBlock.addKeypoint(point8);
         //Curve that joins point 6 to point 8 keeping the angles the same at start
 
-        frontBlock.addDirectedCurve(point6,point8,point7,new Vector2D(point7.subtract(point6)),0);
+
 
 
         //need to calculate front sideseam shaping first
@@ -258,6 +256,8 @@ public class TrouserPattern extends Pattern
         //point 9
         Vector2D point9 = new Vector2D(waistXPosition-sideStreamUpliftR,halfFrontCreaselineFromHipPoint-(halfOverallDiffFrHipToFrWaistWithEase*(interimFrontSideSeamShaping/sumInterims)));
         frontBlock.addKeypoint(point9);
+
+        frontBlock.addCircularCurve(point7,point8,(point8.getY()-(new Vector2D(point7.add(point8.subtract(point7).divide(2)))).getY())/2,true);
 
 
 
@@ -276,7 +276,10 @@ public class TrouserPattern extends Pattern
         frontBlock.addDart(point9,point10,-point9.getY()/new Vector2D(point10.subtract(point9)).getY(),(interimFrontDartWidth/sumInterims)*halfOverallDiffFrHipToFrWaistWithEase,frontDartApexPos,false);
 
         //curve between 8 and 9 with attempt to keep angle between point 9 and incoming curve greater than 90
-        frontBlock.addDirectedCurve(point8,point9,new Vector2D(point8.subtract(point7)),new Vector2D(point10.subtract(point9)),new double[]{0,100});
+        //   frontBlock.addDirectedCurve(point8,point9,new Vector2D(point8.subtract(point7)),new Vector2D(point10.subtract(point9)),new double[]{0,100});
+        //attempt with Circular curve -> may look better
+        frontBlock.addCircularCurve(point8,point9,(point9.getY()-(new Vector2D(point8.add(point9.subtract(point8).divide(2)))).getY())/2,false);
+
 
         //point 11
         Vector2D point11 = new Vector2D(seatXPosition,-(halfFrontCreaselineFromHipPoint-frontSeatExtension));
@@ -327,8 +330,6 @@ public class TrouserPattern extends Pattern
 
 
         backBlock.addKeypoint(point15);
-
-
 
 
 
