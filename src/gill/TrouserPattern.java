@@ -5,7 +5,7 @@ import jblockenums.EMethod;
 import jblockenums.EPosition;
 import jblockexceptions.MeasurementNotFoundException;
 import jblockmain.*;
-import mathcontainers.Vector2D;
+import mathcontainers.*;
 
 import java.util.ArrayList;
 import java.util.Vector;
@@ -289,7 +289,9 @@ public class TrouserPattern extends Pattern
         Vector2D point12 = new Vector2D(hipXPosition,-(halfFrontCreaselineFromHipPoint-frontCrotchExtension));
 
         //final steep curve that connects to crotch point
-        frontBlock.addDirectedCurve(point11,point1,point12,0);
+        PolyCoeffs crotchCurve = new PolyCoeffs(new VectorND(4,new double[]{0,0,0,0}));
+        frontBlock.addDirectedCurve(point11,point1,point12,frontBlock.getDirectionAtKeypoint(point11, EPosition.BEFORE),0,crotchCurve);
+
 
 
         Block backBlock = new Block(userName + "_Gill_BackBlock");
@@ -313,6 +315,9 @@ public class TrouserPattern extends Pattern
         //get height of position 15 and subtract it from width of points 18 and 15
         double backSeatExtension = (seatDepth - 6)*0.62;//calculation of CELL G25
 
+        double lengthPoint10Point11 = (new Vector2D(point11.subtract(point10))).norm();
+
+
 
         Vector2D point13 = new Vector2D(centreXpoint+1,halfBackCreaselineFromHipPoint);
         Vector2D point14 = new Vector2D(hipXPosition,halfBackCreaselineFromHipPoint-backCrotchExtension);
@@ -321,7 +326,8 @@ public class TrouserPattern extends Pattern
         Vector2D point17 = new Vector2D(waistXPosition-sideStreamUpliftR,-(halfBackCreaselineFromHipPoint-(halfOverallDiffBkHipToBkWaistInclEase/2*(interimBackSideSeamShaping/backSumInterms))));
         Vector2D point18 = new Vector2D(seatXPosition,-((backSeatArc/2+(double)seatEase/4)-(halfBackCreaselineFromHipPoint-backSeatExtension))); //y:A30/2 + SeatEase/4 ) - (crotch height - CELL g25)
         Vector2D point19 = new Vector2D(hipXPosition,-(((backHipArc/2)+(double)hipEase/4)-(halfBackCreaselineFromHipPoint-backCrotchExtension)));
-        Vector2D point20 = new Vector2D(centreXpoint,0);
+        Vector2D point20 = new Vector2D(centreXpoint,point19.getY());//for now same Y pos as point 10
+        Vector2D point21 = new Vector2D(kneeXPosition,0);
 
         backBlock.addKeypoint(point13);
 
