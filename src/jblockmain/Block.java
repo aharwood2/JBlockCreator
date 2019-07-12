@@ -1249,4 +1249,4 @@ public class Block
         return addDiscretisedPoints(f.refStart, f.refEnd, f.Ri, startPoint, coeffs);
     }
 
-}
+   }
