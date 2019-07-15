@@ -152,7 +152,7 @@ public class TrouserPattern extends Pattern
 
     @Override
     protected void createBlocks() {
-        //readjustMeasurement();
+        readjustMeasurement();
         Block frontBlock = new Block(userName + "_Gill_FrontBlock");
         blocks.add(frontBlock);
 
@@ -186,35 +186,35 @@ public class TrouserPattern extends Pattern
         double frontSeatExtension = (seatDepth - 6) * 0.38;
 
         //point 1
-        Vector2D point1 = new Vector2D(centreXpoint, -halfFrontCreaselineFromHipPoint);
+        Vector2D point1 = new Vector2D(centreXpoint, -halfFrontCreaselineFromHipPoint+centreYpoint);
         frontBlock.addKeypoint(point1);
 
         //point 2
-        Vector2D point2 = new Vector2D(kneeXPosition, -(((kneeCircumR + kneeEase) / 4) - 0.75));
+        Vector2D point2 = new Vector2D(kneeXPosition, -(((kneeCircumR + kneeEase) / 4) - 0.75)+centreYpoint);
         frontBlock.addKeypoint(point2);
 
-        Vector2D point1and2 = new Vector2D((point1.getX() - point2.getX()) / 3, point2.getY() - ((point2.getY() - point1.getY()) * 0.66));
+        Vector2D point1and2 = new Vector2D((point1.getX() - point2.getX()) / 3, point2.getY() - ((point2.getY() - point1.getY()) * 0.66)+centreYpoint);
         frontBlock.addDirectedCurve(point1,point2, new Vector2D(point1.subtract(point2)),new Vector2D(point2.subtract(point1and2)),new double[]{0,0});
 
 
         //point 3
-        Vector2D point3 = new Vector2D(new Vector2D(ankleXPosition, -(((ankleCircumR + ankleEase) / 4) - 0.75)));
+        Vector2D point3 = new Vector2D(ankleXPosition, -(((ankleCircumR + ankleEase) / 4) - 0.75)+centreYpoint);
         frontBlock.addKeypoint(point3);
 
         //point 4
-        Vector2D point4 = new Vector2D(ankleXPosition, ((ankleCircumR + ankleEase) / 4) - 0.75);
+        Vector2D point4 = new Vector2D(ankleXPosition, ((ankleCircumR + ankleEase) / 4) - 0.75+centreYpoint);
         frontBlock.addKeypoint(point4);
 
         //point 5
-        Vector2D point5 = new Vector2D(kneeXPosition, ((kneeCircumR + kneeEase) / 4) - 0.75);
+        Vector2D point5 = new Vector2D(kneeXPosition, ((kneeCircumR + kneeEase) / 4) - 0.75+centreYpoint);
         frontBlock.addKeypoint(point5);
 
         //point 6
-        Vector2D point6 = new Vector2D(centreXpoint, ((frontCrotchExtension + (frontHipArc / 2) + ((double) hipEase / 4)) - halfFrontCreaselineFromHipPoint));
+        Vector2D point6 = new Vector2D(centreXpoint, ((frontCrotchExtension + (frontHipArc / 2) + ((double) hipEase / 4)) - halfFrontCreaselineFromHipPoint)+centreYpoint);
         frontBlock.addKeypoint(point6);
 
         //point 7
-        Vector2D point7 = new Vector2D(hipXPosition, ((frontHipArc / 2 + (double) hipEase / 4 + frontCrotchExtension) - halfFrontCreaselineFromHipPoint));
+        Vector2D point7 = new Vector2D(hipXPosition, ((frontHipArc / 2 + (double) hipEase / 4 + frontCrotchExtension) - halfFrontCreaselineFromHipPoint)+centreYpoint);
         frontBlock.addKeypoint(point7);
 
         frontBlock.addDirectedCurve(point5, point6, new Vector2D(point5.subtract(point4)), new Vector2D(point7.subtract(point6)), new double[]{0, 0});
@@ -223,7 +223,7 @@ public class TrouserPattern extends Pattern
         //first calculate front seat extension
 
 
-        Vector2D point8 = new Vector2D(seatXPosition, (frontSeatArc / 2 + (double) seatEase / 4 + frontSeatExtension) - halfFrontCreaselineFromHipPoint);
+        Vector2D point8 = new Vector2D(seatXPosition, (frontSeatArc / 2 + (double) seatEase / 4 + frontSeatExtension) - halfFrontCreaselineFromHipPoint+centreYpoint);
         frontBlock.addKeypoint(point8);
         //Curve that joins point 6 to point 8 keeping the angles the same at start
 
@@ -239,15 +239,15 @@ public class TrouserPattern extends Pattern
         double halfOverallDiffFrHipToFrWaistWithEase = (((frontHipArc + ((double) seatEase / 2)) - (frontWaistArc + ((double) waistEase / 2))) / 2);
 
         //point 9
-        Vector2D point9 = new Vector2D(waistXPosition - sideStreamUpliftR, halfFrontCreaselineFromHipPoint - (halfOverallDiffFrHipToFrWaistWithEase * (interimFrontSideSeamShaping / sumInterims)));
+        Vector2D point9 = new Vector2D(waistXPosition - sideStreamUpliftR, halfFrontCreaselineFromHipPoint - (halfOverallDiffFrHipToFrWaistWithEase * (interimFrontSideSeamShaping / sumInterims))+centreYpoint);
         frontBlock.addKeypoint(point9);
 
         frontBlock.addCircularCurve(point7, point8, (point8.getY() - (new Vector2D(point7.add(point8.subtract(point7).divide(2)))).getY()) / 2, true);
 
 
         //point 10
-        Vector2D point10 = new Vector2D(new Vector2D(waistXPosition, -(halfFrontCreaselineFromHipPoint -
-                (frontSeatExtension + halfOverallDiffFrHipToFrWaistWithEase * interimCBShaping / sumInterims))));
+        Vector2D point10 = new Vector2D(waistXPosition, -(halfFrontCreaselineFromHipPoint -
+                (frontSeatExtension + halfOverallDiffFrHipToFrWaistWithEase * interimCBShaping / sumInterims))+centreYpoint);
         frontBlock.addKeypoint(point10);
 
         //dart between 9 and 10
@@ -257,10 +257,15 @@ public class TrouserPattern extends Pattern
         //      (interimFrontDartWidth/sumInterims)*halfOverallDiffFrHipToFrWaistWithEase,waistToAbdomen-1.5,true,false);
         //Dart test 2 gives a better apex position
         Vector2D frontDartApexPos = new Vector2D((new Vector2D(point9.add(point10.subtract(point9).divide(2)))).getX() + waistToAbdomen - 1.5, centreYpoint);
-        frontBlock.addDart(point9, point10, -point9.getY() / new Vector2D(point10.subtract(point9)).getY(), (interimFrontDartWidth / sumInterims) * halfOverallDiffFrHipToFrWaistWithEase, frontDartApexPos, false);
+        ArrayList<Vector2D> frontDarts = frontBlock.addDart(point9, point10, -point9.getY() / new Vector2D(point10.subtract(point9)).getY(), (interimFrontDartWidth / sumInterims) * halfOverallDiffFrHipToFrWaistWithEase, frontDartApexPos, false);
 
         frontBlock.addCircularCurve(point8, point9, (point9.getY() - (new Vector2D(point8.add(point9.subtract(point8).divide(2)))).getY()) / 2, false);
 
+        Vector2D frontDartStart = frontDarts.get(0);
+        Vector2D frontDartEnd = frontDarts.get(2);
+
+        frontBlock.addRightAngleCurve(point9, frontDartStart);
+        frontBlock.addRightAngleCurve(frontDartEnd, point10);
 
         //point 11
         Vector2D point11 = new Vector2D(seatXPosition, -(halfFrontCreaselineFromHipPoint - frontSeatExtension));
@@ -344,6 +349,7 @@ public class TrouserPattern extends Pattern
         //backBlock.addCircularCurve(point15, point16, (point16.getY() - (new Vector2D(point15.add(point16.subtract(point15).divide(2)))).getY()) / 2, false);
 
         double dartWidth = (interimBackDartWidth / backSumInterims) * halfOverallDiffBkHipToBkWaistInclEase;
+        /*
         Vector2D D16D17 = new Vector2D(point17.subtract(point16));
         double basePointRatio = ((D16D17.norm() / 2) - (dartWidth / 2)) / D16D17.norm();
         Vector2D baseStart = new Vector2D(point16.add(D16D17.multiply(basePointRatio)));
@@ -355,7 +361,16 @@ public class TrouserPattern extends Pattern
 
         backBlock.addDart(baseStart, baseEnd, Apex, point16, EPosition.AFTER);
         backBlock.addRightAngleCurve(point16, baseStart);
-        backBlock.addRightAngleCurve(baseEnd, point17);
+        backBlock.addRightAngleCurve(baseEnd, point17);g
+         */
+
+        ArrayList<Vector2D> backDarts = backBlock.addDart(point16,point17,0.5,dartWidth,waistToSeat-5,true,false);
+
+        Vector2D dartStart = backDarts.get(0);
+        Vector2D dartEnd = backDarts.get(2);
+
+        backBlock.addRightAngleCurve(point16, dartStart);
+        backBlock.addRightAngleCurve(dartEnd, point17);
 
     }
 
