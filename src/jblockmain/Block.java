@@ -1120,6 +1120,43 @@ public class Block
         return angle;
     }
 
+    //gets the length between 2 keypoints going in an anti-clockwise manner
+    public double getLengthBetweenPoints(Vector2D startPoint, Vector2D endPoint)
+    {
+        double length=0;
+        int start = 0;
+        int end = 0;
+        try
+        {
+             start = getKeypointNumber(startPoint); // if start = vector point10, keypointNumber would  be 9
+             end = getKeypointNumber(endPoint); //if end = vector point 13, keypoint number would be 12
+        } catch (Exception e)
+        {
+            e.printStackTrace();
+            return 0;
+        }
+        if (start == end) {return 0;}
+        int size = end; // size = 2 here
+        //this is to help with say, getting the size from point 10 to point 3 -> need to loop to 10,11,12,13,14,15...1,2,3
+        //which is equal to the .size - start + end
+        if (end < start){size += keypointsX.size()-start;} else {size -= start;}
+        end = start+1; //end = 10 here and start = 9
+            for (int i = 0; i < size; i++) {
+
+                //consider that arraylists are indexed from 0 so to get point 10, you have to .get(9)so if we start from 10, we will do point 11 (.get(0) = point1 -> .get(10) = point11) - .get(9) = point10
+                length += Math.sqrt((Math.pow(keypointsX.get(end) - keypointsX.get(start), 2) + Math.pow(keypointsY.get(end) - keypointsY.get(start), 2))); //subtract the vector after from vector before to get directional vector then find the magnitude of that and add them up, up to the last vector.
+                start = end; //when end is set to 0
+                end++;
+                if (end == keypointsX.size()) //need to reset to 0 to deal with null pointer exception
+                {
+                    end = 0; //for the loop around
+                }
+
+            }
+
+        return length;
+    }
+
     public void addQuadraticBezierCurve(Vector2D start, Vector2D intermediate, Vector2D end)
     {
         int numPts = (int)Math.ceil(end.subtract(start).norm() * res);
@@ -1192,61 +1229,5 @@ public class Block
         return start.getY()*(1-t)*(1-t)*(1-t)+3*intermediate1.getY()*t*(1-t)*(1-t)+3*intermediate2.getY()*(1-t)*t*t+end.getY()*t*t*t;
     }
 
-    public Vector2D addDirectedCurve(Vector2D startPoint, Vector2D endPoint,
-                                     Vector2D intermediate, Vector2D dirStart,
-                                     double angleAtStart, PolyCoeffs myCurve)
-    {
-        // Construct the reference frame
-        ReferenceFrame f = new ReferenceFrame(startPoint, endPoint, dirStart, angleAtStart);
-
-        // Rotate direction
-        Vector2D refDirStart = new Vector2D(f.R.postMultiply(dirStart));
-
-        // Shift and rotate intermediate
-        Vector2D refInt = new Vector2D(f.R.postMultiply(f.shift(intermediate)));
-
-        // Compute curve start and gradient in reference system
-        Vector2D refCurveStart;
-        double refDxDyStart;
-
-        // Rotate the directions given by the amount given
-        double startAngle = angleAtStart * Math.PI / 180.0;
-        Matrix2D RCurveStart = new Matrix2D(2, 2,
-                new double[][]{
-                        {Math.cos(startAngle), -Math.sin(startAngle)},
-                        {Math.sin(startAngle), Math.cos(startAngle)}
-                }
-        );
-        refCurveStart = new Vector2D(RCurveStart.postMultiply(refDirStart));
-
-        // Compute the required gradient of the curve
-        refDxDyStart = refCurveStart.getY() / refCurveStart.getX();
-
-
-        // Find coefficients for the cubic spline:
-        // ax^3 + bx^2 + cx + d
-        // By using three points and one gradient condition to define a set of simultaneous equations.
-        final VectorND constants =
-                new VectorND(4, new double[] {f.refStart.getY(), refInt.getY(), f.refEnd.getY(), refDxDyStart});
-        final Matrix2D mat = new Matrix2D(4, 4,
-                new double[][] {
-                        {Math.pow(f.refStart.getX(),3), Math.pow(f.refStart.getX(),2), f.refStart.getX(), 1.0},
-                        {Math.pow(refInt.getX(),3), Math.pow(refInt.getX(),2), refInt.getX(), 1.0},
-                        {Math.pow(f.refEnd.getX(),3), Math.pow(f.refEnd.getX(),2), f.refEnd.getX(), 1.0},
-                        {3.0 * Math.pow(f.refStart.getX(),2), 2.0 * f.refStart.getX(), 1.0, 0.0}
-                }
-        );
-
-        // Solve to get coefficients
-        PolyCoeffs coeffs = solveForCoefficients(mat, constants);
-        //only way to do this kind of copy without modifying
-        myCurve.a = coeffs.a;
-        myCurve.b = coeffs.b;
-        myCurve.c = coeffs.c;
-        myCurve.d = coeffs.d;
-
-        // Add keypoints
-        return addDiscretisedPoints(f.refStart, f.refEnd, f.Ri, startPoint, coeffs);
-    }
 
 }
