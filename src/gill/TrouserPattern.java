@@ -5,7 +5,7 @@ import jblockenums.EMethod;
 import jblockenums.EPosition;
 import jblockexceptions.MeasurementNotFoundException;
 import jblockmain.*;
-import mathcontainers.*;
+import mathcontainers.Vector2D;
 
 import java.util.ArrayList;
 import java.util.Vector;
@@ -289,9 +289,13 @@ public class TrouserPattern extends Pattern
         Vector2D point12 = new Vector2D(hipXPosition,-(halfFrontCreaselineFromHipPoint-frontCrotchExtension));
 
         //final steep curve that connects to crotch point
+<<<<<<< HEAD
         PolyCoeffs crotchCurve11_1 = new PolyCoeffs(new VectorND(4,new double[]{0,0,0,0}));
         frontBlock.addDirectedCurve(point11,point1,point12,frontBlock.getDirectionAtKeypoint(point11, EPosition.BEFORE),0,crotchCurve11_1);
 
+=======
+        frontBlock.addDirectedCurve(point11,point1,point12,0);
+>>>>>>> 698baead8c7a3d0973ca6358eba737800a01800f
 
 
         //Block backBlock = new Block(userName + "_Gill_BackBlock");
@@ -310,29 +314,69 @@ public class TrouserPattern extends Pattern
         double interimBackSideSeamShaping = (hipWidth-waistWidth)/2;
         double interimBackDartWidth = (backSeatArc-backWaistArc)/2;
         double interimBackCBShaping = Math.abs(seatBKZ-backWaistZ);
-        double backSumInterms = interimBackCBShaping+interimBackDartWidth+interimBackSideSeamShaping;
+        double backSumInterims = interimBackCBShaping+interimBackDartWidth+interimBackSideSeamShaping;
         //calculation for Y position of point 18
         //get height of position 15 and subtract it from width of points 18 and 15
         double backSeatExtension = (seatDepth - 6)*0.62;//calculation of CELL G25
-
-        double lengthPoint10Point11 = (new Vector2D(point11.subtract(point10))).norm();
-
 
 
         Vector2D point13 = new Vector2D(centreXpoint+1,halfBackCreaselineFromHipPoint);
         Vector2D point14 = new Vector2D(hipXPosition,halfBackCreaselineFromHipPoint-backCrotchExtension);
         Vector2D point15 = new Vector2D(seatXPosition,halfBackCreaselineFromHipPoint-backSeatExtension);
-        Vector2D point16 = new Vector2D(0,0); //TODO needs to be redone incorporating length of the whole crotch -> calculate length of cubic splines
-        Vector2D point17 = new Vector2D(waistXPosition-sideStreamUpliftR,-(halfBackCreaselineFromHipPoint-(halfOverallDiffBkHipToBkWaistInclEase/2*(interimBackSideSeamShaping/backSumInterms))));
+        double y16 = halfBackCreaselineFromHipPoint-(backSeatExtension+(halfOverallDiffBkHipToBkWaistInclEase*interimBackCBShaping/backSumInterims));
+        Vector2D point17 = new Vector2D(waistXPosition-sideStreamUpliftR,-(halfBackCreaselineFromHipPoint-(halfOverallDiffBkHipToBkWaistInclEase/2*(interimBackSideSeamShaping/backSumInterims))));
         Vector2D point18 = new Vector2D(seatXPosition,-((backSeatArc/2+(double)seatEase/4)-(halfBackCreaselineFromHipPoint-backSeatExtension))); //y:A30/2 + SeatEase/4 ) - (crotch height - CELL g25)
         Vector2D point19 = new Vector2D(hipXPosition,-(((backHipArc/2)+(double)hipEase/4)-(halfBackCreaselineFromHipPoint-backCrotchExtension)));
+<<<<<<< HEAD
         Vector2D point20 = new Vector2D(centreXpoint,point19.getY());//for now same Y pos as point 10
         Vector2D point21 = new Vector2D(kneeXPosition,-(((kneeCircumR+(double)kneeEase)/4)+0.75));
         Vector2D point22 = new Vector2D(ankleXPosition,-(((ankleCircumR+ankleEase)/4)+0.75));
         //Vector2D point23 added as part of a curve
         Vector2D point24 = new Vector2D(ankleXPosition,(((ankleCircumR+ankleEase)/4)+0.75));
         Vector2D point25 = new Vector2D(kneeXPosition,(((kneeCircumR+(double)kneeEase)/4)+0.75));
+=======
+        Vector2D point20 = new Vector2D(centreXpoint,-(((backHipArc/2)+(double)hipEase/4)-(halfBackCreaselineFromHipPoint-backCrotchExtension))); //same as point 19
+        Vector2D point21 = new Vector2D(kneeXPosition,-(((kneeCircumR+kneeEase)/4)+0.75));
+        Vector2D point22 = new Vector2D(ankleXPosition,-(((ankleCircumR+kneeEase)/4)+0.75));
+        Vector2D point24 = new Vector2D(ankleXPosition,(((ankleCircumR+kneeEase)/4)+0.75));
+        Vector2D point25 = new Vector2D(kneeXPosition,(((kneeCircumR+kneeEase)/4)+0.75));
 
+        //curve for point 13 to 15
+        backBlock.addKeypoint(point17);
+        backBlock.addKeypoint(point19);
+        backBlock.addDirectedCurve(point17,point19,point18,new Vector2D(0,-10),90);
+
+        backBlock.addKeypoint(point20);
+        backBlock.addKeypoint(point21);
+
+        backBlock.addDirectedCurve(point20,point21,new Vector2D(point20.subtract(point19)),new Vector2D(point22.subtract(point21)),new double[]{0,0});
+
+        backBlock.addKeypoint(point22);
+        backBlock.addKeypoint(point24);
+
+
+        backBlock.addKeypoint(point25);
+        backBlock.addKeypoint(point13);
+
+        Vector2D tangcorn = new Vector2D((point25.getX()-point13.getX())/3,(point13.getY()-point25.getY())/4);
+        backBlock.addDirectedCurveWithApexTangent(point25,point13,new Vector2D(point25.subtract(point24)),new Vector2D((point13).subtract(tangcorn)),
+               tangcorn,0,new double[]{0,0},new int[]{1,1});
+
+
+        backBlock.addKeypoint(point15);
+        backBlock.addDirectedCurve(point13,point15,point14,90);
+
+        //backBlock.addCircularCurve(point25,point13,(point13.getY()-(new Vector2D(point25.add(point13.subtract(point25).divide(2)))).getY())/2,false);
+
+        //backBlock.addDirectedCurve(point13,point15,point14,90);
+
+        double crotchExtension = fullCrotchLength - (frontBlock.getLengthBetweenPoints(point10,point1) + backBlock.getLengthBetweenPoints(point13,point15));
+        double x16 = Math.sqrt((crotchExtension*crotchExtension) - (y16*y16));
+        Vector2D point16 = new Vector2D(seatXPosition-x16,y16);
+>>>>>>> 698baead8c7a3d0973ca6358eba737800a01800f
+
+        //add point 16 and 17
+        backBlock.addKeypoint(point16);
 
     }
 
