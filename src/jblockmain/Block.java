@@ -1056,7 +1056,7 @@ public class Block
      * @param adjacency connecting point from which to infer direction.
      * @return  normalised direction vector.
      */
-    public Vector2D getDirectionAtKeypoint(Vector2D keypoint, EPosition adjacency)
+    private Vector2D getDirectionAtKeypoint(Vector2D keypoint, EPosition adjacency)
     {
         try
         {
@@ -1156,78 +1156,5 @@ public class Block
 
         return length;
     }
-
-    public void addQuadraticBezierCurve(Vector2D start, Vector2D intermediate, Vector2D end)
-    {
-        int numPts = (int)Math.ceil(end.subtract(start).norm() * res);
-
-        Vector2D tmp = new Vector2D(start);
-        Vector2D tmp2 = new Vector2D(tmp);
-        for (int i = 1; i < numPts - 1; i++)
-        {
-            double t = ((double)i/((double)numPts-1));
-            double x = quadraticXBezier(t,start,intermediate,end);
-            double y = quadraticYBezier(t,start,intermediate,end);
-
-            tmp = new Vector2D(x,y);
-            addKeypointNextTo(tmp, tmp2, EPosition.AFTER);
-            tmp2 = new Vector2D(tmp);
-        }
-    }
-
-    /*
-    public void addQuadraticBezierCurve(Vector2D start, Vector2D end, double startTangentAngle, double endTangentAngle)
-    {
-        int numPts = (int)Math.ceil(end.subtract(start).norm() * res);
-        //First calculate a direction vector which will make the required
-        double rotang = getAngleToPositiveYAxis(start) - startTangentAngle;
-
-        Matrix2D R = new Matrix2D(2, 2,
-                new double[][]{
-                        {Math.cos(rotang), -Math.sin(rotang)},
-                        {Math.sin(rotang), Math.cos(rotang)}
-                }
-        );
-
-        Vector2D normDirectional = new Vector2D(R.postMultiply(start).divide(start.norm()));
-        Vector2D tmp = new Vector2D(start);
-        Vector2D tmp2 = new Vector2D(tmp);
-        for (int i = 1; i < numPts - 1; i++)
-        {
-            double t = (double)(i/((double)numPts-1));
-            double x = quadraticXBezier(t,start,intermediate,end);
-            double y = quadraticYBezier(t,start,intermediate,end);
-
-            // Add point reversing rotation and shift (exc. first and last)
-            tmp = new Vector2D(x,y);
-            addKeypointNextTo(tmp, tmp2, EPosition.AFTER);
-            tmp2 = new Vector2D(tmp);
-        }
-    }
-
-     */
-
-    private double quadraticXBezier(double t, Vector2D start, Vector2D intermediate, Vector2D end )
-    {
-        return (start.getX()*((1-t)*(1-t)))
-                +(2*intermediate.getX()*(t*(1-t)))
-                +(end.getX()*(t*t));
-    }
-
-    private double quadraticYBezier(double t, Vector2D start, Vector2D intermediate, Vector2D end )
-    {
-        return (start.getY()*(1-t)*(1-t))+((2*intermediate.getY()*t*(1-t)))+(end.getY()*t*t);
-    }
-
-    private double cubicXBezier(double t, Vector2D start, Vector2D intermediate1,Vector2D intermediate2, Vector2D end )
-    {
-        return start.getX()*(1-t)*(1-t)*(1-t)+3*intermediate1.getX()*t*(1-t)*(1-t)+3*intermediate2.getX()*(1-t)*t*t+end.getX()*t*t*t;
-    }
-
-    private double cubicYBezier(double t, Vector2D start, Vector2D intermediate1,Vector2D intermediate2, Vector2D end )
-    {
-        return start.getY()*(1-t)*(1-t)*(1-t)+3*intermediate1.getY()*t*(1-t)*(1-t)+3*intermediate2.getY()*(1-t)*t*t+end.getY()*t*t*t;
-    }
-
-
+    
    }
