@@ -300,31 +300,17 @@ public class TrouserPattern extends Pattern
 
         //calculation of dart width
         double dartWidth = (interimBackDartWidth / backSumInterims) * halfOverallDiffBkHipToBkWaistInclEase;
-
-        ArrayList<Vector2D> backDarts = backBlock.addDart(point16,point17,0.5,dartWidth,waistToSeat-5,true,false);
-
-
-        Vector2D dartStart = backDarts.get(0);
-        Vector2D dartEnd = backDarts.get(2);
-
-        //curve between darts and points to keep angles at 90 deg
-        backBlock.addRightAngleCurve(point16, dartStart);
-        backBlock.addRightAngleCurve(dartEnd, point17);
-
-        /*
+   
         Vector2D D16D17 = new Vector2D(point17.subtract(point16));
-        double basePointRatio = ((D16D17.norm() / 2) - (dartWidth / 2)) / D16D17.norm();
-        Vector2D baseStart = new Vector2D(point16.add(D16D17.multiply(basePointRatio)));
-        Vector2D baseEnd = new Vector2D(point17.subtract(D16D17.multiply(basePointRatio)));
 
         //calculaton of apex point
-        double lamda = ((waistToSeat - 5) * (waistToSeat - 5)) / (Math.pow(((point15.getX() - point16.getX())), 2) + Math.pow(((point15.getY() - point16.getY())), 2));
-        Vector2D Apex = new Vector2D(baseStart.add(point15.subtract(point16).multiply(lamda)));
+        double lambda = (waistToSeat - 5) / Math.sqrt (Math.pow(((point15.getX() - point16.getX())), 2) + Math.pow(((point15.getY() - point16.getY())), 2));
+        System.out.println(lambda);
+        Vector2D Apex = new Vector2D(point16.add(D16D17.divide(2)).add(new Vector2D(point15.subtract(point16)).multiply(lambda)));
 
-        backBlock.addDart(baseStart, baseEnd, Apex, point16, EPosition.AFTER);
-        backBlock.addRightAngleCurve(point16, baseStart);
-        backBlock.addRightAngleCurve(baseEnd, point17);g
-         */
+        ArrayList<Vector2D> backDarts = backBlock.addDart(point16,point17,0.5,dartWidth,Apex,true);
+        backBlock.addRightAngleCurve(point16, backDarts.get(0));
+        backBlock.addRightAngleCurve(backDarts.get(2), point17);
 
     }
 
