@@ -2,14 +2,12 @@ package gill;
 
 import jblockenums.EGarment;
 import jblockenums.EMethod;
-import jblockenums.EPosition;
 import jblockexceptions.MeasurementNotFoundException;
 import jblockmain.*;
 import mathcontainers.Vector2D;
 
 import java.util.ArrayList;
-import java.util.Vector;
-
+//todo: need to give it its own UI
 public class TrouserPattern extends Pattern
 {
 
@@ -300,7 +298,7 @@ public class TrouserPattern extends Pattern
 
         //calculation of dart width
         double dartWidth = (interimBackDartWidth / backSumInterims) * halfOverallDiffBkHipToBkWaistInclEase;
-   
+
         Vector2D D16D17 = new Vector2D(point17.subtract(point16));
 
         //calculaton of apex point
