@@ -6,6 +6,8 @@ import jblockexceptions.MeasurementNotFoundException;
 import jblockmain.*;
 import mathcontainers.Vector2D;
 
+import java.util.ArrayList;
+
 public class TrouserPattern
     extends Pattern
 {
@@ -152,8 +154,27 @@ public class TrouserPattern
 
         // Predefining Step 9 Y value as it is used as the basis for multiple other steps
         // Has an if statement depending on the sign of measurement [047]
-        if (r_CrotchZ>0) {s_HipFrZ -= r_CrotchZ; t_HipBkZ += r_CrotchZ;}
-        if (r_CrotchZ<0) {s_HipFrZ += r_CrotchZ; t_HipBkZ -= r_CrotchZ;}
+        if (r_CrotchZ>0)
+        {
+            s_HipFrZ -= r_CrotchZ;
+            u_SeatFrZ -= r_CrotchZ;
+            w_WaistFrZ-= r_CrotchZ;
+
+            t_HipBkZ += r_CrotchZ;
+            v_SeatBkZ += r_CrotchZ;
+            x_WaistBkZ+= r_CrotchZ;
+        }
+
+        if (r_CrotchZ<0)
+        {
+            s_HipFrZ += r_CrotchZ;
+            u_SeatFrZ += r_CrotchZ;
+            w_WaistFrZ += r_CrotchZ;
+
+            t_HipBkZ -= r_CrotchZ;
+            v_SeatBkZ -= r_CrotchZ;
+            x_WaistBkZ -= r_CrotchZ;
+        }
 
         // Create component representing half back of skirt folded in half.
         Block fullBlock = new Block(userName + "_Gill_Trouser_Block");
@@ -185,10 +206,10 @@ public class TrouserPattern
         Vector2D point6 = new Vector2D(kneeXPosition, y7/2+(((c_KneeCircR/2)+7+2)/2));
         Vector2D point7 = new Vector2D(crotchXPosition,y7);
         Vector2D point8 = new Vector2D(hipXPosition,t_HipBkZ+r_CrotchZ-2.5+(i_BkHipArc/2)+2);
-        Vector2D point9 = new Vector2D(seatXPosition,(r_CrotchZ+v_SeatBkZ-2.5)+(g_BkSeatArc/2)+2);
-        Vector2D point10 = new Vector2D(waistXPosition,(r_CrotchZ+v_SeatBkZ-2.5+r_CrotchZ+x_WaistBkZ-2.5)+(0.32*halfWaistSuppression)+(f_BkWaistArc/2)+0.35);
-        Vector2D point11 = new Vector2D(waistXPosition+4,(r_CrotchZ+v_SeatBkZ-2.5+r_CrotchZ+x_WaistBkZ-2.5));
-        Vector2D point12 = new Vector2D(seatXPosition,r_CrotchZ+v_SeatBkZ-2.5);
+        Vector2D point9 = new Vector2D(seatXPosition,r_CrotchZ+v_SeatBkZ-12.5+(g_BkSeatArc/2)+2);
+        Vector2D point10 = new Vector2D(waistXPosition,(r_CrotchZ+v_SeatBkZ+r_CrotchZ+x_WaistBkZ-25+(0.32*halfWaistSuppression)+(f_BkWaistArc/2)+0.35));
+        Vector2D point11 = new Vector2D(waistXPosition+4,r_CrotchZ+v_SeatBkZ+r_CrotchZ+x_WaistBkZ-25);
+        Vector2D point12 = new Vector2D(seatXPosition,r_CrotchZ+v_SeatBkZ-(2.5*5));
         Vector2D point13 = new Vector2D(hipXPosition,(t_HipBkZ+r_CrotchZ-2.5));
 
         //frontBlock key vectors
@@ -205,6 +226,7 @@ public class TrouserPattern
         Vector2D point25 = new Vector2D(ankleXPosition,(point22.getY()/2)+(((d_AnkleCircleR/2)+10-2)/2));
         Vector2D point26 = new Vector2D(kneeXPosition,(point22.getY()/2)+(((c_KneeCircR/2)+7-2)/2));
 
+
         fullBlock.addKeypoint(point1);
         fullBlock.addKeypoint(point2);
         fullBlock.addKeypoint(point3);
@@ -218,6 +240,7 @@ public class TrouserPattern
         fullBlock.addKeypoint(point12);
         fullBlock.addKeypoint(point13);
 
+
         fullBlock.addKeypoint(point15);
         fullBlock.addKeypoint(point16);
         fullBlock.addKeypoint(point17);
@@ -230,5 +253,16 @@ public class TrouserPattern
         fullBlock.addKeypoint(point24);
         fullBlock.addKeypoint(point25);
         fullBlock.addKeypoint(point26);
+
+        /*
+        Vector2D point1and2 = new Vector2D((point1.getX() + (point2.getX() - point1.getX())) / 3, point1.getY() + ((point2.getY() - point1.getY()) * 0.75));
+        fullBlock.addDirectedCurve(point1,point2, new Vector2D(point1and2.subtract(point1)),new Vector2D(point3.subtract(point2)),new double[]{0,0});
+        fullBlock.addCircularCurve(point3,point5,1,true);
+        fullBlock.addDirectedCurve(point6,point7,new Vector2D(point6.subtract(point5)),new Vector2D(point8.subtract(point7)),new double[]{0,0});
+
+        fullBlock.addDirectedCurve(point12,point1,point13,0);
+
+         */
+
     }
 }
