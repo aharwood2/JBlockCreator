@@ -208,7 +208,7 @@ public class TrouserPattern
         Block backblock = blocks.get(1);
 
         // Adding Step 24
-        backblock.addKeypoint(new Vector2D((d_BodyRise + 0.5), -(((b_Hips/12)+2)+((b_Hips/16)+1))));
+        backblock.addKeypoint(new Vector2D((d_BodyRise + 0.5), -((b_Hips/12)+2+(b_Hips/16)+1+0.8+(((b_Hips/16)+1)/2))));
 
         // Adding Step 29
         backblock.addKeypoint(new Vector2D((d_BodyRise + ((h_CrotchHeight / 2.0) - 5.0)), -((Arb_HemWidth / 2.0) - 0.5 + 1.3) - 1.0));
@@ -238,7 +238,7 @@ public class TrouserPattern
         backblock.addKeypoint(new Vector2D((d_BodyRise / 2.0), (-(((b_Hips / 12.0) + 2) - ((((b_Hips / 12.0)) + 2.0) / 4.0)))));
 
         // Adding Step 24
-        backblock.addKeypoint(new Vector2D((d_BodyRise + 0.5), -(((b_Hips/12)+2)+((b_Hips/16)+1))));
+        backblock.addKeypoint(new Vector2D((d_BodyRise + 0.5), -((b_Hips/12)+2+(b_Hips/16)+1+0.8+(((b_Hips/16)+1)/2))));
 
         // Add first back dart between points 22 and 21
         Vector2D startSegment2 = new Vector2D(0.0, ((b_Hips / 4.0) - ((b_Hips / 12.0) + 2.0) - (((b_Hips / 12.0) + 2.0) / 4.0)));
@@ -271,7 +271,7 @@ public class TrouserPattern
         );
 
         // Adding curve from Step 24 --> 29
-        backblock.addCircularCurve(new Vector2D((d_BodyRise + 0.5), -(((b_Hips/12)+2)+((b_Hips/16)+1))),
+        backblock.addCircularCurve(new Vector2D((d_BodyRise + 0.5), -((b_Hips/12)+2+(b_Hips/16)+1+0.8+(((b_Hips/16)+1)/2))),
                 new Vector2D((d_BodyRise + ((h_CrotchHeight / 2.0) - 5.0)), -((Arb_HemWidth / 2.0) - 0.5 + 1.3) - 1.0),
                 0.5,
                 false
@@ -307,7 +307,7 @@ public class TrouserPattern
 
         // Adding curve from Step 19 --> 24
         backblock.addCircularCurve(new Vector2D((d_BodyRise / 2.0), (-(((b_Hips / 12.0) + 2) - ((((b_Hips / 12.0)) + 2.0) / 4.0)))),
-                new Vector2D((d_BodyRise + 0.5), -(((b_Hips/12)+2)+((b_Hips/16)+1))),
+                new Vector2D((d_BodyRise + 0.5), -((b_Hips/12)+2+(b_Hips/16)+1+0.8+(((b_Hips/16)+1)/2))),
                 1.0,
                 false
         );
