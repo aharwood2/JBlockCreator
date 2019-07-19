@@ -242,10 +242,6 @@ public class TrouserPatternTwo extends Pattern
         //solved a vector line of equation for lambda when y = 0 to calculate position
         Vector2D frontDartApexPos = new Vector2D((new Vector2D(point9.add(point10.subtract(point9).divide(2)))).getX() + waistToAbdomen - 1.5, centreYpoint);
         ArrayList<Vector2D> frontDarts = frontBlock.addDart(point9, point10, -point9.getY() / new Vector2D(point10.subtract(point9)).getY(), (interimFrontDartWidth / sumInterims) * halfOverallDiffFrHipToFrWaistWithEase, frontDartApexPos, false);
-        System.out.println(interimFrontDartWidth);
-        System.out.println(sumInterims);
-        System.out.println(halfOverallDiffFrHipToFrWaistWithEase);
-        System.out.println((interimFrontDartWidth / sumInterims) * halfOverallDiffFrHipToFrWaistWithEase);
 
         Vector2D frontDartStart = frontDarts.get(0);
         Vector2D frontDartEnd = frontDarts.get(2);
