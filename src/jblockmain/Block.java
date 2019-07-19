@@ -1137,9 +1137,9 @@ public class Block
         if (start == end) {return 0;}
         int size = end; // size = 2 here
         //this is to help with say, getting the size from point 10 to point 3 -> need to loop to 10,11,12,13,14,15...1,2,3
-        //which is equal to the .size - start + end
+        //which is equal to the arraylist.size - start + end
         if (end < start){size += keypointsX.size()-start;} else {size -= start;}
-        end = start+1; //end = 10 here and start = 9
+        end = start+1;
             for (int i = 0; i < size; i++) {
 
                 //consider that arraylists are indexed from 0 so to get point 10, you have to .get(9)so if we start from 10, we will do point 11 (.get(0) = point1 -> .get(10) = point11) - .get(9) = point10

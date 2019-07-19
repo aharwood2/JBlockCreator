@@ -7,6 +7,8 @@ import jblockmain.*;
 import mathcontainers.Vector2D;
 
 import java.util.ArrayList;
+import java.util.Collections;
+
 public class TrouserPatternTwo extends Pattern
 {
 
@@ -170,9 +172,6 @@ public class TrouserPatternTwo extends Pattern
         int ankleEase = 22;
 
 
-        //starting from origin, add internal points as vectors not key points because nothing is actually attached
-        //to them
-
         //starting from the centre point, directly south of crotch point, going in an anti-clockwise manner
         //calculation for front crotch extension
         double frontCrotchExtension = (hipDepth - 6) * 0.38;
@@ -187,7 +186,7 @@ public class TrouserPatternTwo extends Pattern
         double interimCBShaping = 0;
         if (frontAbdomenZ > frontWaistZ) {
             interimCBShaping = frontAbdomenZ - frontWaistZ;
-        } //0.18
+        }
         double sumInterims = interimFrontDartWidth + interimFrontSideSeamShaping + interimCBShaping; //7.7
         double halfOverallDiffFrHipToFrWaistWithEase = (((frontHipArc + ((double) seatEase / 2)) - (frontWaistArc + ((double) waistEase / 2))) / 2);
 
@@ -203,8 +202,8 @@ public class TrouserPatternTwo extends Pattern
         Vector2D point9 = new Vector2D(waistXPosition - sideStreamUpliftR, halfFrontCreaselineFromHipPoint - (halfOverallDiffFrHipToFrWaistWithEase * (interimFrontSideSeamShaping / sumInterims))+centreYpoint);
         Vector2D point10 = new Vector2D(waistXPosition, -(halfFrontCreaselineFromHipPoint -
                 (frontSeatExtension + halfOverallDiffFrHipToFrWaistWithEase * interimCBShaping / sumInterims))+centreYpoint);
-        Vector2D point11 = new Vector2D(seatXPosition, -(halfFrontCreaselineFromHipPoint - frontSeatExtension));
-        Vector2D point12 = new Vector2D(hipXPosition, -(halfFrontCreaselineFromHipPoint - frontCrotchExtension));
+        Vector2D point11 = new Vector2D(seatXPosition, -(halfFrontCreaselineFromHipPoint - frontSeatExtension +centreYpoint));
+        Vector2D point12 = new Vector2D(hipXPosition, -(halfFrontCreaselineFromHipPoint - frontCrotchExtension + centreYpoint));
 
         //point 1 and 2
         frontBlock.addKeypoint(point1);
@@ -255,6 +254,21 @@ public class TrouserPatternTwo extends Pattern
         //final steep curve that connects to crotch point point 12 not added as a keypoint but through curve function
         frontBlock.addDirectedCurve(point11, point1, point12, 0);
 
+        //get the max and min y with a small additional buffer of 5cm for the construction lines
+        double maxFrontY = Collections.max(frontBlock.getPlottableKeypointsY())+5;
+        double minFrontY = Collections.min(frontBlock.getPlottableKeypointsY())-5;
+
+        //all the key construction points
+        frontBlock.addConstructionPoint(new Vector2D(waistXPosition,minFrontY),new Vector2D(waistXPosition,maxFrontY),"Waist");
+        frontBlock.addConstructionPoint(new Vector2D(seatXPosition,minFrontY),new Vector2D(seatXPosition,maxFrontY),"Seat");
+        frontBlock.addConstructionPoint(new Vector2D(hipXPosition,minFrontY),new Vector2D(hipXPosition,maxFrontY),"Hip");
+        frontBlock.addConstructionPoint(new Vector2D(centreXpoint,minFrontY),new Vector2D(centreXpoint,maxFrontY),"Crotch");
+        frontBlock.addConstructionPoint(new Vector2D(kneeXPosition,minFrontY),new Vector2D(kneeXPosition,maxFrontY),"Knee");
+        frontBlock.addConstructionPoint(new Vector2D(ankleXPosition,minFrontY),new Vector2D(ankleXPosition,maxFrontY),"Aankle");
+
+        //construction point representing the centre fold
+        frontBlock.addConstructionPoint(new Vector2D(Collections.min(frontBlock.getPlottableKeypointsX())-5,centreYpoint),new Vector2D(Collections.max(frontBlock.getPlottableKeypointsX())+5,centreYpoint),"CentreFold");
+
 
         Block backBlock = new Block(userName + "_Gill_BackBlock");
         blocks.add(backBlock);
@@ -276,18 +290,18 @@ public class TrouserPatternTwo extends Pattern
         double backSeatExtension = (seatDepth - 6) * 0.62;//calculation of CELL G25
 
         //all keypoints except point 16 added as vectors
-        Vector2D point13 = new Vector2D(centreXpoint + 1, halfBackCreaselineFromHipPoint);
-        Vector2D point14 = new Vector2D(hipXPosition, halfBackCreaselineFromHipPoint - backCrotchExtension);
-        Vector2D point15 = new Vector2D(seatXPosition, halfBackCreaselineFromHipPoint - backSeatExtension);
-        double y16 = halfBackCreaselineFromHipPoint - (backSeatExtension + (halfOverallDiffBkHipToBkWaistInclEase * interimBackCBShaping / backSumInterims));
-        Vector2D point17 = new Vector2D(waistXPosition - sideStreamUpliftR, -(halfBackCreaselineFromHipPoint - (halfOverallDiffBkHipToBkWaistInclEase / 2 * (interimBackSideSeamShaping / backSumInterims))));
-        Vector2D point18 = new Vector2D(seatXPosition, -((backSeatArc / 2 + (double) seatEase / 4) - (halfBackCreaselineFromHipPoint - backSeatExtension))); //y:A30/2 + SeatEase/4 ) - (crotch height - CELL g25)
-        Vector2D point19 = new Vector2D(hipXPosition, -(((backHipArc / 2) + (double) hipEase / 4) - (halfBackCreaselineFromHipPoint - backCrotchExtension)));
-        Vector2D point20 = new Vector2D(centreXpoint, -(((backHipArc / 2) + (double) hipEase / 4) - (halfBackCreaselineFromHipPoint - backCrotchExtension))); //same as point 19
-        Vector2D point21 = new Vector2D(kneeXPosition, -(((kneeCircumR + kneeEase) / 4) + 0.75));
-        Vector2D point22 = new Vector2D(ankleXPosition, -(((ankleCircumR + kneeEase) / 4) + 0.75));
-        Vector2D point24 = new Vector2D(ankleXPosition, (((ankleCircumR + kneeEase) / 4) + 0.75));
-        Vector2D point25 = new Vector2D(kneeXPosition, (((kneeCircumR + kneeEase) / 4) + 0.75));
+        Vector2D point13 = new Vector2D(centreXpoint + 1, halfBackCreaselineFromHipPoint +centreYpoint);
+        Vector2D point14 = new Vector2D(hipXPosition, halfBackCreaselineFromHipPoint - backCrotchExtension +centreYpoint);
+        Vector2D point15 = new Vector2D(seatXPosition, halfBackCreaselineFromHipPoint - backSeatExtension+centreYpoint);
+        double y16 = halfBackCreaselineFromHipPoint - (backSeatExtension + (halfOverallDiffBkHipToBkWaistInclEase * interimBackCBShaping / backSumInterims))+centreYpoint;
+        Vector2D point17 = new Vector2D(waistXPosition - sideStreamUpliftR, -(halfBackCreaselineFromHipPoint - (halfOverallDiffBkHipToBkWaistInclEase / 2 * (interimBackSideSeamShaping / backSumInterims))+centreYpoint));
+        Vector2D point18 = new Vector2D(seatXPosition, -((backSeatArc / 2 + (double) seatEase / 4) - (halfBackCreaselineFromHipPoint - backSeatExtension)+centreYpoint)); //y:A30/2 + SeatEase/4 ) - (crotch height - CELL g25)
+        Vector2D point19 = new Vector2D(hipXPosition, -(((backHipArc / 2) + (double) hipEase / 4) - (halfBackCreaselineFromHipPoint - backCrotchExtension)+centreYpoint));
+        Vector2D point20 = new Vector2D(centreXpoint, -(((backHipArc / 2) + (double) hipEase / 4) - (halfBackCreaselineFromHipPoint - backCrotchExtension)+centreYpoint)); //same as point 19
+        Vector2D point21 = new Vector2D(kneeXPosition, -(((kneeCircumR + kneeEase) / 4) + 0.75+centreYpoint));
+        Vector2D point22 = new Vector2D(ankleXPosition, -(((ankleCircumR + kneeEase) / 4) + 0.75 +centreYpoint));
+        Vector2D point24 = new Vector2D(ankleXPosition, (((ankleCircumR + kneeEase) / 4) + 0.75)+centreYpoint);
+        Vector2D point25 = new Vector2D(kneeXPosition, (((kneeCircumR + kneeEase) / 4) + 0.75)+centreYpoint);
 
         //addition of keypoints 17 and 18
         backBlock.addKeypoint(point17);
@@ -339,6 +353,22 @@ public class TrouserPatternTwo extends Pattern
         ArrayList<Vector2D> backDarts = backBlock.addDart(point16,point17,0.5,dartWidth,Apex,true);
         backBlock.addRightAngleCurve(point16, backDarts.get(0));
         backBlock.addRightAngleCurve(backDarts.get(2), point17);
+
+
+        //get the max and min y with a small additional buffer of 5cm for the construction lines
+        double maxBackY = Collections.max(backBlock.getPlottableKeypointsY())+5;
+        double minBackY = Collections.min(backBlock.getPlottableKeypointsY())-5;
+
+        //all the key construction points
+        backBlock.addConstructionPoint(new Vector2D(waistXPosition,minBackY),new Vector2D(waistXPosition,maxBackY),"Waist");
+        backBlock.addConstructionPoint(new Vector2D(seatXPosition,minBackY),new Vector2D(seatXPosition,maxBackY),"Seat");
+        backBlock.addConstructionPoint(new Vector2D(hipXPosition,minBackY),new Vector2D(hipXPosition,maxBackY),"Hip");
+        backBlock.addConstructionPoint(new Vector2D(centreXpoint,minBackY),new Vector2D(centreXpoint,maxBackY),"Crotch");
+        backBlock.addConstructionPoint(new Vector2D(kneeXPosition,minBackY),new Vector2D(kneeXPosition,maxBackY),"Knee");
+        backBlock.addConstructionPoint(new Vector2D(ankleXPosition,minBackY),new Vector2D(ankleXPosition,maxBackY),"Aankle");
+
+        //construction point representing the centre fold
+        backBlock.addConstructionPoint(new Vector2D(Collections.min(backBlock.getPlottableKeypointsX())-5,centreYpoint),new Vector2D(Collections.max(backBlock.getPlottableKeypointsX())+5,centreYpoint),"CentreFold");
 
     }
 
