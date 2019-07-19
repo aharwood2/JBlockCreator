@@ -263,10 +263,10 @@ public class TrouserPattern
 
         fullBlock.addDirectedCurve(point22,point23,new Vector2D(1,0),new Vector2D(point24.subtract(point23)),new double[]{0,0});
 
-        Vector2D point26and16 = new Vector2D((point15.getX() + (point26.getX() - point15.getX())) / 3, point15.getY() + ((point26.getY() - point15.getY()) * 0.75));
-        fullBlock.addDirectedCurve(point26,point1, new Vector2D(point26.subtract(point15)),new Vector2D(point15.subtract(point26and16)),new double[]{0,0});
+        Vector2D point26and15 = new Vector2D((point15.getX() + (point26.getX() - point15.getX())) / 3, point15.getY() + ((point26.getY() - point15.getY()) * 0.75));
+        fullBlock.addDirectedCurve(point26,point15, new Vector2D(point26.subtract(point25)),new Vector2D(point15.subtract(point26and15)),new double[]{0,0});
 
-        fullBlock.addDirectedCurve(point15,point16,new Vector2D(point15.subtract(point26and16)),new Vector2D(point18.subtract(point16)),new double[]{90,0});
+        fullBlock.addDirectedCurve(point15,point16,new Vector2D(point15.subtract(point26and15)),new Vector2D(point18.subtract(point16)),new double[]{90,0});
 
         Arb_FrontDartWidth = (0.18 * (((h_FrHipArc + i_BkHipArc) / 2.0) - ((e_FrWaistArc + f_BkWaistArc) / 2.0)));
         Arb_FrontDartLength = j_WaistToSeat - 1.5;
