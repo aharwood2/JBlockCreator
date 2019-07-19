@@ -293,8 +293,9 @@ public class TrouserPatternTwo extends Pattern
         Vector2D point13 = new Vector2D(centreXpoint + 1, halfBackCreaselineFromHipPoint +centreYpoint);
         Vector2D point14 = new Vector2D(hipXPosition, halfBackCreaselineFromHipPoint - backCrotchExtension +centreYpoint);
         Vector2D point15 = new Vector2D(seatXPosition, halfBackCreaselineFromHipPoint - backSeatExtension+centreYpoint);
-        double y16 = halfBackCreaselineFromHipPoint - (backSeatExtension + (halfOverallDiffBkHipToBkWaistInclEase * interimBackCBShaping / backSumInterims))+centreYpoint;
+        double y16 = point15.getY() - (halfOverallDiffBkHipToBkWaistInclEase * interimBackCBShaping / backSumInterims);
         Vector2D point17 = new Vector2D(waistXPosition - sideStreamUpliftR, -(halfBackCreaselineFromHipPoint - (halfOverallDiffBkHipToBkWaistInclEase / 2 * (interimBackSideSeamShaping / backSumInterims))+centreYpoint));
+        Vector2D point16Temp = new Vector2D(point17.getX(),y16);
         Vector2D point18 = new Vector2D(seatXPosition, -((backSeatArc / 2 + (double) seatEase / 4) - (halfBackCreaselineFromHipPoint - backSeatExtension)+centreYpoint)); //y:A30/2 + SeatEase/4 ) - (crotch height - CELL g25)
         Vector2D point19 = new Vector2D(hipXPosition, -(((backHipArc / 2) + (double) hipEase / 4) - (halfBackCreaselineFromHipPoint - backCrotchExtension)+centreYpoint));
         Vector2D point20 = new Vector2D(centreXpoint, -(((backHipArc / 2) + (double) hipEase / 4) - (halfBackCreaselineFromHipPoint - backCrotchExtension)+centreYpoint)); //same as point 19
@@ -332,7 +333,7 @@ public class TrouserPatternTwo extends Pattern
         backBlock.addKeypoint(point14);
         backBlock.addKeypoint(point15);
 
-        backBlock.addDirectedCurve(point13,point14,new double[] {90,0});
+        backBlock.addDirectedCurve(point13,point14,new Vector2D(point13.subtract(point25and13)),new Vector2D(point16Temp.subtract(point15)),new double[]{90,0});
 
         //calculate length point 16 needs to be moved in the -x direction by to keep overall crotch length constant
         double crotchExtension = fullCrotchLength - (frontBlock.getLengthBetweenPoints(point10, point1) + backBlock.getLengthBetweenPoints(point13, point15));
