@@ -196,9 +196,9 @@ public class TrouserPattern
 
         //frontBlock key vectors
         Vector2D point15 = new Vector2D(crotchXPosition,centreYPosition);
-        Vector2D point16 = new Vector2D(hipXPosition,-(s_HipFrZ+r_CrotchZ+2.5));
-        Vector2D point17 = new Vector2D(seatXPosition,-(r_CrotchZ+u_SeatFrZ+2.5));
-        Vector2D point18 = new Vector2D(waistXPosition,-(r_CrotchZ+w_WaistFrZ+2.5));
+        Vector2D point16 = new Vector2D(hipXPosition,-(s_HipFrZ-r_CrotchZ-2.5));
+        Vector2D point17 = new Vector2D(seatXPosition,-(u_SeatFrZ-r_CrotchZ-2.5));
+        Vector2D point18 = new Vector2D(waistXPosition,-(w_WaistFrZ-r_CrotchZ-2.5));
         Vector2D point19 = new Vector2D(waistXPosition,point18.getY()-((e_FrWaistArc/2)+0.35+(0.18*halfWaistSuppression)));
         Vector2D point20 = new Vector2D(seatXPosition,point17.getY()-((q_FrSeatArc/2)+1));
         Vector2D point21 = new Vector2D(hipXPosition,point16.getY()-((h_FrHipArc/2)+1));
@@ -261,7 +261,7 @@ public class TrouserPattern
 
         fullBlock.addCircularCurve(point19,point20,(point20.getY() - (new Vector2D(point19.add(point20.subtract(point19).divide(2)))).getY()) / 2,false);
 
-        //fullBlock.addDirectedCurve(point22,point23,new Vector2D(1,0),new Vector2D(point24.subtract(point23)),new double[]{0,0});
+        fullBlock.addDirectedCurve(point22,point23,new Vector2D(1,0),new Vector2D(point24.subtract(point23)),new double[]{0,0});
 
         Vector2D point26and16 = new Vector2D((point15.getX() + (point26.getX() - point15.getX())) / 3, point15.getY() + ((point26.getY() - point15.getY()) * 0.75));
         fullBlock.addDirectedCurve(point26,point1, new Vector2D(point26.subtract(point15)),new Vector2D(point15.subtract(point26and16)),new double[]{0,0});
