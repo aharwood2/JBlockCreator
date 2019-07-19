@@ -116,6 +116,38 @@ public class TrouserPatternTwo extends Pattern
         }
     }
 
+    private void readjustMeasurement()
+    {
+        optSmallofBackWaist = 83.33;
+        hipCircum = 93.89;
+        waistToHipLength = 25.88;
+        kneeCircumR = 35.36;
+        ankleCircumR = 27.15;
+        frontWaistArc = 34.38;
+        backWaistArc = 32.36;
+        frontAbdomenArc = 39.63;
+        backSeatArc = 49.51;
+        frontHipArc = 43.06;
+        backHipArc = 50.78;
+        waistToAbdomen = 9.9;
+        waistToSeat = 21.91;
+        sideStreamUpliftR = 0.58;
+        bodyRise = 30.16;
+        seatDepth = 22.05;
+        hipDepth = 20.68;
+        ankleCircumHeightR = 7.43;
+        kneeCircumHeightR = 44.67;
+        crotchHeight = 78.13;
+        frontSeatArc = 43.14;
+        seatBKZ = -17.91;
+        frontWaistZ = 6.07;
+        backWaistZ = -11.12;
+        waistWidth = 24.43;
+        hipWidth = 34.52;
+        frontAbdomenZ = 6.25;
+        fullCrotchLength = 75.67;
+    }
+
 
     @Override
     protected void createBlocks() {
@@ -180,8 +212,8 @@ public class TrouserPatternTwo extends Pattern
         frontBlock.addKeypoint(point2);
 
         //calculation of a point for the curve to go through which is 1/3rd the width 1/4 the heigh between them
-        Vector2D point1and2 = new Vector2D((point1.getX() - point2.getX()) / 3, point2.getY() - ((point2.getY() - point1.getY()) * 0.66)+centreYpoint);
-        frontBlock.addDirectedCurve(point1,point2, new Vector2D(point1.subtract(point2)),new Vector2D(point2.subtract(point1and2)),new double[]{0,0});
+        Vector2D point1and2 = new Vector2D((point1.getX() + ((point2.getX() - point1.getX())) / 3), point1.getY() + ((point2.getY() - point1.getY()) * 0.75)+centreYpoint);
+        frontBlock.addDirectedCurve(point1,point2, new Vector2D(point1and2.subtract(point1)),new Vector2D(point3.subtract(point2)),new double[]{0,0});
 
         //point 3,4,5,6,7
         frontBlock.addKeypoint(point3);
@@ -210,6 +242,10 @@ public class TrouserPatternTwo extends Pattern
         //solved a vector line of equation for lambda when y = 0 to calculate position
         Vector2D frontDartApexPos = new Vector2D((new Vector2D(point9.add(point10.subtract(point9).divide(2)))).getX() + waistToAbdomen - 1.5, centreYpoint);
         ArrayList<Vector2D> frontDarts = frontBlock.addDart(point9, point10, -point9.getY() / new Vector2D(point10.subtract(point9)).getY(), (interimFrontDartWidth / sumInterims) * halfOverallDiffFrHipToFrWaistWithEase, frontDartApexPos, false);
+        System.out.println(interimFrontDartWidth);
+        System.out.println(sumInterims);
+        System.out.println(halfOverallDiffFrHipToFrWaistWithEase);
+        System.out.println((interimFrontDartWidth / sumInterims) * halfOverallDiffFrHipToFrWaistWithEase);
 
         Vector2D frontDartStart = frontDarts.get(0);
         Vector2D frontDartEnd = frontDarts.get(2);
@@ -281,8 +317,8 @@ public class TrouserPatternTwo extends Pattern
         backBlock.addKeypoint(point13);
 
         //added a new vector 1/4 height and 1/3 length for this curve to go through
-        Vector2D point25and13 = new Vector2D((point25.getX() - point13.getX()) / 3, point13.getY() - ((point13.getY() - point25.getY()) * 0.66));
-        backBlock.addDirectedCurve(point25,point13, new Vector2D(point25.subtract(point24)),new Vector2D(point13.subtract(point25and13)),new double[]{0,0});
+        Vector2D point25and13 = new Vector2D(point13.getX()+((point25.getX() - point13.getX()) / 3), point13.getY() + ((point25.getY() - point13.getY()) * 0.75));
+        backBlock.addDirectedCurve(point25,point13, new Vector2D(point25.subtract(point24)),new Vector2D(point25and13.subtract(point13)),new double[]{0,0});
 
         backBlock.addKeypoint(point14);
         backBlock.addKeypoint(point15);
@@ -303,7 +339,6 @@ public class TrouserPatternTwo extends Pattern
 
         //calculaton of apex point
         double lambda = (waistToSeat - 5) / Math.sqrt (Math.pow(((point15.getX() - point16.getX())), 2) + Math.pow(((point15.getY() - point16.getY())), 2));
-        System.out.println(lambda);
         Vector2D Apex = new Vector2D(point16.add(D16D17.divide(2)).add(new Vector2D(point15.subtract(point16)).multiply(lambda)));
 
         ArrayList<Vector2D> backDarts = backBlock.addDart(point16,point17,0.5,dartWidth,Apex,true);
