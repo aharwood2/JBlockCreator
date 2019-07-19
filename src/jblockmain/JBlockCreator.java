@@ -289,8 +289,8 @@ public class JBlockCreator
 
                         if (checkGillTrousersTwo.isSelected())
                         {
-                            gill.TrouserPatternTwo gill_trousers = new gill.TrouserPatternTwo(measurements);
-                            gill_trousers.writeToDXF(fileOutput, dxfLayerChoices);
+                            gill.TrouserPatternTwo gill_trouserTwo = new gill.TrouserPatternTwo(measurements);
+                            gill_trouserTwo.writeToDXF(fileOutput, dxfLayerChoices);
                         }
 
                         if (checkAldrichSkirt.isSelected())
