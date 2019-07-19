@@ -259,9 +259,27 @@ public class TrouserPattern
 
         fullBlock.addDirectedCurve(point13,point1,new Vector2D(point12.subtract(point11)),new Vector2D(point1and2.subtract(point1)),new double[]{0,90});
 
+        fullBlock.addCircularCurve(point19,point20,(point20.getY() - (new Vector2D(point19.add(point20.subtract(point19).divide(2)))).getY()) / 2,false);
 
-        /*
+        //fullBlock.addDirectedCurve(point22,point23,new Vector2D(1,0),new Vector2D(point24.subtract(point23)),new double[]{0,0});
 
-         */
+        Vector2D point26and16 = new Vector2D((point15.getX() + (point26.getX() - point15.getX())) / 3, point15.getY() + ((point26.getY() - point15.getY()) * 0.75));
+        fullBlock.addDirectedCurve(point26,point1, new Vector2D(point26.subtract(point15)),new Vector2D(point15.subtract(point26and16)),new double[]{0,0});
+
+        fullBlock.addDirectedCurve(point15,point16,new Vector2D(point15.subtract(point26and16)),new Vector2D(point18.subtract(point16)),new double[]{90,0});
+
+        Arb_FrontDartWidth = (0.18 * (((h_FrHipArc + i_BkHipArc) / 2.0) - ((e_FrWaistArc + f_BkWaistArc) / 2.0)));
+        Arb_FrontDartLength = j_WaistToSeat - 1.5;
+        ArrayList<Vector2D> dartPoints2 = fullBlock.addDart(point18,
+                point19,
+                0.3,
+                Arb_BackDartWidth,
+                Arb_BackDartLength,
+                true, false);
+
+        fullBlock.addRightAngleCurve(point18,dartPoints2.get(0));
+        fullBlock.addRightAngleCurve(dartPoints2.get(2),point19);
+
+
     }
 }
