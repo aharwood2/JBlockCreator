@@ -7,7 +7,6 @@ import jblockmain.*;
 import mathcontainers.Vector2D;
 
 import java.util.ArrayList;
-//todo: need to give it its own UI
 public class TrouserPatternTwo extends Pattern
 {
 

@@ -7,7 +7,6 @@ import mathcontainers.Vector2D;
 import mathcontainers.VectorND;
 
 import java.util.ArrayList;
-import java.util.Vector;
 
 import static jblockmain.JBlockCreator.tol;
 

@@ -202,7 +202,7 @@
                           <grid row="2" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                         </constraints>
                         <properties>
-                          <text value="Trousers1"/>
+                          <text value="Trouser One"/>
                         </properties>
                       </component>
                       <component id="4fcf5" class="javax.swing.JCheckBox" binding="checkGillTrousersTwo">
@@ -210,7 +210,7 @@
                           <grid row="2" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                         </constraints>
                         <properties>
-                          <text value="Trousers2"/>
+                          <text value="Trouser Two"/>
                         </properties>
                       </component>
                     </children>
