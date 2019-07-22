@@ -11,6 +11,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.io.FileWriter;
+import java.util.Date;
 
 
 /** Interface to be implemented by every pattern added to the module. */
@@ -173,7 +174,7 @@ public abstract class Pattern implements IPlottable
     }
 
     @Override
-    public void writeToDXF(File fileOutput, boolean[] dxfLayerChooser)
+    public void writeToDXF(File fileOutput, boolean[] dxfLayerChooser, String timeStamp)
     {
         for (int i = 0; i < getNumberOfBlocksToPlot(); i++)
         {
