@@ -85,6 +85,7 @@ public class JBlockCreator
     private JPanel imageAnalysisWrapper;
     private JLayeredPane stackedPatternSample;
     private JLayeredPane stackedAnalysisSample;
+    private JCheckBox checkAhmedBodice;
 
     // Layers
     private ArrayList<Component> paneLayers;
@@ -279,6 +280,7 @@ public class JBlockCreator
                             gill_skirt.writeToDXF(fileOutput, dxfLayerChoices);
                         }
 
+
                         if (checkGillTrousers.isSelected())
                         {
                             gill.TrouserPattern gill_trousers = new gill.TrouserPattern(measurements);
@@ -295,6 +297,12 @@ public class JBlockCreator
                         {
                             aldrich.TrouserPattern aldrich_trousers = new aldrich.TrouserPattern(measurements);
                             aldrich_trousers.writeToDXF(fileOutput, dxfLayerChoices);
+                        }
+
+                        if (checkAhmedBodice.isSelected())
+                        {
+                            ahmed.BodicePattern ahmed_bodice = new ahmed.BodicePattern(measurements);
+                            ahmed_bodice.writeToDXF(fileOutput, dxfLayerChoices);
                         }
 
                         // Creates analysis outputs depending on which checkboxes are ticked
