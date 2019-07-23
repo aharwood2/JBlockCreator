@@ -269,6 +269,15 @@ public class TrouserPattern
                 Arb_BackDartLength,
                 true, false);
 
+        fullBlock.addRightAngleCurve(point10,dartPoints.get(0));
+        fullBlock.addRightAngleCurve(dartPoints.get(2),point11);
+
+        fullBlock.addDirectedCurve(point13,point1,new Vector2D(point12.subtract(point11)),new Vector2D(point1and2.subtract(point1)),new double[]{0,90});
+
+        fullBlock.addCircularCurve(point19,point20,(point20.getY() - (new Vector2D(point19.add(point20.subtract(point19).divide(2)))).getY()) / 2,false);
+
+        fullBlock.addDirectedCurve(point22,point23,new Vector2D(1,0),new Vector2D(point24.subtract(point23)),new double[]{0,0});
+
         Vector2D point26and15 = new Vector2D((point15.getX() + (point26.getX() - point15.getX())) / 3, point15.getY() + ((point26.getY() - point15.getY()) * 0.75));
         fullBlock.addDirectedCurve(point26,point15, new Vector2D(point26.subtract(point25)),new Vector2D(point15.subtract(point26and15)),new double[]{0,0});
 
