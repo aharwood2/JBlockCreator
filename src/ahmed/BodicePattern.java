@@ -8,6 +8,7 @@ import jblockmain.*;
 import mathcontainers.Vector2D;
 
 import java.util.ArrayList;
+import java.util.Vector;
 
 public class BodicePattern extends Pattern
 {
@@ -39,6 +40,7 @@ public class BodicePattern extends Pattern
     private double frontBustArcEase;
     private double backBustArcEase;
     private double waistEase;
+    private double shoulderRightX;
 
     @Override
     protected EMethod assignMethod()
@@ -99,6 +101,7 @@ public class BodicePattern extends Pattern
             frontNeckDepth = dataStore.getMeasurement("B10").value;
             backNeckDepth = dataStore.getMeasurement("B11").value;
             shoulderToWaistDepth = dataStore.getMeasurement("B16").value;
+            shoulderRightX = dataStore.getMeasurement("B17").value;
 
             userName = dataStore.getName();
 
@@ -132,6 +135,7 @@ public class BodicePattern extends Pattern
         frontNeckDepth = 4.91;
         backNeckDepth = 1.56;
         shoulderToWaistDepth = 41;
+        shoulderRightX = 21.13;
         userName = dataStore.getName();
         return true;
     }
@@ -176,36 +180,61 @@ public class BodicePattern extends Pattern
         Vector2D point4 = new Vector2D(0,point1.getY()-halfBackCentreTapeMeasure);
         Vector2D point5;
         Vector2D point6 = new Vector2D(point3.getX()+(backBustArc/2)+3,point3.getY());
-        double[][] x4y6 = circleIntersect(point4.getX(),point6.getX(),point4.getY(),point6.getY(),sideSeamDepth-armholeDepthEase,(backWaistArc/2)+1.5);
+        double [][] circleP;
+        circleP = circleIntersect(point4.getX(),point6.getX(),point4.getY(),point6.getY(),sideSeamDepth-armholeDepthEase,(backWaistArc/2)+1.5);
         //pick the one with smaller Y for now
-        if (x4y6[0][1] < x4y6[1][1])
+        if (circleP[0][1] < circleP[1][1])
         {
-            point5 = new Vector2D(x4y6[0][0],x4y6[0][1]);
+            point5 = new Vector2D(circleP[0][0],circleP[0][1]);
         } else
         {
-            point5 = new Vector2D(x4y6[1][0],x4y6[1][1]);
+            point5 = new Vector2D(circleP[1][0],circleP[1][1]);
         }
 
         Vector2D point7;
         Vector2D point8 = new Vector2D(point6.getX()+(frontBustArc/2)+1,point4.getY());
-        double[][] x6y8 = circleIntersect(point6.getX(),point8.getX(),point6.getY(),point8.getY(),(sideSeamDepth-armholeDepthEase),(frontWaistArc/2)+1.5);
-        if (x6y8[0][1] < x6y8[1][1])
+
+        circleP = circleIntersect(point6.getX(),point8.getX(),point6.getY(),point8.getY(),(sideSeamDepth-armholeDepthEase),(frontWaistArc/2)+1.5);
+        if (circleP[0][1] < circleP[1][1])
         {
-            point7 = new Vector2D(x6y8[0][0],x6y8[0][1]);
+            point7 = new Vector2D(circleP[0][0],circleP[0][1]);
         } else
         {
-            point7 = new Vector2D(x6y8[1][0],x6y8[1][1]);
+            point7 = new Vector2D(circleP[1][0],circleP[1][1]);
         }
+
         Vector2D point10 = new Vector2D(point8.getX(),point3.getY());
+        Vector2D point11 = new Vector2D(point8.getX(),point8.getY()+((sideNeckToBustToWaistR-frontNeckDepth)*0.75));
         Vector2D point12 = new Vector2D(point8.getX(),point8.getY()+(sideNeckToBustToWaistR-frontNeckDepth));
         Vector2D point13 = new Vector2D(point12.getX()-(neckWidthFrontandBack/2),point12.getY()+frontNeckDepth);
-        double y13and14 = Math.sqrt((((shoulderLengthRight+((frontBustArc+backBustArc)*0.08))*(shoulderLengthRight+((frontBustArc+backBustArc)*0.08)))-((acrossShoulderBackandFront-(neckWidthFrontandBack/2))*(acrossShoulderBackandFront-(neckWidthFrontandBack/2)))));
-        System.out.println(y13and14);
-        System.out.println(shoulderLengthRight+((frontBustArc+backBustArc)*0.08));
-        System.out.println((acrossShoulderBackandFront-(neckWidthFrontandBack/2)));
-        Vector2D point13and14 = new Vector2D(point12.getX()-acrossShoulderBackandFront, point13.getY()-y13and14);
 
+        Vector2D point13_14;
+        double hyp = Math.sqrt((shoulderRightX*shoulderRightX)+(shoulderToWaistDepth*shoulderToWaistDepth))+shoulderSlopeEase;
+        circleP = circleIntersect(point8.getX(),point13.getX(),point8.getY(),point13.getY(),hyp,shoulderLengthRight );
+        point13_14 = new Vector2D(circleP[1][0],circleP[1][1]);
+        if (circleP[0][0] < circleP [1][0]) {point13_14 = new Vector2D(circleP[0][0],circleP[0][1]);}
 
+        double dx = point13_14.getX()-point13.getX();
+        double dy = point13_14.getY()-point13.getY();
+        double lamda = (shoulderLengthRight/2)/Math.sqrt(((dx*dx)+(dy*dy)));
+        Vector2D dartPTBust = new Vector2D(point13.add(point13_14.subtract(point13).multiply(lamda)));
+        System.out.println(lamda);
+
+        Vector2D point16 = new Vector2D(point2.getX()+(acrossBackTapeMeasurement/2)+acrossBackEase,point2.getY());
+        Vector2D point17;
+        Vector2D point18 = new Vector2D(point1.getX()+(neckWidthFrontandBack/2),0);
+        circleP = circleIntersect(point4.getX(),point18.getX(),point4.getY(),point18.getY(),hyp,shoulderLengthRight );
+        Vector2D point17_18;
+        point17_18 = new Vector2D(circleP[1][0],circleP[1][1]);
+        if (circleP[0][0] > circleP [1][0]) {point17_18 = new Vector2D(circleP[0][0],circleP[0][1]);}
+        dx = point17_18.getX()-point18.getX();
+        dy = point17_18.getY()-point18.getY();
+        lamda = (shoulderLengthRight+1)/Math.sqrt(((dx*dx)+(dy*dy)));
+        point17 = new Vector2D(point18.add(point17_18.subtract(point18).multiply(lamda)));
+
+        fullBlock.addKeypoint(point16);
+        fullBlock.addKeypoint(point17);
+        fullBlock.addKeypoint(point18);
         fullBlock.addKeypoint(point1);
         fullBlock.addKeypoint(point2);
         fullBlock.addKeypoint(point3);
@@ -216,9 +245,11 @@ public class BodicePattern extends Pattern
         fullBlock.addKeypoint(point8);
 
         fullBlock.addKeypoint(point10);
+        fullBlock.addKeypoint(point11);
         fullBlock.addKeypoint(point12);
         fullBlock.addKeypoint(point13);
-        fullBlock.addKeypoint(point13and14);
+        fullBlock.addKeypoint(dartPTBust);
+        fullBlock.addKeypoint(point13_14);
 
 
 
@@ -230,6 +261,17 @@ public class BodicePattern extends Pattern
         System.out.println(x4y6[1][0] + "," + x4y6[1][1]);
          */
 
+
+        /*
+        attempt 1
+        double point13_14y = point13.getY() - Math.sqrt(Math.pow(shoulderLengthRight,2)-Math.pow((acrossShoulderBackandFront/2)-(neckWidthFrontandBack/2),2));
+
+        double hyp = Math.sqrt((shoulderRightX*shoulderRightX)+(shoulderToWaistDepth*shoulderToWaistDepth))+shoulderSlopeEase;
+
+        Vector2D point13_14 = new Vector2D(point12.getX()-(acrossShoulderBackandFront/2),point13_14y);
+        System.out.println(new Vector2D(point8.subtract(point13_14)).norm());
+        System.out.println(hyp);
+         */
     }
 
 }
