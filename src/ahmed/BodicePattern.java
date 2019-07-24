@@ -207,6 +207,8 @@ public class BodicePattern extends Pattern
         Vector2D point11 = new Vector2D(point8.getX(),point8.getY()+((sideNeckToBustToWaistR-frontNeckDepth)*0.75));
         Vector2D point12 = new Vector2D(point8.getX(),point8.getY()+(sideNeckToBustToWaistR-frontNeckDepth));
         Vector2D point13 = new Vector2D(point12.getX()-(neckWidthFrontandBack/2),point12.getY()+frontNeckDepth);
+        Vector2D point9 = new Vector2D(point8.getX(),point13.getY()-Math.sqrt(Math.pow(sideNeckToBustLengthR,2)-Math.pow((bustWidth/2)-(neckWidthFrontandBack/2),2)));
+        Vector2D bustPoint = new Vector2D(point9.getX()-(bustWidth)/2,point9.getY());
 
         Vector2D point13_14;
         double hyp = Math.sqrt((shoulderRightX*shoulderRightX)+(shoulderToWaistDepth*shoulderToWaistDepth))+shoulderSlopeEase;
@@ -217,8 +219,9 @@ public class BodicePattern extends Pattern
         double dx = point13_14.getX()-point13.getX();
         double dy = point13_14.getY()-point13.getY();
         double lamda = (shoulderLengthRight/2)/Math.sqrt(((dx*dx)+(dy*dy)));
-        Vector2D dartPTBust = new Vector2D(point13.add(point13_14.subtract(point13).multiply(lamda)));
-        System.out.println(lamda);
+        Vector2D dartPT1Bust = new Vector2D(point13.add(point13_14.subtract(point13).multiply(lamda)));
+
+        fullBlock.addDart()
 
         Vector2D point16 = new Vector2D(point2.getX()+(acrossBackTapeMeasurement/2)+acrossBackEase,point2.getY());
         Vector2D point17;
@@ -243,12 +246,13 @@ public class BodicePattern extends Pattern
         fullBlock.addKeypoint(point6);
         fullBlock.addKeypoint(point7);
         fullBlock.addKeypoint(point8);
+        fullBlock.addKeypoint(point9);
 
         fullBlock.addKeypoint(point10);
         fullBlock.addKeypoint(point11);
         fullBlock.addKeypoint(point12);
         fullBlock.addKeypoint(point13);
-        fullBlock.addKeypoint(dartPTBust);
+        fullBlock.addKeypoint(dartPT1Bust);
         fullBlock.addKeypoint(point13_14);
 
 
