@@ -216,17 +216,35 @@ public class BodicePattern extends Pattern
         point13_14 = new Vector2D(circleP[1][0],circleP[1][1]);
         if (circleP[0][0] < circleP [1][0]) {point13_14 = new Vector2D(circleP[0][0],circleP[0][1]);}
 
+        System.out.println(circleP[0][0] + "," + circleP[0][1]);
+        System.out.println(circleP[1][0] + "," + circleP[1][1]);
+        System.out.println(bustPoint.getX() + "," + bustPoint.getY());
+
         double dx = point13_14.getX()-point13.getX();
         double dy = point13_14.getY()-point13.getY();
         double lamda = (shoulderLengthRight/2)/Math.sqrt(((dx*dx)+(dy*dy)));
         Vector2D dartPT1Bust = new Vector2D(point13.add(point13_14.subtract(point13).multiply(lamda)));
 
-        fullBlock.addDart()
+        //calculation of 2nd dart pust bt
+        double dartLegLength = new Vector2D(bustPoint.subtract(dartPT1Bust)).norm();
+        //todo: need to vary dart width percent based on size of body
+        double dartWidth = (frontBustArc+backBustArc)*0.08;
+        circleP = circleIntersect(dartPT1Bust.getX(),bustPoint.getX(),dartPT1Bust.getY(),bustPoint.getY(),dartWidth,dartLegLength);
+        System.out.println(circleP[0][0] + "," + circleP[0][1]);
+        System.out.println(circleP[1][0] + "," + circleP[1][1]);
+        System.out.println(dartPT1Bust.getX() + "," + dartPT1Bust.getY());
+        Vector2D dartPT2Bust;
+        if (circleP[0][0] < circleP [1][0]) {dartPT2Bust = new Vector2D(circleP[0][0],circleP[1][0]);}
+        else {dartPT2Bust = new Vector2D(circleP[1][0],circleP[1][1]);}
 
+
+        //calculation of point 16,18 and using the intersect between them to calculate point 17
         Vector2D point16 = new Vector2D(point2.getX()+(acrossBackTapeMeasurement/2)+acrossBackEase,point2.getY());
         Vector2D point17;
         Vector2D point18 = new Vector2D(point1.getX()+(neckWidthFrontandBack/2),0);
         circleP = circleIntersect(point4.getX(),point18.getX(),point4.getY(),point18.getY(),hyp,shoulderLengthRight );
+
+
         Vector2D point17_18;
         point17_18 = new Vector2D(circleP[1][0],circleP[1][1]);
         if (circleP[0][0] > circleP [1][0]) {point17_18 = new Vector2D(circleP[0][0],circleP[0][1]);}
@@ -253,6 +271,8 @@ public class BodicePattern extends Pattern
         fullBlock.addKeypoint(point12);
         fullBlock.addKeypoint(point13);
         fullBlock.addKeypoint(dartPT1Bust);
+        fullBlock.addKeypoint(bustPoint);
+        fullBlock.addKeypoint(dartPT2Bust);
         fullBlock.addKeypoint(point13_14);
 
 
