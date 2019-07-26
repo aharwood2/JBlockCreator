@@ -149,8 +149,14 @@ public class TrouserPatternTwo extends Pattern {
 
         double kneeXPosition = centreXpoint + crotchHeight - kneeCircumHeightR; //A43 - A42
         double ankleXPosition = centreXpoint + crotchHeight - ankleCircumHeightR; //A43 - A41
-        double hipXPosition = centreXpoint - (bodyRise - waistToHipLength); //A38 - A15
-        double seatXPosition = centreXpoint - (bodyRise - waistToSeat); //A38 - A34
+        double hipXPosition, seatXPosition;
+        if (waistToHipLength > waistToSeat) {
+            hipXPosition = centreXpoint - (bodyRise - waistToHipLength); //A38 - A15
+            seatXPosition = centreXpoint - (bodyRise - waistToSeat); //A38 - A34
+        } else {
+            hipXPosition = centreXpoint - (bodyRise - waistToSeat); //A38 - A15
+            seatXPosition = centreXpoint - (bodyRise - waistToHipLength); //A38 - A34
+        }
         double waistXPosition = centreXpoint - bodyRise; //A38
 
         //ease values
