@@ -205,7 +205,7 @@ public class JBlockCreator
         @Override
         public void run()
         {
-            String timeStamp = new java.text.SimpleDateFormat("dd.MM.yyyy HH:mm:ss").format(new java.util.Date());
+            String timeStamp = new java.text.SimpleDateFormat("yyyy-MM-dd_HH-mm-ss").format(new java.util.Date());
             try
             {
                 // Handle missing options
