@@ -183,6 +183,7 @@ public class BodicePattern extends Pattern
         Vector2D point4 = new Vector2D(0,point1.getY()-halfBackCentreTapeMeasure);
         Vector2D point5;
         Vector2D point6 = new Vector2D(point3.getX()+(backBustArc/2)+3,point3.getY());
+        Vector2D point6_2 = new Vector2D(point3.getX()+(backBustArc/2)+3-0.1,point3.getY());
         double [][] circleP;
 
         //calculation of point 5 as the intersect between point 4 and point 6 given their length
@@ -289,16 +290,36 @@ public class BodicePattern extends Pattern
         fullBlock.addKeypoint(bustPoint);
         fullBlock.addKeypoint(dartPT2Bust);
         fullBlock.addKeypoint(point14);
-        fullBlock.addKeypoint(point15);
+        //fullBlock.addKeypoint(point15);
+        Vector2D apex1 = new Vector2D(point15.getX()-1.414,point6.getY()+1.414);
+        Vector2D apex2 = new Vector2D(point16.getX()+1.7678,point6.getY()+1.7678);
 
-        fullBlock.addKeypoint(point16);
+        fullBlock.addDirectedCurve(point14,apex1,point15,90);
+
+        fullBlock.addKeypoint(apex1);
+        fullBlock.addKeypoint(point6);
+        fullBlock.addKeypoint(point6_2);
+
+        fullBlock.addKeypoint(apex2);
+
+        fullBlock.addDirectedCurve(apex1,point6,new Vector2D(-1,-1),new Vector2D(-1,0),new double[]{0,0});
+        fullBlock.addDirectedCurve(point6_2,apex2,new Vector2D(-1,0),new Vector2D(-1,1),new double[]{0,0});
+
+        //fullBlock.addKeypoint(point16);
         fullBlock.addKeypoint(point17);
+
+        fullBlock.addDirectedCurve(apex2,point17,point16,0);
+
         fullBlock.addKeypoint(point18);
+
+        fullBlock.addDart(point17,)
+
         fullBlock.addKeypoint(point1);
         fullBlock.addKeypoint(point2);
         fullBlock.addKeypoint(point3);
         fullBlock.addKeypoint(point4);
         fullBlock.addKeypoint(point5);
+        fullBlock.addKeypoint(point6_2);
 
 
 
