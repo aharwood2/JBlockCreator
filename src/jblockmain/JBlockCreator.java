@@ -85,6 +85,7 @@ public class JBlockCreator
     private JPanel imageAnalysisWrapper;
     private JLayeredPane stackedPatternSample;
     private JLayeredPane stackedAnalysisSample;
+    private JCheckBox timeStampCheckBox;
 
     // Layers
     private ArrayList<Component> paneLayers;
@@ -205,7 +206,9 @@ public class JBlockCreator
         @Override
         public void run()
         {
-            String timeStamp = new java.text.SimpleDateFormat("yyyy-MM-dd_HH-mm-ss").format(new java.util.Date());
+            String timeStamp = null;
+            if (timeStampCheckBox.isSelected())
+            {timeStamp = new java.text.SimpleDateFormat("yyyy-MM-dd_HH-mm-ss").format(new java.util.Date());}
             try
             {
                 // Handle missing options

@@ -144,7 +144,12 @@ public class RectanglePlot implements IPlottable
         if (isLayered)
         {
             // Create new DXF file
-            String filename = "Layered_" + xAxisID + "_" + yAxisID + "_Rectangle_Plot" + timeStamp;
+            String filename;
+            if (timeStamp == null)
+                filename = "Layered_" + xAxisID + "_" + yAxisID + "_Rectangle_Plot";
+            else
+                filename = "Layered_" + xAxisID + "_" + yAxisID + "_Rectangle_Plot" + "_" + timeStamp;
+
             DxfFile file = new DxfFile(path.toString() + "/" + filename);
             try
             {
