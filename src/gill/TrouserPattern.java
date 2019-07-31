@@ -199,7 +199,7 @@ public class TrouserPattern
 
         // TODO: Need to move point 11 in -x direction based on back crotch length
 
-        Vector2D point11 = new Vector2D(waistXPosition + 40, (-v_SeatBkZ - 2.5 + -x_WaistBkZ - 2.5));
+        Vector2D point11 = new Vector2D(waistXPosition + 4.0, (-v_SeatBkZ - 2.5 + -x_WaistBkZ - 2.5));
         Vector2D point12 = new Vector2D(seatXPosition, -v_SeatBkZ - 2.5);
         Vector2D point13 = new Vector2D(hipXPosition, (-t_HipBkZ - 2.5));
 
@@ -279,7 +279,7 @@ public class TrouserPattern
 
         fullBlock.addCircularCurve(
                 point9, point10,
-                point10.getY() - (new Vector2D(point9.add(point10.subtract(point9).divide(2.0)))).getY() / 2.0,
+                (point10.getY() - (new Vector2D(point9.add(point10.subtract(point9).divide(2.0)))).getY()) / 2.0,
                 false);
 
         Arb_BackDartWidth = (0.32 * (((h_FrHipArc + i_BkHipArc) / 2.0) - ((e_FrWaistArc + f_BkWaistArc) / 2.0)));
@@ -303,7 +303,7 @@ public class TrouserPattern
 
         fullBlock.addCircularCurve(
                 point19, point20,
-                point20.getY() - (new Vector2D(point19.add(point20.subtract(point19).divide(2.0)))).getY() / 2.0,
+                (point20.getY() - (new Vector2D(point19.add(point20.subtract(point19).divide(2.0)))).getY()) / 2.0,
                 false);
 
         fullBlock.addDirectedCurve(
