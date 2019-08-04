@@ -507,7 +507,7 @@ public class JBlockCreator
         /* Add listeners */
 
         // Listener for the Run button
-        butRun.addActionListener(e -> new RunThread().start());
+        butRun.addActionListener(e -> runClickedEvent());
 
         // Attach listener to open button
         butLoad.addActionListener(e -> openClickedEvent());
