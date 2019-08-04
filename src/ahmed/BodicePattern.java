@@ -180,7 +180,7 @@ public class BodicePattern extends Pattern {
         double lamda, dx, dy;
         double rightShoulderToFrontWaistLength =
                 Math.sqrt((shoulderRightX * shoulderRightX) + (shoulderToWaistDepth * shoulderToWaistDepth))
-                + shoulderSlopeEase;
+                        + shoulderSlopeEase;
 
         // Some vector keypoints added
         Vector2D point1 = new Vector2D(0.0, -backNeckDepth);
@@ -234,8 +234,8 @@ public class BodicePattern extends Pattern {
         Vector2D bustPoint = new Vector2D(point9.getX() - (bustWidth) / 2.0, point9.getY());
 
         // Calculation of point14
-        double x14 = Math.sqrt((shoulderLengthRight*shoulderLengthRight)-(shoulderSlope*shoulderSlope));
-        Vector2D point14 = new Vector2D(point13.getX()-((frontBustArc+backBustArc)*0.08)-x14,point13.getY()-shoulderSlope);
+        double x14 = Math.sqrt((shoulderLengthRight * shoulderLengthRight) - (shoulderSlope * shoulderSlope));
+        Vector2D point14 = new Vector2D(point13.getX() - ((frontBustArc + backBustArc) * 0.08) - x14, point13.getY() - shoulderSlope);
 
         // Calculation of point 16,18 and using the intersect between them to calculate point 17
         Vector2D point16 = new Vector2D(point2.getX() + (acrossBackTapeMeasurement / 2.0) + acrossBackEase, point2.getY());
@@ -244,7 +244,7 @@ public class BodicePattern extends Pattern {
 
         // First calculate the intermediate point between point 18 and 17
 
-        Vector2D point17_18 = new Vector2D(point18.getX()+x14,point18.getY()-shoulderSlope);
+        Vector2D point17_18 = new Vector2D(point18.getX() + x14, point18.getY() - shoulderSlope);
 
         // Use point 17_18 to direct point 18 to calculate location of point 17
         dx = point17_18.getX() - point18.getX();
@@ -260,19 +260,17 @@ public class BodicePattern extends Pattern {
         fullBlock.addKeypoint(point10);
         fullBlock.addKeypoint(point11);
         fullBlock.addKeypoint(point12);
-        Vector2D point13_2 = new Vector2D(point13.getX()+0.01, point13.getY());
-        fullBlock.addKeypoint(point13_2);
 
         // Also bustdart base start 1
         fullBlock.addKeypoint(point13);
         fullBlock.addKeypoint(bustPoint);
-        Vector2D bustBase2 = new Vector2D(point13.getX()-(frontBustArc+backBustArc)*0.08, point13.getY());
+        Vector2D bustBase2 = new Vector2D(point13.getX() - (frontBustArc + backBustArc) * 0.08, point13.getY());
         fullBlock.addKeypoint(bustBase2);
         fullBlock.addKeypoint(point14);
 
         // Addition of dart between 13 and 14
         //ArrayList<Vector2D> bustDarts = fullBlock.addDart(point13, point14, 0.5,
-         //       (frontBustArc+backBustArc)*0.08, bustPoint, true);
+        //       (frontBustArc+backBustArc)*0.08, bustPoint, true);
 
         // Calculation of point15 -> need to add the length of the dart at this y position to push point 15
         // So that when the dart closes, the distance between point 11 and 15 is exactly a10/2
@@ -311,25 +309,22 @@ public class BodicePattern extends Pattern {
                 overallDiffTotalPatternWidthToWaistWithEase * 0.37, new Vector2D(bustPoint.getX(),
                         bustPoint.getY() - 2.5), false);
 
-        // Curve which meets 13 and 12 at 90 degs
-        //fullBlock.addDirectedCurve(point12, point13_2, new Vector2D(point12.subtract(point11)),
-        //        new Vector2D(point13.subtract(point13_2)), new double[]{90.0, 89.0});
-        fullBlock.addRightAngleCurve(point12,point13_2);
+        fullBlock.addDirectedCurveWithApexTangent(point12, point13, new Vector2D(point12.subtract(point11)), new Vector2D(-1, 0), new Vector2D(point13.getX(), point12.getY()), 2, new double[]{90, 90}, new int[]{1, 1});
 
         // All these curves make up the armhole curves
-        fullBlock.addDirectedCurve(point14, apex1, point15, 90.0);
         fullBlock.addDirectedCurve(apex1, point6, new Vector2D(-1.0, -1.0), new Vector2D(-1.0, 0.0), new double[]{0.0, 0.0});
+        fullBlock.addDirectedCurve(point14, apex1, point15, 90.0);
         fullBlock.addDirectedCurve(point6_2, apex2, new Vector2D(-1.0, 0.0), new Vector2D(-1.0, 1.0), new double[]{0.0, 0.0});
         fullBlock.addDirectedCurve(apex2, point17, point16, 0.0);
 
         // Dart between 17 and 18
         fullBlock.addDart(point17, point18, 0.5, 1.0, midShoulderToShoulderBlades - 2.5, true, true);
 
-        fullBlock.addRightAngleCurve(point18,point1);
+        fullBlock.addRightAngleCurve(point18, point1);
 
-        ArrayList<Vector2D> backWaistDarts = fullBlock.addDart(point4,point5,
-                (backWaistArc/4.0)/(new Vector2D(point5.subtract(point4)).norm()),
-                overallDiffTotalPatternWidthToWaistWithEase*0.37, waistToArmpitDepth-2.5,true,false);
+        ArrayList<Vector2D> backWaistDarts = fullBlock.addDart(point4, point5,
+                (backWaistArc / 4.0) / (new Vector2D(point5.subtract(point4)).norm()),
+                overallDiffTotalPatternWidthToWaistWithEase * 0.37, waistToArmpitDepth - 2.5, true, false);
 
     }
 
