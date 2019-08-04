@@ -54,6 +54,11 @@ public abstract class Pattern implements IPlottable
     protected static ArrayList<String> missingMeasurements = new ArrayList<String>();
 
     /**
+     *  Private store of easeMeasurements
+     */
+    protected  ArrayList<Measurements.Measurement> easeMeasurements = new ArrayList<Measurements.Measurement>();
+
+    /**
      * Constructor
      */
     public Pattern()
@@ -117,6 +122,7 @@ public abstract class Pattern implements IPlottable
      */
     protected abstract void addEasement();
 
+    protected abstract void addEasement(ArrayList<Measurements.Measurement> easeValues);
     /**
      * Create the blocks for this pattern.
      */

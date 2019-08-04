@@ -7,6 +7,7 @@ import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Hashtable;
 import java.util.ResourceBundle;
 
 import analysis.RectanglePlot;
@@ -85,6 +86,8 @@ public class JBlockCreator
     private JPanel imageAnalysisWrapper;
     private JLayeredPane stackedPatternSample;
     private JLayeredPane stackedAnalysisSample;
+    private JButton aldrichSkirtEaseButton;
+    private JButton aldrichTrouserEaseButton;
 
     // Layers
     private ArrayList<Component> paneLayers;
@@ -192,8 +195,16 @@ public class JBlockCreator
 
         // Finally, make our main window
         frame.pack();
+        block.setButtonsInvisible();
         frame.setResizable(false);
         frame.setVisible(true);
+    }
+
+    // To deal with resizing issues
+    private void setButtonsInvisible()
+    {
+        aldrichTrouserEaseButton.setVisible(false);
+        aldrichSkirtEaseButton.setVisible(false);
     }
 
     /**
@@ -616,6 +627,14 @@ public class JBlockCreator
                                                                else
                                                                    stackedAnalysisSample.setLayer(paneLayers.get(7), 1);
                                                            });
+        checkAldrichSkirt.addActionListener(e ->
+        {
+                aldrichSkirtEaseButton.setVisible(!aldrichSkirtEaseButton.isVisible());
+        });
+
+        checkAldrichTrousers.addActionListener(e -> {
+            aldrichTrouserEaseButton.setVisible(!aldrichTrouserEaseButton.isVisible());
+        });
     }
 
     /**
@@ -734,5 +753,11 @@ public class JBlockCreator
 
         // Create logo
         imageUomLogo = new JLabel(new ImageIcon("./images/logo_small.jpg"));
+    }
+
+    public ArrayList<Measurements.Measurement> createEaseForm (ArrayList<Measurements.Measurement> easeMeasurements)
+    {
+        
+        return easeMeasurements;
     }
 }
