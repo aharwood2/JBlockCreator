@@ -9,7 +9,7 @@ import mathcontainers.Vector2D;
 import java.util.ArrayList;
 
 public class SkirtPattern
-    extends Pattern
+    extends Pattern implements Ease
 {
     /* Skirt pattern block is constructed to fit on the 'natural waistline' */
 
