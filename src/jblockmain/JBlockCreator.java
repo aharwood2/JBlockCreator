@@ -195,12 +195,16 @@ public class JBlockCreator
 
         // Finally, make our main window
         frame.pack();
-        block.setComponentsInvisible(block.panelPatterns, new JPanel());
+        block.setComponentsInvisible(block.panelPatterns, new JButton());
         frame.setResizable(false);
         frame.setVisible(true);
     }
 
-    // To deal with resizing issues
+    /**
+     * To deal with resizing issues whereby components which case jframe to change size when set to visible cause bits to push out
+     * @param whichPanel the Panel in which everything underneath it will be searched for the particular component but not including the panel
+     * @param type the type of component you want to set invisibile, i.e JButton will set all buttons to invisible
+     */
     private void setComponentsInvisible(JPanel whichPanel, Component type)
     {
         for (int i = 0; i < whichPanel.getComponentCount(); i++)
