@@ -195,16 +195,26 @@ public class JBlockCreator
 
         // Finally, make our main window
         frame.pack();
-        block.setButtonsInvisible();
+        block.setComponentsInvisible(block.panelPatterns, new JButton());
         frame.setResizable(false);
         frame.setVisible(true);
     }
 
     // To deal with resizing issues
-    private void setButtonsInvisible()
+    private void setComponentsInvisible(JPanel whichPanel, Component type)
     {
-        aldrichTrouserEaseButton.setVisible(false);
-        aldrichSkirtEaseButton.setVisible(false);
+        for (int i = 0; i < whichPanel.getComponentCount(); i++)
+        {
+            System.out.println(whichPanel.getComponent(i).toString());
+            if (whichPanel.getComponent(i) instanceof JPanel)
+            {
+                setComponentsInvisible((JPanel)whichPanel.getComponent(i), type);
+            }
+            if (whichPanel.getComponent(i).getClass() == type.getClass())
+            {
+                ((whichPanel).getComponent(i)).setVisible(false);
+            }
+        }
     }
 
     /**
@@ -757,7 +767,7 @@ public class JBlockCreator
 
     public ArrayList<Measurements.Measurement> createEaseForm (ArrayList<Measurements.Measurement> easeMeasurements)
     {
-        
+
         return easeMeasurements;
     }
 }
