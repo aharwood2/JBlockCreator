@@ -195,7 +195,7 @@ public class JBlockCreator
 
         // Finally, make our main window
         frame.pack();
-        block.setComponentsInvisible(block.panelPatterns, new JButton());
+        block.setComponentsInvisible(block.panelPatterns, new JPanel());
         frame.setResizable(false);
         frame.setVisible(true);
     }
