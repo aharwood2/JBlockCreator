@@ -206,4 +206,11 @@ public abstract class Pattern implements IPlottable
             file.writeFile(blocks.get(i).getName(), dxfLayerChooser);
         }
     }
+
+    protected static ArrayList<easeMeasurement> easeMeasurements = null;
+    public static ArrayList<easeMeasurement> getEaseMeasurement()
+    {
+        return easeMeasurements;
+    }
+
 }

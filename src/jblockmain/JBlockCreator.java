@@ -1,6 +1,9 @@
 package jblockmain;
 
 import javax.swing.*;
+import javax.swing.border.Border;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
@@ -209,7 +212,6 @@ public class JBlockCreator
     {
         for (int i = 0; i < whichPanel.getComponentCount(); i++)
         {
-            System.out.println(whichPanel.getComponent(i).toString());
             if (whichPanel.getComponent(i) instanceof JPanel)
             {
                 setComponentsInvisible((JPanel)whichPanel.getComponent(i), type);
@@ -217,6 +219,21 @@ public class JBlockCreator
             if (whichPanel.getComponent(i).getClass() == type.getClass())
             {
                 ((whichPanel).getComponent(i)).setVisible(false);
+            }
+        }
+    }
+
+    private void toggleComponents(JPanel whichPanel, Component type)
+    {
+        for (int i = 0; i < whichPanel.getComponentCount(); i++)
+        {
+            if (whichPanel.getComponent(i) instanceof JPanel)
+            {
+                toggleComponents((JPanel)whichPanel.getComponent(i), type);
+            }
+            if (whichPanel.getComponent(i).getClass() == type.getClass())
+            {
+                ((whichPanel).getComponent(i)).setEnabled(!((whichPanel).getComponent(i)).isEnabled());
             }
         }
     }
@@ -649,6 +666,29 @@ public class JBlockCreator
         checkAldrichTrousers.addActionListener(e -> {
             aldrichTrouserEaseButton.setVisible(!aldrichTrouserEaseButton.isVisible());
         });
+
+        aldrichTrouserEaseButton.addActionListener(e ->
+        {
+            try {
+                createEaseForm(aldrich.TrouserPattern.getEaseMeasurement());
+                toggleComponents(panelPatterns, new JButton());
+            } catch (Exception j)
+            {
+                j.printStackTrace();
+                Prompts.infoBox("No Associated Ease", "Ease", EMsgType.Error);
+            }
+        });
+        aldrichSkirtEaseButton.addActionListener(e ->
+        {
+            try {
+                createEaseForm(aldrich.SkirtPattern.getEaseMeasurement());
+                toggleComponents(panelPatterns, new JButton());
+            } catch (Exception j)
+            {
+                j.printStackTrace();
+                Prompts.infoBox("No Associated Ease", "Ease", EMsgType.Error);
+            }
+        });
     }
 
     /**
@@ -769,9 +809,171 @@ public class JBlockCreator
         imageUomLogo = new JLabel(new ImageIcon("./images/logo_small.jpg"));
     }
 
-    public ArrayList<Measurements.Measurement> createEaseForm (ArrayList<Measurements.Measurement> easeMeasurements)
+    protected void createEaseForm( ArrayList<easeMeasurement> easeMeasurements)
     {
+        JFrame easeFrame = new JFrame();
+        easeFrame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 
-        return easeMeasurements;
+        int size = easeMeasurements.size();
+
+        // No adjustable measurements?
+        if (size ==0) {return;}
+
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.insets = new Insets(5, 5, 5, 5);
+
+        // An array of sliders, used to store and then modify the measurements
+        JSlider[] newValuesSlider = new JSlider[size];
+
+        // Borders for all the main Text areas
+        Border nameBorders = BorderFactory.createEtchedBorder();
+
+        JPanel main = new JPanel(new GridBagLayout());
+
+        JLabel easeNamesLabel = new JLabel("Measurement Name", SwingConstants.LEADING);
+        easeNamesLabel.setBorder(nameBorders);
+        JLabel currentValuesLabel = new JLabel("Current Value", SwingConstants.CENTER);
+        currentValuesLabel.setBorder(nameBorders);
+        JLabel newValuesLabel = new JLabel("Adjustment", SwingConstants.CENTER);
+        newValuesLabel.setBorder(nameBorders);
+
+        // First add the main names at the top
+        // Give them all the same weight
+        gbc.weightx = 0.2;
+        gbc.gridy = 0;
+
+        gbc.gridx = 0;
+        main.add(easeNamesLabel, gbc);
+
+        gbc.gridx = 1;
+        main.add(currentValuesLabel, gbc);
+
+        gbc.gridx = 2;
+        gbc.gridwidth = 2;
+        main.add(newValuesLabel, gbc);
+
+        //
+        gbc.gridy = 1;
+        gbc.gridx = 0;
+        gbc.gridwidth = 5;
+        gbc.weightx = 1;
+        gbc.weighty = 1;
+        gbc.ipadx = 0;
+        JSeparator menuSeperator = new JSeparator();
+        menuSeperator.setPreferredSize(new Dimension(1,1));
+        main.add(menuSeperator, gbc);
+
+        gbc.gridwidth = 1;
+        gbc.weightx = 0.2;
+
+        for (int i = 0; i < size; i++) {
+
+            // Relative positioning so all the measurements are stacked below each other
+            gbc.gridy = GridBagConstraints.RELATIVE;
+            gbc.anchor = GridBagConstraints.EAST;
+            gbc.gridx = 0;
+            JLabel nameLabel = new JLabel(easeMeasurements.get(i).getName(), SwingConstants.TRAILING);
+            main.add(nameLabel, gbc);
+
+            gbc.gridx = 1;
+            gbc.anchor = GridBagConstraints.CENTER;
+
+            // Multiply then divide by 10 to truncate the value shown to 1 DP since for now, only allows adjustments of 0.1
+            JTextArea currentValText = new JTextArea(((int)((easeMeasurements.get(i)).getValue() * 10.0) / 10.0) + " cm");
+            currentValText.setEditable(false);
+            main.add(currentValText, gbc);
+
+            Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+            gbc.weightx = 0.8;
+            gbc.gridx = 3;
+            gbc.ipadx = (int) (dim.getWidth() / 2);
+
+            //set the max and min of the sliders to +-50% of the current plus an additional border of +- 100 which would be +-10.0 in decimal
+            int limits = (int)(Math.abs(easeMeasurements.get(i).getValue() * 5));
+            int min = ((int)((easeMeasurements.get(i)).getValue() * 10.0) / 10) - limits - 100;
+
+            // Clamp the min and max to stop really big values
+            int max = ((int)((easeMeasurements.get(i)).getValue() * 10.0) / 10) + limits + 100;
+            int interval = (max / 10);
+
+            Hashtable labelTable = new Hashtable();
+            //create the Hashtable for each of the sliders
+            for (int j = min; j <= max; j += interval) {
+                labelTable.put(j, new JLabel(Double.toString(j / 10.0)));
+            }
+
+            newValuesSlider[i] = new JSlider((min), (max), (int) (easeMeasurements.get(i).getValue() * 10.0));
+
+            //this would mean 0.1 in double terms
+            newValuesSlider[i].setMinorTickSpacing(1);
+            newValuesSlider[i].setMajorTickSpacing(interval);
+            newValuesSlider[i].setLabelTable(labelTable);
+            newValuesSlider[i].setSnapToTicks(true);
+            newValuesSlider[i].setPaintLabels(true);
+            newValuesSlider[i].setPaintTicks(true);
+            main.add(newValuesSlider[i], gbc);
+
+            gbc.gridx = 4;
+            gbc.weightx = 0.2;
+            gbc.ipadx = 10;
+            gbc.anchor = GridBagConstraints.WEST;
+            JTextArea newValText = new JTextArea((double)newValuesSlider[i].getValue() / 10.0 + "");
+            newValText.setEditable(false);
+            main.add(newValText, gbc);
+
+            // Create a new instance of the slider updater and append
+            newValuesSlider[i].addChangeListener(new ChangeListener() {
+                @Override
+                public void stateChanged(ChangeEvent e) {
+                    if (e.getSource() instanceof JSlider)
+                    {
+                        newValText.setText("" + (double)((JSlider) e.getSource()).getValue() / 10.0 );
+                    }
+                }
+            });
+        }
+
+        easeFrame.addWindowListener(new WindowListener() {
+            @Override public void windowOpened(WindowEvent e) { }
+            @Override public void windowClosing(WindowEvent e) { }
+            @Override public void windowIconified(WindowEvent e) { }
+            @Override public void windowDeiconified(WindowEvent e) { }
+            @Override public void windowActivated(WindowEvent e) { }
+            @Override public void windowDeactivated(WindowEvent e) { }
+
+            @Override
+            public void windowClosed(WindowEvent e) {
+                // Perhaps change it so that if they close, do not change measurements
+                toggleComponents(panelPatterns, new JButton());
+                alterValues(newValuesSlider, easeMeasurements);
+            }
+        });
+
+        JButton confirmButton = new JButton("Confirm");
+        confirmButton.addActionListener(e -> {
+            confirmButton.setEnabled(false);
+            easeFrame.dispose();
+        });
+
+        gbc.gridy = GridBagConstraints.RELATIVE;
+        gbc.gridx = GridBagConstraints.RELATIVE;
+        main.add(confirmButton);
+
+        easeFrame.getContentPane().removeAll();
+        easeFrame.getContentPane().add(main);
+        easeFrame.pack();
+        easeFrame.setLocationRelativeTo(null);
+        easeFrame.setResizable(false);
+        easeFrame.setVisible(true);
+    }
+
+    private void alterValues(JSlider[] newValues, ArrayList<easeMeasurement> alteringValues)
+    {
+        for (int i = 0; i < alteringValues.size(); i++)
+        {
+            // Divide by 10.0 since the slider only deals with integers, hence initially multiplied by 10 to get it to emulate decimals
+            alteringValues.get(i).setValue((double)newValues[i].getValue() / 10.0);
+        }
     }
 }
