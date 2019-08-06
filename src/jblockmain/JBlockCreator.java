@@ -18,6 +18,7 @@ import beazleybond.BodicePattern;
 import beazleybond.SkirtPattern;
 import beazleybond.StraightSleevePattern;
 import beazleybond.TrouserPattern;
+import gill.SweatShirtPattern;
 import jblockenums.EMsgType;
 
 /**
@@ -91,6 +92,8 @@ public class JBlockCreator
     private JLayeredPane stackedAnalysisSample;
     private JButton aldrichSkirtEaseButton;
     private JButton aldrichTrouserEaseButton;
+    private JCheckBox checkGillSweatshirt;
+    private JButton gillSweatShirtEaseButton;
 
     // Layers
     private ArrayList<Component> paneLayers;
@@ -337,6 +340,12 @@ public class JBlockCreator
                         {
                             aldrich.TrouserPattern aldrich_trousers = new aldrich.TrouserPattern(measurements);
                             aldrich_trousers.writeToDXF(fileOutput, dxfLayerChoices);
+                        }
+
+                        if (checkGillSweatshirt.isSelected())
+                        {
+                            gill.SweatShirtPattern gill_sweatshirt = new gill.SweatShirtPattern(measurements);
+                            gill_sweatshirt.writeToDXF(fileOutput, dxfLayerChoices);
                         }
 
                         // Creates analysis outputs depending on which checkboxes are ticked
@@ -667,6 +676,11 @@ public class JBlockCreator
             aldrichTrouserEaseButton.setVisible(!aldrichTrouserEaseButton.isVisible());
         });
 
+        checkGillSweatshirt.addActionListener(e -> {
+            gill.SweatShirtPattern.populateEaseMeasurements();
+            gillSweatShirtEaseButton.setVisible(!gillSweatShirtEaseButton.isVisible());
+        });
+
         aldrichTrouserEaseButton.addActionListener(e ->
         {
             try {
@@ -682,6 +696,19 @@ public class JBlockCreator
         {
             try {
                 createEaseForm(aldrich.SkirtPattern.getEaseMeasurement());
+                toggleComponents(panelPatterns, new JButton());
+            } catch (Exception j)
+            {
+                j.printStackTrace();
+                Prompts.infoBox("No Associated Ease", "Ease", EMsgType.Error);
+            }
+        });
+
+
+        gillSweatShirtEaseButton.addActionListener(e ->
+        {
+            try {
+                createEaseForm(SweatShirtPattern.getEaseMeasurement());
                 toggleComponents(panelPatterns, new JButton());
             } catch (Exception j)
             {
