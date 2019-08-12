@@ -175,6 +175,7 @@ public class TrouserPattern
         double ankleXPosition = n_CrotchHeight - l_AnkleCRHeight;
         double hipXPosition = -(o_HipCHeight - n_CrotchHeight);
         double seatXPosition = -(p_SeatCHeight - n_CrotchHeight);
+        System.out.println(seatXPosition);
         double waistXPosition = -k_BodyRise;
 
         double halfWaistSuppression = ((h_FrHipArc + i_BkHipArc) / 2.0) - ((e_FrWaistArc + f_BkWaistArc) / 2.0);
@@ -228,6 +229,29 @@ public class TrouserPattern
         Vector2D point26 = new Vector2D(kneeXPosition,
                 (point22.getY() / 2.0) + (((c_KneeCircR / 2.0) + 7.0 - 2.0) / 2.0));
 
+        // Need to switch points depending on whether seat or hip is more negative
+        if (hipXPosition < seatXPosition) {
+            Vector2D temp;
+
+            temp = point8;
+            point8 = point9;
+            point9 = temp;
+
+            temp = point13;
+            point13 = point12;
+            point12 = temp;
+
+            temp = point16;
+            point16 = point17;
+            point17 = temp;
+
+            temp = point21;
+            point21 = point20;
+            point20 = temp;
+        }
+
+        // TODO: Not as simple as switching points, leads to some wacky curves
+
         // All the back half keypoints/vectors added
         fullBlock.addKeypoint(point1);
         fullBlock.addKeypoint(point2);
@@ -240,22 +264,9 @@ public class TrouserPattern
         fullBlock.addKeypoint(point10);
         fullBlock.addKeypoint(point11);
         fullBlock.addKeypoint(point12);
-        fullBlock.addKeypoint(point13);
         fullBlock.addKeypoint(point1);
 
-        // All the front half keypoints/vectors added
-        fullBlock.addKeypoint(point15);
-        fullBlock.addKeypoint(point16);
-        fullBlock.addKeypoint(point17);
-        fullBlock.addKeypoint(point18);
-        fullBlock.addKeypoint(point19);
-        fullBlock.addKeypoint(point20);
-        fullBlock.addKeypoint(point21);
-        fullBlock.addKeypoint(point22);
-        fullBlock.addKeypoint(point23);
-        fullBlock.addKeypoint(point24);
-        fullBlock.addKeypoint(point25);
-        fullBlock.addKeypoint(point26);
+        fullBlock.addDirectedCurve(point12, point1, point13, 0.0);
 
         // Used to help guide curve between crotch point and ankle by having an apex 1/3rd length and 1/4 height
         // From the length and height
@@ -295,11 +306,20 @@ public class TrouserPattern
         fullBlock.addRightAngleCurve(point10, dartPoints.get(0));
         fullBlock.addRightAngleCurve(dartPoints.get(2), point11);
 
-        fullBlock.addDirectedCurve(
-                point13, point1,
-                new Vector2D(point12.subtract(point11)),
-                new Vector2D(point1and2.subtract(point1)),
-                new double[]{0.0, 90.0});
+        // All the front half keypoints/vectors added after so as to not mess with back curves
+        fullBlock.addKeypoint(point15);
+        fullBlock.addKeypoint(point16);
+        fullBlock.addKeypoint(point17);
+        fullBlock.addKeypoint(point18);
+        fullBlock.addKeypoint(point19);
+        fullBlock.addKeypoint(point20);
+        fullBlock.addKeypoint(point21);
+        fullBlock.addKeypoint(point22);
+        fullBlock.addKeypoint(point23);
+        fullBlock.addKeypoint(point24);
+        fullBlock.addKeypoint(point25);
+        fullBlock.addKeypoint(point26);
+        fullBlock.addKeypoint(point15);
 
         fullBlock.addCircularCurve(
                 point19, point20,
