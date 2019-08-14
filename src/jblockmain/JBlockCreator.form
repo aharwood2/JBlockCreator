@@ -138,54 +138,6 @@
                           <text value="Gill:"/>
                         </properties>
                       </component>
-                      <component id="b601a" class="javax.swing.JCheckBox" binding="checkBeazleySkirt">
-                        <constraints>
-                          <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
-                        </constraints>
-                        <properties>
-                          <text value="Skirt"/>
-                        </properties>
-                      </component>
-                      <component id="d9930" class="javax.swing.JCheckBox" binding="checkBeazleyTrousers">
-                        <constraints>
-                          <grid row="1" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
-                        </constraints>
-                        <properties>
-                          <text value="Trousers"/>
-                        </properties>
-                      </component>
-                      <component id="dc349" class="javax.swing.JCheckBox" binding="checkBeazleyBodice">
-                        <constraints>
-                          <grid row="1" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
-                        </constraints>
-                        <properties>
-                          <text value="Bodice"/>
-                        </properties>
-                      </component>
-                      <component id="aeaba" class="javax.swing.JCheckBox" binding="checkBeazleyStraightSleeve">
-                        <constraints>
-                          <grid row="1" column="4" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
-                        </constraints>
-                        <properties>
-                          <text value="Straight Sleeve"/>
-                        </properties>
-                      </component>
-                      <component id="c299f" class="javax.swing.JCheckBox" binding="checkGillSkirt">
-                        <constraints>
-                          <grid row="2" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
-                        </constraints>
-                        <properties>
-                          <text value="Skirt"/>
-                        </properties>
-                      </component>
-                      <component id="db86c" class="javax.swing.JCheckBox" binding="checkGillTrousers">
-                        <constraints>
-                          <grid row="2" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
-                        </constraints>
-                        <properties>
-                          <text value="Trousers"/>
-                        </properties>
-                      </component>
                       <grid id="d0777" layout-manager="GridLayoutManager" row-count="2" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
                         <margin top="0" left="0" bottom="0" right="0"/>
                         <constraints>
@@ -211,8 +163,9 @@
                               <enabled value="true"/>
                               <horizontalAlignment value="0"/>
                               <horizontalTextPosition value="11"/>
+                              <label value="Ease"/>
                               <selected value="false"/>
-                              <text value="Change Ease"/>
+                              <text value="Ease"/>
                               <visible value="true"/>
                             </properties>
                           </component>
@@ -239,7 +192,8 @@
                               <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                             </constraints>
                             <properties>
-                              <text value="Change Ease"/>
+                              <label value="Ease"/>
+                              <text value="Ease"/>
                               <visible value="true"/>
                             </properties>
                           </component>
@@ -266,7 +220,167 @@
                               <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                             </constraints>
                             <properties>
-                              <text value="Change Ease"/>
+                              <label value="Ease"/>
+                              <text value="Ease"/>
+                            </properties>
+                          </component>
+                        </children>
+                      </grid>
+                      <grid id="7b437" layout-manager="GridLayoutManager" row-count="2" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+                        <margin top="0" left="0" bottom="0" right="0"/>
+                        <constraints>
+                          <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+                        </constraints>
+                        <properties/>
+                        <border type="none"/>
+                        <children>
+                          <component id="b601a" class="javax.swing.JCheckBox" binding="checkBeazleySkirt">
+                            <constraints>
+                              <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                            </constraints>
+                            <properties>
+                              <text value="Skirt"/>
+                            </properties>
+                          </component>
+                          <component id="4203a" class="javax.swing.JButton" binding="beazleyBondSkirtEaseButton">
+                            <constraints>
+                              <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                            </constraints>
+                            <properties>
+                              <label value="Ease"/>
+                              <text value="Ease"/>
+                            </properties>
+                          </component>
+                        </children>
+                      </grid>
+                      <grid id="ea1be" layout-manager="GridLayoutManager" row-count="2" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+                        <margin top="0" left="0" bottom="0" right="0"/>
+                        <constraints>
+                          <grid row="1" column="2" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+                        </constraints>
+                        <properties/>
+                        <border type="none"/>
+                        <children>
+                          <component id="d9930" class="javax.swing.JCheckBox" binding="checkBeazleyTrousers">
+                            <constraints>
+                              <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                            </constraints>
+                            <properties>
+                              <text value="Trousers"/>
+                            </properties>
+                          </component>
+                          <component id="e372a" class="javax.swing.JButton" binding="beazleyBondTrouserEaseButton">
+                            <constraints>
+                              <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                            </constraints>
+                            <properties>
+                              <label value="Ease"/>
+                              <text value="Ease"/>
+                            </properties>
+                          </component>
+                        </children>
+                      </grid>
+                      <grid id="f2845" layout-manager="GridLayoutManager" row-count="2" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+                        <margin top="0" left="0" bottom="0" right="0"/>
+                        <constraints>
+                          <grid row="1" column="3" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+                        </constraints>
+                        <properties/>
+                        <border type="none"/>
+                        <children>
+                          <component id="dc349" class="javax.swing.JCheckBox" binding="checkBeazleyBodice">
+                            <constraints>
+                              <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                            </constraints>
+                            <properties>
+                              <text value="Bodice"/>
+                            </properties>
+                          </component>
+                          <component id="dec60" class="javax.swing.JButton" binding="beazleyBondBodiceEaseButton">
+                            <constraints>
+                              <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                            </constraints>
+                            <properties>
+                              <label value="Ease"/>
+                              <text value="Ease"/>
+                            </properties>
+                          </component>
+                        </children>
+                      </grid>
+                      <grid id="38d16" layout-manager="GridLayoutManager" row-count="2" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+                        <margin top="0" left="0" bottom="0" right="0"/>
+                        <constraints>
+                          <grid row="1" column="4" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+                        </constraints>
+                        <properties/>
+                        <border type="none"/>
+                        <children>
+                          <component id="aeaba" class="javax.swing.JCheckBox" binding="checkBeazleyStraightSleeve">
+                            <constraints>
+                              <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                            </constraints>
+                            <properties>
+                              <text value="Straight Sleeve"/>
+                            </properties>
+                          </component>
+                          <component id="290d4" class="javax.swing.JButton" binding="beazleyBondStraightSleeveEaseButton">
+                            <constraints>
+                              <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                            </constraints>
+                            <properties>
+                              <text value="Ease"/>
+                            </properties>
+                          </component>
+                        </children>
+                      </grid>
+                      <grid id="b3c3" layout-manager="GridLayoutManager" row-count="2" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+                        <margin top="0" left="0" bottom="0" right="0"/>
+                        <constraints>
+                          <grid row="2" column="1" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+                        </constraints>
+                        <properties/>
+                        <border type="none"/>
+                        <children>
+                          <component id="c299f" class="javax.swing.JCheckBox" binding="checkGillSkirt">
+                            <constraints>
+                              <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                            </constraints>
+                            <properties>
+                              <text value="Skirt"/>
+                            </properties>
+                          </component>
+                          <component id="ad217" class="javax.swing.JButton" binding="gillSkirtEaseButton">
+                            <constraints>
+                              <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                            </constraints>
+                            <properties>
+                              <text value="Ease"/>
+                            </properties>
+                          </component>
+                        </children>
+                      </grid>
+                      <grid id="500f7" layout-manager="GridLayoutManager" row-count="2" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+                        <margin top="0" left="0" bottom="0" right="0"/>
+                        <constraints>
+                          <grid row="2" column="2" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+                        </constraints>
+                        <properties/>
+                        <border type="none"/>
+                        <children>
+                          <component id="db86c" class="javax.swing.JCheckBox" binding="checkGillTrousers">
+                            <constraints>
+                              <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                            </constraints>
+                            <properties>
+                              <text value="Trousers"/>
+                            </properties>
+                          </component>
+                          <component id="4c8b0" class="javax.swing.JButton" binding="gillTrouserEaseButton">
+                            <constraints>
+                              <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                            </constraints>
+                            <properties>
+                              <text value="Ease"/>
                             </properties>
                           </component>
                         </children>

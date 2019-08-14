@@ -212,5 +212,6 @@ public abstract class Pattern implements IPlottable
     {
         return easeMeasurements;
     }
+    public static void populateEaseMeasurements(){}
 
 }

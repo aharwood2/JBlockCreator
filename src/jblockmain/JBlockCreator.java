@@ -94,6 +94,12 @@ public class JBlockCreator
     private JButton aldrichTrouserEaseButton;
     private JCheckBox checkGillSweatshirt;
     private JButton gillSweatShirtEaseButton;
+    private JButton beazleyBondSkirtEaseButton;
+    private JButton beazleyBondTrouserEaseButton;
+    private JButton beazleyBondBodiceEaseButton;
+    private JButton beazleyBondStraightSleeveEaseButton;
+    private JButton gillSkirtEaseButton;
+    private JButton gillTrouserEaseButton;
 
     // Layers
     private ArrayList<Component> paneLayers;
@@ -226,13 +232,13 @@ public class JBlockCreator
         }
     }
 
-    private void toggleComponents(JPanel whichPanel, Component type)
+    private void toggleComponents(Container whichPanel, Component type)
     {
         for (int i = 0; i < whichPanel.getComponentCount(); i++)
         {
-            if (whichPanel.getComponent(i) instanceof JPanel)
+            if (whichPanel.getComponent(i) instanceof Container)
             {
-                toggleComponents((JPanel)whichPanel.getComponent(i), type);
+                toggleComponents((Container) whichPanel.getComponent(i), type);
             }
             if (whichPanel.getComponent(i).getClass() == type.getClass())
             {
@@ -669,16 +675,61 @@ public class JBlockCreator
                                                            });
         checkAldrichSkirt.addActionListener(e ->
         {
-                aldrichSkirtEaseButton.setVisible(!aldrichSkirtEaseButton.isVisible());
+            aldrich.SkirtPattern.populateEaseMeasurements();
+            aldrichSkirtEaseButton.setVisible(!aldrichSkirtEaseButton.isVisible());
         });
 
         checkAldrichTrousers.addActionListener(e -> {
+            aldrich.TrouserPattern.populateEaseMeasurements();
             aldrichTrouserEaseButton.setVisible(!aldrichTrouserEaseButton.isVisible());
+        });
+
+        checkBeazleySkirt.addActionListener(e -> {
+            beazleybond.TrouserPattern.populateEaseMeasurements();
+            beazleyBondSkirtEaseButton.setVisible(!beazleyBondSkirtEaseButton.isVisible());
+        });
+
+        checkBeazleyTrousers.addActionListener(e -> {
+            beazleybond.TrouserPattern.populateEaseMeasurements();
+            beazleyBondTrouserEaseButton.setVisible(!beazleyBondTrouserEaseButton.isVisible());
+        });
+
+        checkBeazleyBodice.addActionListener(e -> {
+            beazleybond.BodicePattern.populateEaseMeasurements();
+            beazleyBondBodiceEaseButton.setVisible(!beazleyBondBodiceEaseButton.isVisible());
+        });
+
+        checkBeazleyStraightSleeve.addActionListener(e -> {
+            beazleybond.StraightSleevePattern.populateEaseMeasurements();
+            beazleyBondStraightSleeveEaseButton.setVisible(!beazleyBondStraightSleeveEaseButton.isVisible());
+        });
+
+        checkGillSkirt.addActionListener(e -> {
+            gill.SkirtPattern.populateEaseMeasurements();
+            gillSkirtEaseButton.setVisible(!gillSkirtEaseButton.isVisible());
+        });
+
+        checkGillTrousers.addActionListener(e -> {
+            gill.TrouserPattern.populateEaseMeasurements();
+            gillTrouserEaseButton.setVisible(!gillTrouserEaseButton.isVisible());
         });
 
         checkGillSweatshirt.addActionListener(e -> {
             gill.SweatShirtPattern.populateEaseMeasurements();
             gillSweatShirtEaseButton.setVisible(!gillSweatShirtEaseButton.isVisible());
+        });
+
+        // Aldrich Ease Button Listeners
+        aldrichSkirtEaseButton.addActionListener(e ->
+        {
+            try {
+                createEaseForm(aldrich.SkirtPattern.getEaseMeasurement());
+                toggleComponents(panelMain, new JButton());
+            } catch (Exception j)
+            {
+                j.printStackTrace();
+                Prompts.infoBox("No Associated Ease", "Ease", EMsgType.Error);
+            }
         });
 
         aldrichTrouserEaseButton.addActionListener(e ->
@@ -692,10 +743,13 @@ public class JBlockCreator
                 Prompts.infoBox("No Associated Ease", "Ease", EMsgType.Error);
             }
         });
-        aldrichSkirtEaseButton.addActionListener(e ->
+
+        // Beazley bond Ease button listeners
+
+        beazleyBondSkirtEaseButton.addActionListener(e ->
         {
             try {
-                createEaseForm(aldrich.SkirtPattern.getEaseMeasurement());
+                createEaseForm(beazleybond.SkirtPattern.getEaseMeasurement());
                 toggleComponents(panelPatterns, new JButton());
             } catch (Exception j)
             {
@@ -704,12 +758,72 @@ public class JBlockCreator
             }
         });
 
+        beazleyBondTrouserEaseButton.addActionListener(e ->
+        {
+            try {
+                createEaseForm(beazleybond.TrouserPattern.getEaseMeasurement());
+                toggleComponents(panelPatterns, new JButton());
+            } catch (Exception j)
+            {
+                j.printStackTrace();
+                Prompts.infoBox("No Associated Ease", "Ease", EMsgType.Error);
+            }
+        });
+
+        beazleyBondBodiceEaseButton.addActionListener(e ->
+        {
+            try {
+                createEaseForm(beazleybond.BodicePattern.getEaseMeasurement());
+                toggleComponents(panelPatterns, new JButton());
+            } catch (Exception j)
+            {
+                j.printStackTrace();
+                Prompts.infoBox("No Associated Ease", "Ease", EMsgType.Error);
+            }
+        });
+
+        beazleyBondStraightSleeveEaseButton.addActionListener(e ->
+        {
+            try {
+                createEaseForm(beazleybond.StraightSleevePattern.getEaseMeasurement());
+                toggleComponents(panelPatterns, new JButton());
+            } catch (Exception j)
+            {
+                j.printStackTrace();
+                Prompts.infoBox("No Associated Ease", "Ease", EMsgType.Error);
+            }
+        });
+
+        // Gill Ease Buttons
+        gillSkirtEaseButton.addActionListener(e ->
+        {
+            try {
+                createEaseForm(gill.SkirtPattern.getEaseMeasurement());
+                toggleComponents(panelMain, new JButton());
+            } catch (Exception j)
+            {
+                j.printStackTrace();
+                Prompts.infoBox("No Associated Ease", "Ease", EMsgType.Error);
+            }
+        });
+
+        gillTrouserEaseButton.addActionListener(e ->
+        {
+            try {
+                createEaseForm(gill.TrouserPattern.getEaseMeasurement());
+                toggleComponents(panelMain, new JButton());
+            } catch (Exception j)
+            {
+                j.printStackTrace();
+                Prompts.infoBox("No Associated Ease", "Ease", EMsgType.Error);
+            }
+        });
 
         gillSweatShirtEaseButton.addActionListener(e ->
         {
             try {
-                createEaseForm(SweatShirtPattern.getEaseMeasurement());
-                toggleComponents(panelPatterns, new JButton());
+                createEaseForm(gill.SweatShirtPattern.getEaseMeasurement());
+                toggleComponents(panelMain, new JButton());
             } catch (Exception j)
             {
                 j.printStackTrace();
@@ -972,7 +1086,7 @@ public class JBlockCreator
             @Override
             public void windowClosed(WindowEvent e) {
                 // Perhaps change it so that if they close, do not change measurements
-                toggleComponents(panelPatterns, new JButton());
+                toggleComponents(panelMain, new JButton());
                 alterValues(newValuesSlider, easeMeasurements);
             }
         });

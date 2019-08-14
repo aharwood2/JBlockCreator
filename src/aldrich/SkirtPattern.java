@@ -211,8 +211,9 @@ public class SkirtPattern
 
     protected static ArrayList<easeMeasurement> easeMeasurements = new ArrayList<>();
 
-    private static void populateEaseMeasurements()
+    public static void populateEaseMeasurements()
     {
+        if (easeMeasurements.size() > 0) {return;}
         SkirtPattern.easeMeasurements.add(new easeMeasurement("Hip Ease", 0));
         SkirtPattern.easeMeasurements.add(new easeMeasurement("Waist Ease", 0));
         SkirtPattern.easeMeasurements.add(new easeMeasurement("Knee Ease", 0));
@@ -221,7 +222,6 @@ public class SkirtPattern
 
     public static ArrayList<easeMeasurement> getEaseMeasurement()
     {
-        if (easeMeasurements.size() == 0) {populateEaseMeasurements();}
         return SkirtPattern.easeMeasurements;
     }
 
