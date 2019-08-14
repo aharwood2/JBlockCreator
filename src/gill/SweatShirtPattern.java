@@ -232,7 +232,7 @@ public class SweatShirtPattern extends Pattern
         easeMeasurements.add(new easeMeasurement("Optional SoB Waist Circ Ease", 18));
         easeMeasurements.add(new easeMeasurement("Wrist Ease", 8));
         easeMeasurements.add(new easeMeasurement("Back Shoulder Width Horizontal Ease", 0));
-        easeMeasurements.add(new easeMeasurement("CBNeckDepthDefault", 2));
+        easeMeasurements.add(new easeMeasurement("CB Neck Depth Default", 2));
     }
 
     public static ArrayList<easeMeasurement> getEaseMeasurement()

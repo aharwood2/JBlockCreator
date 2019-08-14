@@ -69,6 +69,7 @@ public class JBlockCreator
     private JCheckBox checkConnectingLinesAnalysis;
     private JCheckBox checkKeypointsAsCirclesAnalysis;
     private JCheckBox checkKeypointCoordinatesAnalysis;
+    private JCheckBox checkGillSweatshirt;
 
     // Buttons
     private JButton butRun;
@@ -90,9 +91,10 @@ public class JBlockCreator
     private JPanel imageAnalysisWrapper;
     private JLayeredPane stackedPatternSample;
     private JLayeredPane stackedAnalysisSample;
+
+    // Ease Buttons
     private JButton aldrichSkirtEaseButton;
     private JButton aldrichTrouserEaseButton;
-    private JCheckBox checkGillSweatshirt;
     private JButton gillSweatShirtEaseButton;
     private JButton beazleyBondSkirtEaseButton;
     private JButton beazleyBondTrouserEaseButton;
@@ -236,7 +238,7 @@ public class JBlockCreator
     {
         for (int i = 0; i < whichPanel.getComponentCount(); i++)
         {
-            if (whichPanel.getComponent(i) instanceof Container)
+            if (whichPanel.getComponent(i) instanceof JPanel || whichPanel.getComponent(i) instanceof JTabbedPane)
             {
                 toggleComponents((Container) whichPanel.getComponent(i), type);
             }
