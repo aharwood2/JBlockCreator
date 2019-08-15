@@ -620,4 +620,18 @@ public class TrouserPattern
                 false
         );
     }
+
+    protected static ArrayList<easeMeasurement> easeMeasurements = new ArrayList<>();
+
+    public static void populateEaseMeasurements()
+    {
+        // Check to see it hasn't already been populated / it is empty
+        if (easeMeasurements.size() > 0) {return;}
+    }
+
+    public static ArrayList<easeMeasurement> getEaseMeasurement()
+    {
+        return easeMeasurements;
+    }
+
 }

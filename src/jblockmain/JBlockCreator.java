@@ -221,12 +221,15 @@ public class JBlockCreator
      */
     private void setComponentsInvisible(Container whichPanel, Component type)
     {
+        // Go through all the components in the container
         for (int i = 0; i < whichPanel.getComponentCount(); i++)
         {
+            // If the type of component is either a JPanel or JTabbedPane, go through that panel (recursively)
             if (whichPanel.getComponent(i) instanceof JPanel || whichPanel.getComponent(i) instanceof JTabbedPane)
             {
                 setComponentsInvisible((JPanel)whichPanel.getComponent(i), type);
             }
+            // If the type of component in the containing panel is of type type, set that component invisible
             if (whichPanel.getComponent(i).getClass() == type.getClass())
             {
                 ((whichPanel).getComponent(i)).setVisible(false);
@@ -241,12 +244,15 @@ public class JBlockCreator
      */
     private void toggleComponents(Container whichPanel, Component type)
     {
+        // Go through all the components in the container
         for (int i = 0; i < whichPanel.getComponentCount(); i++)
         {
+            // If the type of component is either a JPanel or JTabbedPane, go through that panel (recursively)
             if (whichPanel.getComponent(i) instanceof JPanel || whichPanel.getComponent(i) instanceof JTabbedPane)
             {
                 toggleComponents((Container) whichPanel.getComponent(i), type);
             }
+            // If the type of component in the containing panel is of type type, toggle that component
             if (whichPanel.getComponent(i).getClass() == type.getClass())
             {
                 ((whichPanel).getComponent(i)).setEnabled(!((whichPanel).getComponent(i)).isEnabled());
@@ -977,13 +983,19 @@ public class JBlockCreator
 
     protected void createEaseForm(ArrayList<easeMeasurement> easeMeasurements)
     {
+        // If Empty, just pop-up a message box to dev to notify their measurements are empty
+        int size = easeMeasurements.size();
+        if (size ==0) {
+            Prompts.infoBox("No Associated Ease", "Ease", EMsgType.Info);
+            isRunning = false;
+            return;}
+
+        // Create a new Frame which will contain the ease components
         JFrame easeFrame = new JFrame();
         easeFrame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 
-        int size = easeMeasurements.size();
+        // No adjustable measurements/empty array list means nothing to plot
 
-        // No adjustable measurements?
-        if (size ==0) {return;}
 
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.fill = GridBagConstraints.HORIZONTAL;
@@ -1009,6 +1021,7 @@ public class JBlockCreator
         gbc.weightx = 0.2;
         gbc.gridy = 0;
 
+        // Add them in horizontal order
         gbc.gridx = 0;
         main.add(easeNamesLabel, gbc);
 
@@ -1019,13 +1032,14 @@ public class JBlockCreator
         gbc.gridwidth = 2;
         main.add(newValuesLabel, gbc);
 
-        //
         gbc.gridy = 1;
         gbc.gridx = 0;
         gbc.gridwidth = 5;
         gbc.weightx = 1;
         gbc.weighty = 1;
         gbc.ipadx = 0;
+
+        // Mainly just for visual appeal
         JSeparator menuSeperator = new JSeparator();
         menuSeperator.setPreferredSize(new Dimension(1,1));
         main.add(menuSeperator, gbc);
@@ -1033,6 +1047,7 @@ public class JBlockCreator
         gbc.gridwidth = 1;
         gbc.weightx = 0.2;
 
+        // Loop through the arraylist of easeMeasurements and add them in consecutive vertical order
         for (int i = 0; i < size; i++) {
 
             // Relative positioning so all the measurements are stacked below each other
@@ -1055,23 +1070,26 @@ public class JBlockCreator
             gbc.gridx = 3;
             gbc.ipadx = (int) (dim.getWidth() / 2);
 
-            //set the max and min of the sliders to +-50% of the current plus an additional border of +- 100 which would be +-10.0 in decimal
+            //set the max and min of the sliders to +-50% of the current plus an additional border of +- 100 which would be +-10.0 in decimal since
+            // Get the current value and increase by 50%, use *5 because all values are multiplied by 10 for the slider
             int limits = (int)(Math.abs(easeMeasurements.get(i).getValue() * 5));
+
+            // Set the Min and max values on the slider as the current value +-50% of the current value and a border of +- 100 which is +- 10.0
             int min = ((int)((easeMeasurements.get(i)).getValue() * 10.0) / 10) - limits - 100;
-
-            // Clamp the min and max to stop really big values
             int max = ((int)((easeMeasurements.get(i)).getValue() * 10.0) / 10) + limits + 100;
-            int interval = (max / 10);
 
-            Hashtable labelTable = new Hashtable();
+            // For creating the hash table, we get the sliders to mark every 10% of the way
+            int interval = (max / 10);
+            Hashtable<Integer, JLabel> labelTable = new Hashtable<>();
             //create the Hashtable for each of the sliders
             for (int j = min; j <= max; j += interval) {
                 labelTable.put(j, new JLabel(Double.toString(j / 10.0)));
             }
 
+            // Create the new slider component with set min, max and current value
             newValuesSlider[i] = new JSlider((min), (max), (int) (easeMeasurements.get(i).getValue() * 10.0));
 
-            //this would mean 0.1 in double terms
+            // This would mean 0.1 in double terms
             newValuesSlider[i].setMinorTickSpacing(1);
             newValuesSlider[i].setMajorTickSpacing(interval);
             newValuesSlider[i].setLabelTable(labelTable);
@@ -1080,6 +1098,7 @@ public class JBlockCreator
             newValuesSlider[i].setPaintTicks(true);
             main.add(newValuesSlider[i], gbc);
 
+            // Addition of a text box to read from the JSlider
             gbc.gridx = 4;
             gbc.weightx = 0.2;
             gbc.ipadx = 10;
@@ -1088,7 +1107,7 @@ public class JBlockCreator
             newValText.setEditable(false);
             main.add(newValText, gbc);
 
-            // Create a new instance of the slider updater and append
+            // Add a listener for the slider and textbox to update whenever the JSlider is moved to show the value of the slider
             newValuesSlider[i].addChangeListener(new ChangeListener() {
                 @Override
                 public void stateChanged(ChangeEvent e) {
@@ -1100,6 +1119,10 @@ public class JBlockCreator
             });
         }
 
+        // The confirm button to confirm your changes
+        JButton confirmButton = new JButton("Confirm");
+
+        // Window listener for closing
         easeFrame.addWindowListener(new WindowListener() {
             @Override public void windowOpened(WindowEvent e) { }
             @Override public void windowClosing(WindowEvent e) { }
@@ -1110,15 +1133,16 @@ public class JBlockCreator
 
             @Override
             public void windowClosed(WindowEvent e) {
-                // Perhaps change it so that if they close, do not change measurements
-                alterValues(newValuesSlider, easeMeasurements);
+                // If they simply close the window, keep old values.
                 isRunning = false;
             }
         });
 
-        JButton confirmButton = new JButton("Confirm");
+        // When button is pressed, disable the button and alter the values in the static easeMeasurement Array List
+        // To the Values changed to
         confirmButton.addActionListener(e -> {
             confirmButton.setEnabled(false);
+            alterValues(newValuesSlider, easeMeasurements);
             easeFrame.dispose();
         });
 
@@ -1126,6 +1150,7 @@ public class JBlockCreator
         gbc.gridx = GridBagConstraints.RELATIVE;
         main.add(confirmButton);
 
+        // Finally finish up the ease frame and make it visible
         easeFrame.getContentPane().removeAll();
         easeFrame.getContentPane().add(main);
         easeFrame.pack();

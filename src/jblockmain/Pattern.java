@@ -207,7 +207,7 @@ public abstract class Pattern implements IPlottable
         }
     }
 
-    protected static ArrayList<easeMeasurement> easeMeasurements = null;
+    protected final static ArrayList<easeMeasurement> easeMeasurements = null;
     public static ArrayList<easeMeasurement> getEaseMeasurement()
     {
         return easeMeasurements;
