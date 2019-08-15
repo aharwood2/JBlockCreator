@@ -215,15 +215,15 @@ public class JBlockCreator
     }
 
     /**
-     * To deal with resizing issues whereby components which case jframe to change size when set to visible cause bits to push out
+     * To deal with resizing issues whereby components which cause jframe to change size when set to visible cause bits to push out
      * @param whichPanel the Panel in which everything underneath it will be searched for the particular component but not including the panel
      * @param type the type of component you want to set invisibile, i.e JButton will set all buttons to invisible
      */
-    private void setComponentsInvisible(JPanel whichPanel, Component type)
+    private void setComponentsInvisible(Container whichPanel, Component type)
     {
         for (int i = 0; i < whichPanel.getComponentCount(); i++)
         {
-            if (whichPanel.getComponent(i) instanceof JPanel)
+            if (whichPanel.getComponent(i) instanceof JPanel || whichPanel.getComponent(i) instanceof JTabbedPane)
             {
                 setComponentsInvisible((JPanel)whichPanel.getComponent(i), type);
             }
@@ -234,6 +234,11 @@ public class JBlockCreator
         }
     }
 
+    /**
+     * Will set all the Comoponent type to unenabled if enabled and vice versa within the containing panel, not used anymore
+     * @param whichPanel Everything within this panel will be be affected / affected panel
+     * @param type The type of component, i.e button etc that you want disabled/enabled
+     */
     private void toggleComponents(Container whichPanel, Component type)
     {
         for (int i = 0; i < whichPanel.getComponentCount(); i++)
@@ -724,11 +729,13 @@ public class JBlockCreator
         // Aldrich Ease Button Listeners
         aldrichSkirtEaseButton.addActionListener(e ->
         {
+            if (isRunning) {return;}
             try {
+                isRunning = true;
                 createEaseForm(aldrich.SkirtPattern.getEaseMeasurement());
-                toggleComponents(panelMain, new JButton());
             } catch (Exception j)
             {
+                isRunning = false;
                 j.printStackTrace();
                 Prompts.infoBox("No Associated Ease", "Ease", EMsgType.Error);
             }
@@ -736,11 +743,13 @@ public class JBlockCreator
 
         aldrichTrouserEaseButton.addActionListener(e ->
         {
+            if (isRunning) {return;}
             try {
+                isRunning = true;
                 createEaseForm(aldrich.TrouserPattern.getEaseMeasurement());
-                toggleComponents(panelPatterns, new JButton());
             } catch (Exception j)
             {
+                isRunning = false;
                 j.printStackTrace();
                 Prompts.infoBox("No Associated Ease", "Ease", EMsgType.Error);
             }
@@ -750,11 +759,13 @@ public class JBlockCreator
 
         beazleyBondSkirtEaseButton.addActionListener(e ->
         {
+            if (isRunning) {return;}
             try {
+                isRunning = true;
                 createEaseForm(beazleybond.SkirtPattern.getEaseMeasurement());
-                toggleComponents(panelPatterns, new JButton());
             } catch (Exception j)
             {
+                isRunning = false;
                 j.printStackTrace();
                 Prompts.infoBox("No Associated Ease", "Ease", EMsgType.Error);
             }
@@ -762,11 +773,13 @@ public class JBlockCreator
 
         beazleyBondTrouserEaseButton.addActionListener(e ->
         {
+            if (isRunning) {return;}
             try {
+                isRunning = true;
                 createEaseForm(beazleybond.TrouserPattern.getEaseMeasurement());
-                toggleComponents(panelPatterns, new JButton());
             } catch (Exception j)
             {
+                isRunning = false;
                 j.printStackTrace();
                 Prompts.infoBox("No Associated Ease", "Ease", EMsgType.Error);
             }
@@ -774,11 +787,13 @@ public class JBlockCreator
 
         beazleyBondBodiceEaseButton.addActionListener(e ->
         {
+            if (isRunning) {return;}
             try {
+                isRunning = true;
                 createEaseForm(beazleybond.BodicePattern.getEaseMeasurement());
-                toggleComponents(panelPatterns, new JButton());
             } catch (Exception j)
             {
+                isRunning = false;
                 j.printStackTrace();
                 Prompts.infoBox("No Associated Ease", "Ease", EMsgType.Error);
             }
@@ -786,11 +801,13 @@ public class JBlockCreator
 
         beazleyBondStraightSleeveEaseButton.addActionListener(e ->
         {
+            if (isRunning) {return;}
             try {
+                isRunning = true;
                 createEaseForm(beazleybond.StraightSleevePattern.getEaseMeasurement());
-                toggleComponents(panelPatterns, new JButton());
             } catch (Exception j)
             {
+                isRunning = false;
                 j.printStackTrace();
                 Prompts.infoBox("No Associated Ease", "Ease", EMsgType.Error);
             }
@@ -799,11 +816,13 @@ public class JBlockCreator
         // Gill Ease Buttons
         gillSkirtEaseButton.addActionListener(e ->
         {
+            if (isRunning) {return;}
             try {
+                isRunning = true;
                 createEaseForm(gill.SkirtPattern.getEaseMeasurement());
-                toggleComponents(panelMain, new JButton());
             } catch (Exception j)
             {
+                isRunning = false;
                 j.printStackTrace();
                 Prompts.infoBox("No Associated Ease", "Ease", EMsgType.Error);
             }
@@ -811,11 +830,13 @@ public class JBlockCreator
 
         gillTrouserEaseButton.addActionListener(e ->
         {
+            if (isRunning) {return;}
             try {
+                isRunning = true;
                 createEaseForm(gill.TrouserPattern.getEaseMeasurement());
-                toggleComponents(panelMain, new JButton());
             } catch (Exception j)
             {
+                isRunning = false;
                 j.printStackTrace();
                 Prompts.infoBox("No Associated Ease", "Ease", EMsgType.Error);
             }
@@ -823,11 +844,13 @@ public class JBlockCreator
 
         gillSweatShirtEaseButton.addActionListener(e ->
         {
+            if (isRunning) {return;}
             try {
+                isRunning = true;
                 createEaseForm(gill.SweatShirtPattern.getEaseMeasurement());
-                toggleComponents(panelMain, new JButton());
             } catch (Exception j)
             {
+                isRunning = false;
                 j.printStackTrace();
                 Prompts.infoBox("No Associated Ease", "Ease", EMsgType.Error);
             }
@@ -952,7 +975,7 @@ public class JBlockCreator
         imageUomLogo = new JLabel(new ImageIcon("./images/logo_small.jpg"));
     }
 
-    protected void createEaseForm( ArrayList<easeMeasurement> easeMeasurements)
+    protected void createEaseForm(ArrayList<easeMeasurement> easeMeasurements)
     {
         JFrame easeFrame = new JFrame();
         easeFrame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
@@ -1088,8 +1111,8 @@ public class JBlockCreator
             @Override
             public void windowClosed(WindowEvent e) {
                 // Perhaps change it so that if they close, do not change measurements
-                toggleComponents(panelMain, new JButton());
                 alterValues(newValuesSlider, easeMeasurements);
+                isRunning = false;
             }
         });
 
