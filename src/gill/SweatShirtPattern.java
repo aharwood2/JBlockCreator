@@ -136,22 +136,26 @@ public class SweatShirtPattern extends Pattern
         Vector2D point7 = new Vector2D(largestShoulderDrop, BackShoulderWidthHorizontal / 2.0);
         Vector2D point8 = new Vector2D(0.0, MidNeckBaseWidth / 2.0 + NeckWidthEase / 2.0);
 
+        Vector2D point56 = new Vector2D(point6.getX() + ((point5.getX() - point6.getX()) / 4.0), point6.getY());
+
         // All the Keypoints added to the block
         backBlock.addKeypoint(point1);
         backBlock.addKeypoint(point2);
         backBlock.addKeypoint(point3);
         backBlock.addKeypoint(point5);
+        backBlock.addKeypoint(point56);
         backBlock.addKeypoint(point6);
         backBlock.addKeypoint(point7);
         backBlock.addKeypoint(point8);
 
-        // Bezier curve to angle the curve for 90/0 degrees since directed curve was not working
-        // + Rest of the curves
-        //backBlock.addQuadraticBezierCurve(point5, new Vector2D(point5.getX(), point6.getY()), point6);
+
         //backBlock.addDirectedCurveWithApexTangent(point5, point6,
         //        new Vector2D(0.0, -1.0), new Vector2D(-1.0, 0.0),
         //        new Vector2D(point5.getX(), point6.getY()),
-        //        2.0, new double[] {0.0, 0.0}, new int[] {-1, 1});
+        //        Math.sqrt(point5.getY() - point6.getY()) + (point5.getX() - point6.getX() - 10.0),
+        //        new double[] {0.0, 0.0}, new int[] {-1, 1});
+        backBlock.addDirectedCurve(point5, point56, new double[] {90.0, 0.0});
+
 
         backBlock.addDirectedCurve(point6, point7,
                 new Vector2D(-1.0, 0.0),
@@ -187,7 +191,12 @@ public class SweatShirtPattern extends Pattern
         frontBlock.addKeypoint(point15);
         frontBlock.addKeypoint(point16);
 
-        frontBlock.addQuadraticBezierCurve(point13, new Vector2D(point13.getX(), point14.getY()), point14);
+        frontBlock.addDirectedCurveWithApexTangent(point13, point14,
+                new Vector2D(0.0, -1.0), new Vector2D(-1.0, 0.0),
+                new Vector2D(point13.getX(), point14.getY()),
+                Math.sqrt(point13.getY() - point14.getY()) + (point13.getY() - point14.getY() - 10.0),
+                new double[] {0.0, 0.0}, new int[] {-1, 1});
+
         frontBlock.addDirectedCurve(point14, point15, new Vector2D(-1.0, 0.0), new Vector2D(point16.subtract(point15)), new double[] {0.0, 90.0});
         frontBlock.addDirectedCurve(point16, point9, new double[] {90.0,90.0});
 
