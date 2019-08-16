@@ -12,6 +12,7 @@ import mathcontainers.Vector2D;
 
 import javax.swing.text.html.Option;
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class SweatShirtPattern extends Pattern
 {
@@ -146,9 +147,22 @@ public class SweatShirtPattern extends Pattern
 
         // Bezier curve to angle the curve for 90/0 degrees since directed curve was not working
         // + Rest of the curves
-        backBlock.addQuadraticBezierCurve(point5, new Vector2D(point5.getX(), point6.getY()), point6);
-        backBlock.addDirectedCurve(point6, point7, new Vector2D(-1.0, 0.0), new Vector2D(point8.subtract(point7)), new double[] {0.0, 90.0});
+        //backBlock.addQuadraticBezierCurve(point5, new Vector2D(point5.getX(), point6.getY()), point6);
+        //backBlock.addDirectedCurveWithApexTangent(point5, point6,
+        //        new Vector2D(0.0, -1.0), new Vector2D(-1.0, 0.0),
+        //        new Vector2D(point5.getX(), point6.getY()),
+        //        2.0, new double[] {0.0, 0.0}, new int[] {-1, 1});
+
+        backBlock.addDirectedCurve(point6, point7,
+                new Vector2D(-1.0, 0.0),
+                new Vector2D(point8.subtract(point7)),
+                new double[] {0.0, 90.0});
+
         backBlock.addDirectedCurve(point8, point1, new double[] {90.0,90.0});
+
+        // Get the max and min y with a small additional buffer of 5cm for the construction lines
+        double maxY = Collections.max(backBlock.getPlottableKeypointsY()) + 5.0;
+        double minY = Collections.min(backBlock.getPlottableKeypointsY()) - 5.0;
 
         // Front Sweatshirt Block
         Block frontBlock = new Block(userName + "_Gill_Front_SweatShirt_Block");
@@ -177,6 +191,36 @@ public class SweatShirtPattern extends Pattern
         frontBlock.addDirectedCurve(point14, point15, new Vector2D(-1.0, 0.0), new Vector2D(point16.subtract(point15)), new double[] {0.0, 90.0});
         frontBlock.addDirectedCurve(point16, point9, new double[] {90.0,90.0});
 
+        // All the construction keypoints added for both front and back since they are similar
+        backBlock.addConstructionPoint(new Vector2D(point8.getX(), minY), new Vector2D(point8.getX(), maxY), "Side Nk");
+        backBlock.addConstructionPoint(new Vector2D(point1.getX(), minY), new Vector2D(point1.getX(), maxY), "Bk Nk Depth");
+        backBlock.addConstructionPoint(new Vector2D(point7.getX(), minY), new Vector2D(point7.getX(), maxY), "Shldr Depth");
+        backBlock.addConstructionPoint(new Vector2D(point9.getX(), minY), new Vector2D(point9.getX(), maxY), "Fr Nk Depth");
+        backBlock.addConstructionPoint(new Vector2D(point6.getX(), minY), new Vector2D(point6.getX(), maxY), "Midway Nk To U-Arm");
+        backBlock.addConstructionPoint(new Vector2D(point5.getX(), minY), new Vector2D(point5.getX(), maxY), "U-Arm");
+        backBlock.addConstructionPoint(new Vector2D(point4.getX(), minY), new Vector2D(point4.getX(), maxY), "Waist");
+        backBlock.addConstructionPoint(new Vector2D(point3.getX(), minY), new Vector2D(point3.getX(), maxY), "Hem");
+
+        frontBlock.addConstructionPoint(new Vector2D(point8.getX(), minY), new Vector2D(point8.getX(), maxY), "Side Nk");
+        frontBlock.addConstructionPoint(new Vector2D(point1.getX(), minY), new Vector2D(point1.getX(), maxY), "Bk Nk Depth");
+        frontBlock.addConstructionPoint(new Vector2D(point7.getX(), minY), new Vector2D(point7.getX(), maxY), "Shldr Depth");
+        frontBlock.addConstructionPoint(new Vector2D(point9.getX(), minY), new Vector2D(point9.getX(), maxY), "Fr Nk Depth");
+        frontBlock.addConstructionPoint(new Vector2D(point6.getX(), minY), new Vector2D(point6.getX(), maxY), "Midway Nk To U-Arm");
+        frontBlock.addConstructionPoint(new Vector2D(point5.getX(), minY), new Vector2D(point5.getX(), maxY), "U-Arm");
+        frontBlock.addConstructionPoint(new Vector2D(point4.getX(), minY), new Vector2D(point4.getX(), maxY), "Waist");
+        frontBlock.addConstructionPoint(new Vector2D(point3.getX(), minY), new Vector2D(point3.getX(), maxY), "Hem");
+
+        // Construction keypoint representing point4 which is used in shaping
+        backBlock.addConstructionPoint(
+                new Vector2D(point4.getX() - 2.0, point4.getY()),
+                new Vector2D(point4.getX() + 2.0, point4.getY()),
+                "");
+
+        frontBlock.addConstructionPoint(
+                new Vector2D(point4.getX() - 2.0, point4.getY()),
+                new Vector2D(point4.getX() + 2.0, point4.getY()),
+                "");
+
         Block sleeveBlock = new Block(userName + "_Gill_Sleeve_Block");
         blocks.add(sleeveBlock);
 
@@ -186,7 +230,7 @@ public class SweatShirtPattern extends Pattern
 
         // Calculation of point1
         Vector2D sleevePoint9 = new Vector2D(-(point5.getX() / 2.0), 0.0);
-        Vector2D sleevePoint1 = new Vector2D(0.0, -(Math.sqrt(Math.pow(crownHeightAid + 2.0, 2) - Math.pow(sleevePoint9.getX() / 2.0, 2))));
+        Vector2D sleevePoint1 = new Vector2D(0.0, -(Math.sqrt(Math.pow(sleeveWidthAid + 2.0, 2) - Math.pow(crownHeightAid / 2.0, 2))));
         Vector2D sleevePoint3 = new Vector2D(largestArmLength - (sleevePoint9.getX() / 2.0), -((largestWristCircum + WristEase) / 2.0));
         Vector2D sleevePoint4 = new Vector2D(sleevePoint3.getX(), 0.0);
         Vector2D sleevePoint5 = new Vector2D(sleevePoint3.getX(), -(sleevePoint3.getY()));
@@ -214,7 +258,9 @@ public class SweatShirtPattern extends Pattern
         sleeveBlock.addKeypoint(sleevePoint8);
         sleeveBlock.addKeypoint(sleevePoint10);
 
-        sleeveBlock.addCircularCurve(sleevePoint8, sleevePoint10, point9.getX(), true);
+        sleeveBlock.addCircularCurve(sleevePoint8, sleevePoint10, point9.getX(), true, true);
+        sleeveBlock.addDirectedCurve(sleevePoint7, sleevePoint8, new double[] {90.0, 0.0});
+        sleeveBlock.addDirectedCurve(sleevePoint10, sleevePoint1, new double[] {0.0, 90.0});
 
     }
 

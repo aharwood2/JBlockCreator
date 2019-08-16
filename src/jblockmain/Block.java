@@ -1107,4 +1107,89 @@ public class Block {
         }
     }
 
+    /**
+     * Add a curve given the height of curve above the centre of a line joining the two points. Assumes the curve is
+     * cut from a circle and hence given points are on the circle circumference. Direction of normal is indicated by
+     * boolean value -- true for right hand normal and false for left hand normal -- which tells the method which way
+     * to curve. Start and end points must be specified in the strict anti-clockwise order of the keypoints list.
+     *
+     * @param startPoint start position of curve
+     * @param endPoint   end position of curve
+     * @param height     height of curve above a straight line joining start and end positions
+     * @param dirNorm    direction of the centre of the circle
+     * @param otherSide Whether to draw the otherside of the circle
+     */
+    public void addCircularCurve(Vector2D startPoint, Vector2D endPoint, double height, boolean dirNorm, boolean otherSide) {
+        // Get equation of line
+        Vector2D direction = new Vector2D(endPoint.subtract(startPoint));
+        Vector2D norm_dir;
+        if (dirNorm) {
+            norm_dir = new Vector2D(direction.getY(), -direction.getX());
+        } else {
+            norm_dir = new Vector2D(-direction.getY(), direction.getX());
+        }
+        norm_dir.divideBy(norm_dir.norm());
+
+        // Use normalised direction to find midpoint
+        Vector2D midpt = new Vector2D(startPoint.add(direction.multiply(0.5)));
+
+        // Find the 3rd point required for the arc
+        Vector2D crestpt = new Vector2D(midpt.add(norm_dir.multiply(height)));
+
+        // Solve for coefficients
+        double lam1 = -Math.pow(startPoint.getX(), 2) - Math.pow(startPoint.getY(), 2);
+        double lam2 = -Math.pow(endPoint.getX(), 2) - Math.pow(endPoint.getY(), 2);
+        double lam3 = -Math.pow(crestpt.getX(), 2) - Math.pow(crestpt.getY(), 2);
+        double lam23 = lam2 - lam3;
+        double lam13 = lam1 - lam3;
+        double y23 = endPoint.getY() - crestpt.getY();
+        double y13 = startPoint.getY() - crestpt.getY();
+        double x23 = endPoint.getX() - crestpt.getX();
+        double x13 = startPoint.getX() - crestpt.getX();
+        double alp = (lam23 - (y23 / y13) * lam13) / ((x23 * y13 - y23 * x13) / y13);
+        double bet = (lam13 - x13 * alp) / y13;
+        double gam = lam1 - startPoint.getY() * bet - startPoint.getX() * alp;
+
+        // Convert to standard form of equation for circle
+        double centrex = -alp / 2.0;
+        double centrey = -bet / 2.0;
+        double radius = Math.sqrt(centrex * centrex + centrey * centrey - gam);
+
+        // Discretise equation of circle using specified resolution and correct for quadrant
+        double xOffsetStart = startPoint.getX() - centrex;
+        double yOffsetStart = startPoint.getY() - centrey;
+        double th1 = Math.acos(xOffsetStart / radius);
+
+        double xOffsetEnd = endPoint.getX() - centrex;
+        double yOffsetEnd = endPoint.getY() - centrey;
+        double th2 = Math.acos(xOffsetEnd / radius);
+
+        // Quadrant check to get offset correct
+        if ((xOffsetStart < 0.0 && yOffsetStart < 0.0) || (xOffsetStart > 0.0 && yOffsetStart < 0.0)) {
+            // Flip theta
+            th1 *= -1.0;
+        }
+        if ((xOffsetEnd < 0.0 && yOffsetEnd < 0.0) || (xOffsetEnd > 0.0 && yOffsetEnd < 0.0)) {
+            // Flip theta
+            th2 *= -1.0;
+        }
+
+        if(otherSide) {th2 = (Math.PI * 2.0) + th2;}
+
+        double dcircum = Math.abs(th2 - th1) * radius;
+        int numPts = (int) Math.ceil(dcircum * res);
+
+        // Specify in polar coordinates then convert to Cartesian
+        Vector2D tmp;
+        Vector2D tmp2 = new Vector2D(startPoint);
+        double spacing = (th2 - th1) / (numPts - 1);
+        double th;
+        for (int i = 1; i < numPts - 1; i++) {
+            th = th1 + i * spacing;
+            tmp = new Vector2D(radius * Math.cos(th) + centrex, radius * Math.sin(th) + centrey);
+            addKeypointNextTo(tmp, tmp2, EPosition.AFTER);
+            tmp2 = new Vector2D(tmp);
+        }
+    }
+
 }
