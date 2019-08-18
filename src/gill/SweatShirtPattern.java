@@ -136,31 +136,34 @@ public class SweatShirtPattern extends Pattern
         Vector2D point7 = new Vector2D(largestShoulderDrop, BackShoulderWidthHorizontal / 2.0);
         Vector2D point8 = new Vector2D(0.0, MidNeckBaseWidth / 2.0 + NeckWidthEase / 2.0);
 
-        Vector2D point56 = new Vector2D(point6.getX() + ((point5.getX() - point6.getX()) / 4.0), point6.getY());
+        Vector2D point562 = new Vector2D(point6.getX() + ((point5.getX() - point6.getX()) / 3.0), point6.getY() + ((point5.getY() - point6.getY())/ 20.0));
 
         // All the Keypoints added to the block
         backBlock.addKeypoint(point1);
         backBlock.addKeypoint(point2);
         backBlock.addKeypoint(point3);
         backBlock.addKeypoint(point5);
-        backBlock.addKeypoint(point56);
+        backBlock.addKeypoint(point562);
         backBlock.addKeypoint(point6);
         backBlock.addKeypoint(point7);
         backBlock.addKeypoint(point8);
 
+        // Adds an extension depending on difference between height and width of the 2 points, probably
+        // Needs a better system but these give decent curves for now
+        double extension = Math.sqrt(Math.abs((point5.getY() - point6.getY()) - (point5.getX() - point6.getX()))) / 2.0;
+        extension = point5.getX() - point6.getX() > point5.getY() - point6.getY() ? -extension : extension;
 
-        //backBlock.addDirectedCurveWithApexTangent(point5, point6,
-        //        new Vector2D(0.0, -1.0), new Vector2D(-1.0, 0.0),
-        //        new Vector2D(point5.getX(), point6.getY()),
-        //        Math.sqrt(point5.getY() - point6.getY()) + (point5.getX() - point6.getX() - 10.0),
-        //        new double[] {0.0, 0.0}, new int[] {-1, 1});
-        backBlock.addDirectedCurve(point5, point56, new double[] {90.0, 0.0});
-
+        backBlock.addDirectedCurveWithApexTangent(point5, point562,
+                new Vector2D(point5.getX(), point562.getY()),
+                4.0 + extension,
+                new double[]{90.0, 0.0}, new int[]{-1, 1});
 
         backBlock.addDirectedCurve(point6, point7,
                 new Vector2D(-1.0, 0.0),
                 new Vector2D(point8.subtract(point7)),
                 new double[] {0.0, 90.0});
+
+        backBlock.addBlendedCurve(point562, point6);
 
         backBlock.addDirectedCurve(point8, point1, new double[] {90.0,90.0});
 
@@ -172,7 +175,7 @@ public class SweatShirtPattern extends Pattern
         Block frontBlock = new Block(userName + "_Gill_Front_SweatShirt_Block");
         blocks.add(frontBlock);
 
-        // Most of the keypoints added
+        // Most of the keypoints added as vectors, a lot of similarities with backblock but kept for readability
         Vector2D point9 = new Vector2D(NeckCircumference / 5.0 - 1.5, 0);
         Vector2D point10 = new Vector2D(point2.getX(), 0);
         Vector2D point11 = new Vector2D(point2.getX(), point3.getY());
@@ -182,22 +185,35 @@ public class SweatShirtPattern extends Pattern
         Vector2D point15 = point7;
         Vector2D point16 = point8;
 
+        Vector2D point1314 = new Vector2D(point14.getX() + ((point13.getX() - point14.getX()) / 3.0), point14.getY() + ((point13.getY() - point14.getY())/ 20.0));
+
+
         // Addition of all the points as keypoints
         frontBlock.addKeypoint(point9);
         frontBlock.addKeypoint(point10);
         frontBlock.addKeypoint(point11);
         frontBlock.addKeypoint(point13);
+        frontBlock.addKeypoint(point1314);
         frontBlock.addKeypoint(point14);
         frontBlock.addKeypoint(point15);
         frontBlock.addKeypoint(point16);
 
-        frontBlock.addDirectedCurveWithApexTangent(point13, point14,
-                new Vector2D(0.0, -1.0), new Vector2D(-1.0, 0.0),
-                new Vector2D(point13.getX(), point14.getY()),
-                Math.sqrt(point13.getY() - point14.getY()) + (point13.getY() - point14.getY() - 10.0),
-                new double[] {0.0, 0.0}, new int[] {-1, 1});
+        // Calculating extension for the tangent offset
+        extension = Math.sqrt(Math.abs((point13.getY() - point14.getY()) - (point13.getX() - point14.getX()))) / 2.0;
+        extension = point13.getX() - point14.getX() > point13.getY() - point14.getY() ? -extension : extension;
 
-        frontBlock.addDirectedCurve(point14, point15, new Vector2D(-1.0, 0.0), new Vector2D(point16.subtract(point15)), new double[] {0.0, 90.0});
+        frontBlock.addDirectedCurveWithApexTangent(point13, point1314,
+                new Vector2D(point13.getX(), point1314.getY()),
+                4.0 + extension,
+                new double[]{90.0, 0.0}, new int[]{-1, 1});
+
+        frontBlock.addDirectedCurve(point14, point15,
+                new Vector2D(-1.0, 0.0),
+                new Vector2D(point8.subtract(point15)),
+                new double[] {0.0, 90.0});
+
+        frontBlock.addBlendedCurve(point1314, point14);
+        
         frontBlock.addDirectedCurve(point16, point9, new double[] {90.0,90.0});
 
         // All the construction keypoints added for both front and back since they are similar
