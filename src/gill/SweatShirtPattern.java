@@ -213,7 +213,7 @@ public class SweatShirtPattern extends Pattern
                 new double[] {0.0, 90.0});
 
         frontBlock.addBlendedCurve(point1314, point14);
-        
+
         frontBlock.addDirectedCurve(point16, point9, new double[] {90.0,90.0});
 
         // All the construction keypoints added for both front and back since they are similar
@@ -286,6 +286,9 @@ public class SweatShirtPattern extends Pattern
         sleeveBlock.addCircularCurve(sleevePoint8, sleevePoint10, point9.getX(), true, true);
         sleeveBlock.addDirectedCurve(sleevePoint7, sleevePoint8, new double[] {90.0, 0.0});
         sleeveBlock.addDirectedCurve(sleevePoint10, sleevePoint1, new double[] {0.0, 90.0});
+
+        Block sleeveBlock2 = new Block(userName + "_Gill_Sleeve2_Block");
+        blocks.add(sleeveBlock2);
 
     }
 
