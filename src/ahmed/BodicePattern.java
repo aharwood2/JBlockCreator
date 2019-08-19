@@ -135,41 +135,6 @@ public class BodicePattern extends Pattern {
         return true;
     }
 
-    /**
-     * @param x1 x position of the center of circle 1
-     * @param x2 x position of the center of circle 2
-     * @param y1 y position of the center of circle 1
-     * @param y2 y position of the center of circle 2
-     * @param r1 length between point 1 and point of intersections
-     * @param r2 length between point 2 and point of intersections
-     * @return return a 2d array representing the 2 points of intersection [0][0] = x0, [0][1] = y0, [1][1] = x1, [1][1] = y1
-     */
-    private double[][] circleIntersect(double x1, double x2, double y1, double y2, double r1, double r2) {
-        // Creation of return variable
-        double[][] xy = new double[2][2];
-
-        // Actual mathematics of finding intersect point between 2 circles by solving a quadaratic
-        // By expanding cartesian equation of a circle
-        double A = ((r2 * r2) - (r1 * r1) - (x2 * x2) + (x1 * x1) - (y2 * y2) + (y1 * y1)) / ((-2 * x2) + (2 * x1));
-        double D = ((-2.0 * y2) + (2.0 * y1)) / ((-2.0 * x2) + (2.0 * x1));
-        double a = (D * D) + 1.0;
-        double b = ((-2.0 * A * D) + (2.0 * D * x1) + (-2.0 * y1));
-        double c = (A * A) + (x1 * x1) + (-2.0 * A * x1) + (y1 * y1) - (r1 * r1);
-        double discriminant = (b * b) - (4.0 * a * c);
-        if (discriminant < 0.0) {
-            return xy;
-        } // Cannot sqrt a negative number without going into complex numbers
-
-        // TODO: circles do not intersect exception
-
-        // Calculating the x values after the y values have been calculated
-        xy[0][1] = ((-1.0 * b) + (Math.sqrt(discriminant))) / (2.0 * a);
-        xy[1][1] = ((-1.0 * b) - (Math.sqrt(discriminant))) / (2.0 * a);
-        xy[0][0] = A - (D * xy[0][1]);
-        xy[1][0] = A - (D * xy[1][1]);
-        return xy;
-    }
-
     @Override
     protected void createBlocks() {
         Block fullBlock = new Block(userName + "_Ahmed_Bodice_Block");
@@ -197,7 +162,7 @@ public class BodicePattern extends Pattern {
 
 
         // Calculation of point 5 as the intersect between point 4 and point 6 given their length
-        circleP = circleIntersect(point4.getX(), point6.getX(),
+        circleP = Block.circleIntersect(point4.getX(), point6.getX(),
                 point4.getY(), point6.getY(),
                 (backWaistArc / 2.0) + 1.5, sideSeamDepth);
 
@@ -212,7 +177,7 @@ public class BodicePattern extends Pattern {
         Vector2D point8 = new Vector2D(point6.getX() + (frontBustArc / 2.0) + 1.0, point4.getY());
 
         // Calculation of point 7 as the intersect between 2 circles of point 6 and point 8
-        circleP = circleIntersect(point6.getX(), point8.getX(),
+        circleP = Block.circleIntersect(point6.getX(), point8.getX(),
                 point6.getY(), point8.getY(),
                 (sideSeamDepth), (frontWaistArc / 2.0) + 1.5);
 
