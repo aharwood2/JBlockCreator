@@ -144,34 +144,21 @@ public class SweatShirtPattern extends Pattern
         Vector2D point7 = new Vector2D(largestShoulderDrop, BackShoulderWidthHorizontal / 2.0);
         Vector2D point8 = new Vector2D(0.0, MidNeckBaseWidth / 2.0 + NeckWidthEase / 2.0);
 
-        Vector2D point562 = new Vector2D(point6.getX() + ((point5.getX() - point6.getX()) / 3.0), point6.getY() + ((point5.getY() - point6.getY())/ 20.0));
-
         // All the Keypoints added to the block
         backBlock.addKeypoint(point1);
         backBlock.addKeypoint(point2);
         backBlock.addKeypoint(point3);
         backBlock.addKeypoint(point5);
-        backBlock.addKeypoint(point562);
         backBlock.addKeypoint(point6);
         backBlock.addKeypoint(point7);
         backBlock.addKeypoint(point8);
 
-        // Adds an extension depending on difference between height and width of the 2 points, probably
-        // Needs a better system but these give decent curves for now
-        double extension = Math.sqrt(Math.abs((point5.getY() - point6.getY()) - (point5.getX() - point6.getX()))) / 2.0;
-        extension = point5.getX() - point6.getX() > point5.getY() - point6.getY() ? -extension : extension;
-
-        backBlock.addDirectedCurveWithApexTangent(point5, point562,
-                new Vector2D(point5.getX(), point562.getY()),
-                4.0 + extension,
-                new double[]{90.0, 0.0}, new int[]{-1, 1});
+        backBlock.addQuadraticBezierCurve(point5, new Vector2D(point5.getX(), point6.getY()), point6);
 
         backBlock.addDirectedCurve(point6, point7,
                 new Vector2D(-1.0, 0.0),
                 new Vector2D(point8.subtract(point7)),
                 new double[] {0.0, 90.0});
-
-        backBlock.addBlendedCurve(point562, point6);
 
         backBlock.addDirectedCurve(point8, point1, new double[] {90.0,90.0});
 
@@ -207,7 +194,7 @@ public class SweatShirtPattern extends Pattern
         frontBlock.addKeypoint(point16);
 
         // Calculating extension for the tangent offset
-        extension = Math.sqrt(Math.abs((point13.getY() - point14.getY()) - (point13.getX() - point14.getX()))) / 2.0;
+        double extension = Math.sqrt(Math.abs((point13.getY() - point14.getY()) - (point13.getX() - point14.getX()))) / 2.0;
         extension = point13.getX() - point14.getX() > point13.getY() - point14.getY() ? -extension : extension;
 
         frontBlock.addDirectedCurveWithApexTangent(point13, point1314,

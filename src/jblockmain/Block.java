@@ -1089,14 +1089,14 @@ public class Block {
     private double quadraticYBezier(double t, Vector2D start, Vector2D intermediate, Vector2D end) {
         return (start.getY() * (1 - t) * (1 - t)) + ((2 * intermediate.getY() * t * (1 - t))) + (end.getY() * t * t);
     }
-    public void addQuadraticBezierCurve(Vector2D start, Vector2D end, Vector2D apex) {
+    public void addQuadraticBezierCurve(Vector2D start, Vector2D Apex, Vector2D end) {
         int numPts = (int) Math.ceil(end.subtract(start).norm() * res);
         Vector2D tmp = new Vector2D(start);
         Vector2D tmp2 = new Vector2D(tmp);
         for (int i = 1; i < numPts - 1; i++) {
             double t = ((double) i / ((double) numPts - 1));
-            double x = quadraticXBezier(t, start, end, apex);
-            double y = quadraticYBezier(t, start, end, apex);
+            double x = quadraticXBezier(t, start, Apex, end);
+            double y = quadraticYBezier(t, start, Apex, end);
             tmp = new Vector2D(x, y);
             addKeypointNextTo(tmp, tmp2, EPosition.AFTER);
             tmp2 = new Vector2D(tmp);
