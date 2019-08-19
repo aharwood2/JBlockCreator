@@ -698,7 +698,7 @@ public class JBlockCreator
         });
 
         checkBeazleySkirt.addActionListener(e -> {
-            beazleybond.TrouserPattern.populateEaseMeasurements();
+            beazleybond.SkirtPattern.populateEaseMeasurements();
             beazleyBondSkirtEaseButton.setVisible(!beazleyBondSkirtEaseButton.isVisible());
         });
 
