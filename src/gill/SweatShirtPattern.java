@@ -241,7 +241,9 @@ public class SweatShirtPattern extends Pattern
                 new Vector2D(point4.getX() + 2.0, point4.getY()),
                 "");
 
-        /////////////////////////////////////SLEEVE BLOCK////////////////////////////////////////////////////////////////
+     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+     ////////////////////////////////////////// SLEEVE BLOCK ///////////////////////////////////////////////////////////
+     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
         Block sleeveBlock = new Block(userName + "_Gill_Sleeve_Block");
         blocks.add(sleeveBlock);
@@ -251,7 +253,7 @@ public class SweatShirtPattern extends Pattern
         double crownHeightAid = (point5.getX() - point1.getX()) * CrownWidthMultiplier;
 
         // Calculation of point1
-        Vector2D sleevePoint9 = new Vector2D(-(point5.getX() / 2.0), 0.0);
+        Vector2D sleevePoint9 = new Vector2D(-(crownHeightAid / 2.0), 0.0);
         // 9 is the Multiplier to adjust the amount as a percentage that is used
         Vector2D sleevePoint1 = new Vector2D(0.0, -(
                 Math.sqrt(
@@ -288,7 +290,10 @@ public class SweatShirtPattern extends Pattern
         sleeveBlock.addKeypoint(sleevePoint8);
         sleeveBlock.addKeypoint(sleevePoint10);
 
-        sleeveBlock.addCircularCurve(sleevePoint8, sleevePoint10, point9.getX(), true, true);
+        sleeveBlock.addCircularCurve(sleevePoint8, sleevePoint10,
+                                    (sleevePoint9.getX() - (sleevePoint10.getX())),
+                                    false, true);
+
         sleeveBlock.addDirectedCurve(sleevePoint7, sleevePoint8, new double[] {90.0, 0.0});
         sleeveBlock.addDirectedCurve(sleevePoint10, sleevePoint1, new double[] {0.0, 90.0});
 
