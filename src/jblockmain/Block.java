@@ -1082,17 +1082,37 @@ public class Block {
     }
 
     private double quadraticXBezier(double t, Vector2D start, Vector2D intermediate, Vector2D end) {
+        // Helper Function that returns X value for a given t value
+        // Which varies from 0 to 1 for a given start, apex, and end vector
+
         return (start.getX() * ((1 - t) * (1 - t)))
                 + (2 * intermediate.getX() * (t * (1 - t)))
                 + (end.getX() * (t * t));
     }
     private double quadraticYBezier(double t, Vector2D start, Vector2D intermediate, Vector2D end) {
-        return (start.getY() * (1 - t) * (1 - t)) + ((2 * intermediate.getY() * t * (1 - t))) + (end.getY() * t * t);
+        // Helper Function that returns Y value for a given t value
+        // Which varies from 0 to 1 for a given start, apex, and end vector
+
+        return (start.getY() * (1 - t) * (1 - t))
+                + ((2 * intermediate.getY() * t * (1 - t)))
+                + (end.getY() * t * t);
     }
+
+    /**
+     * Draws a quadratic bezier curve between 2 points for a given start, end and shaping? point
+     * @param start start vector you want the curve to start from
+     * @param Apex the point which shapes the bezier curve
+     * @param end the end vector you want the curve to stop at
+     */
     public void addQuadraticBezierCurve(Vector2D start, Vector2D Apex, Vector2D end) {
+        // Calculate the number of points to draw
         int numPts = (int) Math.ceil(end.subtract(start).norm() * res);
+
+        // Initialization of temporary variables as the method iterates through these temp variables
         Vector2D tmp = new Vector2D(start);
         Vector2D tmp2 = new Vector2D(tmp);
+
+        // For loop which calculates X and Y, adds them to the keypoints, as it iterates from t = 0 to t = 1
         for (int i = 1; i < numPts - 1; i++) {
             double t = ((double) i / ((double) numPts - 1));
             double x = quadraticXBezier(t, start, Apex, end);

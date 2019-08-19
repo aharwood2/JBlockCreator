@@ -182,7 +182,6 @@ public class SweatShirtPattern extends Pattern
 
         Vector2D point1314 = new Vector2D(point14.getX() + ((point13.getX() - point14.getX()) / 3.0), point14.getY() + ((point13.getY() - point14.getY())/ 20.0));
 
-
         // Addition of all the points as keypoints
         frontBlock.addKeypoint(point9);
         frontBlock.addKeypoint(point10);
@@ -253,52 +252,120 @@ public class SweatShirtPattern extends Pattern
         double crownHeightAid = (point5.getX() - point1.getX()) * CrownWidthMultiplier;
 
         // Calculation of point1
-        Vector2D sleevePoint9 = new Vector2D(-(crownHeightAid / 2.0), 0.0);
-        // 9 is the Multiplier to adjust the amount as a percentage that is used
-        Vector2D sleevePoint1 = new Vector2D(0.0, -(
+        point1 = new Vector2D(0.0, -(
                 Math.sqrt(
-                Math.abs    (
-                Math.pow(sleeveWidthAid + 2.0, 2) - Math.pow(crownHeightAid / 2.0, 2)
-                            )
-                         )
+                        Math.abs    (
+                                Math.pow(sleeveWidthAid + 2.0, 2) - Math.pow(crownHeightAid / 2.0, 2)
+                        )
+                )
         ));
 
-        Vector2D sleevePoint3 = new Vector2D(largestArmLength - (sleevePoint9.getX() / 2.0), -((largestWristCircum + WristEase) / 2.0));
-        Vector2D sleevePoint4 = new Vector2D(sleevePoint3.getX(), 0.0);
-        Vector2D sleevePoint5 = new Vector2D(sleevePoint3.getX(), -(sleevePoint3.getY()));
-        Vector2D sleevePoint7 = new Vector2D(0.0, -(sleevePoint1.getY()));
+        point9 = new Vector2D(-(crownHeightAid / 2.0), 0.0);
+        point3 = new Vector2D(largestArmLength - (point9.getX() / 2.0), -((largestWristCircum + WristEase) / 2.0));
+        point4 = new Vector2D(point3.getX(), 0.0);
+        point5 = new Vector2D(point3.getX(), -(point3.getY()));
+        point7 = new Vector2D(0.0, -(point1.getY()));
 
         // Create a direction vector from point1 to point3
-        Vector2D D1_3 = new Vector2D(sleevePoint3.subtract(sleevePoint1));
+        Vector2D D1_3 = new Vector2D(point3.subtract(point1));
         // Calculate point 2 as halfway
-        Vector2D sleevePoint2 = new Vector2D(sleevePoint1.add(D1_3.divide(2.0)));
+        point2 = new Vector2D(point1.add(D1_3.divide(2.0)));
         // Point6 is just point 2 reflected in the x-axis
-        Vector2D sleevePoint6 = new Vector2D(sleevePoint2.getX(), -(sleevePoint2.getY()));
+        point6 = new Vector2D(point2.getX(), -(point2.getY()));
 
-        Vector2D D7_8 = new Vector2D(sleevePoint9.subtract(sleevePoint7));
+        Vector2D D7_8 = new Vector2D(point9.subtract(point7));
         // Point8 is just 1/3rd the distance of 7 to 9
-        Vector2D sleevePoint8 = new Vector2D(sleevePoint7.add(D7_8.divide(3.0)));
-        Vector2D sleevePoint10 = new Vector2D(sleevePoint8.getX(), -(sleevePoint8.getY() - 0.01));
+        point8 = new Vector2D(point7.add(D7_8.divide(3.0)));
+        point10 = new Vector2D(point8.getX(), -(point8.getY() - 0.01));
 
-        sleeveBlock.addKeypoint(sleevePoint1);
-        sleeveBlock.addKeypoint(sleevePoint2);
-        sleeveBlock.addKeypoint(sleevePoint3);
-        sleeveBlock.addKeypoint(sleevePoint4);
-        sleeveBlock.addKeypoint(sleevePoint5);
-        sleeveBlock.addKeypoint(sleevePoint6);
-        sleeveBlock.addKeypoint(sleevePoint7);
-        sleeveBlock.addKeypoint(sleevePoint8);
-        sleeveBlock.addKeypoint(sleevePoint10);
+        sleeveBlock.addKeypoint(point1);
+        sleeveBlock.addKeypoint(point2);
+        sleeveBlock.addKeypoint(point3);
+        sleeveBlock.addKeypoint(point4);
+        sleeveBlock.addKeypoint(point5);
+        sleeveBlock.addKeypoint(point6);
+        sleeveBlock.addKeypoint(point7);
+        sleeveBlock.addKeypoint(point8);
+        sleeveBlock.addKeypoint(point10);
 
-        sleeveBlock.addCircularCurve(sleevePoint8, sleevePoint10,
-                                    (sleevePoint9.getX() - (sleevePoint10.getX())),
+        sleeveBlock.addCircularCurve(point8, point10,
+                                    (point9.getX() - (point10.getX())),
                                     false, true);
 
-        sleeveBlock.addDirectedCurve(sleevePoint7, sleevePoint8, new double[] {90.0, 0.0});
-        sleeveBlock.addDirectedCurve(sleevePoint10, sleevePoint1, new double[] {0.0, 90.0});
+        sleeveBlock.addDirectedCurve(point7, point8, new double[] {90.0, 0.0});
+        sleeveBlock.addDirectedCurve(point10, point1, new double[] {0.0, 90.0});
 
-        //Block sleeveBlock2 = new Block(userName + "_Gill_Sleeve2_Block");
-        //blocks.add(sleeveBlock2);
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////// SLEEVE BLOCK TWO ////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        Block sleeveBlockTwo = new Block(userName + "_Gill_SleeveTwo_Block");
+        blocks.add(sleeveBlockTwo);
+
+        double cuffOpening = (WristEase + largestWristCircum) / 2.0;
+        double sleeveHemXPosition = point3.getX();
+
+        // As above for readability
+        // Point11 and Point15 are the same as above sleeve patten, but they are rewritten here so as to not
+        // Be Re-written later
+        point11 = point8;
+        point15 = point10;
+        point10 = point7;
+        point13 = point9;
+        // A lot of similarities as above sleeve pattern, explicitly written down for readability
+        point1 = point1;
+        double sleeveWidth = point10.getY() - point1.getY();
+        double cuffSpacing = (sleeveWidth - (cuffOpening)) / 2.0;
+
+        point2 = new Vector2D(point2.getX(), point1.getY());
+        point3 = new Vector2D(sleeveHemXPosition, point1.getY());
+        point4 = new Vector2D(sleeveHemXPosition, -(sleeveWidth/2.0) + cuffOpening / 4.0);
+        point5 = new Vector2D(sleeveHemXPosition, point4.getY() + cuffSpacing);
+        point6 = new Vector2D(sleeveHemXPosition, point5.getY() + cuffOpening / 2.0);
+        point7 = new Vector2D(sleeveHemXPosition, point6.getY() + cuffSpacing);
+        point8 = new Vector2D(sleeveHemXPosition, point7.getY() + cuffOpening / 4.0);
+        point9 = new Vector2D(point2.getX(), point8.getY());
+
+
+        sleeveBlockTwo.addKeypoint(point8);
+        sleeveBlockTwo.addKeypoint(point9);
+        sleeveBlockTwo.addKeypoint(point10);
+        sleeveBlockTwo.addKeypoint(point11);
+        sleeveBlockTwo.addKeypoint(point15);
+        sleeveBlockTwo.addKeypoint(point1);
+        sleeveBlockTwo.addKeypoint(point2);
+        sleeveBlockTwo.addKeypoint(point3);
+        sleeveBlockTwo.addKeypoint(point4);
+
+        sleeveBlockTwo.addCircularCurve(point11, point15,
+                point13.getX() - point15.getX(),
+                false, true);
+
+        double lookingFor = point1.getY() / 2.0;
+        double diff = 0;
+        double prevDiff = (double)Integer.MAX_VALUE;
+        int currentClosest = 0;
+
+        ArrayList<Double> ypoints = getYPoints(blocks.size() - 1);
+        ArrayList<Double> xpoints = getXPoints(blocks.size() - 1);
+        for (int i = 0; i < ypoints.size(); i++)
+        {
+            diff = Math.abs(ypoints.get(i) - lookingFor);
+            currentClosest = diff < prevDiff ? i : currentClosest;
+            prevDiff = diff < prevDiff ? diff : prevDiff;
+        }
+        point14 = new Vector2D(xpoints.get(currentClosest), ypoints.get(currentClosest));
+        point12 = new Vector2D(point14.getX(), -point14.getY());
+
+        sleeveBlockTwo.addKeypoint(point14);
+        sleeveBlockTwo.addKeypoint(point5);
+        sleeveBlockTwo.addKeypoint(point6);
+        sleeveBlockTwo.addKeypoint(point12);
+        sleeveBlockTwo.addKeypoint(point7);
+
+        sleeveBlockTwo.addDirectedCurve(point10, point11, new double[] {90.0, 0.0});
+        sleeveBlockTwo.addDirectedCurve(point15, point1, new double[] {0.0, 90.0});
+
     }
 
     protected static ArrayList<easeMeasurement> easeMeasurements = new ArrayList<>();
