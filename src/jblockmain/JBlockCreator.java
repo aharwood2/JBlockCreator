@@ -241,29 +241,6 @@ public class JBlockCreator
     }
 
     /**
-     * Will set all the Comoponent type to unenabled if enabled and vice versa within the containing panel, not used anymore
-     * @param whichPanel Everything within this panel will be be affected / affected panel
-     * @param type The type of component, i.e button etc that you want disabled/enabled
-     */
-    private void toggleComponents(Container whichPanel, Component type)
-    {
-        // Go through all the components in the container
-        for (int i = 0; i < whichPanel.getComponentCount(); i++)
-        {
-            // If the type of component is either a JPanel or JTabbedPane, go through that panel (recursively)
-            if (whichPanel.getComponent(i) instanceof JPanel || whichPanel.getComponent(i) instanceof JTabbedPane)
-            {
-                toggleComponents((Container) whichPanel.getComponent(i), type);
-            }
-            // If the type of component in the containing panel is of type type, toggle that component
-            if (whichPanel.getComponent(i).getClass() == type.getClass())
-            {
-                ((whichPanel).getComponent(i)).setEnabled(!((whichPanel).getComponent(i)).isEnabled());
-            }
-        }
-    }
-
-    /**
      * Background thread to perform operations when run button is pressed.
      */
     private class RunThread
@@ -526,6 +503,24 @@ public class JBlockCreator
     }
 
     /**
+     * Method run when an ease button is clicked.
+     * @param easeMeasurements The ease measurements to display
+     */
+    private void easeButtonClickedEvent(ArrayList<easeMeasurement> easeMeasurements)
+    {
+        if (isRunning) {return;}
+        try {
+            isRunning = true;
+            createEaseForm(easeMeasurements);
+        } catch (Exception j)
+        {
+            isRunning = false;
+            j.printStackTrace();
+            Prompts.infoBox("No Associated Ease", "Ease", EMsgType.Error);
+        }
+    }
+
+    /**
      * Method to set ifLayeredRectanglePlot boolean
      */
     private void layeredRectanglePlot()
@@ -749,145 +744,55 @@ public class JBlockCreator
         // Aldrich Ease Button Listeners
         aldrichSkirtEaseButton.addActionListener(e ->
         {
-            if (isRunning) {return;}
-            try {
-                isRunning = true;
-                createEaseForm(aldrich.SkirtPattern.getEaseMeasurement());
-            } catch (Exception j)
-            {
-                isRunning = false;
-                j.printStackTrace();
-                Prompts.infoBox("No Associated Ease", "Ease", EMsgType.Error);
-            }
+            easeButtonClickedEvent(aldrich.SkirtPattern.getEaseMeasurement());
         });
 
         aldrichTrouserEaseButton.addActionListener(e ->
         {
-            if (isRunning) {return;}
-            try {
-                isRunning = true;
-                createEaseForm(aldrich.TrouserPattern.getEaseMeasurement());
-            } catch (Exception j)
-            {
-                isRunning = false;
-                j.printStackTrace();
-                Prompts.infoBox("No Associated Ease", "Ease", EMsgType.Error);
-            }
+            easeButtonClickedEvent(aldrich.TrouserPattern.getEaseMeasurement());
         });
 
         // Beazley bond Ease button listeners
 
         beazleyBondSkirtEaseButton.addActionListener(e ->
         {
-            if (isRunning) {return;}
-            try {
-                isRunning = true;
-                createEaseForm(beazleybond.SkirtPattern.getEaseMeasurement());
-            } catch (Exception j)
-            {
-                isRunning = false;
-                j.printStackTrace();
-                Prompts.infoBox("No Associated Ease", "Ease", EMsgType.Error);
-            }
+                easeButtonClickedEvent(beazleybond.SkirtPattern.getEaseMeasurement());
         });
 
         beazleyBondTrouserEaseButton.addActionListener(e ->
         {
-            if (isRunning) {return;}
-            try {
-                isRunning = true;
-                createEaseForm(beazleybond.TrouserPattern.getEaseMeasurement());
-            } catch (Exception j)
-            {
-                isRunning = false;
-                j.printStackTrace();
-                Prompts.infoBox("No Associated Ease", "Ease", EMsgType.Error);
-            }
+            easeButtonClickedEvent(beazleybond.TrouserPattern.getEaseMeasurement());
         });
 
         beazleyBondBodiceEaseButton.addActionListener(e ->
         {
-            if (isRunning) {return;}
-            try {
-                isRunning = true;
-                createEaseForm(beazleybond.BodicePattern.getEaseMeasurement());
-            } catch (Exception j)
-            {
-                isRunning = false;
-                j.printStackTrace();
-                Prompts.infoBox("No Associated Ease", "Ease", EMsgType.Error);
-            }
+            easeButtonClickedEvent(beazleybond.BodicePattern.getEaseMeasurement());
         });
 
         beazleyBondStraightSleeveEaseButton.addActionListener(e ->
         {
-            if (isRunning) {return;}
-            try {
-                isRunning = true;
-                createEaseForm(beazleybond.StraightSleevePattern.getEaseMeasurement());
-            } catch (Exception j)
-            {
-                isRunning = false;
-                j.printStackTrace();
-                Prompts.infoBox("No Associated Ease", "Ease", EMsgType.Error);
-            }
+            easeButtonClickedEvent(beazleybond.StraightSleevePattern.getEaseMeasurement());
         });
 
         // Gill Ease Buttons
         gillSkirtEaseButton.addActionListener(e ->
         {
-            if (isRunning) {return;}
-            try {
-                isRunning = true;
-                createEaseForm(gill.SkirtPattern.getEaseMeasurement());
-            } catch (Exception j)
-            {
-                isRunning = false;
-                j.printStackTrace();
-                Prompts.infoBox("No Associated Ease", "Ease", EMsgType.Error);
-            }
+            easeButtonClickedEvent(gill.SkirtPattern.getEaseMeasurement());
         });
 
         gillTrouserEaseButton.addActionListener(e ->
         {
-            if (isRunning) {return;}
-            try {
-                isRunning = true;
-                createEaseForm(gill.TrouserPattern.getEaseMeasurement());
-            } catch (Exception j)
-            {
-                isRunning = false;
-                j.printStackTrace();
-                Prompts.infoBox("No Associated Ease", "Ease", EMsgType.Error);
-            }
+            easeButtonClickedEvent(gill.TrouserPattern.getEaseMeasurement());
         });
 
         gillSweatShirtEaseButton.addActionListener(e ->
         {
-            if (isRunning) {return;}
-            try {
-                isRunning = true;
-                createEaseForm(gill.SweatShirtPattern.getEaseMeasurement());
-            } catch (Exception j)
-            {
-                isRunning = false;
-                j.printStackTrace();
-                Prompts.infoBox("No Associated Ease", "Ease", EMsgType.Error);
-            }
+            easeButtonClickedEvent(gill.SweatShirtPattern.getEaseMeasurement());
         });
 
         ahmedBodiceEaseButton.addActionListener(e ->
         {
-            if (isRunning) {return;}
-            try {
-                isRunning = true;
-                createEaseForm(ahmed.BodicePattern.getEaseMeasurement());
-            } catch (Exception j)
-            {
-                isRunning = false;
-                j.printStackTrace();
-                Prompts.infoBox("No Associated Ease", "Ease", EMsgType.Error);
-            }
+            easeButtonClickedEvent(ahmed.BodicePattern.getEaseMeasurement());
         });
 
     }

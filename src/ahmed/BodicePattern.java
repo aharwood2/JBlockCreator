@@ -61,7 +61,7 @@ public class BodicePattern extends Pattern {
         backBustArcEase = easeMeasurements.get(4).getValue();
         waistEase = easeMeasurements.get(5).getValue();
     }
-    
+
     public BodicePattern(Measurements dataStore) {
         if (!readMeasurements(dataStore)) return;
         addEasement();
