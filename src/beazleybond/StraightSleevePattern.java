@@ -6,6 +6,8 @@ import jblockexceptions.MeasurementNotFoundException;
 import jblockmain.*;
 import mathcontainers.Vector2D;
 
+import java.util.ArrayList;
+
 public class StraightSleevePattern
     extends Pattern
 {
@@ -59,9 +61,9 @@ public class StraightSleevePattern
     }
 
     @Override
-    protected void addEasement()
+    protected void addEasement() throws IndexOutOfBoundsException
     {
-        a_UpperArmGirth += 6.0;
+        a_UpperArmGirth += easeMeasurements.get(0).getValue();
     }
 
     @Override
@@ -179,5 +181,19 @@ public class StraightSleevePattern
                 new Vector2D(c_DepthOfSleeveHead, 0.0),
                 1.25,
                 false);
+    }
+
+    protected static ArrayList<easeMeasurement> easeMeasurements = new ArrayList<>();
+
+    public static void populateEaseMeasurements()
+    {
+        // Check to see it hasn't already been populated / it is empty
+        if (easeMeasurements.size() > 0) {return;}
+        easeMeasurements.add(new easeMeasurement("Upper Arm Girth Ease", 6.0));
+    }
+
+    public static ArrayList<easeMeasurement> getEaseMeasurement()
+    {
+        return easeMeasurements;
     }
 }

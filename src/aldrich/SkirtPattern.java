@@ -208,21 +208,4 @@ public class SkirtPattern
         fullBlock.addRightAngleCurve(dartEdges2.get(2),dartEdges3.get(0));
         fullBlock.addRightAngleCurve(dartEdges3.get(2),new Vector2D(0.0, 0.0));
     }
-
-    protected static ArrayList<easeMeasurement> easeMeasurements = new ArrayList<>();
-
-    public static void populateEaseMeasurements()
-    {
-        if (easeMeasurements.size() > 0) {return;}
-        SkirtPattern.easeMeasurements.add(new easeMeasurement("Hip Ease", 0));
-        SkirtPattern.easeMeasurements.add(new easeMeasurement("Waist Ease", 0));
-        SkirtPattern.easeMeasurements.add(new easeMeasurement("Knee Ease", 0));
-        SkirtPattern.easeMeasurements.add(new easeMeasurement("Ankle Ease", 0));
-    }
-
-    public static ArrayList<easeMeasurement> getEaseMeasurement()
-    {
-        return SkirtPattern.easeMeasurements;
-    }
-
 }

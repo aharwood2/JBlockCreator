@@ -29,18 +29,11 @@ public class BodicePattern
     private double k_Shoulder       = 13.0;
     private double l_WidthBustProm  = 19.0;
     private double m_WidthArmhole   = 10.0;
-    
-    /* Ease */
-    private final double a_Bust_Ease = 6.0;
-    private final double m_WidthArmhole_Ease = 1.5;
-
-    // Width of armhole ease
-
 
     /* Arbitrary Measurements */
     
     // Use default (size 12) values of m_WidthArmhole and a_Bust to compute a ratio
-    private final double Arb_ArmholeRatio = (m_WidthArmhole + m_WidthArmhole_Ease) / (a_Bust + a_Bust_Ease);
+    private final double Arb_ArmholeRatio = (m_WidthArmhole + easeMeasurements.get(6).getValue()) / (a_Bust + easeMeasurements.get(0).getValue());
 
     // This relates to the height of the basic rectangle which includes this amount for suppression of back waist dart
     // and the side seam.
@@ -93,7 +86,7 @@ public class BodicePattern
         Arb_BackWaistDartSuppression = 1.5;
         Arb_AcrossBackLevel = f_ArmholeDepth / 2.0;
         Arb_BackArmholeTouchX = Arb_AcrossBackLevel + 2.0;
-        Arb_SideSeamFromCentreBack = ((a_Bust - a_Bust_Ease) / 4.0) + 1.5;  // Deducted ease from bust measurement in this case
+        Arb_SideSeamFromCentreBack = ((a_Bust - easeMeasurements.get(0).getValue()) / 4.0) + 1.5;  // Deducted ease from bust measurement in this case
         Arb_HalfFrontNeckWidth = (c_Neck / 5.0) - 1.5;
         Arb_FrontNeckDepth = c_Neck / 5.0;
         Arb_HalfBackNeckWidth = (c_Neck / 5.0) - 0.5;
@@ -133,13 +126,13 @@ public class BodicePattern
     protected void addEasement()
     {
         // Size 12 for now
-        a_Bust += a_Bust_Ease;
-        b_Waist += 4.0;
-        c_Neck += 2.0;
-        f_ArmholeDepth += 3.0;
-        i_AcrossBack += 2.0;
-        j_AcrossFront += 1.0;
-        m_WidthArmhole += m_WidthArmhole_Ease;
+        a_Bust += easeMeasurements.get(0).getValue();
+        b_Waist += easeMeasurements.get(1).getValue();
+        c_Neck += easeMeasurements.get(2).getValue();
+        f_ArmholeDepth += easeMeasurements.get(3).getValue();
+        i_AcrossBack += easeMeasurements.get(4).getValue();
+        j_AcrossFront += easeMeasurements.get(5).getValue();
+        m_WidthArmhole += easeMeasurements.get(6).getValue();
     }
 
     @Override
@@ -403,6 +396,24 @@ public class BodicePattern
 
     }
 
+    protected static ArrayList<easeMeasurement> easeMeasurements = new ArrayList<>();
 
+    public static void populateEaseMeasurements()
+    {
+        // Check to see it hasn't already been populated / it is empty
+        if (easeMeasurements.size() > 0) {return;}
+        easeMeasurements.add(new easeMeasurement("Bust Ease", 6.0));
+        easeMeasurements.add(new easeMeasurement("Waist Ease", 4.0));
+        easeMeasurements.add(new easeMeasurement("Neck Ease", 2.0));
+        easeMeasurements.add(new easeMeasurement("Armhole Depth Ease", 3.0));
+        easeMeasurements.add(new easeMeasurement("Across Back Ease", 2.0));
+        easeMeasurements.add(new easeMeasurement("Across Front Ease", 1.0));
+        easeMeasurements.add(new easeMeasurement("Armhole Width Ease", 1.5));
+    }
+
+    public static ArrayList<easeMeasurement> getEaseMeasurement()
+    {
+        return easeMeasurements;
+    }
 
 }

@@ -87,19 +87,18 @@ public class SkirtPattern
     }
 
     @Override
-    protected void addEasement()
+    protected void addEasement() throws IndexOutOfBoundsException
     {
-        // Size 12 skirt.
-//        a_Waist += 4.0;
-//        b_UpperHip += 4.0;
-//        c_Hip += 4.0;
-
-        // Should make this easier to adjust -- use a custom measurement?
-        a_Waist += 2.0;
-        b_UpperHip += 4.0;
-        c_Hip += 4.0;
-        e_SideSeam += 6.8;
-
+        try {
+            a_Waist += easeMeasurements.get(0).getValue();
+            b_UpperHip += easeMeasurements.get(1).getValue();
+            c_Hip += easeMeasurements.get(2).getValue();
+            e_SideSeam += easeMeasurements.get(3).getValue();
+        } catch (Exception e)
+        {
+            e.printStackTrace();
+            System.out.println("Ease array out of bounds");
+        }
     }
 
     @Override
@@ -210,5 +209,22 @@ public class SkirtPattern
         frontBlock.addRightAngleCurve(new Vector2D(0.0, Int_SuppressedSS), dartEdges.get(0));
 
         frontBlock.addRightAngleCurve(dartEdges.get(2), new Vector2D(Arb_WaistLevel, 0.0));
+    }
+
+    protected static ArrayList<easeMeasurement> easeMeasurements = new ArrayList<>();
+
+    public static void populateEaseMeasurements()
+    {
+        // Check to see it hasn't already been populated / it is empty
+        if (easeMeasurements.size() > 0) {return;}
+        easeMeasurements.add(new easeMeasurement("Waist Ease", 2.0));
+        easeMeasurements.add(new easeMeasurement("Upper Hip Ease", 4.0));
+        easeMeasurements.add(new easeMeasurement("Hip Ease", 4.0));
+        easeMeasurements.add(new easeMeasurement("SideSeam Ease", 6.8));
+    }
+
+    public static ArrayList<easeMeasurement> getEaseMeasurement()
+    {
+        return easeMeasurements;
     }
 }

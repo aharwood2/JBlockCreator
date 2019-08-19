@@ -6,6 +6,7 @@ import jblockexceptions.MeasurementNotFoundException;
 import jblockmain.Block;
 import jblockmain.Measurements;
 import jblockmain.Pattern;
+import jblockmain.easeMeasurement;
 import mathcontainers.Vector2D;
 
 import java.util.ArrayList;
@@ -117,19 +118,19 @@ public class TrouserPattern
     }
 
     @Override
-    protected void addEasement()
+    protected void addEasement() throws IndexOutOfBoundsException
     {
         // Size 12 for now
-        a_Waist += 4.0;
-        a_WaistBand += 2.0;
-        b_UpperHip += 4.0;
-        c_Hip += 4.0;
-        d_Thigh += 10.0;
-        e_KneeStraight += 15.0;
-        e_KneeSlim += 9.0;
-        f_Ankle += 9.0;
-        i_Crutch += 1.0;
-        l_InsideLegToAnkle -= 1.0;
+        a_Waist += easeMeasurements.get(0).getValue();
+        a_WaistBand += easeMeasurements.get(1).getValue();
+        b_UpperHip += easeMeasurements.get(2).getValue();
+        c_Hip += easeMeasurements.get(3).getValue();
+        d_Thigh += easeMeasurements.get(4).getValue();
+        e_KneeStraight += easeMeasurements.get(5).getValue();
+        e_KneeSlim += easeMeasurements.get(6).getValue();
+        f_Ankle += easeMeasurements.get(7).getValue();
+        i_Crutch += easeMeasurements.get(8).getValue();
+        l_InsideLegToAnkle -= easeMeasurements.get(8).getValue();
     }
 
     @Override
@@ -389,5 +390,29 @@ public class TrouserPattern
                                        new Vector2D((j_Knee), c_Hip/4 + 1.0 + Arb_BackCrutchFork + Arb_Con),
                                        "Knee");
     }
+
+    protected static ArrayList<easeMeasurement> easeMeasurements = new ArrayList<>();
+
+    public static void populateEaseMeasurements()
+    {
+        // Check to see it hasn't already been populated / it is empty
+        if (easeMeasurements.size() > 0) {return;}
+        easeMeasurements.add(new easeMeasurement("Waist Ease", 4.0));
+        easeMeasurements.add(new easeMeasurement("Waist Band Ease", 2.0));
+        easeMeasurements.add(new easeMeasurement("Upper Hip Ease", 4.0));
+        easeMeasurements.add(new easeMeasurement("Hip Ease", 4.0));
+        easeMeasurements.add(new easeMeasurement("Thigh Ease", 10.0));
+        easeMeasurements.add(new easeMeasurement("Straight Knee Ease", 15.0));
+        easeMeasurements.add(new easeMeasurement("Slim Knee Ease", 9.0));
+        easeMeasurements.add(new easeMeasurement("Ankle Ease", 9.0));
+        easeMeasurements.add(new easeMeasurement("Crutch Ease", 1.0));
+        easeMeasurements.add(new easeMeasurement("Inside Leg To Ankle Ease", 1.0));
+    }
+
+    public static ArrayList<easeMeasurement> getEaseMeasurement()
+    {
+        return easeMeasurements;
+    }
+
 
 }
