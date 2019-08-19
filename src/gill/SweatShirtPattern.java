@@ -42,6 +42,7 @@ public class SweatShirtPattern extends Pattern
     private double ArmLengthRight;
     private double WristCircumL;
     private double WristCircumR;
+    private double CrownWidthMultiplier;
 
     public SweatShirtPattern(Measurements dataStore)
     {
@@ -66,15 +67,22 @@ public class SweatShirtPattern extends Pattern
     @Override
     protected void addEasement() throws IndexOutOfBoundsException
     {
-          BustChestEase = easeMeasurements.get(0).getValue();
-          BackWidthEase = easeMeasurements.get(1).getValue();
-          CBToUnderArmEase = easeMeasurements.get(2).getValue();
-          NeckWidthEase = easeMeasurements.get(3).getValue();
-          HipCircumEase = easeMeasurements.get(4).getValue();
-          OptionalSoBWaistCircEase = easeMeasurements.get(5).getValue();
-          WristEase = easeMeasurements.get(6).getValue();
-          BackShouldWidthEase = easeMeasurements.get(7).getValue();
-          CBNeckDepthDefault = easeMeasurements.get(8).getValue();
+        try {
+            BustChestEase = easeMeasurements.get(0).getValue();
+            BackWidthEase = easeMeasurements.get(1).getValue();
+            CBToUnderArmEase = easeMeasurements.get(2).getValue();
+            NeckWidthEase = easeMeasurements.get(3).getValue();
+            HipCircumEase = easeMeasurements.get(4).getValue();
+            OptionalSoBWaistCircEase = easeMeasurements.get(5).getValue();
+            WristEase = easeMeasurements.get(6).getValue();
+            BackShouldWidthEase = easeMeasurements.get(7).getValue();
+            CBNeckDepthDefault = easeMeasurements.get(8).getValue();
+            CrownWidthMultiplier = easeMeasurements.get(9).getValue();
+        } catch (Exception e)
+        {
+            e.printStackTrace();
+            System.out.println("Ease array out of bound");
+        }
     }
 
     @Override
@@ -246,16 +254,26 @@ public class SweatShirtPattern extends Pattern
                 new Vector2D(point4.getX() + 2.0, point4.getY()),
                 "");
 
+        /////////////////////////////////////SLEEVE BLOCK////////////////////////////////////////////////////////////////
+
         Block sleeveBlock = new Block(userName + "_Gill_Sleeve_Block");
         blocks.add(sleeveBlock);
 
         // Calculates the length between point 13 and point 15 and point 1 to point5 but only in X
         double sleeveWidthAid = new Vector2D(point13.subtract(point15)).norm();
-        double crownHeightAid = point5.getX() - point1.getX();
+        double crownHeightAid = (point5.getX() - point1.getX()) * CrownWidthMultiplier;
 
         // Calculation of point1
         Vector2D sleevePoint9 = new Vector2D(-(point5.getX() / 2.0), 0.0);
-        Vector2D sleevePoint1 = new Vector2D(0.0, -(Math.sqrt(Math.pow(sleeveWidthAid + 2.0, 2) - Math.pow(crownHeightAid / 2.0, 2))));
+        // 9 is the Multiplier to adjust the amount as a percentage that is used
+        Vector2D sleevePoint1 = new Vector2D(0.0, -(
+                Math.sqrt(
+                Math.abs    (
+                Math.pow(sleeveWidthAid + 2.0, 2) - Math.pow(crownHeightAid / 2.0, 2)
+                            )
+                         )
+        ));
+
         Vector2D sleevePoint3 = new Vector2D(largestArmLength - (sleevePoint9.getX() / 2.0), -((largestWristCircum + WristEase) / 2.0));
         Vector2D sleevePoint4 = new Vector2D(sleevePoint3.getX(), 0.0);
         Vector2D sleevePoint5 = new Vector2D(sleevePoint3.getX(), -(sleevePoint3.getY()));
@@ -287,9 +305,8 @@ public class SweatShirtPattern extends Pattern
         sleeveBlock.addDirectedCurve(sleevePoint7, sleevePoint8, new double[] {90.0, 0.0});
         sleeveBlock.addDirectedCurve(sleevePoint10, sleevePoint1, new double[] {0.0, 90.0});
 
-        Block sleeveBlock2 = new Block(userName + "_Gill_Sleeve2_Block");
-        blocks.add(sleeveBlock2);
-
+        //Block sleeveBlock2 = new Block(userName + "_Gill_Sleeve2_Block");
+        //blocks.add(sleeveBlock2);
     }
 
     protected static ArrayList<easeMeasurement> easeMeasurements = new ArrayList<>();
@@ -298,15 +315,16 @@ public class SweatShirtPattern extends Pattern
     {
         // Check to see it hasn't already been populated / it is empty
         if (easeMeasurements.size() > 0) {return;}
-        easeMeasurements.add(new easeMeasurement("Bust/Chest Ease", 16));
+        easeMeasurements.add(new easeMeasurement("Bust/Chest Ease", 16.0));
         easeMeasurements.add(new easeMeasurement("Back Width Ease", 2.5));
-        easeMeasurements.add(new easeMeasurement("CB to Under Arm Ease", 3));
-        easeMeasurements.add(new easeMeasurement("Neck Width Ease", 1));
-        easeMeasurements.add(new easeMeasurement("Hip Circ Ease", 12));
-        easeMeasurements.add(new easeMeasurement("Optional SoB Waist Circ Ease", 18));
-        easeMeasurements.add(new easeMeasurement("Wrist Ease", 8));
-        easeMeasurements.add(new easeMeasurement("Back Shoulder Width Horizontal Ease", 0));
-        easeMeasurements.add(new easeMeasurement("CB Neck Depth Default", 2));
+        easeMeasurements.add(new easeMeasurement("CB to Under Arm Ease", 3.0));
+        easeMeasurements.add(new easeMeasurement("Neck Width Ease", 1.0));
+        easeMeasurements.add(new easeMeasurement("Hip Circ Ease", 12.0));
+        easeMeasurements.add(new easeMeasurement("Optional SoB Waist Circ Ease", 18.0));
+        easeMeasurements.add(new easeMeasurement("Wrist Ease", 8.0));
+        easeMeasurements.add(new easeMeasurement("Back Shoulder Width Horizontal Ease", 0.0));
+        easeMeasurements.add(new easeMeasurement("CB Neck Depth Default", 2.0));
+        easeMeasurements.add(new easeMeasurement("Crown Height Multiplier (Abs)", 1.0));
     }
 
     public static ArrayList<easeMeasurement> getEaseMeasurement()
