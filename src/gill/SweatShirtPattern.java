@@ -318,5 +318,4 @@ public class SweatShirtPattern extends Pattern
     {
         return easeMeasurements;
     }
-
 }

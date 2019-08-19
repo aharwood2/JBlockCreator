@@ -53,16 +53,15 @@ public class BodicePattern extends Pattern {
     }
 
     @Override
-    protected void addEasement() {
-        armholeDepthEase = 1.7;
-        acrossBackEase = 0.5;
-        shoulderSlopeEase = 0.3;
-        frontBustArcEase = 1;
-        backBustArcEase = 3;
-        waistEase = 1.5;
+    protected void addEasement() throws IndexOutOfBoundsException {
+        armholeDepthEase = easeMeasurements.get(0).getValue();
+        acrossBackEase = easeMeasurements.get(1).getValue();
+        shoulderSlopeEase = easeMeasurements.get(2).getValue();
+        frontBustArcEase = easeMeasurements.get(3).getValue();
+        backBustArcEase = easeMeasurements.get(4).getValue();
+        waistEase = easeMeasurements.get(5).getValue();
     }
-
-
+    
     public BodicePattern(Measurements dataStore) {
         if (!readMeasurements(dataStore)) return;
         addEasement();
@@ -294,4 +293,22 @@ public class BodicePattern extends Pattern {
 
     }
 
+    protected static ArrayList<easeMeasurement> easeMeasurements = new ArrayList<>();
+
+    public static void populateEaseMeasurements()
+    {
+        // Check to see it hasn't already been populated / it is empty
+        if (easeMeasurements.size() > 0) {return;}
+        easeMeasurements.add(new easeMeasurement("Armhole Depth", 1.7));
+        easeMeasurements.add(new easeMeasurement("Across Back Ease", 0.5));
+        easeMeasurements.add(new easeMeasurement("Shoulder Slop Ease", 0.3));
+        easeMeasurements.add(new easeMeasurement("Front Bust Arc Ease", 1.0));
+        easeMeasurements.add(new easeMeasurement("Back Bust Arc Ease", 3.0));
+        easeMeasurements.add(new easeMeasurement("Waist Ease", 1.5));
+    }
+
+    public static ArrayList<easeMeasurement> getEaseMeasurement()
+    {
+        return easeMeasurements;
+    }
 }
