@@ -102,6 +102,9 @@ public class JBlockCreator
     private JButton beazleyBondStraightSleeveEaseButton;
     private JButton gillSkirtEaseButton;
     private JButton gillTrouserEaseButton;
+    private JLabel labAhmed;
+    private JCheckBox checkAhmedBodice;
+    private JButton ahmedBodiceEaseButton;
 
     // Layers
     private ArrayList<Component> paneLayers;
@@ -365,6 +368,12 @@ public class JBlockCreator
                         {
                             gill.SweatShirtPattern gill_sweatshirt = new gill.SweatShirtPattern(measurements);
                             gill_sweatshirt.writeToDXF(fileOutput, dxfLayerChoices);
+                        }
+
+                        if (checkAhmedBodice.isSelected())
+                        {
+                            ahmed.BodicePattern ahmed_bodice = new ahmed.BodicePattern(measurements);
+                            ahmed_bodice.writeToDXF(fileOutput, dxfLayerChoices);
                         }
 
                         // Creates analysis outputs depending on which checkboxes are ticked
@@ -732,6 +741,11 @@ public class JBlockCreator
             gillSweatShirtEaseButton.setVisible(!gillSweatShirtEaseButton.isVisible());
         });
 
+        checkAhmedBodice.addActionListener(e -> {
+            ahmed.BodicePattern.populateEaseMeasurements();
+            ahmedBodiceEaseButton.setVisible(!ahmedBodiceEaseButton.isVisible());
+        });
+
         // Aldrich Ease Button Listeners
         aldrichSkirtEaseButton.addActionListener(e ->
         {
@@ -861,6 +875,21 @@ public class JBlockCreator
                 Prompts.infoBox("No Associated Ease", "Ease", EMsgType.Error);
             }
         });
+
+        ahmedBodiceEaseButton.addActionListener(e ->
+        {
+            if (isRunning) {return;}
+            try {
+                isRunning = true;
+                createEaseForm(ahmed.BodicePattern.getEaseMeasurement());
+            } catch (Exception j)
+            {
+                isRunning = false;
+                j.printStackTrace();
+                Prompts.infoBox("No Associated Ease", "Ease", EMsgType.Error);
+            }
+        });
+
     }
 
     /**
