@@ -378,9 +378,7 @@ public class TrouserPatternTwo extends Pattern {
         // Construction point representing the centre fold
         backBlock.addConstructionPoint(new Vector2D(Collections.min(backBlock.getPlottableKeypointsX()) - 5.0,
                 centreYpoint), new Vector2D(Collections.max(backBlock.getPlottableKeypointsX()) + 5.0, centreYpoint), "CentreFold");
-
     }
-
 
     protected static ArrayList<easeMeasurement> easeMeasurements = new ArrayList<>();
 
