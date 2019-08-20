@@ -252,13 +252,13 @@ public class SweatShirtPattern extends Pattern
         double crownHeightAid = (point5.getX() - point1.getX()) * CrownWidthMultiplier;
 
         // Calculation of point1
-        point1 = new Vector2D(0.0, -(
-                Math.sqrt(
-                        Math.abs    (
-                                Math.pow(sleeveWidthAid + 2.0, 2) - Math.pow(crownHeightAid / 2.0, 2)
-                        )
-                )
-        ));
+            point1 = new Vector2D(0.0, -(
+                    Math.sqrt(
+                            Math.abs(
+                                    Math.pow(sleeveWidthAid + 2.0, 2) - Math.pow(crownHeightAid / 2.0, 2)
+                            )
+                    )
+            ));
 
         point9 = new Vector2D(-(crownHeightAid / 2.0), 0.0);
         point3 = new Vector2D(largestArmLength - (point9.getX() / 2.0), -((largestWristCircum + WristEase) / 2.0));
@@ -278,6 +278,9 @@ public class SweatShirtPattern extends Pattern
         point8 = new Vector2D(point7.add(D7_8.divide(3.0)));
         point10 = new Vector2D(point8.getX(), -(point8.getY() - 0.01));
 
+        Vector2D internalPoint9_10 = new Vector2D(point10.getX() + ((point9.getX() - point10.getX()) / 2.0), point1.getY() / 2.0);
+        Vector2D internalPoint8_9 = new Vector2D(internalPoint9_10.getX(), -(internalPoint9_10.getY()));
+
         sleeveBlock.addKeypoint(point1);
         sleeveBlock.addKeypoint(point2);
         sleeveBlock.addKeypoint(point3);
@@ -286,10 +289,12 @@ public class SweatShirtPattern extends Pattern
         sleeveBlock.addKeypoint(point6);
         sleeveBlock.addKeypoint(point7);
         sleeveBlock.addKeypoint(point8);
+        sleeveBlock.addKeypoint(internalPoint8_9);
+        sleeveBlock.addKeypoint(internalPoint9_10);
         sleeveBlock.addKeypoint(point10);
 
-        sleeveBlock.addCircularCurve(point8, point10,
-                                    (point9.getX() - (point10.getX())),
+        sleeveBlock.addCircularCurve(internalPoint8_9, internalPoint9_10,
+                                    (point9.getX() - (internalPoint8_9.getX())),
                                     false, true);
 
         sleeveBlock.addDirectedCurve(point7, point8, new double[] {90.0, 0.0});
@@ -306,8 +311,8 @@ public class SweatShirtPattern extends Pattern
         double sleeveHemXPosition = point3.getX();
 
         // As above for readability
-        // Point11 and Point15 are the same as above sleeve patten, but they are rewritten here so as to not
-        // Be Re-written later
+        // Similarities as above sleeve patten, but they are rewritten here so as to not
+        // Be Re-written later with the new values
         point11 = point8;
         point15 = point10;
         point10 = point7;
@@ -315,65 +320,49 @@ public class SweatShirtPattern extends Pattern
         // A lot of similarities as above sleeve pattern, explicitly written down for readability
         point1 = point1;
         double sleeveWidth = point10.getY() - point1.getY();
-        double cuffSpacing = (sleeveWidth - (cuffOpening)) / 2.0;
+        double cuffSpacing = (sleeveWidth - (cuffOpening * 2.0)) / 2.0;
 
         point2 = new Vector2D(point2.getX(), point1.getY());
         point3 = new Vector2D(sleeveHemXPosition, point1.getY());
-        point4 = new Vector2D(sleeveHemXPosition, -(sleeveWidth/2.0) + cuffOpening / 4.0);
+        point4 = new Vector2D(sleeveHemXPosition, -((cuffSpacing) + cuffOpening / 2.0));
         point5 = new Vector2D(sleeveHemXPosition, point4.getY() + cuffSpacing);
-        point6 = new Vector2D(sleeveHemXPosition, point5.getY() + cuffOpening / 2.0);
+        point6 = new Vector2D(sleeveHemXPosition, point5.getY() + cuffOpening);
         point7 = new Vector2D(sleeveHemXPosition, point6.getY() + cuffSpacing);
-        point8 = new Vector2D(sleeveHemXPosition, point7.getY() + cuffOpening / 4.0);
+        point8 = new Vector2D(sleeveHemXPosition, point7.getY() + cuffOpening / 2.0);
         point9 = new Vector2D(point2.getX(), point8.getY());
-
 
         sleeveBlockTwo.addKeypoint(point8);
         sleeveBlockTwo.addKeypoint(point9);
         sleeveBlockTwo.addKeypoint(point10);
         sleeveBlockTwo.addKeypoint(point11);
+        sleeveBlockTwo.addKeypoint(internalPoint8_9);
+        sleeveBlockTwo.addKeypoint(internalPoint9_10);
         sleeveBlockTwo.addKeypoint(point15);
         sleeveBlockTwo.addKeypoint(point1);
         sleeveBlockTwo.addKeypoint(point2);
         sleeveBlockTwo.addKeypoint(point3);
         sleeveBlockTwo.addKeypoint(point4);
-
-        sleeveBlockTwo.addCircularCurve(point11, point15,
-                point13.getX() - point15.getX(),
-                false, true);
-
-        double lookingFor = point1.getY() / 2.0;
-        double diff = 0;
-        double prevDiff = (double)Integer.MAX_VALUE;
-        int currentClosest = 0;
-
-        ArrayList<Double> ypoints = getYPoints(blocks.size() - 1);
-        ArrayList<Double> xpoints = getXPoints(blocks.size() - 1);
-        for (int i = 0; i < ypoints.size(); i++)
-        {
-            diff = Math.abs(ypoints.get(i) - lookingFor);
-            currentClosest = diff < prevDiff ? i : currentClosest;
-            prevDiff = diff < prevDiff ? diff : prevDiff;
-        }
-        point14 = new Vector2D(xpoints.get(currentClosest), ypoints.get(currentClosest));
-        point12 = new Vector2D(point14.getX(), -point14.getY());
-
-        sleeveBlockTwo.addKeypoint(point14);
+        sleeveBlockTwo.addKeypoint(internalPoint9_10);
         sleeveBlockTwo.addKeypoint(point5);
         sleeveBlockTwo.addKeypoint(point6);
-        sleeveBlockTwo.addKeypoint(point12);
+        sleeveBlockTwo.addKeypoint(internalPoint8_9);
         sleeveBlockTwo.addKeypoint(point7);
+
+        sleeveBlockTwo.addCircularCurve(internalPoint8_9, internalPoint9_10,
+                point13.getX() - internalPoint8_9.getX(),
+                false, true);
 
         sleeveBlockTwo.addDirectedCurve(point10, point11, new double[] {90.0, 0.0});
         sleeveBlockTwo.addDirectedCurve(point15, point1, new double[] {0.0, 90.0});
-
     }
 
     protected static ArrayList<easeMeasurement> easeMeasurements = new ArrayList<>();
 
     public static void populateEaseMeasurements()
     {
-        // Check to see it hasn't already been populated / it is empty
+        // Check to see it hasn't already been populated / it is empty so as to not re-write
         if (easeMeasurements.size() > 0) {return;}
+        // Add all the ease measurements to the array list with initial values
         easeMeasurements.add(new easeMeasurement("Bust/Chest Ease", 16.0));
         easeMeasurements.add(new easeMeasurement("Back Width Ease", 2.5));
         easeMeasurements.add(new easeMeasurement("CB to Under Arm Ease", 3.0));
