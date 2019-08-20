@@ -338,7 +338,7 @@ public class JBlockCreator
                         if (checkGillTrouserTwo.isSelected())
                         {
                             gill.TrouserPatternTwo gill_trousersTwo = new gill.TrouserPatternTwo(measurements);
-                            gill_trousersTwo.writeToDXF(fileOutput, dxfLayerChoices);
+                            gill_trousersTwo.writeToDXF(fileOutput, dxfLayerChoices, timeStamp);
                         }
 
                         if (checkAldrichSkirt.isSelected())
@@ -356,13 +356,13 @@ public class JBlockCreator
                         if (checkGillSweatshirt.isSelected())
                         {
                             gill.SweatShirtPattern gill_sweatshirt = new gill.SweatShirtPattern(measurements);
-                            gill_sweatshirt.writeToDXF(fileOutput, dxfLayerChoices);
+                            gill_sweatshirt.writeToDXF(fileOutput, dxfLayerChoices, timeStamp);
                         }
 
                         if (checkAhmedBodice.isSelected())
                         {
                             ahmed.BodicePattern ahmed_bodice = new ahmed.BodicePattern(measurements);
-                            ahmed_bodice.writeToDXF(fileOutput, dxfLayerChoices);
+                            ahmed_bodice.writeToDXF(fileOutput, dxfLayerChoices,timeStamp);
                         }
 
                         // Creates analysis outputs depending on which checkboxes are ticked
