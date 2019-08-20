@@ -9,8 +9,7 @@ import mathcontainers.Vector2D;
 import java.util.ArrayList;
 
 public class TrouserPattern
-    extends Pattern
-{
+        extends Pattern {
     /* Pattern-specific Measurements */
     private double a_WaistToHip;            // Measurement [015]
     private double b_ThighCircR;            // Measurement [017]
@@ -64,8 +63,7 @@ public class TrouserPattern
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     /* Methods */
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    public TrouserPattern(Measurements dataStore)
-    {
+    public TrouserPattern(Measurements dataStore) {
         if (!readMeasurements(dataStore)) return;
         addEasement();
 
@@ -81,28 +79,23 @@ public class TrouserPattern
 
     /* Implement abstract methods from super class */
     @Override
-    protected EMethod assignMethod()
-    {
+    protected EMethod assignMethod() {
         return EMethod.GILL;
     }
 
     @Override
-    protected EGarment assignGarment()
-    {
+    protected EGarment assignGarment() {
         return EGarment.TROUSER;
     }
 
     @Override
-    protected void addEasement()
-    {
+    protected void addEasement() {
         // No easement needed
     }
 
     @Override
-    protected boolean readMeasurements(Measurements dataStore)
-    {
-        try
-        {
+    protected boolean readMeasurements(Measurements dataStore) {
+        try {
             // Based on measurements for this pattern we can read the following from the scan
             a_WaistToHip = dataStore.getMeasurement("A15").value;            // Measurement [015]
             b_ThighCircR = dataStore.getMeasurement("A17").value;            // Measurement [017]
@@ -135,9 +128,7 @@ public class TrouserPattern
             userName = dataStore.getName();
 
             return true;
-        }
-        catch(MeasurementNotFoundException e)
-        {
+        } catch (MeasurementNotFoundException e) {
             addMissingMeasurement(dataStore.getName(), e.getMeasurementId());
             return false;
         }
@@ -147,478 +138,227 @@ public class TrouserPattern
      * The actual block creation process following the drafting method of Gill.
      */
     @Override
-    protected void createBlocks()
-    {
+    protected void createBlocks() {
         // Points that make up the shape are listed in a strict anti-clockwise order to maintain correct connectivity for
         // plotting. The crotch point is the origin
 
-        // Predefining Step 9 Y value as it is used as the basis for multiple other steps
-        // Has an if statement depending on the sign of measurement [047]
-        double stepNineY = 0.0;
-        if (r_CrotchZ < 0)
-        {
-            stepNineY = ((t_HipBkZ - r_CrotchZ) - 2.5 * (Arb_CrotchReduction) + ((i_BkHipArc / 2.0) + 2.0));
+        //need to fix the fact that the crotch point is not always centered on the body scanner
+        //hence need to shift the front/back by that amount
+        if (r_CrotchZ > 0.0) {
+            s_HipFrZ -= r_CrotchZ;
+            w_WaistFrZ -= r_CrotchZ;
+            u_SeatFrZ -= r_CrotchZ;
+
+            t_HipBkZ -= r_CrotchZ;
+            x_WaistBkZ -= r_CrotchZ;
+            v_SeatBkZ -= r_CrotchZ;
         }
-        else if (r_CrotchZ > 0)
-        {
-            stepNineY = ((t_HipBkZ + r_CrotchZ) - 2.5 * (Arb_CrotchReduction) + ((i_BkHipArc / 2.0) + 2.0));
-        }
-        else if (r_CrotchZ == 0)
-        {
-            stepNineY = ((t_HipBkZ) - 2.5 * (Arb_CrotchReduction) + ((i_BkHipArc / 2.0) + 2.0));
+        if (r_CrotchZ < 0.0) {
+            s_HipFrZ -= r_CrotchZ;
+            w_WaistFrZ -= r_CrotchZ;
+            u_SeatFrZ -= r_CrotchZ;
+
+            t_HipBkZ -= r_CrotchZ;
+            x_WaistBkZ -= r_CrotchZ;
+            v_SeatBkZ -= r_CrotchZ;
         }
 
         // Create component representing half back of skirt folded in half.
-        blocks.add(new Block(userName + "_Gill_Trouser_Block"));
-        Block fullBlock = blocks.get(0);
+        Block fullBlock = new Block(userName + "_Gill_Trouser_Block");
+        blocks.add(fullBlock);
+
+        double centreXPosition = 0.0;
+        double centreYPosition = 0.0;
+
+        double crotchXPosition = centreXPosition;
+        double kneeXPosition = centreXPosition + n_CrotchHeight - m_KneeCRHeight;
+        double ankleXPosition = n_CrotchHeight - l_AnkleCRHeight;
+        double hipXPosition = -(o_HipCHeight - n_CrotchHeight);
+        double seatXPosition = -(p_SeatCHeight - n_CrotchHeight);
+        double waistXPosition = -k_BodyRise;
+
+        double halfWaistSuppression = ((h_FrHipArc + i_BkHipArc) / 2.0) - ((e_FrWaistArc + f_BkWaistArc) / 2.0);
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        /* Back half points, curves and dart */
+        /* Back half key vectors/points */
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        // Adding Step 1
-        fullBlock.addKeypoint(new Vector2D(Arb_CrotchPointFive, 0.0));
+        // Pre-calculation of point 7 y coordinate - used in a lot of calculations
+        double y7 = (i_BkHipArc / 2.0) - t_HipBkZ - 2.5 + 2.0;
 
-        // Adding Step 2
-        fullBlock.addKeypoint(new Vector2D(Arb_TwoInches, ((stepNineY / 2.0) - (((b_ThighCircR + 5.5) + 2.0) / 4.0))));
+        Vector2D point1 = new Vector2D(crotchXPosition + 0.5, centreYPosition);
+        Vector2D point2 = new Vector2D(kneeXPosition, y7 / 2.0 - (((c_KneeCircR / 2.0) + 7.0 + 2.0) / 2.0));
+        Vector2D point3 = new Vector2D(ankleXPosition, y7 / 2.0 - (((d_AnkleCircleR / 2.0) + 10.0 + 2.0) / 2.0));
+        Vector2D point5 = new Vector2D(ankleXPosition, y7 / 2.0 + (((d_AnkleCircleR / 2.0) + 10.0 + 2.0) / 2.0));
+        Vector2D point6 = new Vector2D(kneeXPosition, y7 / 2.0 + (((c_KneeCircR / 2.0) + 7.0 + 2.0) / 2.0));
+        Vector2D point7 = new Vector2D(crotchXPosition, y7);
+        Vector2D point8 = new Vector2D(hipXPosition, (i_BkHipArc / 2.0) - t_HipBkZ - 2.5 + 2.0);
+        Vector2D point9 = new Vector2D(seatXPosition, ((-v_SeatBkZ) - 2.5) + (g_BkSeatArc / 2.0) + 2.0);
+        Vector2D point10 = new Vector2D(waistXPosition, ((-v_SeatBkZ) - 2.5 + (-x_WaistBkZ) - 2.5)
+                + (0.32 * halfWaistSuppression) + (f_BkWaistArc / 2.0) + 0.35);
 
-        // Adding Step 3
-        fullBlock.addKeypoint(new Vector2D((n_CrotchHeight - m_KneeCRHeight), ((stepNineY / 2.0) - (((c_KneeCircR * 0.5 + 2.0) + 7.0) / 2.0))));
+        // TODO: Need to move point 11 in -x direction based on back crotch length
 
-        // Adding Step 4
-        fullBlock.addKeypoint(new Vector2D((n_CrotchHeight - l_AnkleCRHeight), ((stepNineY / 2.0) - (((d_AnkleCircleR * 0.5) + 10.0) / 2.0))));
+        Vector2D point11 = new Vector2D(waistXPosition + 4.0, (-v_SeatBkZ - 2.5 + -x_WaistBkZ - 2.5));
+        Vector2D point12 = new Vector2D(seatXPosition, -v_SeatBkZ - 2.5);
+        Vector2D point13 = new Vector2D(hipXPosition, (-t_HipBkZ - 2.5));
 
-        // Adding Step 5
-        fullBlock.addKeypoint(new Vector2D(((n_CrotchHeight - l_AnkleCRHeight) + Arb_BkHemDrop), (stepNineY / 2.0)));
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        /*  Front half key vectors/points */
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        // Adding Step 6
-        fullBlock.addKeypoint(new Vector2D((n_CrotchHeight - l_AnkleCRHeight), ((stepNineY / 2.0) + (((0.5 * d_AnkleCircleR + 2.0) + 10.0) / 2.0))));
+        Vector2D point15 = new Vector2D(crotchXPosition, centreYPosition);
+        Vector2D point16 = new Vector2D(hipXPosition, -(s_HipFrZ - 2.5));
+        Vector2D point17 = new Vector2D(seatXPosition, -(u_SeatFrZ - 2.5));
+        Vector2D point18 = new Vector2D(waistXPosition, -(w_WaistFrZ - 2.5));
+        Vector2D point19 = new Vector2D(waistXPosition, point18.getY() - ((e_FrWaistArc / 2.0) + 0.35
+                + (0.18 * halfWaistSuppression)));
+        Vector2D point20 = new Vector2D(seatXPosition, point17.getY() - ((q_FrSeatArc / 2.0) + 1.0));
+        Vector2D point21 = new Vector2D(hipXPosition, point16.getY() - ((h_FrHipArc / 2.0) + 1.0));
+        Vector2D point22 = new Vector2D(centreXPosition, -(s_HipFrZ - 2.5 + (h_FrHipArc / 2.0) + 1.0));
+        Vector2D point23 = new Vector2D(kneeXPosition,
+                (point22.getY() / 2.0) - (((c_KneeCircR / 2.0) + 7.0 - 2.0) / 2.0));
 
-        // Adding Step 7
-        fullBlock.addKeypoint(new Vector2D((n_CrotchHeight - m_KneeCRHeight), ((stepNineY / 2.0) + (((0.5 * c_KneeCircR + 2.0) + 7.0) / 2.0))));
+        Vector2D point24 = new Vector2D(ankleXPosition,
+                (point22.getY() / 2.0) - (((d_AnkleCircleR / 2.0) + 10.0 - 2.0) / 2.0));
 
-        // Adding Step 8
-        fullBlock.addKeypoint(new Vector2D(Arb_TwoInches, ((stepNineY / 2.0) + (((b_ThighCircR + 5.5) + 2.0) / 4.0))));
+        Vector2D point25 = new Vector2D(ankleXPosition,
+                (point22.getY() / 2.0) + (((d_AnkleCircleR / 2.0) + 10.0 - 2.0) / 2.0));
 
-        // Adding Step 9
-        fullBlock.addKeypoint(new Vector2D(0.0, stepNineY));
+        Vector2D point26 = new Vector2D(kneeXPosition,
+                (point22.getY() / 2.0) + (((c_KneeCircR / 2.0) + 7.0 - 2.0) / 2.0));
 
-        // Adding Step 10
-        // TODO: This step will need an additional easement to be calculate from analysis of patter outputs
-        fullBlock.addKeypoint(new Vector2D((-(k_BodyRise - a_WaistToHip)), ((stepNineY / 2.0) + ((i_BkHipArc / 4.0) + 2.0))));
-
-        // Adding Step 11
-        // Has an if statement depending on the sign of measurement [047]
-        double stepElevenY = 0.0;
-        if (r_CrotchZ < 0)
+        if (seatXPosition > hipXPosition)
         {
-            stepElevenY = ((v_SeatBkZ - r_CrotchZ) - 2.5 * Arb_CrotchReduction + ((g_BkSeatArc / 2.0) + 2.0));
-        }
-        else if (r_CrotchZ > 0)
-        {
-            stepElevenY = ((v_SeatBkZ + r_CrotchZ) - 2.5 * Arb_CrotchReduction + ((g_BkSeatArc / 2.0) + 2.0));
-        }
-        else if (r_CrotchZ == 0)
-        {
-            stepElevenY = ((v_SeatBkZ) - 2.5 * Arb_CrotchReduction + ((g_BkSeatArc / 2.0) + 2.0));
-        }
+            Vector2D temp;
+            temp = point8;
+            point8 = point9;
+            point9 = temp;
 
-        fullBlock.addKeypoint(new Vector2D((-(k_BodyRise - j_WaistToSeat)), stepElevenY));
+            temp = point12;
+            point12 = point13;
+            point13 = temp;
 
-        // Adding Step 12
-        // Has an if statement depending on the sign of measurement [047]
-        double stepTwelveY = 0.0;
-        if (r_CrotchZ < 0)
-        {
-            stepTwelveY = ((x_WaistBkZ - r_CrotchZ) - (2.5 * Arb_CrotchReduction) + ((v_SeatBkZ - x_WaistBkZ) * 2.0) + ((f_BkWaistArc  + 0.5) / 2.0));
-        }
-        else if (r_CrotchZ > 0)
-        {
-            stepTwelveY = ((x_WaistBkZ + r_CrotchZ) - (2.5 * Arb_CrotchReduction) + ((v_SeatBkZ - x_WaistBkZ) * 2.0) + ((f_BkWaistArc  + 0.5) / 2.0));
-        }
-        else if (r_CrotchZ == 0)
-        {
-            stepTwelveY = ((x_WaistBkZ) - (2.5 * Arb_CrotchReduction) + ((v_SeatBkZ - x_WaistBkZ) * 2.0) + ((f_BkWaistArc  + 0.5) / 2.0));
-        }
+            temp = point16;
+            point16 = point17;
+            point17 = temp;
 
-        fullBlock.addKeypoint(new Vector2D(-k_BodyRise, stepTwelveY));
+            temp = point20;
+            point20 = point21;
+            point21 = temp;
 
-        // Adding Step 13
-        // TODO: Needs an offset value adding to the x value, this will be calculated from analysis of the outputs
-        // Has an if statement depending on the sign of measurement [047]
-        double stepThirteenY = 0.0;
-        if (r_CrotchZ < 0)
-        {
-            stepThirteenY = ((x_WaistBkZ - r_CrotchZ) - (2.5 * Arb_CrotchReduction) + ((v_SeatBkZ - x_WaistBkZ) * 2.0));
-        }
-        else if (r_CrotchZ > 0)
-        {
-            stepThirteenY = ((x_WaistBkZ + r_CrotchZ) - (2.5 * Arb_CrotchReduction) + ((v_SeatBkZ - x_WaistBkZ) * 2.0));
-        }
-        else if (r_CrotchZ == 0)
-        {
-            stepThirteenY = ((x_WaistBkZ) - (2.5 * Arb_CrotchReduction) + ((v_SeatBkZ - x_WaistBkZ) * 2.0));
         }
 
-        fullBlock.addKeypoint(new Vector2D(-k_BodyRise, stepThirteenY));
+        // All the back half keypoints/vectors added
+        fullBlock.addKeypoint(point1);
+        fullBlock.addKeypoint(point2);
+        fullBlock.addKeypoint(point3);
+        fullBlock.addKeypoint(point5);
+        fullBlock.addKeypoint(point6);
+        fullBlock.addKeypoint(point7);
+        fullBlock.addKeypoint(point8);
+        fullBlock.addKeypoint(point9);
+        fullBlock.addKeypoint(point10);
+        fullBlock.addKeypoint(point11);
+        fullBlock.addKeypoint(point12);
+        fullBlock.addKeypoint(point13);
+        fullBlock.addKeypoint(point1);
 
-        // Adding Step 14
-        // Has an if statement depending on the sign of measurement [047]
-        double stepFourteenY = 0.0;
-        if (r_CrotchZ < 0)
-        {
-            stepFourteenY = ((v_SeatBkZ - r_CrotchZ) - (2.5 * Arb_CrotchReduction));
-        }
-        else if (r_CrotchZ > 0)
-        {
-            stepFourteenY = ((v_SeatBkZ + r_CrotchZ) - (2.5 * Arb_CrotchReduction));
-        }
-        else if (r_CrotchZ == 0)
-        {
-            stepFourteenY = ((v_SeatBkZ) - (2.5 * Arb_CrotchReduction));
-        }
+        // All the front half keypoints/vectors added
+        fullBlock.addKeypoint(point15);
+        fullBlock.addKeypoint(point16);
+        fullBlock.addKeypoint(point17);
+        fullBlock.addKeypoint(point18);
+        fullBlock.addKeypoint(point19);
+        fullBlock.addKeypoint(point20);
+        fullBlock.addKeypoint(point21);
+        fullBlock.addKeypoint(point22);
+        fullBlock.addKeypoint(point23);
+        fullBlock.addKeypoint(point24);
+        fullBlock.addKeypoint(point25);
+        fullBlock.addKeypoint(point26);
 
-        fullBlock.addKeypoint(new Vector2D((-(k_BodyRise - j_WaistToSeat)), stepFourteenY));
+        // Used to help guide curve between crotch point and ankle by having an apex 1/3rd length and 1/4 height
+        // From the length and height
+        Vector2D point1and2 = new Vector2D((point1.getX() + (point2.getX() - point1.getX())) / 3.0,
+                point1.getY() + ((point2.getY() - point1.getY()) * 0.75));
 
-        // Adding Step 15
-        // Has an if statement depending on the sign of measurement [047]
-        double stepFifteenY = 0.0;
-        if (r_CrotchZ < 0)
-        {
-            stepFifteenY = ((t_HipBkZ - r_CrotchZ) - (2.5 * Arb_CrotchReduction));
-        }
-        else if (r_CrotchZ > 0)
-        {
-            stepFifteenY = ((t_HipBkZ + r_CrotchZ) - (2.5 * Arb_CrotchReduction));
-        }
-        else if (r_CrotchZ == 0)
-        {
-            stepFifteenY = ((t_HipBkZ) - (2.5 * Arb_CrotchReduction));
-        }
+        // A bunch of curves
+        fullBlock.addDirectedCurve(
+                point1, point2,
+                new Vector2D(point1and2.subtract(point1)),
+                new Vector2D(point3.subtract(point2)),
+                new double[]{0.0, 0.0});
 
-        fullBlock.addKeypoint(new Vector2D((-(k_BodyRise - a_WaistToHip)), stepFifteenY));
+        fullBlock.addCircularCurve(point3, point5, 1.0, true);
 
-        // Adding Step 16
-        fullBlock.addKeypoint(new Vector2D(Arb_CrotchPointFive, 0.0));
+        fullBlock.addDirectedCurve(
+                point6, point7,
+                new Vector2D(point6.subtract(point5)),
+                new Vector2D(point8.subtract(point7)),
+                new double[]{0.0, 0.0});
 
-        // Add back dart
-        Vector2D startSegment = new Vector2D(-k_BodyRise, stepTwelveY);
-        Vector2D endSegment = new Vector2D(-k_BodyRise, stepThirteenY);
-        double positionTopDart = 0.5;
+        fullBlock.addCircularCurve(
+                point9, point10,
+                (point10.getY() - (new Vector2D(point9.add(point10.subtract(point9).divide(2.0)))).getY()) / 2.0,
+                false);
+
         Arb_BackDartWidth = (0.32 * (((h_FrHipArc + i_BkHipArc) / 2.0) - ((e_FrWaistArc + f_BkWaistArc) / 2.0)));
         Arb_BackDartLength = j_WaistToSeat - 5.0;
-        ArrayList<Vector2D> dartPoints = fullBlock.addDart(startSegment,
-                endSegment,
-                positionTopDart,
+        ArrayList<Vector2D> dartPoints = fullBlock.addDart(
+                point10, point11,
+                0.5,
                 Arb_BackDartWidth,
                 Arb_BackDartLength,
                 true, false);
 
-        // Adding curve from 1 --> 2
-        fullBlock.addCircularCurve(new Vector2D(Arb_CrotchPointFive, 0.0),
-                new Vector2D(Arb_TwoInches, ((stepNineY / 2.0) - (((b_ThighCircR + 5.5) + 2.0) / 4.0))),
-                0.5,
-                false
-        );
+        // More curves added between the points
+        fullBlock.addRightAngleCurve(point10, dartPoints.get(0));
+        fullBlock.addRightAngleCurve(dartPoints.get(2), point11);
 
-        // Adding curve from 2 --> 3
-        fullBlock.addCircularCurve(new Vector2D(Arb_TwoInches, ((stepNineY / 2.0) - (((b_ThighCircR + 5.5) + 2.0) / 4.0))),
-                new Vector2D((n_CrotchHeight - m_KneeCRHeight), ((stepNineY / 2.0) - (((c_KneeCircR * 0.5 + 2.0) + 7.0) / 2.0))),
-                        0.5,
-                        false
-                );
+        fullBlock.addDirectedCurve(
+                point13, point1,
+                new Vector2D(point12.subtract(point11)),
+                new Vector2D(point1and2.subtract(point1)),
+                new double[]{0.0, 90.0});
 
-        // Adding curve from 4 --> 5
-        fullBlock.addCircularCurve(new Vector2D((n_CrotchHeight - l_AnkleCRHeight), ((stepNineY / 2.0) - (((d_AnkleCircleR * 0.5) + 10.0) / 2.0))),
-                new Vector2D(((n_CrotchHeight - l_AnkleCRHeight) + Arb_BkHemDrop), (stepNineY / 2.0)),
-                0.25,
-                true
-        );
+        fullBlock.addCircularCurve(
+                point19, point20,
+                (point20.getY() - (new Vector2D(point19.add(point20.subtract(point19).divide(2.0)))).getY()) / 2.0,
+                false);
 
-        // Adding curve from 5 --> 6
-        fullBlock.addCircularCurve(new Vector2D(((n_CrotchHeight - l_AnkleCRHeight) + Arb_BkHemDrop), (stepNineY / 2.0)),
-                new Vector2D((n_CrotchHeight - l_AnkleCRHeight), ((stepNineY / 2.0) + (((0.5 * d_AnkleCircleR + 2.0) + 10.0) / 2.0))),
-                0.25,
-                true
-        );
+        fullBlock.addDirectedCurve(
+                point22, point23,
+                new Vector2D(1.0, 0.0),
+                new Vector2D(point24.subtract(point23)), new double[]{0.0, 0.0});
 
-        // Adding curve from 7 --> 8
-        fullBlock.addCircularCurve(new Vector2D((n_CrotchHeight - m_KneeCRHeight), ((stepNineY / 2.0) + (((0.5 * c_KneeCircR + 2.0) + 7.0) / 2.0))),
-                new Vector2D(Arb_TwoInches, ((stepNineY / 2.0) + (((b_ThighCircR + 5.5) + 2.0) / 4.0))),
-                0.5,
-                false
-        );
+        // Used to help guide curve between crotch point and ankle by having an apex 1/3rd length and 1/4 height
+        // From the length and height
+        Vector2D point26and15 = new Vector2D((point15.getX() + (point26.getX()
+                - point15.getX())) / 3.0, point15.getY() + ((point26.getY() - point15.getY()) * 0.75));
 
-        // Adding curve from 8 --> 9
-        fullBlock.addCircularCurve(new Vector2D(Arb_TwoInches, ((stepNineY / 2.0) + (((b_ThighCircR + 5.5) + 2.0) / 4.0))),
-                new Vector2D(0.0, stepNineY),
-                0.5,
-                true
-        );
+        fullBlock.addDirectedCurve(
+                point26, point15,
+                new Vector2D(point26.subtract(point25)),
+                new Vector2D(point15.subtract(point26and15)), new double[]{0.0, 0.0});
 
-        // Adding curve from 9 --> 10
-        fullBlock.addCircularCurve(new Vector2D(0.0, stepNineY),
-                new Vector2D((-(k_BodyRise - a_WaistToHip)), ((stepNineY / 2.0) + ((i_BkHipArc / 4.0) + 2.0))),
-                0.5,
-                true
-        );
+        fullBlock.addDirectedCurve(
+                point15, point16,
+                new Vector2D(point15.subtract(point26and15)),
+                new Vector2D(point18.subtract(point16)), new double[]{90.0, 0.0});
 
-        // Adding curve from 10 --> 11
-        fullBlock.addCircularCurve(new Vector2D((-(k_BodyRise - a_WaistToHip)), ((stepNineY / 2.0) + ((i_BkHipArc / 4.0) + 2.0))),
-                new Vector2D((-(k_BodyRise - j_WaistToSeat)), stepElevenY),
-                0.5,
-                true
-                );
-
-        // Adding curve from 11 --> 12
-        fullBlock.addCircularCurve(new Vector2D((-(k_BodyRise - j_WaistToSeat)), stepElevenY),
-                new Vector2D(-k_BodyRise, stepTwelveY),
-                0.5,
-                true
-                );
-
-        // Adding curve from 12 --> dart start
-        fullBlock.addCircularCurve(new Vector2D(-k_BodyRise, stepTwelveY),
-                dartPoints.get(0),
-                0.5,
-                false
-        );
-
-        // Adding curve from dart end --> 13
-        fullBlock.addCircularCurve(dartPoints.get(2),
-                new Vector2D(-k_BodyRise, stepThirteenY),
-                0.5,
-                false
-        );
-
-        // Adding curve from 14 --> 15
-        fullBlock.addCircularCurve(new Vector2D((-(k_BodyRise - j_WaistToSeat)), stepFourteenY),
-                new Vector2D((-(k_BodyRise - a_WaistToHip)), stepFifteenY),
-                0.5,
-                false
-        );
-
-        // Adding curve from 15 --> 16
-        fullBlock.addCircularCurve(new Vector2D((-(k_BodyRise - a_WaistToHip)), stepFifteenY),
-                new Vector2D(Arb_CrotchPointFive, 0.0),
-                0.5,
-                false
-        );
-
-        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        /* Front half points, curves and dart */
-        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-        // Adding Step 17
-        fullBlock.addKeypoint(new Vector2D(0.0, 0.0));
-
-        // Adding Step 18
-        // Has an if statement depending on the sign of measurement [047]
-        double stepEighteenY = 0.0;
-        if (r_CrotchZ < 0)
-        {
-            stepEighteenY = (-((s_HipFrZ + r_CrotchZ) - (2.5 * Arb_CrotchReduction)));
-        }
-        else if (r_CrotchZ > 0)
-        {
-            stepEighteenY = (-((s_HipFrZ - r_CrotchZ) - (2.5 * Arb_CrotchReduction)));
-        }
-        else if (r_CrotchZ == 0)
-        {
-            stepEighteenY = (-((s_HipFrZ) - (2.5 * Arb_CrotchReduction)));
-        }
-
-        fullBlock.addKeypoint(new Vector2D((-(k_BodyRise - a_WaistToHip)), stepEighteenY));
-
-        // Adding Step 19
-        // Has an if statement depending on the sign of measurement [047]
-        double stepNineteenY = 0.0;
-        if (r_CrotchZ < 0)
-        {
-            stepNineteenY = (-((u_SeatFrZ + r_CrotchZ) - (2.5 * Arb_CrotchReduction)));
-        }
-        else if (r_CrotchZ > 0)
-        {
-            stepNineteenY = (-((u_SeatFrZ - r_CrotchZ) - (2.5 * Arb_CrotchReduction)));
-        }
-        else if (r_CrotchZ == 0)
-        {
-            stepNineteenY = (-((u_SeatFrZ) - (2.5 * Arb_CrotchReduction)));
-        }
-
-        fullBlock.addKeypoint(new Vector2D((-(k_BodyRise - j_WaistToSeat)), stepNineteenY));
-
-        // Adding Step 20
-        // Has an if statement depending on the sign of measurement [047]
-        double stepTwentyY = 0.0;
-        if (r_CrotchZ < 0)
-        {
-            stepTwentyY = (-((w_WaistFrZ + r_CrotchZ) - (2.5 * Arb_CrotchReduction)));
-        }
-        else if (r_CrotchZ > 0)
-        {
-            stepTwentyY = (-((w_WaistFrZ - r_CrotchZ) - (2.5 * Arb_CrotchReduction)));
-        }
-        else if (r_CrotchZ == 0)
-        {
-            stepTwentyY = (-((w_WaistFrZ) - (2.5 * Arb_CrotchReduction)));
-        }
-
-        fullBlock.addKeypoint(new Vector2D(-k_BodyRise, stepTwentyY));
-
-        // Adding Step 21
-        // Has an if statement depending on the sign of measurement [047]
-        double stepTwentyOneY = 0.0;
-        if (r_CrotchZ < 0)
-        {
-            stepTwentyOneY = (-((w_WaistFrZ + r_CrotchZ) - (2.5 * Arb_CrotchReduction) + (e_FrWaistArc + 0.25) / 2.0));
-        }
-        else if (r_CrotchZ > 0)
-        {
-            stepTwentyOneY = (-((w_WaistFrZ - r_CrotchZ) - (2.5 * Arb_CrotchReduction) + (e_FrWaistArc + 0.25) / 2.0));
-        }
-        else if (r_CrotchZ == 0)
-        {
-            stepTwentyOneY = (-((w_WaistFrZ) - (2.5 * Arb_CrotchReduction) + (e_FrWaistArc + 0.25) / 2.0));
-        }
-
-        fullBlock.addKeypoint(new Vector2D(-k_BodyRise, stepTwentyOneY));
-
-        // Adding Step 22
-        // Has an if statement depending on the sign of measurement [047]
-        double stepTwentyTwoY = 0.0;
-        if (r_CrotchZ < 0)
-        {
-            stepTwentyTwoY = (-((u_SeatFrZ + r_CrotchZ) - (2.5 * Arb_CrotchReduction) + ((q_FrSeatArc / 2.0) + 1.0)));
-        }
-        else if (r_CrotchZ > 0)
-        {
-            stepTwentyTwoY = (-((u_SeatFrZ - r_CrotchZ) - (2.5 * Arb_CrotchReduction) + ((q_FrSeatArc / 2.0) + 1.0)));
-        }
-        else if (r_CrotchZ == 0)
-        {
-            stepTwentyTwoY = (-((u_SeatFrZ) - (2.5 * Arb_CrotchReduction) + ((q_FrSeatArc / 2.0) + 1.0)));
-        }
-
-        fullBlock.addKeypoint(new Vector2D((-(k_BodyRise - j_WaistToSeat)), stepTwentyTwoY));
-
-        // Adding Step 23
-        // Has an if statement depending on the sign of measurement [047]
-        double stepTwentyThreeY = 0.0;
-        if (r_CrotchZ < 0)
-        {
-            stepTwentyThreeY = (-((s_HipFrZ + r_CrotchZ) - (2.5 * Arb_CrotchReduction) + ((h_FrHipArc / 2.0) + 1.0)));
-        }
-        else if (r_CrotchZ > 0)
-        {
-            stepTwentyThreeY = (-((s_HipFrZ - r_CrotchZ) - (2.5 * Arb_CrotchReduction) + ((h_FrHipArc / 2.0) + 1.0)));
-        }
-        else if (r_CrotchZ == 0)
-        {
-            stepTwentyThreeY = (-((s_HipFrZ) - (2.5 * Arb_CrotchReduction) + ((h_FrHipArc / 2.0) + 1.0)));
-        }
-
-        fullBlock.addKeypoint(new Vector2D((-(k_BodyRise - a_WaistToHip)), stepTwentyThreeY));
-
-        // Adding Step 24
-        fullBlock.addKeypoint(new Vector2D(0.0, stepTwentyThreeY));
-
-        // Adding Step 25
-        fullBlock.addKeypoint(new Vector2D(Arb_TwoInches, ((stepTwentyThreeY / 2.0) - (((b_ThighCircR + 5.5) - 2) / 4.0))));
-
-        // Adding Step 26
-        fullBlock.addKeypoint(new Vector2D((n_CrotchHeight - m_KneeCRHeight), ((stepTwentyThreeY / 2.0) - (((c_KneeCircR + 5.5) - 2.0) / 2.0))));
-
-        // Adding Step 27
-        fullBlock.addKeypoint(new Vector2D((n_CrotchHeight - l_AnkleCRHeight), ((stepTwentyThreeY / 2.0) - (((d_AnkleCircleR + 5.5) - 2.0) / 2.0))));
-
-        // Adding Step 28
-        fullBlock.addKeypoint(new Vector2D((n_CrotchHeight - l_AnkleCRHeight), ((stepTwentyThreeY / 2.0) + (((d_AnkleCircleR + 5.5) - 2.0) / 4.0))));
-
-        // Adding Step 29
-        fullBlock.addKeypoint(new Vector2D((n_CrotchHeight - m_KneeCRHeight), ((stepTwentyThreeY / 2.0) + (((c_KneeCircR + 5.5) - 2.0) / 4.0))));
-
-        // Adding Step 30
-        fullBlock.addKeypoint(new Vector2D(Arb_TwoInches, ((stepTwentyThreeY / 2.0) + (((b_ThighCircR + 5.5) - 2) / 4.0))));
-
-        // Adding Step 31
-        fullBlock.addKeypoint(new Vector2D(0.0, 0.0));
-
-        // Add front dart
-        Vector2D startSegment2 = new Vector2D(-k_BodyRise, stepTwentyY);
-        Vector2D endSegment2 = new Vector2D(-k_BodyRise, stepTwentyOneY);
-        double positionTopDart2 = 1.0 / 3.0;
         Arb_FrontDartWidth = (0.18 * (((h_FrHipArc + i_BkHipArc) / 2.0) - ((e_FrWaistArc + f_BkWaistArc) / 2.0)));
         Arb_FrontDartLength = j_WaistToSeat - 1.5;
-        ArrayList<Vector2D> dartPoints2 = fullBlock.addDart(startSegment2,
-                endSegment2,
-                positionTopDart2,
+        ArrayList<Vector2D> dartPoints2 = fullBlock.addDart(
+                point18, point19,
+                0.3,
                 Arb_BackDartWidth,
                 Arb_BackDartLength,
                 true, false);
 
-        // Adding curve from 17 --> 18
-        fullBlock.addCircularCurve(new Vector2D(0.0, 0.0),
-                new Vector2D((-(k_BodyRise - a_WaistToHip)), stepEighteenY),
-                0.5,
-                false
-        );
+        fullBlock.addRightAngleCurve(point18, dartPoints2.get(0));
+        fullBlock.addRightAngleCurve(dartPoints2.get(2), point19);
 
-        // Adding curve from 18 --> 19
-        fullBlock.addCircularCurve(new Vector2D((-(k_BodyRise - a_WaistToHip)), stepEighteenY),
-                new Vector2D((-(k_BodyRise - j_WaistToSeat)), stepNineteenY),
-                0.5,
-                false
-        );
-
-        // Adding curve from 21 --> 22
-        fullBlock.addCircularCurve(new Vector2D(-k_BodyRise, stepTwentyOneY),
-                new Vector2D((-(k_BodyRise - j_WaistToSeat)), stepTwentyTwoY),
-                0.5,
-                true
-        );
-
-        // Adding curve from 22 --> 23
-        fullBlock.addCircularCurve(new Vector2D((-(k_BodyRise - j_WaistToSeat)), stepTwentyTwoY),
-                new Vector2D((-(k_BodyRise - a_WaistToHip)), stepTwentyThreeY),
-                0.5,
-                true
-        );
-
-        // Adding curve from 23 --> 24
-        fullBlock.addCircularCurve(new Vector2D((-(k_BodyRise - a_WaistToHip)), stepTwentyThreeY),
-                new Vector2D(0.0, stepTwentyThreeY),
-                0.5,
-                true
-        );
-
-        // Adding curve from 24 --> 25
-        fullBlock.addCircularCurve(new Vector2D(0.0, stepTwentyThreeY),
-                new Vector2D(Arb_TwoInches, ((stepTwentyThreeY / 2.0) - (((b_ThighCircR + 5.5) - 2) / 4.0))),
-                0.5,
-                true
-        );
-
-        // Adding curve from 25 --> 26
-        fullBlock.addCircularCurve(new Vector2D(Arb_TwoInches, ((stepTwentyThreeY / 2.0) - (((b_ThighCircR + 5.5) - 2) / 4.0))),
-                new Vector2D((n_CrotchHeight - m_KneeCRHeight), ((stepTwentyThreeY / 2.0) - (((c_KneeCircR + 5.5) - 2.0) / 2.0))),
-                0.5,
-                true
-        );
-
-        // Adding curve from 29 --> 30
-        fullBlock.addCircularCurve(new Vector2D((n_CrotchHeight - m_KneeCRHeight), ((stepTwentyThreeY / 2.0) + (((c_KneeCircR + 5.5) - 2.0) / 4.0))),
-                new Vector2D(Arb_TwoInches, ((stepTwentyThreeY / 2.0) + (((b_ThighCircR + 5.5) - 2) / 4.0))),
-                0.5,
-                false
-        );
-
-        // Adding curve from 30 --> 31
-        fullBlock.addCircularCurve(new Vector2D(Arb_TwoInches, ((stepTwentyThreeY / 2.0) + (((b_ThighCircR + 5.5) - 2) / 4.0))),
-                new Vector2D(0.0, 0.0),
-                0.5,
-                false
-        );
     }
 
     protected static ArrayList<easeMeasurement> easeMeasurements = new ArrayList<>();

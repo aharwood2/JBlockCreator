@@ -18,7 +18,7 @@ import beazleybond.BodicePattern;
 import beazleybond.SkirtPattern;
 import beazleybond.StraightSleevePattern;
 import beazleybond.TrouserPattern;
-import gill.SweatShirtPattern;
+
 import jblockenums.EMsgType;
 
 /**
@@ -54,7 +54,7 @@ public class JBlockCreator
     private JCheckBox checkAldrichTrousers;
     private JCheckBox checkBeazleySkirt;
     private JCheckBox checkGillSkirt;
-    private JCheckBox checkGillTrousers;
+    private JCheckBox checkGillTrouserOne;
     private JCheckBox checkBeazleyStraightSleeve;
     private JCheckBox checkBeazleyTrousers;
     private JCheckBox checkBeazleyBodice;
@@ -101,10 +101,12 @@ public class JBlockCreator
     private JButton beazleyBondBodiceEaseButton;
     private JButton beazleyBondStraightSleeveEaseButton;
     private JButton gillSkirtEaseButton;
-    private JButton gillTrouserEaseButton;
+    private JButton gillTrouserOneEaseButton;
     private JLabel labAhmed;
     private JCheckBox checkAhmedBodice;
     private JButton ahmedBodiceEaseButton;
+    private JCheckBox checkGillTrouserTwo;
+    private JButton gillTrouserTwoEaseButton;
 
     // Layers
     private ArrayList<Component> paneLayers;
@@ -323,10 +325,16 @@ public class JBlockCreator
                             gill_skirt.writeToDXF(fileOutput, dxfLayerChoices);
                         }
 
-                        if (checkGillTrousers.isSelected())
+                        if (checkGillTrouserOne.isSelected())
                         {
                             gill.TrouserPattern gill_trousers = new gill.TrouserPattern(measurements);
                             gill_trousers.writeToDXF(fileOutput, dxfLayerChoices);
+                        }
+
+                        if (checkGillTrouserTwo.isSelected())
+                        {
+                            gill.TrouserPatternTwo gill_trousersTwo = new gill.TrouserPatternTwo(measurements);
+                            gill_trousersTwo.writeToDXF(fileOutput, dxfLayerChoices);
                         }
 
                         if (checkAldrichSkirt.isSelected())
@@ -726,9 +734,14 @@ public class JBlockCreator
             gillSkirtEaseButton.setVisible(!gillSkirtEaseButton.isVisible());
         });
 
-        checkGillTrousers.addActionListener(e -> {
+        checkGillTrouserOne.addActionListener(e -> {
             gill.TrouserPattern.populateEaseMeasurements();
-            gillTrouserEaseButton.setVisible(!gillTrouserEaseButton.isVisible());
+            gillTrouserOneEaseButton.setVisible(!gillTrouserOneEaseButton.isVisible());
+        });
+
+        checkGillTrouserTwo.addActionListener(e -> {
+            gill.TrouserPatternTwo.populateEaseMeasurements();
+            gillTrouserTwoEaseButton.setVisible(!gillTrouserTwoEaseButton.isVisible());
         });
 
         checkGillSweatshirt.addActionListener(e -> {
@@ -780,9 +793,14 @@ public class JBlockCreator
             easeButtonClickedEvent(gill.SkirtPattern.getEaseMeasurement());
         });
 
-        gillTrouserEaseButton.addActionListener(e ->
+        gillTrouserOneEaseButton.addActionListener(e ->
         {
             easeButtonClickedEvent(gill.TrouserPattern.getEaseMeasurement());
+        });
+
+        gillTrouserTwoEaseButton.addActionListener(e ->
+        {
+            easeButtonClickedEvent(gill.TrouserPatternTwo.getEaseMeasurement());
         });
 
         gillSweatShirtEaseButton.addActionListener(e ->
@@ -927,9 +945,6 @@ public class JBlockCreator
         // Create a new Frame which will contain the ease components
         JFrame easeFrame = new JFrame();
         easeFrame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-
-        // No adjustable measurements/empty array list means nothing to plot
-
 
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.fill = GridBagConstraints.HORIZONTAL;

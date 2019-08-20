@@ -492,6 +492,10 @@ public class Block {
      * cut from a circle and hence given points are on the circle circumference. Direction of normal is indicated by
      * boolean value -- true for right hand normal and false for left hand normal -- which tells the method which way
      * to curve. Start and end points must be specified in the strict anti-clockwise order of the keypoints list.
+<<<<<<< HEAD
+=======
+     * -> ), ( <-
+>>>>>>> c5939f2beef55e5311f895b577467dc855ac213f
      *
      * @param startPoint start position of curve
      * @param endPoint   end position of curve
@@ -1241,6 +1245,54 @@ public class Block {
         xy[0][0] = A - (D * xy[0][1]);
         xy[1][0] = A - (D * xy[1][1]);
         return xy;
+    }
+
+    //gets the length between 2 keypoints going in an anti-clockwise manner
+    public double getLengthBetweenPoints(Vector2D startPoint, Vector2D endPoint) {
+        double length = 0;
+        int start = 0;
+        int end = 0;
+        try {
+            //gets the start and end vector keypoints
+            //if start = vector point10, keypointNumber would  be 9
+            start = getKeypointNumber(startPoint);
+            end = getKeypointNumber(endPoint);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return 0;
+        }
+        //Length from point 10 to point 10 is 0
+        if (start == end) {
+            return 0;
+        }
+        //keep track of end as end is then used in the for loop further down
+        int size = end;
+        //this is to help with say, getting the size from point 10 to point 3 -> need to loop to 10,11,12,13,14,15...1,2,3
+        //which is equal to the arraylist.size - start + end
+        if (end < start) {
+            size += keypointsX.size() - start;
+        } else {
+            size -= start;
+        }
+        end = start + 1;
+        for (int i = 0; i < size; i++) {
+
+            //gets the x and y values of the next keypoint and calculated the magnitude/norm between the next
+            //and current value then sums up the magnitudes/norms
+            //may need to use less sqrts/power functions
+            length += Math.sqrt((Math.pow(keypointsX.get(end) - keypointsX.get(start), 2) + Math.pow(keypointsY.get(end) - keypointsY.get(start), 2)));
+            //special case when you need to calculate length between point 12 and point 3, this is for the loop around
+            //to help the for loop
+            start = end;
+            end++;
+            if (end == keypointsX.size()) //need to reset to 0 to deal with null pointer exception
+            {
+                end = 0; //for the loop around
+            }
+
+        }
+
+        return length;
     }
 
 }

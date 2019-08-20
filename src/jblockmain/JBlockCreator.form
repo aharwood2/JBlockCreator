@@ -367,15 +367,15 @@
                         <properties/>
                         <border type="none"/>
                         <children>
-                          <component id="db86c" class="javax.swing.JCheckBox" binding="checkGillTrousers">
+                          <component id="db86c" class="javax.swing.JCheckBox" binding="checkGillTrouserOne">
                             <constraints>
                               <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                             </constraints>
                             <properties>
-                              <text value="Trousers"/>
+                              <text value="Trouser One"/>
                             </properties>
                           </component>
-                          <component id="4c8b0" class="javax.swing.JButton" binding="gillTrouserEaseButton">
+                          <component id="4c8b0" class="javax.swing.JButton" binding="gillTrouserOneEaseButton">
                             <constraints>
                               <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                             </constraints>
@@ -414,6 +414,33 @@
                               <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                             </constraints>
                             <properties>
+                              <text value="Ease"/>
+                            </properties>
+                          </component>
+                        </children>
+                      </grid>
+                      <grid id="b7980" layout-manager="GridLayoutManager" row-count="2" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+                        <margin top="0" left="0" bottom="0" right="0"/>
+                        <constraints>
+                          <grid row="2" column="3" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+                        </constraints>
+                        <properties/>
+                        <border type="none"/>
+                        <children>
+                          <component id="33ed6" class="javax.swing.JCheckBox" binding="checkGillTrouserTwo">
+                            <constraints>
+                              <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                            </constraints>
+                            <properties>
+                              <text value="Trouser Two"/>
+                            </properties>
+                          </component>
+                          <component id="87356" class="javax.swing.JButton" binding="gillTrouserTwoEaseButton">
+                            <constraints>
+                              <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                            </constraints>
+                            <properties>
+                              <label value="Ease"/>
                               <text value="Ease"/>
                             </properties>
                           </component>
