@@ -91,6 +91,7 @@ public class JBlockCreator
     private JPanel imageAnalysisWrapper;
     private JLayeredPane stackedPatternSample;
     private JLayeredPane stackedAnalysisSample;
+    private JCheckBox timeStampCheckBox;
 
     // Ease Buttons
     private JButton aldrichSkirtEaseButton;
@@ -251,6 +252,9 @@ public class JBlockCreator
         @Override
         public void run()
         {
+            String timeStamp = null;
+            if (timeStampCheckBox.isSelected())
+            {timeStamp = new java.text.SimpleDateFormat("yyyy-MM-dd_HH-mm-ss").format(new java.util.Date());}
             try
             {
                 // Handle missing options
@@ -298,37 +302,37 @@ public class JBlockCreator
                         if (checkBeazleySkirt.isSelected())
                         {
                             SkirtPattern bb_skirt = new SkirtPattern(measurements);
-                            bb_skirt.writeToDXF(fileOutput, dxfLayerChoices);
+                            bb_skirt.writeToDXF(fileOutput, dxfLayerChoices,timeStamp);
                         }
 
                         if (checkBeazleyTrousers.isSelected())
                         {
                             TrouserPattern bb_trouser = new TrouserPattern(measurements);
-                            bb_trouser.writeToDXF(fileOutput, dxfLayerChoices);
+                            bb_trouser.writeToDXF(fileOutput, dxfLayerChoices,timeStamp);
                         }
 
                         if (checkBeazleyBodice.isSelected())
                         {
                             BodicePattern bb_bodice = new BodicePattern(measurements);
-                            bb_bodice.writeToDXF(fileOutput, dxfLayerChoices);
+                            bb_bodice.writeToDXF(fileOutput, dxfLayerChoices,timeStamp);
                         }
 
                         if (checkBeazleyStraightSleeve.isSelected())
                         {
                             StraightSleevePattern bb_sleeve = new StraightSleevePattern(measurements);
-                            bb_sleeve.writeToDXF(fileOutput, dxfLayerChoices);
+                            bb_sleeve.writeToDXF(fileOutput, dxfLayerChoices,timeStamp);
                         }
 
                         if (checkGillSkirt.isSelected())
                         {
                             gill.SkirtPattern gill_skirt = new gill.SkirtPattern(measurements);
-                            gill_skirt.writeToDXF(fileOutput, dxfLayerChoices);
+                            gill_skirt.writeToDXF(fileOutput, dxfLayerChoices,timeStamp);
                         }
 
                         if (checkGillTrouserOne.isSelected())
                         {
                             gill.TrouserPattern gill_trousers = new gill.TrouserPattern(measurements);
-                            gill_trousers.writeToDXF(fileOutput, dxfLayerChoices);
+                            gill_trousers.writeToDXF(fileOutput, dxfLayerChoices,timeStamp);
                         }
 
                         if (checkGillTrouserTwo.isSelected())
@@ -340,13 +344,13 @@ public class JBlockCreator
                         if (checkAldrichSkirt.isSelected())
                         {
                             aldrich.SkirtPattern aldrich_skirt = new aldrich.SkirtPattern(measurements);
-                            aldrich_skirt.writeToDXF(fileOutput, dxfLayerChoices);
+                            aldrich_skirt.writeToDXF(fileOutput, dxfLayerChoices,timeStamp);
                         }
 
                         if (checkAldrichTrousers.isSelected())
                         {
                             aldrich.TrouserPattern aldrich_trousers = new aldrich.TrouserPattern(measurements);
-                            aldrich_trousers.writeToDXF(fileOutput, dxfLayerChoices);
+                            aldrich_trousers.writeToDXF(fileOutput, dxfLayerChoices,timeStamp);
                         }
 
                         if (checkGillSweatshirt.isSelected())
@@ -368,7 +372,7 @@ public class JBlockCreator
                     // Write the plot if we created one
                     if (plot != null)
                     {
-                        plot.writeToDXF(fileOutput, dxfLayersAnalysis);
+                        plot.writeToDXF(fileOutput, dxfLayersAnalysis, timeStamp);
                     }
 
                     // Write out to a text file the patterns that could not be made

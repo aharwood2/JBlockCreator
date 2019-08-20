@@ -50,5 +50,5 @@ public interface IPlottable
      * @param dxfLayerChooser   array of flags indicating content to write to drawing.
      */
     // TODO: Need to improve this definition as boolean[] should have a defined length if in an interface. Ideally should be its own class.
-    void writeToDXF(File fileOutput, boolean[] dxfLayerChooser);
+    void writeToDXF(File fileOutput, boolean[] dxfLayerChooser, String timeStamp);
 }

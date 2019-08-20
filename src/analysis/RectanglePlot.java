@@ -107,7 +107,7 @@ public class RectanglePlot implements IPlottable
     }
 
     @Override
-    public void writeToDXF(File fileOutput, boolean[] dxfLayerChooser)
+    public void writeToDXF(File fileOutput, boolean[] dxfLayerChooser, String timeStamp)
     {
         // Construct output path
         Path path = Paths.get(fileOutput.toString() + "/" + analysis + "/");
@@ -129,7 +129,7 @@ public class RectanglePlot implements IPlottable
             {
 
                 // Create new DXF file
-                String filename = names.get(i) + "_" + xAxisID + "_" + yAxisID + "_Rectangle_Plot";
+                String filename = names.get(i) + "_" + xAxisID + "_" + yAxisID + "_Rectangle_Plot" + timeStamp;
                 DxfFile file = new DxfFile(path.toString() + "/" + filename);
 
                 try {
@@ -144,7 +144,12 @@ public class RectanglePlot implements IPlottable
         if (isLayered)
         {
             // Create new DXF file
-            String filename = "Layered_" + xAxisID + "_" + yAxisID + "_Rectangle_Plot";
+            String filename;
+            if (timeStamp == null)
+                filename = "Layered_" + xAxisID + "_" + yAxisID + "_Rectangle_Plot";
+            else
+                filename = "Layered_" + xAxisID + "_" + yAxisID + "_Rectangle_Plot" + "_" + timeStamp;
+
             DxfFile file = new DxfFile(path.toString() + "/" + filename);
             try
             {
