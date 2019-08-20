@@ -1024,8 +1024,8 @@ public class JBlockCreator
             int limits = (int)(Math.abs(easeMeasurements.get(i).getValue() * 5));
 
             // Set the Min and max values on the slider as the current value +-50% of the current value and a border of +- 100 which is +- 10.0
-            int min = ((int)((easeMeasurements.get(i)).getValue() * 10.0) / 10) - limits - 100;
-            int max = ((int)((easeMeasurements.get(i)).getValue() * 10.0) / 10) + limits + 100;
+            int min = ((int)(easeMeasurements.get(i).getValue() * 10.0)) - limits - 100;
+            int max = ((int)(easeMeasurements.get(i).getValue() * 10.0)) + limits + 100;
 
             // For creating the hash table, we get the sliders to mark every 10% of the way
             int interval = (max / 10);
