@@ -72,7 +72,7 @@ public class BodicePattern extends Pattern {
 
     @Override
     protected boolean readMeasurements(Measurements dataStore) {
-        /*
+
         try
         {
             halfBackCentreTapeMeasure = dataStore.getMeasurement("A04").value;
@@ -96,7 +96,8 @@ public class BodicePattern extends Pattern {
             frontNeckDepth = dataStore.getMeasurement("B10").value;
             backNeckDepth = dataStore.getMeasurement("B11").value;
             shoulderToWaistDepth = dataStore.getMeasurement("B16").value;
-            shoulderRightX = dataStore.getMeasurement("B17").value;
+            // The body scanner outputs a negative number, need to make it negative
+            shoulderRightX = -dataStore.getMeasurement("B19").value;
 
             userName = dataStore.getName();
 
@@ -107,32 +108,6 @@ public class BodicePattern extends Pattern {
             addMissingMeasurement(dataStore.getName(), e.getMeasurementId());
             return false;
         }
-
-         */
-        halfBackCentreTapeMeasure = 46.05;
-        sideNeckToBustLengthR = 29.15;
-        sideNeckToBustToWaistR = 47.11;
-        acrossBackTapeMeasurement = 33.12;
-        acrossChestArmToArmLength = 30.42;
-        shoulderLengthRight = 12.89;
-        bustWidth = 20.4;
-        frontWaistArc = 41.48;
-        backWaistArc = 39.33;
-        frontBustArc = 51.85;
-        backBustArc = 39.89;
-        scyeDepth = 21.39;
-        shoulderSlope = 3.59;
-        sideSeamDepth = 22.54;
-        acrossShoulderBackandFront = 35.94;
-        waistToArmpitDepth = 22.54;
-        midShoulderToShoulderBlades = 10.01;
-        neckWidthFrontandBack = 13.02;
-        frontNeckDepth = 4.91;
-        backNeckDepth = 1.56;
-        shoulderToWaistDepth = 41;
-        shoulderRightX = 21.13;
-        userName = dataStore.getName();
-        return true;
     }
 
     @Override
