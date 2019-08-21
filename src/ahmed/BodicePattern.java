@@ -246,10 +246,6 @@ public class BodicePattern extends Pattern {
                 overallDiffTotalPatternWidthToWaistWithEase * 0.37, new Vector2D(bustPoint.getX(),
                         bustPoint.getY() - 2.5), false);
 
-        // Aadding the curves to keep the angles at 90 degrees between the darts and the adjacent lines
-        fullBlock.addRightAngleCurve(point7, Dart7_8.get(0));
-        fullBlock.addRightAngleCurve(Dart7_8.get(2),point8);
-
         //
         //fullBlock.addDirectedCurveWithApexTangent(point12, point13, new Vector2D(point12.subtract(point11)), new Vector2D(-1, 0), new Vector2D(point13.getX(), point12.getY()), 2, new double[]{90, 90}, new int[]{1, 1});
         fullBlock.addQuadraticBezierCurve(point12, new Vector2D(point13.getX(), point12.getY()), point13);
@@ -264,18 +260,11 @@ public class BodicePattern extends Pattern {
         ArrayList<Vector2D> Dart17_18 = fullBlock.addDart(point17, point18,
                 0.5, 1.0, midShoulderToShoulderBlades - 2.5, true, true);
 
-        fullBlock.addRightAngleCurve(point17, Dart17_18.get(0));
-
         fullBlock.addQuadraticBezierCurve(point18, new Vector2D(point18.getX(), point1.getY()), point1);
-
-        fullBlock.addRightAngleCurve(Dart17_18.get(2), point18);
 
         ArrayList<Vector2D> Dart4_5 = fullBlock.addDart(point4, point5,
                 (backWaistArc / 4.0) / (new Vector2D(point5.subtract(point4)).norm()),
                 overallDiffTotalPatternWidthToWaistWithEase * 0.37, waistToArmpitDepth - 2.5, true, false);
-
-        fullBlock.addRightAngleCurve(point4, Dart4_5.get(0));
-        fullBlock.addRightAngleCurve(Dart4_5.get(2), point5);
 
     }
 

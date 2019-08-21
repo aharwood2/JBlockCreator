@@ -373,7 +373,7 @@ public class TrouserPatternTwo extends Pattern {
         backBlock.addConstructionPoint(new Vector2D(hipXPosition, minBackY), new Vector2D(hipXPosition, maxBackY), "Hip");
         backBlock.addConstructionPoint(new Vector2D(centreXpoint, minBackY), new Vector2D(centreXpoint, maxBackY), "Crotch");
         backBlock.addConstructionPoint(new Vector2D(kneeXPosition, minBackY), new Vector2D(kneeXPosition, maxBackY), "Knee");
-        backBlock.addConstructionPoint(new Vector2D(ankleXPosition, minBackY), new Vector2D(ankleXPosition, maxBackY), "Aankle");
+        backBlock.addConstructionPoint(new Vector2D(ankleXPosition, minBackY), new Vector2D(ankleXPosition, maxBackY), "Ankle");
 
         // Construction point representing the centre fold
         backBlock.addConstructionPoint(new Vector2D(Collections.min(backBlock.getPlottableKeypointsX()) - 5.0,
