@@ -13,6 +13,7 @@ import mathcontainers.Vector2D;
 import javax.swing.text.html.Option;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Vector;
 
 public class SweatShirtPattern extends Pattern
 {
@@ -180,35 +181,25 @@ public class SweatShirtPattern extends Pattern
         Vector2D point15 = point7;
         Vector2D point16 = point8;
 
-        Vector2D point1314 = new Vector2D(point14.getX() + ((point13.getX() - point14.getX()) / 3.0), point14.getY() + ((point13.getY() - point14.getY())/ 20.0));
-
         // Addition of all the points as keypoints
         frontBlock.addKeypoint(point9);
         frontBlock.addKeypoint(point10);
         frontBlock.addKeypoint(point11);
         frontBlock.addKeypoint(point13);
-        frontBlock.addKeypoint(point1314);
         frontBlock.addKeypoint(point14);
         frontBlock.addKeypoint(point15);
         frontBlock.addKeypoint(point16);
 
-        // Calculating extension for the tangent offset
-        double extension = Math.sqrt(Math.abs((point13.getY() - point14.getY()) - (point13.getX() - point14.getX()))) / 2.0;
-        extension = point13.getX() - point14.getX() > point13.getY() - point14.getY() ? -extension : extension;
-
-        frontBlock.addDirectedCurveWithApexTangent(point13, point1314,
-                new Vector2D(point13.getX(), point1314.getY()),
-                4.0 + extension,
-                new double[]{90.0, 0.0}, new int[]{-1, 1});
+        frontBlock.addQuadraticBezierCurve(point13, new Vector2D(point13.getX(), point14.getY()), point14);
 
         frontBlock.addDirectedCurve(point14, point15,
                 new Vector2D(-1.0, 0.0),
                 new Vector2D(point8.subtract(point15)),
                 new double[] {0.0, 90.0});
 
-        frontBlock.addBlendedCurve(point1314, point14);
-
-        frontBlock.addDirectedCurve(point16, point9, new double[] {90.0,90.0});
+        frontBlock.addDirectedCurveWithApexTangent(point16, point9, new Vector2D(point9.getX(), point16.getY()),
+                Math.sqrt(point9.getX() - point16.getX()), new double[] {90.0, 90.0},
+                new int[]{-1, -1});
 
         // All the construction keypoints added for both front and back since they are similar
         backBlock.addConstructionPoint(new Vector2D(point8.getX(), minY), new Vector2D(point8.getX(), maxY), "Side Nk");
