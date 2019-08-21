@@ -291,6 +291,20 @@ public class SweatShirtPattern extends Pattern
         sleeveBlock.addDirectedCurve(point7, point8, new double[] {90.0, 0.0});
         sleeveBlock.addDirectedCurve(point10, point1, new double[] {0.0, 90.0});
 
+        maxY = Collections.max(sleeveBlock.getPlottableKeypointsY()) + 5.0;
+        minY = Collections.min(sleeveBlock.getPlottableKeypointsY()) - 5.0;
+        double maxX = Collections.max(sleeveBlock.getPlottableKeypointsX()) + 5.0;
+        double minX = Collections.min(sleeveBlock.getPlottableKeypointsX()) - 5.0;
+
+        sleeveBlock.addConstructionPoint(new Vector2D(point9.getX(), minY), new Vector2D(point9.getX(), maxY), "Crown Height");
+        sleeveBlock.addConstructionPoint(new Vector2D(point8.getX(), minY), new Vector2D(point8.getX(), maxY), "Angle Change");
+        sleeveBlock.addConstructionPoint(new Vector2D(point1.getX(), minY), new Vector2D(point1.getX(), maxY), "Underarm");
+        sleeveBlock.addConstructionPoint(new Vector2D(point2.getX(), minY), new Vector2D(point2.getX(), maxY), "Elbow");
+        sleeveBlock.addConstructionPoint(new Vector2D(point3.getX(), minY), new Vector2D(point3.getX(), maxY), "Sleeve Hem");
+
+        sleeveBlock.addConstructionPoint(new Vector2D(point4.add(point5.subtract(point4).multiply(0.5))), internalPoint8_9, "");
+        sleeveBlock.addConstructionPoint(new Vector2D(point4.add(point3.subtract(point4).multiply(0.5))), internalPoint9_10, "");
+
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         ////////////////////////////////////////// SLEEVE BLOCK TWO ////////////////////////////////////////////////////
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -345,6 +359,17 @@ public class SweatShirtPattern extends Pattern
 
         sleeveBlockTwo.addDirectedCurve(point10, point11, new double[] {90.0, 0.0});
         sleeveBlockTwo.addDirectedCurve(point15, point1, new double[] {0.0, 90.0});
+
+
+        sleeveBlockTwo.addConstructionPoint(new Vector2D(point13.getX(), minY), new Vector2D(point13.getX(), maxY), "Crown Height");
+        sleeveBlockTwo.addConstructionPoint(new Vector2D(point14.getX(), minY), new Vector2D(point14.getX(), maxY), "Angle Change 1");
+        sleeveBlockTwo.addConstructionPoint(new Vector2D(point15.getX(), minY), new Vector2D(point15.getX(), maxY), "Angle Change 2");
+        sleeveBlockTwo.addConstructionPoint(new Vector2D(point1.getX(), minY), new Vector2D(point1.getX(), maxY), "Underarm");
+        sleeveBlockTwo.addConstructionPoint(new Vector2D(point2.getX(), minY), new Vector2D(point2.getX(), maxY), "Elbow");
+        sleeveBlockTwo.addConstructionPoint(new Vector2D(point3.getX(), minY), new Vector2D(point3.getX(), maxY), "Sleeve Hem");
+
+        sleeveBlockTwo.addConstructionPoint(new Vector2D(minX, internalPoint8_9.getY()), new Vector2D(maxX, internalPoint8_9.getY()), "");
+        sleeveBlockTwo.addConstructionPoint(new Vector2D(minX, internalPoint9_10.getY()), new Vector2D(maxX, internalPoint9_10.getY()), "");
     }
 
     protected static ArrayList<easeMeasurement> easeMeasurements = new ArrayList<>();
