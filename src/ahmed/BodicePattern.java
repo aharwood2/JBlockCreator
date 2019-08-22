@@ -75,8 +75,7 @@ public class BodicePattern extends Pattern {
     @Override
     protected boolean readMeasurements(Measurements dataStore) {
 
-        try
-        {
+        try {
             halfBackCentreTapeMeasure = dataStore.getMeasurement("A04").value;
             sideNeckToBustLengthR = dataStore.getMeasurement("A07").value;
             sideNeckToBustToWaistR = dataStore.getMeasurement("A08").value;
@@ -104,9 +103,7 @@ public class BodicePattern extends Pattern {
             userName = dataStore.getName();
 
             return true;
-        }
-        catch(MeasurementNotFoundException e)
-        {
+        } catch (MeasurementNotFoundException e) {
             addMissingMeasurement(dataStore.getName(), e.getMeasurementId());
             return false;
         }
@@ -238,12 +235,13 @@ public class BodicePattern extends Pattern {
 
         // x15temp1-x15temp2 gives the width of the dart at Y = point15 which we then add since when the dart is closed,
         // It will be subtracted
-        Vector2D point15 = new Vector2D(point11.getX() - ((acrossChestArmToArmLength / 2) + (x15temp1 - x15temp2))
-                , point11.getY());
-
+        Vector2D point15 = new Vector2D(point11.getX() -
+                ((acrossChestArmToArmLength / 2) + (x15temp1 - x15temp2)),
+                point11.getY());
 
         // Apex points used in directing the curves of the armhole
-        // Not used anymore
+        // Not used anymore in the new calculation of armhole curves
+        // Values obtained by pythagoras
         Vector2D apex1 = new Vector2D(point15.getX() - 1.414, point6.getY() + 1.414);
         Vector2D apex2 = new Vector2D(point16.getX() + 1.7678, point6.getY() + 1.7678);
 
@@ -265,9 +263,19 @@ public class BodicePattern extends Pattern {
         // Point 6_2 because cannot have 4 points going into 1 / issues with using just point 6
         fullBlock.addKeypoint(point6_2);
 
-        // Calculation and addition of the dart between point 7 and 8
-        D = new Vector2D(point8.subtract(point7));
-        lamda = (bustPoint.getX() - point7.getX()) / (D.getX());
+        ArrayList<Vector2D> Dart4_5 = fullBlock.addDart(point4, point5,
+                (backWaistArc / 4.0) / (new Vector2D(point5.subtract(point4)).norm()),
+                backWaistDartWidth, waistToArmpitDepth - 2.5, true, false);
+
+        /* Get a directional vector from midpoint of 17->18 to the apex of the back waist dart
+         This is required as the dart between 17 and 18 needs to be linked to the dart between 4 and 5
+         In terms of their apex points
+         */
+        Vector2D mid17_18 = new Vector2D(point18.add(point17.subtract(point18).divide(2.0)));
+        D = new Vector2D(Dart4_5.get(1).subtract(mid17_18));
+        Vector2D backShoulderApex = new Vector2D(mid17_18.add(D.divide(D.norm()).multiply(
+                (midShoulderToShoulderBlades - 2.5))));
+        ArrayList<Vector2D> Dart17_18 = fullBlock.addDart(point17, point18, 0.5, 1.0, backShoulderApex, true);
 
         fullBlock.addQuadraticBezierCurve(point12, new Vector2D(point13.getX(), point12.getY()), point13);
 
@@ -277,32 +285,30 @@ public class BodicePattern extends Pattern {
         //fullBlock.addDirectedCurve(point6_2, apex2, new Vector2D(-1.0, 0.0), new Vector2D(-1.0, 1.0), new double[]{0.0, 0.0});
         //fullBlock.addDirectedCurve(apex2, point17, point16, 0.0);
 
+        // Alternative method of making the armhole curve using bezier curves, less strict but more appealing to the eye
         fullBlock.addQuadraticBezierCurve(point15, controlPoint1, point6);
-        fullBlock.addDirectedCurve(point14, point15, new double[] {90.0, 0.0});
+        fullBlock.addDirectedCurve(point14, point15, new double[]{90.0, 0.0});
         fullBlock.addQuadraticBezierCurve(point6_2, controlPoint2, point16);
-        fullBlock.addDirectedCurve(point16, point17, new double[] {0.0, 90.0});
+        fullBlock.addDirectedCurve(point16, point17, new double[]{0.0, 90.0});
 
         fullBlock.addQuadraticBezierCurve(point18, new Vector2D(point18.getX(), point1.getY()), point1);
 
-        ArrayList<Vector2D> Dart4_5 = fullBlock.addDart(point4, point5,
-                (backWaistArc / 4.0) / (new Vector2D(point5.subtract(point4)).norm()),
-                backWaistDartWidth, waistToArmpitDepth - 2.5, true, false);
+        // Calculation and addition of the dart between point 7 and 8 as it is a ratio of the total length
+        D = new Vector2D(point8.subtract(point7));
+        lamda = (bustPoint.getX() - point7.getX()) / (D.getX());
 
         ArrayList<Vector2D> Dart7_8 = fullBlock.addDart(point7, point8, lamda,
                 frontWaistDartWidth, new Vector2D(bustPoint.getX(),
                         bustPoint.getY() - 2.5), false);
-
-        ArrayList<Vector2D> Dart17_18 = fullBlock.addDart(point17, point18,
-                0.5, 1.0, midShoulderToShoulderBlades - 2.5, true, true);
-
     }
 
     protected static ArrayList<easeMeasurement> easeMeasurements = new ArrayList<>();
 
-    public static void populateEaseMeasurements()
-    {
+    public static void populateEaseMeasurements() {
         // Check to see it hasn't already been populated / it is empty
-        if (easeMeasurements.size() > 0) {return;}
+        if (easeMeasurements.size() > 0) {
+            return;
+        }
         easeMeasurements.add(new easeMeasurement("Armhole Depth", 1.7));
         easeMeasurements.add(new easeMeasurement("Across Back Ease", 0.5));
         easeMeasurements.add(new easeMeasurement("Shoulder Slop Ease", 0.3));
@@ -311,8 +317,7 @@ public class BodicePattern extends Pattern {
         easeMeasurements.add(new easeMeasurement("Waist Ease", 1.5));
     }
 
-    public static ArrayList<easeMeasurement> getEaseMeasurement()
-    {
+    public static ArrayList<easeMeasurement> getEaseMeasurement() {
         return easeMeasurements;
     }
 }
