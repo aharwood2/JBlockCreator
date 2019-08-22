@@ -1087,15 +1087,16 @@ public class Block {
 
     private double quadraticXBezier(double t, Vector2D start, Vector2D intermediate, Vector2D end) {
         // Helper Function that returns X value for a given t value
-        // Which varies from 0 to 1 for a given start, apex, and end vector
+        // Which varies from 0 to 1 for a given start, control point, and end vector
 
         return (start.getX() * ((1 - t) * (1 - t)))
                 + (2 * intermediate.getX() * (t * (1 - t)))
                 + (end.getX() * (t * t));
     }
+
     private double quadraticYBezier(double t, Vector2D start, Vector2D intermediate, Vector2D end) {
         // Helper Function that returns Y value for a given t value
-        // Which varies from 0 to 1 for a given start, apex, and end vector
+        // Which varies from 0 to 1 for a given start, control point, and end vector
 
         return (start.getY() * (1 - t) * (1 - t))
                 + ((2 * intermediate.getY() * t * (1 - t)))
@@ -1108,7 +1109,7 @@ public class Block {
      * @param Apex the point which shapes the bezier curve
      * @param end the end vector you want the curve to stop at
      */
-    public void addQuadraticBezierCurve(Vector2D start, Vector2D Apex, Vector2D end) {
+    public void addQuadraticBezierCurve(Vector2D start, Vector2D controlPoint, Vector2D end) {
         // Calculate the number of points to draw
         int numPts = (int) Math.ceil(end.subtract(start).norm() * res);
 
@@ -1119,8 +1120,8 @@ public class Block {
         // For loop which calculates X and Y, adds them to the keypoints, as it iterates from t = 0 to t = 1
         for (int i = 1; i < numPts - 1; i++) {
             double t = ((double) i / ((double) numPts - 1));
-            double x = quadraticXBezier(t, start, Apex, end);
-            double y = quadraticYBezier(t, start, Apex, end);
+            double x = quadraticXBezier(t, start, controlPoint, end);
+            double y = quadraticYBezier(t, start, controlPoint, end);
             tmp = new Vector2D(x, y);
             addKeypointNextTo(tmp, tmp2, EPosition.AFTER);
             tmp2 = new Vector2D(tmp);
