@@ -23,14 +23,14 @@ which are recorded on the issue tracker where appropriate. Please add more issue
 
 # Release Notes #
 **Version 1.5**
-Issue #76: Add timestamp to pattern outputs.
-Issue #74: Added Gill sweatshirt pattern.
-Issue #62: Added UI for adding custom ease values for most of the patterns.
-Issue #58/#72: Fixed issues with Gill trouser draft.
-Issue #71: Fixed issues with Aldrich trouser draft.
-Issue #70: Added Ahmed bodice draft.
-Issue #69: Added Gill trouser draft type 2.
-Issue #87: Fixed typographical errors.
+Issue #76: Add timestamp to pattern outputs.    
+Issue #74: Added Gill sweatshirt pattern.    
+Issue #62: Added UI for adding custom ease values for most of the patterns.    
+Issue #58/#72: Fixed issues with Gill trouser draft.    
+Issue #71: Fixed issues with Aldrich trouser draft.    
+Issue #70: Added Ahmed bodice draft.    
+Issue #69: Added Gill trouser draft type 2.    
+Issue #87: Fixed typographical errors.    
 
 **Version 1.4**    
 Addition of the Gill experimental patterns for public consumption.     
