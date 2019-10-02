@@ -6,27 +6,24 @@ import jblockenums.EMethod;
 
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileWriter;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.io.FileWriter;
-import java.util.Date;
 
 
-/** Interface to be implemented by every pattern added to the module. */
-public abstract class Pattern implements IPlottable
+/**
+ * Interface to be implemented by every pattern added to the module.
+ */
+public abstract class Pattern
+        implements IPlottable
 {
+    protected final static ArrayList<easeMeasurement> easeMeasurements = null;
     /**
-     * Offset used for drawing of construction lines
+     * Common store of missing measurements.
      */
-    protected double Arb_Con = 2.0;
-
-    /**
-     * User associated with the pattern
-     */
-    protected String userName;
-
+    protected static ArrayList<String> missingMeasurements = new ArrayList<String>();
     /**
      * Method associated with pattern
      */
@@ -36,23 +33,18 @@ public abstract class Pattern implements IPlottable
      * Type of garment pattern represents
      */
     protected final EGarment garment;
-
     /**
-     * Abstract method to assign final method type.
-     * @return method type to assign to the method field.
+     * Offset used for drawing of construction lines
      */
-    protected abstract EMethod assignMethod();
-
+    protected double Arb_Con = 2.0;
     /**
-     * Abstract method to assign final garment type.
-     * @return method type to assign to the garment field.
+     * User associated with the pattern
      */
-    protected abstract EGarment assignGarment();
-
+    protected String userName;
     /**
-     * Common store of missing measurements.
+     * Blocks that comprise the pattern
      */
-    protected static ArrayList<String> missingMeasurements = new ArrayList<String>();
+    protected ArrayList<Block> blocks;
 
 
     /**
@@ -66,18 +58,9 @@ public abstract class Pattern implements IPlottable
     }
 
     /**
-     * Method to add information about a failed pattern creation due to missing measurements.
-     * @param userid    name of the user concerned.
-     * @param id        ID of the measurement which caused the failure.
-     */
-    protected void addMissingMeasurement(String userid, String id)
-    {
-        missingMeasurements.add(userid + "/" + method + "/" + garment + " : Measurement ID = " + id);
-    }
-
-    /**
      * Method to print the missing measurements record to a file.
-     * @param fileoutput    path to file.
+     *
+     * @param fileoutput path to file.
      */
     protected static void printMissingMeasurements(File fileoutput)
     {
@@ -102,15 +85,45 @@ public abstract class Pattern implements IPlottable
         }
     }
 
+    public static ArrayList<easeMeasurement> getEaseMeasurement()
+    {
+        return easeMeasurements;
+    }
+
+    public static void populateEaseMeasurements()
+    {
+    }
+
     /**
-     * Blocks that comprise the pattern
+     * Abstract method to assign final method type.
+     *
+     * @return method type to assign to the method field.
      */
-    protected ArrayList<Block> blocks;
+    protected abstract EMethod assignMethod();
+
+    /**
+     * Abstract method to assign final garment type.
+     *
+     * @return method type to assign to the garment field.
+     */
+    protected abstract EGarment assignGarment();
+
+    /**
+     * Method to add information about a failed pattern creation due to missing measurements.
+     *
+     * @param userid name of the user concerned.
+     * @param id     ID of the measurement which caused the failure.
+     */
+    protected void addMissingMeasurement(String userid, String id)
+    {
+        missingMeasurements.add(userid + "/" + method + "/" + garment + " : Measurement ID = " + id);
+    }
 
     /**
      * Obtain measurements from the measurements hashmap as required by the pattern.
+     *
      * @param dataStore the object holding all acquired measurement data.
-     * @return          indication as to whether reading was successful.
+     * @return indication as to whether reading was successful.
      */
     protected abstract boolean readMeasurements(Measurements dataStore);
 
@@ -126,11 +139,13 @@ public abstract class Pattern implements IPlottable
 
     /**
      * Method to check that a block number index is within the range of blocks stored in the pattern.
-     * @param blockNumber   number to check.
+     *
+     * @param blockNumber number to check.
      */
     private void rangeCheck(int blockNumber)
     {
-        if (blockNumber > blocks.size()) throw new IndexOutOfBoundsException("Accessing out of range of number of blocks!");
+        if (blockNumber > blocks.size())
+            throw new IndexOutOfBoundsException("Accessing out of range of number of blocks!");
     }
 
     /* Interface implementation */
@@ -181,7 +196,7 @@ public abstract class Pattern implements IPlottable
         {
             // Construct output path
             Path path = Paths.get(fileOutput.toString() + "/" + method + "/" + garment + "/");
-    
+
             // Create directory structure if required
             try
             {
@@ -211,12 +226,5 @@ public abstract class Pattern implements IPlottable
             file.writeFile(blocks.get(i).getName(), dxfLayerChooser);
         }
     }
-
-    protected final static ArrayList<easeMeasurement> easeMeasurements = null;
-    public static ArrayList<easeMeasurement> getEaseMeasurement()
-    {
-        return easeMeasurements;
-    }
-    public static void populateEaseMeasurements(){}
 
 }

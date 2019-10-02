@@ -17,26 +17,27 @@ import java.util.Date;
 public class DxfFile
 {
     /**
+     * Some parameters for the annotation text writing
+     */
+    double baselineSkip = 10.0;
+    double textHeight = baselineSkip * 0.8;
+    /**
      * Flag indicating whether file is ready
      */
     private boolean bIsOpen;
-
     /**
      * File writer
      */
     private FileWriter file;
-
     /**
      * Printer
      */
     private PrintWriter printer;
-
     /**
      * Creation date and time
      */
     private Date dDate;
     private String cDate;
-
     /**
      * Extremes of the drawing
      */
@@ -44,19 +45,17 @@ public class DxfFile
     private double maxX;
     private double minY;
     private double maxY;
-
+    double currentBaseline = maxY * 10.0;
     /**
      * Keypoint line coordinates
      */
     private ArrayList<Double> linesX = new ArrayList<>();
     private ArrayList<Double> linesY = new ArrayList<>();
-
     /**
      * Construction line coordinates
      */
     private ArrayList<Double> ConX = new ArrayList<>();
     private ArrayList<Double> ConY = new ArrayList<>();
-
     /**
      * Construction point names list
      */
@@ -64,16 +63,9 @@ public class DxfFile
 
 
     /**
-     * Some parameters for the annotation text writing
-     */
-    double baselineSkip = 10.0;
-    double textHeight = baselineSkip * 0.8;
-    double currentBaseline = maxY * 10.0;
-
-
-    /**
      * Constructor to open a DXF file.
-     * @param filename  name of the file including path
+     *
+     * @param filename name of the file including path
      */
     public DxfFile(String filename)
     {
@@ -97,8 +89,9 @@ public class DxfFile
 
     /**
      * Method to take a list of coordinates of line endings and add them to the DXF file
-     * @param xPts  coordinates of x
-     * @param yPts  coordinates of y
+     *
+     * @param xPts coordinates of x
+     * @param yPts coordinates of y
      */
     public void addLines(ArrayList<Double> xPts, ArrayList<Double> yPts)
     {
@@ -114,8 +107,9 @@ public class DxfFile
 
     /**
      * Method to take a list of coordinates for construction points and add them to the DXF file
-     * @param xPts coordinates of x
-     * @param yPts coordinates of y
+     *
+     * @param xPts  coordinates of x
+     * @param yPts  coordinates of y
      * @param names names of the points
      */
     public void addConstructionPoints(ArrayList<Double> xPts, ArrayList<Double> yPts, ArrayList<String> names)
@@ -136,8 +130,9 @@ public class DxfFile
 
     /**
      * Writes the contents of the DXF file.
-     * @param blockName     name of the block to be overlaid on the DXF drawing
-     * @param dxfLayerChooser   array of flags indicating which features should be written
+     *
+     * @param blockName       name of the block to be overlaid on the DXF drawing
+     * @param dxfLayerChooser array of flags indicating which features should be written
      */
     public void writeFile(String blockName, boolean[] dxfLayerChooser)
     {
@@ -215,7 +210,7 @@ public class DxfFile
             writeDxfLine("49", "1.0");          // Dot, dash or space length
 
             // End the table
-            writeDxfLine("0","ENDTAB");
+            writeDxfLine("0", "ENDTAB");
 
             // Configure layer
             writeDxfLine("0", "TABLE");
@@ -335,7 +330,7 @@ public class DxfFile
 
             // Insert the block defined earlier
             writeDxfLine("0", "INSERT");
-            writeDxfLine("8","1");
+            writeDxfLine("8", "1");
             writeDxfLine("2", blockName);
             writeDxfLine("10", "0.0");
             writeDxfLine("20", "0.0");
@@ -468,11 +463,12 @@ public class DxfFile
 
     /**
      * Method to print a line to a file giving it a string format
-     * @param str   string to print
+     *
+     * @param str string to print
      */
     private void writeLine(String str)
     {
-        if(bIsOpen)
+        if (bIsOpen)
         {
             printer.printf("%s" + "%n", str);
         }
@@ -480,8 +476,9 @@ public class DxfFile
 
     /**
      * Wrapper to write a pair of lines in a DXF file
-     * @param code      group code
-     * @param value     value
+     *
+     * @param code  group code
+     * @param value value
      */
     private void writeDxfLine(String code, String value)
     {
@@ -491,7 +488,8 @@ public class DxfFile
 
     /**
      * Write a line of annotation text and adjust internal parameters ready for next line.
-     * @param text  Text line to write
+     *
+     * @param text Text line to write
      */
     private void writeAnnotationText(String text)
     {

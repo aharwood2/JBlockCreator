@@ -6,8 +6,8 @@ package mathcontainers;
 public class VectorND
 {
 
-    int size;
     protected double[] val;
+    int size;
 
     public VectorND(int size)
     {

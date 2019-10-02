@@ -11,9 +11,10 @@ class Prompts
 {
     /**
      * Create a message box.
-     * @param infoMessage   Body text of box.
-     * @param titleBar      Error title.
-     * @param type       Message type based on enumeration.
+     *
+     * @param infoMessage Body text of box.
+     * @param titleBar    Error title.
+     * @param type        Message type based on enumeration.
      */
     public static void infoBox(String infoMessage, String titleBar, EMsgType type)
     {

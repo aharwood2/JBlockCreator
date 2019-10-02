@@ -12,35 +12,36 @@ import mathcontainers.Vector2D;
 import java.util.ArrayList;
 
 
-/** Class to construct a trouser pattern using the Beazley and Bond drafting method. */
+/**
+ * Class to construct a trouser pattern using the Beazley and Bond drafting method.
+ */
 public class TrouserPattern
-    extends Pattern
+        extends Pattern
 {
+    protected static ArrayList<easeMeasurement> easeMeasurements = new ArrayList<>();
     /* Pattern-specific Measurements */
     // In future will be simply extracted from the Measurements object.
-    private double a_Waist              = 70.0;
-    private double a_WaistBand          = 70.0;
-    private double b_UpperHip           = 90.0;
-    private double c_Hip                = 96.0;
-    private double d_Thigh              = 57.0;
-    private double e_KneeStraight       = 37.0;
-    private double e_KneeSlim           = 37.0;
-    private double f_Ankle              = 25.0;
-    private double g_UpperHip           = 10.0;
-    private double h_Hip                = 20.0;
-    private double i_Crutch             = 28.0;
-    private double j_Knee               = 60.0;
-    private double k_OutsideLegToAnkle  = 100.0;
-    private double l_InsideLegToAnkle   = 72.0;
+    private double a_Waist = 70.0;
+    private double a_WaistBand = 70.0;
+    private double b_UpperHip = 90.0;
+    private double c_Hip = 96.0;
+    private double d_Thigh = 57.0;
+    private double e_KneeStraight = 37.0;
+    private double e_KneeSlim = 37.0;
+    private double f_Ankle = 25.0;
+    private double g_UpperHip = 10.0;
+    private double h_Hip = 20.0;
+    private double i_Crutch = 28.0;
+    private double j_Knee = 60.0;
+    private double k_OutsideLegToAnkle = 100.0;
 
     /* Arbitrary Measurements */
     // Some initialised after ease has been applied
-
+    private double l_InsideLegToAnkle = 72.0;
     // Crutch shaping
     private double Arb_CrutchCentreFrontOffset = 0.5;
     private double Arb_FrontCrutchCurveBisect = 2.5;
     private double Arb_BackCrutchCurveBisect = 3.0;
-
     // Waist Shaping
     private double Arb_FrontDartSuppression = 4.0;
     private double Arb_FrontDartLength = 10.0;
@@ -49,25 +50,20 @@ public class TrouserPattern
     private double Arb_BackDartWidth = Arb_BackDartSuppression / 2.0;
     private double Arb_BackDartLengthShort = 13.0;
     private double Arb_BackDartLengthLong = 15.0;
-
     // Width of starting rectangle
     private double Arb_FrontCrutchFork;
     private double Arb_BackCrutchFork;
     private double Arb_FrontWidthOfBlock;
     private double Arb_BackWidthOfBlock;
-
     // Centre front and back lines
     private double Arb_CentreFrontFromInsideLeg;
     private double Arb_CentreBackFromInsideLeg;
-
     // Trouser crease line
     private double Arb_FrontCreaseLineFromInsideLeg;
     private double Arb_BackCreaseLineFromInsideLeg;
-
     // Knee
     private double Arb_FrontHalfKneeWidth;
     private double Arb_BackHalfKneeWidth;
-
     // Arb Measurement for construction lines
     private double Arb_UpperHipLevel;
     private double Arb_HipLevel;
@@ -104,6 +100,30 @@ public class TrouserPattern
         createBlocks();
     }
 
+    public static void populateEaseMeasurements()
+    {
+        // Check to see it hasn't already been populated / it is empty
+        if (easeMeasurements.size() > 0)
+        {
+            return;
+        }
+        easeMeasurements.add(new easeMeasurement("Waist Ease", 4.0));
+        easeMeasurements.add(new easeMeasurement("Waist Band Ease", 2.0));
+        easeMeasurements.add(new easeMeasurement("Upper Hip Ease", 4.0));
+        easeMeasurements.add(new easeMeasurement("Hip Ease", 4.0));
+        easeMeasurements.add(new easeMeasurement("Thigh Ease", 10.0));
+        easeMeasurements.add(new easeMeasurement("Straight Knee Ease", 15.0));
+        easeMeasurements.add(new easeMeasurement("Slim Knee Ease", 9.0));
+        easeMeasurements.add(new easeMeasurement("Ankle Ease", 9.0));
+        easeMeasurements.add(new easeMeasurement("Crutch Ease", 1.0));
+        easeMeasurements.add(new easeMeasurement("Inside Leg To Ankle Ease", 1.0));
+    }
+
+    public static ArrayList<easeMeasurement> getEaseMeasurement()
+    {
+        return easeMeasurements;
+    }
+
     /* Implement abstract methods from super class */
     @Override
     protected EMethod assignMethod()
@@ -136,7 +156,8 @@ public class TrouserPattern
     @Override
     protected boolean readMeasurements(Measurements dataStore)
     {
-        try {
+        try
+        {
             // Get measurements from the scan data store
             a_Waist = dataStore.getMeasurement("A02").value;
             b_UpperHip = dataStore.getMeasurement("A13").value;
@@ -155,7 +176,7 @@ public class TrouserPattern
 
             return true;
         }
-        catch(MeasurementNotFoundException e)
+        catch (MeasurementNotFoundException e)
         {
             addMissingMeasurement(dataStore.getName(), e.getMeasurementId());
             return false;
@@ -176,7 +197,7 @@ public class TrouserPattern
         Block frontBlock = blocks.get(blocks.size() - 1);
 
         // Start keypoint placement from bottom left
-        frontBlock.addKeypoint(new Vector2D(0.0,Arb_CentreFrontFromInsideLeg + Arb_CrutchCentreFrontOffset));
+        frontBlock.addKeypoint(new Vector2D(0.0, Arb_CentreFrontFromInsideLeg + Arb_CrutchCentreFrontOffset));
 
         // Next keypoint is hip level
         frontBlock.addKeypoint(new Vector2D(h_Hip, Arb_CentreFrontFromInsideLeg));
@@ -188,10 +209,12 @@ public class TrouserPattern
         frontBlock.addKeypoint(new Vector2D(j_Knee, Arb_FrontCreaseLineFromInsideLeg - Arb_FrontHalfKneeWidth));
 
         // Add keypoint at inside leg and ankle intersection
-        frontBlock.addKeypoint(new Vector2D(k_OutsideLegToAnkle, Arb_FrontCreaseLineFromInsideLeg - Arb_FrontHalfKneeWidth));
+        frontBlock.addKeypoint(
+                new Vector2D(k_OutsideLegToAnkle, Arb_FrontCreaseLineFromInsideLeg - Arb_FrontHalfKneeWidth));
 
         // Add keypoint at outside leg and ankle intersection
-        frontBlock.addKeypoint(new Vector2D(k_OutsideLegToAnkle, Arb_FrontCreaseLineFromInsideLeg + Arb_FrontHalfKneeWidth));
+        frontBlock.addKeypoint(
+                new Vector2D(k_OutsideLegToAnkle, Arb_FrontCreaseLineFromInsideLeg + Arb_FrontHalfKneeWidth));
 
         // Add keypoint at outside leg and knee
         frontBlock.addKeypoint(new Vector2D(j_Knee, Arb_FrontCreaseLineFromInsideLeg + Arb_FrontHalfKneeWidth));
@@ -206,7 +229,8 @@ public class TrouserPattern
         //frontBlock.addKeypoint(new Vector2D(g_UpperHip, Arb_CentreFrontFromInsideLeg + (b_UpperHip / 4.0)));
 
         // Add keypoint at outside leg and waist level
-        frontBlock.addKeypoint(new Vector2D(0.0, Arb_CentreFrontFromInsideLeg + (a_Waist / 4.0) + Arb_FrontDartSuppression));
+        frontBlock.addKeypoint(
+                new Vector2D(0.0, Arb_CentreFrontFromInsideLeg + (a_Waist / 4.0) + Arb_FrontDartSuppression));
 
         // Insert the inside leg curve -- circular curve will do the job rather than something more complicated
         frontBlock.addCircularCurve(new Vector2D(i_Crutch, 0.0),
@@ -220,15 +244,16 @@ public class TrouserPattern
                 new Vector2D(i_Crutch, 0.0),
                 new Vector2D(i_Crutch, Arb_CentreFrontFromInsideLeg),
                 Arb_FrontCrutchCurveBisect,
-                new double[] {0.0, 90.0},
-                new int[] {-1, -1}
+                new double[]{0.0, 90.0},
+                new int[]{-1, -1}
         );
 
 
         // Insert darts in anti-clockwise order
-        Vector2D startSegment = new Vector2D(0.0, Arb_CentreFrontFromInsideLeg + (a_Waist / 4.0) + Arb_FrontDartSuppression);
-        Vector2D endSegment = new Vector2D(0.0,Arb_CentreFrontFromInsideLeg + Arb_CrutchCentreFrontOffset);
-        double positionTopDart = (0.5 * (startSegment.getY() - Arb_FrontCreaseLineFromInsideLeg))  /
+        Vector2D startSegment = new Vector2D(0.0,
+                                             Arb_CentreFrontFromInsideLeg + (a_Waist / 4.0) + Arb_FrontDartSuppression);
+        Vector2D endSegment = new Vector2D(0.0, Arb_CentreFrontFromInsideLeg + Arb_CrutchCentreFrontOffset);
+        double positionTopDart = (0.5 * (startSegment.getY() - Arb_FrontCreaseLineFromInsideLeg)) /
                 (startSegment.getY() - endSegment.getY());
         ArrayList<Vector2D> dartPoints = frontBlock.addDart(startSegment,
                                                             endSegment,
@@ -250,7 +275,8 @@ public class TrouserPattern
         // Add a curve instead of of straight line for the hip to waist line -- using a point at the upper hip level
         // positioned midway between the point at the hip and the point at the waist as an intermediate point
         Vector2D frontHipWaistStart = new Vector2D(h_Hip, Arb_FrontWidthOfBlock);
-        Vector2D frontHipWaistEnd = new Vector2D(0.0, Arb_CentreFrontFromInsideLeg + (a_Waist / 4.0) + Arb_FrontDartSuppression);
+        Vector2D frontHipWaistEnd = new Vector2D(0.0,
+                                                 Arb_CentreFrontFromInsideLeg + (a_Waist / 4.0) + Arb_FrontDartSuppression);
         double frontHipWaistY = (frontHipWaistStart.getY() - frontHipWaistEnd.getY()) / 2.0;
         Vector2D frontHipWaistInt = new Vector2D(Arb_UpperHipLevel, frontHipWaistEnd.getY() + frontHipWaistY);
         frontBlock.addDirectedCurve(frontHipWaistStart, frontHipWaistEnd, frontHipWaistInt, 0.0);
@@ -258,22 +284,22 @@ public class TrouserPattern
 
         // Add construction keypoints for Upper Hip Level
         frontBlock.addConstructionPoint(new Vector2D((g_UpperHip), 0.0 - Arb_Con),
-                                        new Vector2D((g_UpperHip), c_Hip/4 - 1.0 + Arb_FrontCrutchFork + Arb_Con),
+                                        new Vector2D((g_UpperHip), c_Hip / 4 - 1.0 + Arb_FrontCrutchFork + Arb_Con),
                                         "Upper Hip");
 
         // Add construction keypoints for Hip Level
         frontBlock.addConstructionPoint(new Vector2D((h_Hip), 0.0 - Arb_Con),
-                                        new Vector2D((h_Hip), c_Hip/4 - 1.0 + Arb_FrontCrutchFork + Arb_Con),
+                                        new Vector2D((h_Hip), c_Hip / 4 - 1.0 + Arb_FrontCrutchFork + Arb_Con),
                                         "Hip");
 
         // Add construction keypoints for Crutch Level
         frontBlock.addConstructionPoint(new Vector2D((i_Crutch), 0.0 - Arb_Con),
-                                        new Vector2D((i_Crutch), c_Hip/4 - 1.0 + Arb_FrontCrutchFork + Arb_Con),
+                                        new Vector2D((i_Crutch), c_Hip / 4 - 1.0 + Arb_FrontCrutchFork + Arb_Con),
                                         "Crutch");
 
         // Add construction keypoints for Knee Level
         frontBlock.addConstructionPoint(new Vector2D((j_Knee), 0.0 - Arb_Con),
-                                        new Vector2D((j_Knee), c_Hip/4 - 1.0 + Arb_FrontCrutchFork + Arb_Con),
+                                        new Vector2D((j_Knee), c_Hip / 4 - 1.0 + Arb_FrontCrutchFork + Arb_Con),
                                         "Knee");
 
         // Back block //
@@ -286,7 +312,7 @@ public class TrouserPattern
         backBlock.addKeypoint(new Vector2D(-1.0, Arb_CentreBackFromInsideLeg + 2.0));
 
         // Add keypoint at inside leg and hip level
-        backBlock.addKeypoint(new Vector2D (h_Hip, Arb_CentreBackFromInsideLeg));
+        backBlock.addKeypoint(new Vector2D(h_Hip, Arb_CentreBackFromInsideLeg));
 
         // Add keypoint at inside leg and crutch
         backBlock.addKeypoint(new Vector2D(i_Crutch + 1.0, 0.0));
@@ -295,10 +321,12 @@ public class TrouserPattern
         backBlock.addKeypoint(new Vector2D(j_Knee, Arb_BackCreaseLineFromInsideLeg - Arb_BackHalfKneeWidth));
 
         // Add keypoint at inside leg and ankle
-        backBlock.addKeypoint(new Vector2D(k_OutsideLegToAnkle, Arb_BackCreaseLineFromInsideLeg - Arb_BackHalfKneeWidth));
+        backBlock.addKeypoint(
+                new Vector2D(k_OutsideLegToAnkle, Arb_BackCreaseLineFromInsideLeg - Arb_BackHalfKneeWidth));
 
         // Add keypoint at outside leg and ankle
-        backBlock.addKeypoint(new Vector2D(k_OutsideLegToAnkle, Arb_BackCreaseLineFromInsideLeg + Arb_BackHalfKneeWidth));
+        backBlock.addKeypoint(
+                new Vector2D(k_OutsideLegToAnkle, Arb_BackCreaseLineFromInsideLeg + Arb_BackHalfKneeWidth));
 
         // Add keypoint at outside leg and knee
         backBlock.addKeypoint(new Vector2D(j_Knee, Arb_BackCreaseLineFromInsideLeg + Arb_BackHalfKneeWidth));
@@ -316,15 +344,17 @@ public class TrouserPattern
 
         // Add waist darts
         startSegment = new Vector2D(0.0, Arb_CentreBackFromInsideLeg + 2.0 + yOffset);
-        endSegment = new Vector2D(-1.0,Arb_CentreBackFromInsideLeg + 2.0);
+        endSegment = new Vector2D(-1.0, Arb_CentreBackFromInsideLeg + 2.0);
 
         // Assumes the apex of the dart is reference for its position not the base.
         // Need to therefore compute where the base of the dart would be given the angle of the waistline.
-        double angleOfWaist = Math.atan((endSegment.getX() - startSegment.getX()) / (endSegment.getY() - startSegment.getY()));
+        double angleOfWaist = Math.atan(
+                (endSegment.getX() - startSegment.getX()) / (endSegment.getY() - startSegment.getY()));
         double apexYPosition = 0.5 * (startSegment.getY() + Arb_BackCreaseLineFromInsideLeg);
         double baseYShiftFromApex = Arb_BackDartLengthShort * Math.sin(angleOfWaist);
         double baseYShiftFromStartSeg = startSegment.getY() - (apexYPosition + baseYShiftFromApex);
-        positionTopDart = (baseYShiftFromStartSeg / Math.cos(angleOfWaist)) / (startSegment.subtract(endSegment).norm());
+        positionTopDart = (baseYShiftFromStartSeg / Math.cos(angleOfWaist)) / (startSegment.subtract(
+                endSegment).norm());
         dartPoints.clear();
         dartPoints = backBlock.addDart(startSegment,
                                        endSegment,
@@ -338,7 +368,8 @@ public class TrouserPattern
         apexYPosition = Arb_BackCreaseLineFromInsideLeg;
         baseYShiftFromApex = Arb_BackDartLengthLong * Math.sin(angleOfWaist);
         baseYShiftFromStartSeg = startSegment.getY() - (apexYPosition + baseYShiftFromApex);
-        positionBottomDart = (baseYShiftFromStartSeg / Math.cos(angleOfWaist)) / (startSegment.subtract(endSegment).norm());
+        positionBottomDart = (baseYShiftFromStartSeg / Math.cos(angleOfWaist)) / (startSegment.subtract(
+                endSegment).norm());
         backBlock.addDart(startSegment,
                           endSegment,
                           positionBottomDart,
@@ -359,8 +390,8 @@ public class TrouserPattern
                 new Vector2D(i_Crutch + 1.0, 0.0),
                 new Vector2D(i_Crutch, Arb_CentreBackFromInsideLeg),
                 Arb_BackCrutchCurveBisect,
-                new double[] {0.0, 75.0},
-                new int[] {-1, -1}
+                new double[]{0.0, 75.0},
+                new int[]{-1, -1}
         );
 
         // Add a curve instead of of straight line for the hip to waist line
@@ -372,46 +403,23 @@ public class TrouserPattern
 
         // Add construction keypoints for Upper Hip Level
         backBlock.addConstructionPoint(new Vector2D((g_UpperHip), 0.0 - Arb_Con),
-                                       new Vector2D((g_UpperHip), c_Hip/4 + 1.0 + Arb_BackCrutchFork + Arb_Con),
+                                       new Vector2D((g_UpperHip), c_Hip / 4 + 1.0 + Arb_BackCrutchFork + Arb_Con),
                                        "Upper Hip");
 
         // Add construction keypoints for Hip Level
         backBlock.addConstructionPoint(new Vector2D((h_Hip), 0.0 - Arb_Con),
-                                       new Vector2D((h_Hip), c_Hip/4 + 1.0 + Arb_BackCrutchFork + Arb_Con),
+                                       new Vector2D((h_Hip), c_Hip / 4 + 1.0 + Arb_BackCrutchFork + Arb_Con),
                                        "Hip");
 
         // Add construction keypoints for Crutch Level
         backBlock.addConstructionPoint(new Vector2D((i_Crutch), 0.0 - Arb_Con),
-                                       new Vector2D((i_Crutch), c_Hip/4 + 1.0 + Arb_BackCrutchFork + Arb_Con),
+                                       new Vector2D((i_Crutch), c_Hip / 4 + 1.0 + Arb_BackCrutchFork + Arb_Con),
                                        "Crutch");
 
         // Add construction keypoints for Knee Level
         backBlock.addConstructionPoint(new Vector2D((j_Knee), 0.0 - Arb_Con),
-                                       new Vector2D((j_Knee), c_Hip/4 + 1.0 + Arb_BackCrutchFork + Arb_Con),
+                                       new Vector2D((j_Knee), c_Hip / 4 + 1.0 + Arb_BackCrutchFork + Arb_Con),
                                        "Knee");
-    }
-
-    protected static ArrayList<easeMeasurement> easeMeasurements = new ArrayList<>();
-
-    public static void populateEaseMeasurements()
-    {
-        // Check to see it hasn't already been populated / it is empty
-        if (easeMeasurements.size() > 0) {return;}
-        easeMeasurements.add(new easeMeasurement("Waist Ease", 4.0));
-        easeMeasurements.add(new easeMeasurement("Waist Band Ease", 2.0));
-        easeMeasurements.add(new easeMeasurement("Upper Hip Ease", 4.0));
-        easeMeasurements.add(new easeMeasurement("Hip Ease", 4.0));
-        easeMeasurements.add(new easeMeasurement("Thigh Ease", 10.0));
-        easeMeasurements.add(new easeMeasurement("Straight Knee Ease", 15.0));
-        easeMeasurements.add(new easeMeasurement("Slim Knee Ease", 9.0));
-        easeMeasurements.add(new easeMeasurement("Ankle Ease", 9.0));
-        easeMeasurements.add(new easeMeasurement("Crutch Ease", 1.0));
-        easeMeasurements.add(new easeMeasurement("Inside Leg To Ankle Ease", 1.0));
-    }
-
-    public static ArrayList<easeMeasurement> getEaseMeasurement()
-    {
-        return easeMeasurements;
     }
 
 

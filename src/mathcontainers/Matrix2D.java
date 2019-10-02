@@ -24,10 +24,11 @@ public class Matrix2D
 
     /**
      * Constructor assuming a 2 x 2 matrix
-     * @param a00   1st row, 1st column
-     * @param a01   1st row, 2nd column
-     * @param a10   2nd row, 1st column
-     * @param a11   2nd row, 2nd column
+     *
+     * @param a00 1st row, 1st column
+     * @param a01 1st row, 2nd column
+     * @param a10 2nd row, 1st column
+     * @param a11 2nd row, 2nd column
      */
     public Matrix2D(double a00, double a01, double a10, double a11)
     {
@@ -40,39 +41,6 @@ public class Matrix2D
         val[0][1] = a01;
         val[1][0] = a10;
         val[1][1] = a11;
-    }
-
-    public void transpose()
-    {
-        double[][] tmp = new double[numRows][numCols];
-        for (int i = 0; i < numRows; i++)
-        {
-            for (int j = 0; j < numCols; j++)
-            {
-                tmp[j][i] = val[i][j];
-            }
-        }
-        val = tmp;
-    }
-
-    public VectorND postMultiply(VectorND columnVector)
-    {
-        VectorND tmp = new VectorND(numCols);
-        for (int i = 0; i < numRows; i++)
-        {
-            tmp.val[i] = 0.0;
-            for (int j = 0; j < numCols; j++)
-            {
-                tmp.val[i] += val[i][j] * columnVector.val[j];
-            }
-        }
-        return tmp;
-    }
-
-    // Wrapper for the inversion code
-    public Matrix2D invert()
-    {
-        return new Matrix2D(numRows, numCols, invert(val));
     }
 
     /**
@@ -168,6 +136,39 @@ public class Matrix2D
                     a[index[i]][l] -= pj * a[index[j]][l];
             }
         }
+    }
+
+    public void transpose()
+    {
+        double[][] tmp = new double[numRows][numCols];
+        for (int i = 0; i < numRows; i++)
+        {
+            for (int j = 0; j < numCols; j++)
+            {
+                tmp[j][i] = val[i][j];
+            }
+        }
+        val = tmp;
+    }
+
+    public VectorND postMultiply(VectorND columnVector)
+    {
+        VectorND tmp = new VectorND(numCols);
+        for (int i = 0; i < numRows; i++)
+        {
+            tmp.val[i] = 0.0;
+            for (int j = 0; j < numCols; j++)
+            {
+                tmp.val[i] += val[i][j] * columnVector.val[j];
+            }
+        }
+        return tmp;
+    }
+
+    // Wrapper for the inversion code
+    public Matrix2D invert()
+    {
+        return new Matrix2D(numRows, numCols, invert(val));
     }
 
 }

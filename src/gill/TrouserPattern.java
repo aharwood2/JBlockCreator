@@ -3,13 +3,18 @@ package gill;
 import jblockenums.EGarment;
 import jblockenums.EMethod;
 import jblockexceptions.MeasurementNotFoundException;
-import jblockmain.*;
+import jblockmain.Block;
+import jblockmain.Measurements;
+import jblockmain.Pattern;
+import jblockmain.easeMeasurement;
 import mathcontainers.Vector2D;
 
 import java.util.ArrayList;
 
 public class TrouserPattern
-        extends Pattern {
+        extends Pattern
+{
+    protected static ArrayList<easeMeasurement> easeMeasurements = new ArrayList<>();
     /* Pattern-specific Measurements */
     private double a_WaistToHip;            // Measurement [015]
     private double b_ThighCircR;            // Measurement [017]
@@ -36,26 +41,20 @@ public class TrouserPattern
     private double w_WaistFrZ;              // Measurement [052]
     private double x_WaistBkZ;              // Measurement [053]
     private double y_FrCrotchLength;        // Measurement [054]
-    private double z_BkCrotchLength;        // Measurement [055]
 
     /* Arbitrary Measurements */
-
+    private double z_BkCrotchLength;        // Measurement [055]
     // Arb measurement for 2 inches in centimetres
     private double Arb_TwoInches;
-
     // Arb measurement for the crotch
     private double Arb_CrotchPointFive;
-
     // Arb measurement for back hem drop
     private double Arb_BkHemDrop;
-
     // Arb measurement for the crotch reduction
     private double Arb_CrotchReduction;
-
     // Arb measurements for the back dart
     private double Arb_BackDartWidth;
     private double Arb_BackDartLength;
-
     // Arb measurements for the back dart
     private double Arb_FrontDartWidth;
     private double Arb_FrontDartLength;
@@ -63,7 +62,8 @@ public class TrouserPattern
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     /* Methods */
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    public TrouserPattern(Measurements dataStore) {
+    public TrouserPattern(Measurements dataStore)
+    {
         if (!readMeasurements(dataStore)) return;
         addEasement();
 
@@ -77,25 +77,44 @@ public class TrouserPattern
         createBlocks();
     }
 
+    public static void populateEaseMeasurements()
+    {
+        // Check to see it hasn't already been populated / it is empty
+        if (easeMeasurements.size() > 0)
+        {
+            return;
+        }
+    }
+
+    public static ArrayList<easeMeasurement> getEaseMeasurement()
+    {
+        return easeMeasurements;
+    }
+
     /* Implement abstract methods from super class */
     @Override
-    protected EMethod assignMethod() {
+    protected EMethod assignMethod()
+    {
         return EMethod.GILL;
     }
 
     @Override
-    protected EGarment assignGarment() {
+    protected EGarment assignGarment()
+    {
         return EGarment.TROUSER;
     }
 
     @Override
-    protected void addEasement() {
+    protected void addEasement()
+    {
         // No easement needed
     }
 
     @Override
-    protected boolean readMeasurements(Measurements dataStore) {
-        try {
+    protected boolean readMeasurements(Measurements dataStore)
+    {
+        try
+        {
             // Based on measurements for this pattern we can read the following from the scan
             a_WaistToHip = dataStore.getMeasurement("A15").value;            // Measurement [015]
             b_ThighCircR = dataStore.getMeasurement("A17").value;            // Measurement [017]
@@ -128,7 +147,9 @@ public class TrouserPattern
             userName = dataStore.getName();
 
             return true;
-        } catch (MeasurementNotFoundException e) {
+        }
+        catch (MeasurementNotFoundException e)
+        {
             addMissingMeasurement(dataStore.getName(), e.getMeasurementId());
             return false;
         }
@@ -138,13 +159,15 @@ public class TrouserPattern
      * The actual block creation process following the drafting method of Gill.
      */
     @Override
-    protected void createBlocks() {
+    protected void createBlocks()
+    {
         // Points that make up the shape are listed in a strict anti-clockwise order to maintain correct connectivity for
         // plotting. The crotch point is the origin
 
         //need to fix the fact that the crotch point is not always centered on the body scanner
         //hence need to shift the front/back by that amount
-        if (r_CrotchZ > 0.0) {
+        if (r_CrotchZ > 0.0)
+        {
             s_HipFrZ -= r_CrotchZ;
             w_WaistFrZ -= r_CrotchZ;
             u_SeatFrZ -= r_CrotchZ;
@@ -153,7 +176,8 @@ public class TrouserPattern
             x_WaistBkZ -= r_CrotchZ;
             v_SeatBkZ -= r_CrotchZ;
         }
-        if (r_CrotchZ < 0.0) {
+        if (r_CrotchZ < 0.0)
+        {
             s_HipFrZ -= r_CrotchZ;
             w_WaistFrZ -= r_CrotchZ;
             u_SeatFrZ -= r_CrotchZ;
@@ -217,16 +241,16 @@ public class TrouserPattern
         Vector2D point21 = new Vector2D(hipXPosition, point16.getY() - ((h_FrHipArc / 2.0) + 1.0));
         Vector2D point22 = new Vector2D(centreXPosition, -(s_HipFrZ - 2.5 + (h_FrHipArc / 2.0) + 1.0));
         Vector2D point23 = new Vector2D(kneeXPosition,
-                (point22.getY() / 2.0) - (((c_KneeCircR / 2.0) + 7.0 - 2.0) / 2.0));
+                                        (point22.getY() / 2.0) - (((c_KneeCircR / 2.0) + 7.0 - 2.0) / 2.0));
 
         Vector2D point24 = new Vector2D(ankleXPosition,
-                (point22.getY() / 2.0) - (((d_AnkleCircleR / 2.0) + 10.0 - 2.0) / 2.0));
+                                        (point22.getY() / 2.0) - (((d_AnkleCircleR / 2.0) + 10.0 - 2.0) / 2.0));
 
         Vector2D point25 = new Vector2D(ankleXPosition,
-                (point22.getY() / 2.0) + (((d_AnkleCircleR / 2.0) + 10.0 - 2.0) / 2.0));
+                                        (point22.getY() / 2.0) + (((d_AnkleCircleR / 2.0) + 10.0 - 2.0) / 2.0));
 
         Vector2D point26 = new Vector2D(kneeXPosition,
-                (point22.getY() / 2.0) + (((c_KneeCircR / 2.0) + 7.0 - 2.0) / 2.0));
+                                        (point22.getY() / 2.0) + (((c_KneeCircR / 2.0) + 7.0 - 2.0) / 2.0));
 
         if (seatXPosition > hipXPosition)
         {
@@ -281,7 +305,7 @@ public class TrouserPattern
         // Used to help guide curve between crotch point and ankle by having an apex 1/3rd length and 1/4 height
         // From the length and height
         Vector2D point1and2 = new Vector2D((point1.getX() + (point2.getX() - point1.getX())) / 3.0,
-                point1.getY() + ((point2.getY() - point1.getY()) * 0.75));
+                                           point1.getY() + ((point2.getY() - point1.getY()) * 0.75));
 
         // A bunch of curves
         fullBlock.addDirectedCurve(
@@ -359,19 +383,6 @@ public class TrouserPattern
         fullBlock.addRightAngleCurve(point18, dartPoints2.get(0));
         fullBlock.addRightAngleCurve(dartPoints2.get(2), point19);
 
-    }
-
-    protected static ArrayList<easeMeasurement> easeMeasurements = new ArrayList<>();
-
-    public static void populateEaseMeasurements()
-    {
-        // Check to see it hasn't already been populated / it is empty
-        if (easeMeasurements.size() > 0) {return;}
-    }
-
-    public static ArrayList<easeMeasurement> getEaseMeasurement()
-    {
-        return easeMeasurements;
     }
 
 }

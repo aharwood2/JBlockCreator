@@ -15,96 +15,28 @@ import static jblockmain.JBlockCreator.tol;
  * When plotted in order, these keypoints will trace out the block which can then be cut from fabric.
  * Every new pattern must have at least one block object.
  */
-public class Block {
-    /**
-     * Class encapsulating the reference frame mapping
-     */
-    private class ReferenceFrame {
-        final Matrix2D R;
-        final Matrix2D Ri;
-        private double rotang;
-        final Vector2D refStart;
-        final Vector2D refEnd;
-        final Vector2D shiftVector;
-
-        /**
-         * Constructor
-         *
-         * @param startPoint   start point in physical space
-         * @param endPoint     end point in physical space
-         * @param dirStart     direction vector at the start in physical space
-         * @param angleAtStart angle of curve at start point
-         */
-        ReferenceFrame(Vector2D startPoint, Vector2D endPoint, Vector2D dirStart, double angleAtStart) {
-            // To ensure the process is more robust we first map the two end points and their side directions onto a
-            // reference X axis. This is done by first shifting the start point to the reference origin then rotating the
-            // points and directions such that the start bounding line is coincident with the reference Y axis.
-            shiftVector = startPoint;
-
-            // Find rotation angle such that curve will start parallel to X axis:
-            rotang = Math.acos(dirStart.getY() / dirStart.norm()) - (Math.PI * (90.0 - angleAtStart) / 180.0);
-
-            // Check we have the correct rotation -- dirStart should map to X axis if correct i.e. Y = 0
-            double testY = Math.sin(rotang) * dirStart.getX() + Math.cos(rotang) * dirStart.getY();
-            if (Math.abs(testY) > tol) rotang = -rotang;
-
-            // Construct rotation matrix
-            R = new Matrix2D(2, 2,
-                    new double[][]{
-                            {Math.cos(rotang), -Math.sin(rotang)},
-                            {Math.sin(rotang), Math.cos(rotang)}
-                    }
-            );
-
-            // And reverse for later
-            Ri = new Matrix2D(2, 2,
-                    new double[][]{
-                            {Math.cos(-rotang), -Math.sin(-rotang)},
-                            {Math.sin(-rotang), Math.cos(-rotang)}
-                    }
-            );
-
-            //  Shift and rotate to get the reference start and end vectors
-            refStart = new Vector2D(R.postMultiply(shift(startPoint)));
-            refEnd = new Vector2D(R.postMultiply(shift(endPoint)));
-        }
-
-        /**
-         * Method to apply the shift to any vector
-         *
-         * @param vector vector to shift
-         * @return new vector with shift applied
-         */
-        VectorND shift(Vector2D vector) {
-            return vector.subtract(shiftVector);
-        }
-    }
-
+public class Block
+{
     /**
      * Global resolution for some curves (points per cm)
      */
     private static final double res = 1;
-
     /**
      * Name of the block.
      */
     private String name;
-
     /**
      * X positions of the keypoints.
      */
     private ArrayList<Double> keypointsX;
-
     /**
      * Y positions of the keypoints.
      */
     private ArrayList<Double> keypointsY;
-
     /**
      * X positions of the construction points.
      */
     private ArrayList<Double> constructionX;
-
     /**
      * Y positions of the construction points.
      */
@@ -119,7 +51,8 @@ public class Block {
      *
      * @param newName name of new block.
      */
-    public Block(String newName) {
+    public Block(String newName)
+    {
         keypointsX = new ArrayList<Double>();
         keypointsY = new ArrayList<Double>();
         constructionX = new ArrayList<Double>();
@@ -134,7 +67,8 @@ public class Block {
      * @param otherBlock block to be copied.
      * @param newName    name of new block.
      */
-    public Block(Block otherBlock, String newName) {
+    public Block(Block otherBlock, String newName)
+    {
         this(newName);
         this.keypointsX = new ArrayList<>(otherBlock.keypointsX);
         this.keypointsY = new ArrayList<>(otherBlock.keypointsY);
@@ -145,17 +79,105 @@ public class Block {
     }
 
     /**
+     * Get the hypotenuse of a right-angled triangle given the other two sides
+     *
+     * @param side1 adjacent side
+     * @param side2 other adjacent side
+     * @return hypotenuse
+     */
+    public static double triangleGetHypotenuseFromSide(double side1, double side2)
+    {
+        return Math.sqrt(side1 * side1 + side2 * side2);
+    }
+
+    /**
+     * Get the adjacent side of a right-angled triangle given the hypotenuse and the other side
+     *
+     * @param side1      adjacent side
+     * @param hypotenuse hypotenuse
+     * @return other adjacent side
+     */
+    public static double triangleGetAdjacentFromSide(double side1, double hypotenuse)
+    {
+        return Math.sqrt(hypotenuse * hypotenuse - side1 * side1);
+    }
+
+    /**
+     * Get the opposite side of a right-angled triangle given the angle
+     *
+     * @param hypotenuse hypotenuse side
+     * @param angle      internal angle
+     * @return opposite
+     */
+    public static double triangleGetOppositeFromAngle(double hypotenuse, double angle)
+    {
+        return hypotenuse * Math.sin(Math.PI * angle / 180.0);
+    }
+
+    /**
+     * Get the adjacent side of a right-angled triangle given the angle
+     *
+     * @param hypotenuse hypotenuse side
+     * @param angle      internal angle
+     * @return adjacent
+     */
+    public static double triangleGetAdjacentFromAngle(double hypotenuse, double angle)
+    {
+        return hypotenuse * Math.cos(Math.PI * angle / 180.0);
+    }
+
+    /**
+     * @param x1 x position of the center of circle 1
+     * @param x2 x position of the center of circle 2
+     * @param y1 y position of the center of circle 1
+     * @param y2 y position of the center of circle 2
+     * @param r1 length between point 1 and point of intersections
+     * @param r2 length between point 2 and point of intersections
+     * @return return a 2d array representing the 2 points of intersection [0][0] = x0, [0][1] = y0, [1][1] = x1, [1][1] = y1
+     */
+    public static double[][] circleIntersect(double x1, double x2, double y1, double y2, double r1, double r2)
+    {
+        // Creation of return variable
+        double[][] xy = new double[2][2];
+
+        // Actual mathematics of finding intersect point between 2 circles by solving a quadaratic
+        // By expanding cartesian equation of a circle
+        double A = ((r2 * r2) - (r1 * r1) - (x2 * x2) + (x1 * x1) - (y2 * y2) + (y1 * y1)) / ((-2 * x2) + (2 * x1));
+        double D = ((-2.0 * y2) + (2.0 * y1)) / ((-2.0 * x2) + (2.0 * x1));
+        double a = (D * D) + 1.0;
+        double b = ((-2.0 * A * D) + (2.0 * D * x1) + (-2.0 * y1));
+        double c = (A * A) + (x1 * x1) + (-2.0 * A * x1) + (y1 * y1) - (r1 * r1);
+        double discriminant = (b * b) - (4.0 * a * c);
+        if (discriminant < 0.0)
+        {
+            return xy;
+        } // Cannot sqrt a negative number without going into complex numbers
+
+        // TODO: circles do not intersect exception
+
+        // Calculating the x values after the y values have been calculated
+        xy[0][1] = ((-1.0 * b) + (Math.sqrt(discriminant))) / (2.0 * a);
+        xy[1][1] = ((-1.0 * b) - (Math.sqrt(discriminant))) / (2.0 * a);
+        xy[0][0] = A - (D * xy[0][1]);
+        xy[1][0] = A - (D * xy[1][1]);
+        return xy;
+    }
+
+    /**
      * Method to retrieve the number of a keypoint given its position.
      * (Within floating point tolerances)
      *
      * @param xy x position of point
      * @return keypoint number
      */
-    public int getKeypointNumber(Vector2D xy) throws Exception {
+    public int getKeypointNumber(Vector2D xy) throws Exception
+    {
         int i = 0;
-        while (i < keypointsX.size()) {
+        while (i < keypointsX.size())
+        {
             if (Math.abs(keypointsX.get(i) - xy.getX()) < tol &&
-                    Math.abs(keypointsY.get(i) - xy.getY()) < tol) {
+                    Math.abs(keypointsY.get(i) - xy.getY()) < tol)
+            {
                 // Point found
                 break;
             }
@@ -176,7 +198,8 @@ public class Block {
      * @param xy position of point
      * @return keypoint number
      */
-    public int addKeypoint(Vector2D xy) {
+    public int addKeypoint(Vector2D xy)
+    {
         // Add to end of list
         keypointsX.add(xy.getX());
         keypointsY.add(xy.getY());
@@ -191,7 +214,8 @@ public class Block {
      * @param name       name of construction line
      * @return construction line number
      */
-    public int addConstructionPoint(Vector2D startPoint, Vector2D endPoint, String name) {
+    public int addConstructionPoint(Vector2D startPoint, Vector2D endPoint, String name)
+    {
         // Add to end of list
         constructionX.add(startPoint.getX());
         constructionY.add(startPoint.getY());
@@ -209,9 +233,11 @@ public class Block {
      * @param position place point before or after existing point
      * @return keypoint number
      */
-    public int addKeypointNextTo(Vector2D xy, Vector2D adjacent, EPosition position) {
+    public int addKeypointNextTo(Vector2D xy, Vector2D adjacent, EPosition position)
+    {
         // Get the point number of the adjacent point
-        try {
+        try
+        {
             int i = getKeypointNumber(adjacent);
 
             // Correct position if placing after
@@ -222,7 +248,9 @@ public class Block {
             keypointsY.add(i, xy.getY());
 
             return i;
-        } catch (Exception e) {
+        }
+        catch (Exception e)
+        {
             e.printStackTrace();
         }
 
@@ -236,9 +264,11 @@ public class Block {
      * @param newPosition      desired new position of the keypoint
      * @return index of the keypoint in the list
      */
-    public int moveKeypoint(Vector2D existingPosition, Vector2D newPosition) {
+    public int moveKeypoint(Vector2D existingPosition, Vector2D newPosition)
+    {
         // Get the point number of the adjacent point
-        try {
+        try
+        {
             int i = getKeypointNumber(existingPosition);
 
             // Update position
@@ -246,7 +276,9 @@ public class Block {
             keypointsY.set(i, newPosition.getY());
 
             return i;
-        } catch (Exception e) {
+        }
+        catch (Exception e)
+        {
             e.printStackTrace();
         }
 
@@ -258,15 +290,19 @@ public class Block {
      *
      * @param location location of the keypoint to be deleted
      */
-    public void deleteKeypoint(Vector2D location) {
+    public void deleteKeypoint(Vector2D location)
+    {
         // Get the point number of the adjacent point
-        try {
+        try
+        {
             int i = getKeypointNumber(location);
 
             // Delete position
             keypointsX.remove(i);
             keypointsY.remove(i);
-        } catch (Exception e) {
+        }
+        catch (Exception e)
+        {
             e.printStackTrace();
         }
     }
@@ -282,7 +318,8 @@ public class Block {
      */
     private ArrayList<Vector2D> adjustDartPointsForStraightEdge(ArrayList<Vector2D> points,
                                                                 Vector2D lineStart,
-                                                                Vector2D lineEnd) {
+                                                                Vector2D lineEnd)
+    {
         // Extract and name points from points vector
         Vector2D baseStart = points.get(0);
         Vector2D apex = points.get(1);
@@ -370,7 +407,8 @@ public class Block {
      * @return list of points of the dart edges
      */
     public ArrayList<Vector2D> addDart(Vector2D lineStart, Vector2D lineEnd, double position,
-                                       double width, double length, boolean dirNorm, boolean straightSide) {
+                                       double width, double length, boolean dirNorm, boolean straightSide)
+    {
         // Find the equation of the line to find normal
         Vector2D direction = new Vector2D(lineEnd.subtract(lineStart));
         Vector2D normal = new Vector2D(direction.getY(), -direction.getX());
@@ -412,7 +450,8 @@ public class Block {
      * @return list of points of the dart edges
      */
     public ArrayList<Vector2D> addDart(Vector2D baseStart, Vector2D baseEnd, Vector2D apex,
-                                       Vector2D neighbourPt, EPosition adjacency) {
+                                       Vector2D neighbourPt, EPosition adjacency)
+    {
         // Package and pass on
         ArrayList<Vector2D> pointsOfDart = new ArrayList<>();
         pointsOfDart.add(baseStart);
@@ -436,7 +475,8 @@ public class Block {
      * @return list of points of the dart edges
      */
     public ArrayList<Vector2D> addDart(Vector2D lineStart, Vector2D lineEnd, double position,
-                                       double width, Vector2D apex, boolean straightSide) {
+                                       double width, Vector2D apex, boolean straightSide)
+    {
         // TODO: Really need to generalise this and the version above as they share a lot of the same code
 
         // Find the equation of the line
@@ -476,11 +516,15 @@ public class Block {
      */
     public void addDartKeypoints(Vector2D adjPoint,
                                  ArrayList<Vector2D> points,
-                                 EPosition adjacency) {
+                                 EPosition adjacency)
+    {
         // Insert the keypoints
-        if (adjacency == EPosition.AFTER) {
+        if (adjacency == EPosition.AFTER)
+        {
             addKeypointNextTo(points.get(0), adjPoint, EPosition.AFTER);
-        } else {
+        }
+        else
+        {
             addKeypointNextTo(points.get(0), adjPoint, EPosition.BEFORE);
         }
         addKeypointNextTo(points.get(1), points.get(0), EPosition.AFTER);
@@ -492,23 +536,23 @@ public class Block {
      * cut from a circle and hence given points are on the circle circumference. Direction of normal is indicated by
      * boolean value -- true for right hand normal and false for left hand normal -- which tells the method which way
      * to curve. Start and end points must be specified in the strict anti-clockwise order of the keypoints list.
-<<<<<<< HEAD
-=======
-     * -> ), ( <-
->>>>>>> c5939f2beef55e5311f895b577467dc855ac213f
      *
      * @param startPoint start position of curve
      * @param endPoint   end position of curve
      * @param height     height of curve above a straight line joining start and end positions
      * @param dirNorm    direction of the centre of the circle
      */
-    public void addCircularCurve(Vector2D startPoint, Vector2D endPoint, double height, boolean dirNorm) {
+    public void addCircularCurve(Vector2D startPoint, Vector2D endPoint, double height, boolean dirNorm)
+    {
         // Get equation of line
         Vector2D direction = new Vector2D(endPoint.subtract(startPoint));
         Vector2D norm_dir;
-        if (dirNorm) {
+        if (dirNorm)
+        {
             norm_dir = new Vector2D(direction.getY(), -direction.getX());
-        } else {
+        }
+        else
+        {
             norm_dir = new Vector2D(-direction.getY(), direction.getX());
         }
         norm_dir.divideBy(norm_dir.norm());
@@ -548,11 +592,13 @@ public class Block {
         double th2 = Math.acos(xOffsetEnd / radius);
 
         // Quadrant check to get offset correct
-        if ((xOffsetStart < 0.0 && yOffsetStart < 0.0) || (xOffsetStart > 0.0 && yOffsetStart < 0.0)) {
+        if ((xOffsetStart < 0.0 && yOffsetStart < 0.0) || (xOffsetStart > 0.0 && yOffsetStart < 0.0))
+        {
             // Flip theta
             th1 *= -1.0;
         }
-        if ((xOffsetEnd < 0.0 && yOffsetEnd < 0.0) || (xOffsetEnd > 0.0 && yOffsetEnd < 0.0)) {
+        if ((xOffsetEnd < 0.0 && yOffsetEnd < 0.0) || (xOffsetEnd > 0.0 && yOffsetEnd < 0.0))
+        {
             // Flip theta
             th2 *= -1.0;
         }
@@ -565,7 +611,8 @@ public class Block {
         Vector2D tmp2 = new Vector2D(startPoint);
         double spacing = (th2 - th1) / (numPts - 1);
         double th;
-        for (int i = 1; i < numPts - 1; i++) {
+        for (int i = 1; i < numPts - 1; i++)
+        {
             th = th1 + i * spacing;
             tmp = new Vector2D(radius * Math.cos(th) + centrex, radius * Math.sin(th) + centrey);
             addKeypointNextTo(tmp, tmp2, EPosition.AFTER);
@@ -591,7 +638,8 @@ public class Block {
     public Vector2D addDirectedCurveWithApexTangent(Vector2D startPoint, Vector2D endPoint,
                                                     Vector2D dirStart, Vector2D dirEnd,
                                                     Vector2D tangentCorner, double tangentPointOffset,
-                                                    double[] anglesAtEnds, int[] offsetDirection) {
+                                                    double[] anglesAtEnds, int[] offsetDirection)
+    {
         // Specify the tangent point using corner and offset
         Vector2D tangentPoint = new Vector2D(
                 tangentCorner.subtract(
@@ -604,8 +652,8 @@ public class Block {
 
         // Add guide point as a keypoint
         addKeypointNextTo(tangentPoint,
-                startPoint,
-                EPosition.AFTER);
+                          startPoint,
+                          EPosition.AFTER);
 
         // Get direction of the bisect line (which will be normal to the curve)
         Vector2D apexToCorner = new Vector2D(tangentCorner.subtract(tangentPoint));
@@ -615,17 +663,17 @@ public class Block {
 
         // Now we can construct the first part of the curve
         addDirectedCurve(startPoint,
-                tangentPoint,
-                dirStart,
-                tangentDirection, new double[]{anglesAtEnds[0], 0.0}
+                         tangentPoint,
+                         dirStart,
+                         tangentDirection, new double[]{anglesAtEnds[0], 0.0}
         );
 
         // Construct the second part of the curve (intersect at end is 90 degrees)
         return addDirectedCurve(tangentPoint,
-                endPoint,
-                tangentDirection,
-                dirEnd,
-                new double[]{0.0, anglesAtEnds[1]}
+                                endPoint,
+                                tangentDirection,
+                                dirEnd,
+                                new double[]{0.0, anglesAtEnds[1]}
         );
     }
 
@@ -643,16 +691,17 @@ public class Block {
      */
     public Vector2D addDirectedCurveWithApexTangent(Vector2D startPoint, Vector2D endPoint,
                                                     Vector2D tangentCorner, double tangentPointOffset,
-                                                    double[] anglesAtEnds, int[] offsetDirection) {
+                                                    double[] anglesAtEnds, int[] offsetDirection)
+    {
         // Get directions
         Vector2D dirStart = getDirectionAtKeypoint(startPoint, EPosition.BEFORE);
         Vector2D dirEnd = getDirectionAtKeypoint(endPoint, EPosition.AFTER);
 
         // Pass to fully qualified version
         return addDirectedCurveWithApexTangent(startPoint, endPoint,
-                dirStart, dirEnd,
-                tangentCorner, tangentPointOffset,
-                anglesAtEnds, offsetDirection);
+                                               dirStart, dirEnd,
+                                               tangentCorner, tangentPointOffset,
+                                               anglesAtEnds, offsetDirection);
     }
 
     /**
@@ -664,7 +713,8 @@ public class Block {
      * @param angleAtEnds desired angle at each end of the curve
      * @return final point on the curve
      */
-    public Vector2D addDirectedCurve(Vector2D startPoint, Vector2D endPoint, double[] angleAtEnds) {
+    public Vector2D addDirectedCurve(Vector2D startPoint, Vector2D endPoint, double[] angleAtEnds)
+    {
         // Get directions
         Vector2D dirStart = getDirectionAtKeypoint(startPoint, EPosition.BEFORE);
         Vector2D dirEnd = getDirectionAtKeypoint(endPoint, EPosition.AFTER);
@@ -687,7 +737,8 @@ public class Block {
      */
     public Vector2D addDirectedCurve(Vector2D startPoint, Vector2D endPoint,
                                      Vector2D dirStart, Vector2D dirEnd,
-                                     double[] angleAtEnds) {
+                                     double[] angleAtEnds)
+    {
         // Construct the reference frame
         ReferenceFrame f = new ReferenceFrame(startPoint, endPoint, dirStart, angleAtEnds[0]);
 
@@ -704,17 +755,17 @@ public class Block {
         // Rotate the directions given by the amount given
         double startAngle = angleAtEnds[0] * Math.PI / 180.0;
         Matrix2D RCurveStart = new Matrix2D(2, 2,
-                new double[][]{
-                        {Math.cos(startAngle), -Math.sin(startAngle)},
-                        {Math.sin(startAngle), Math.cos(startAngle)}
-                }
+                                            new double[][]{
+                                                    {Math.cos(startAngle), -Math.sin(startAngle)},
+                                                    {Math.sin(startAngle), Math.cos(startAngle)}
+                                            }
         );
         double endAngle = angleAtEnds[1] * Math.PI / 180.0;
         Matrix2D RCurveEnd = new Matrix2D(2, 2,
-                new double[][]{
-                        {Math.cos(endAngle), -Math.sin(endAngle)},
-                        {Math.sin(endAngle), Math.cos(endAngle)}
-                }
+                                          new double[][]{
+                                                  {Math.cos(endAngle), -Math.sin(endAngle)},
+                                                  {Math.sin(endAngle), Math.cos(endAngle)}
+                                          }
         );
         refCurveStart = new Vector2D(RCurveStart.postMultiply(refDirStart));
         refCurveEnd = new Vector2D(RCurveEnd.postMultiply(refDirEnd));
@@ -730,12 +781,15 @@ public class Block {
         final VectorND constants =
                 new VectorND(4, new double[]{f.refStart.getY(), f.refEnd.getY(), refDxDyStart, refDxDyEnd});
         final Matrix2D mat = new Matrix2D(4, 4,
-                new double[][]{
-                        {Math.pow(f.refStart.getX(), 3), Math.pow(f.refStart.getX(), 2), f.refStart.getX(), 1.0},
-                        {Math.pow(f.refEnd.getX(), 3), Math.pow(f.refEnd.getX(), 2), f.refEnd.getX(), 1.0},
-                        {3.0 * Math.pow(f.refStart.getX(), 2), 2.0 * f.refStart.getX(), 1.0, 0.0},
-                        {3.0 * Math.pow(f.refEnd.getX(), 2), 2.0 * f.refEnd.getX(), 1.0, 0.0}
-                }
+                                          new double[][]{
+                                                  {Math.pow(f.refStart.getX(), 3), Math.pow(f.refStart.getX(),
+                                                                                            2), f.refStart.getX(), 1.0},
+                                                  {Math.pow(f.refEnd.getX(), 3), Math.pow(f.refEnd.getX(),
+                                                                                          2), f.refEnd.getX(), 1.0},
+                                                  {3.0 * Math.pow(f.refStart.getX(),
+                                                                  2), 2.0 * f.refStart.getX(), 1.0, 0.0},
+                                                  {3.0 * Math.pow(f.refEnd.getX(), 2), 2.0 * f.refEnd.getX(), 1.0, 0.0}
+                                          }
         );
 
         // Solve to get coefficients
@@ -755,7 +809,8 @@ public class Block {
      * @return final point on the curve
      */
     public Vector2D addDirectedCurve(Vector2D startPoint, Vector2D endPoint,
-                                     Vector2D intermediate, double angleAtStart) {
+                                     Vector2D intermediate, double angleAtStart)
+    {
         // Get direction
         Vector2D dirStart = getDirectionAtKeypoint(startPoint, EPosition.BEFORE);
 
@@ -777,7 +832,8 @@ public class Block {
      */
     public Vector2D addDirectedCurve(Vector2D startPoint, Vector2D endPoint,
                                      Vector2D intermediate, Vector2D dirStart,
-                                     double angleAtStart) {
+                                     double angleAtStart)
+    {
         // Construct the reference frame
         ReferenceFrame f = new ReferenceFrame(startPoint, endPoint, dirStart, angleAtStart);
 
@@ -794,10 +850,10 @@ public class Block {
         // Rotate the directions given by the amount given
         double startAngle = angleAtStart * Math.PI / 180.0;
         Matrix2D RCurveStart = new Matrix2D(2, 2,
-                new double[][]{
-                        {Math.cos(startAngle), -Math.sin(startAngle)},
-                        {Math.sin(startAngle), Math.cos(startAngle)}
-                }
+                                            new double[][]{
+                                                    {Math.cos(startAngle), -Math.sin(startAngle)},
+                                                    {Math.sin(startAngle), Math.cos(startAngle)}
+                                            }
         );
         refCurveStart = new Vector2D(RCurveStart.postMultiply(refDirStart));
 
@@ -811,12 +867,16 @@ public class Block {
         final VectorND constants =
                 new VectorND(4, new double[]{f.refStart.getY(), refInt.getY(), f.refEnd.getY(), refDxDyStart});
         final Matrix2D mat = new Matrix2D(4, 4,
-                new double[][]{
-                        {Math.pow(f.refStart.getX(), 3), Math.pow(f.refStart.getX(), 2), f.refStart.getX(), 1.0},
-                        {Math.pow(refInt.getX(), 3), Math.pow(refInt.getX(), 2), refInt.getX(), 1.0},
-                        {Math.pow(f.refEnd.getX(), 3), Math.pow(f.refEnd.getX(), 2), f.refEnd.getX(), 1.0},
-                        {3.0 * Math.pow(f.refStart.getX(), 2), 2.0 * f.refStart.getX(), 1.0, 0.0}
-                }
+                                          new double[][]{
+                                                  {Math.pow(f.refStart.getX(), 3), Math.pow(f.refStart.getX(),
+                                                                                            2), f.refStart.getX(), 1.0},
+                                                  {Math.pow(refInt.getX(), 3), Math.pow(refInt.getX(),
+                                                                                        2), refInt.getX(), 1.0},
+                                                  {Math.pow(f.refEnd.getX(), 3), Math.pow(f.refEnd.getX(),
+                                                                                          2), f.refEnd.getX(), 1.0},
+                                                  {3.0 * Math.pow(f.refStart.getX(),
+                                                                  2), 2.0 * f.refStart.getX(), 1.0, 0.0}
+                                          }
         );
 
         // Solve to get coefficients
@@ -833,7 +893,8 @@ public class Block {
      * @param constants right hand side of the system
      * @return coefficients of the cubic spline
      */
-    private PolyCoeffs solveForCoefficients(Matrix2D mat, VectorND constants) {
+    private PolyCoeffs solveForCoefficients(Matrix2D mat, VectorND constants)
+    {
         final Matrix2D inverse = mat.invert();
         VectorND coVec = new VectorND(inverse.postMultiply(constants));
         PolyCoeffs coeffs = new PolyCoeffs(coVec);
@@ -841,8 +902,10 @@ public class Block {
         // Check accuracy of solution
         VectorND test = new VectorND(mat.postMultiply(coVec));
         test.subtractThis(constants);
-        for (int i = 0; i < test.size(); i++) {
-            if (Math.abs(test.get(i)) > tol) {
+        for (int i = 0; i < test.size(); i++)
+        {
+            if (Math.abs(test.get(i)) > tol)
+            {
                 System.out.println("Cubic spline solver is potentially inaccurate!");
             }
         }
@@ -859,7 +922,9 @@ public class Block {
      * @param coeffs     spline coefficients
      * @return last point added
      */
-    private Vector2D addDiscretisedPoints(Vector2D refStart, Vector2D refEnd, Matrix2D Ri, Vector2D startPoint, PolyCoeffs coeffs) {
+    private Vector2D addDiscretisedPoints(Vector2D refStart, Vector2D refEnd, Matrix2D Ri, Vector2D startPoint,
+                                          PolyCoeffs coeffs)
+    {
         // Discretise by specified amount
         int numPts = (int) Math.ceil(refEnd.subtract(refStart).norm() * res);
 
@@ -868,7 +933,8 @@ public class Block {
         double spacing = (refEnd.getX() - refStart.getX()) / (numPts - 1);
         Vector2D tmp = new Vector2D(startPoint);
         Vector2D tmp2 = new Vector2D(tmp);
-        for (int i = 1; i < numPts - 1; i++) {
+        for (int i = 1; i < numPts - 1; i++)
+        {
             double x = refStart.getX() + spacing * i;
             double y = coeffs.a * x * x * x + coeffs.b * x * x + coeffs.c * x + coeffs.d;
 
@@ -889,7 +955,8 @@ public class Block {
      * @param endPoint   end position of curve
      * @return final point on the curve
      */
-    public Vector2D addRightAngleCurve(Vector2D startPoint, Vector2D endPoint) {
+    public Vector2D addRightAngleCurve(Vector2D startPoint, Vector2D endPoint)
+    {
         double[] angles = new double[]{90.0, 90.0};
         return addDirectedCurve(startPoint, endPoint, angles);
     }
@@ -901,7 +968,8 @@ public class Block {
      * @param endPoint   position of the end of the curve
      * @return final point on the curve
      */
-    public Vector2D addBlendedCurve(Vector2D startPoint, Vector2D endPoint) {
+    public Vector2D addBlendedCurve(Vector2D startPoint, Vector2D endPoint)
+    {
         double[] angles = new double[]{0.0, 0.0};
         return addDirectedCurve(startPoint, endPoint, angles);
     }
@@ -911,7 +979,8 @@ public class Block {
      *
      * @return array list of keypoints for plotting
      */
-    public ArrayList<Double> getPlottableKeypointsX() {
+    public ArrayList<Double> getPlottableKeypointsX()
+    {
         ArrayList<Double> tmp = new ArrayList<>(keypointsX);
         tmp.add(keypointsX.get(0));
         return tmp;
@@ -922,7 +991,8 @@ public class Block {
      *
      * @return array list of keypoints for plotting
      */
-    public ArrayList<Double> getPlottableKeypointsY() {
+    public ArrayList<Double> getPlottableKeypointsY()
+    {
         ArrayList<Double> tmp = new ArrayList<>(keypointsY);
         tmp.add(keypointsY.get(0));
         return tmp;
@@ -933,8 +1003,10 @@ public class Block {
      *
      * @return list of X coordinates.
      */
-    public ArrayList<Double> getConstructionX() {
-        if (constructionX != null && constructionX.size() != 0) {
+    public ArrayList<Double> getConstructionX()
+    {
+        if (constructionX != null && constructionX.size() != 0)
+        {
             ArrayList<Double> tmp = new ArrayList<>(constructionX);
             tmp.add(constructionX.get(0));
             return tmp;
@@ -947,8 +1019,10 @@ public class Block {
      *
      * @return list of Y coordinates.
      */
-    public ArrayList<Double> getConstructionY() {
-        if (constructionY != null && constructionY.size() != 0) {
+    public ArrayList<Double> getConstructionY()
+    {
+        if (constructionY != null && constructionY.size() != 0)
+        {
             ArrayList<Double> tmp = new ArrayList<>(constructionY);
             tmp.add(constructionY.get(0));
             return tmp;
@@ -961,8 +1035,10 @@ public class Block {
      *
      * @return list of names.
      */
-    public ArrayList<String> getConstructionNames() {
-        if (constructionNames != null && constructionNames.size() != 0) {
+    public ArrayList<String> getConstructionNames()
+    {
+        if (constructionNames != null && constructionNames.size() != 0)
+        {
             ArrayList<String> tmp = new ArrayList<>(constructionNames);
             tmp.add(constructionNames.get(0));
             return tmp;
@@ -975,52 +1051,9 @@ public class Block {
      *
      * @return name of block
      */
-    public String getName() {
+    public String getName()
+    {
         return name;
-    }
-
-    /**
-     * Get the hypotenuse of a right-angled triangle given the other two sides
-     *
-     * @param side1 adjacent side
-     * @param side2 other adjacent side
-     * @return hypotenuse
-     */
-    public static double triangleGetHypotenuseFromSide(double side1, double side2) {
-        return Math.sqrt(side1 * side1 + side2 * side2);
-    }
-
-    /**
-     * Get the adjacent side of a right-angled triangle given the hypotenuse and the other side
-     *
-     * @param side1      adjacent side
-     * @param hypotenuse hypotenuse
-     * @return other adjacent side
-     */
-    public static double triangleGetAdjacentFromSide(double side1, double hypotenuse) {
-        return Math.sqrt(hypotenuse * hypotenuse - side1 * side1);
-    }
-
-    /**
-     * Get the opposite side of a right-angled triangle given the angle
-     *
-     * @param hypotenuse hypotenuse side
-     * @param angle      internal angle
-     * @return opposite
-     */
-    public static double triangleGetOppositeFromAngle(double hypotenuse, double angle) {
-        return hypotenuse * Math.sin(Math.PI * angle / 180.0);
-    }
-
-    /**
-     * Get the adjacent side of a right-angled triangle given the angle
-     *
-     * @param hypotenuse hypotenuse side
-     * @param angle      internal angle
-     * @return adjacent
-     */
-    public static double triangleGetAdjacentFromAngle(double hypotenuse, double angle) {
-        return hypotenuse * Math.cos(Math.PI * angle / 180.0);
     }
 
     /**
@@ -1030,15 +1063,18 @@ public class Block {
      * @param adjacency connecting point from which to infer direction.
      * @return normalised direction vector.
      */
-    private Vector2D getDirectionAtKeypoint(Vector2D keypoint, EPosition adjacency) {
-        try {
+    private Vector2D getDirectionAtKeypoint(Vector2D keypoint, EPosition adjacency)
+    {
+        try
+        {
             int i = getKeypointNumber(keypoint);
 
             // Approximate direction using linear connection to the adjacent point in the list
             int j = i;
             int adjMultiplier = 1;
             if (adjacency == EPosition.BEFORE) j--;
-            else {
+            else
+            {
                 j++;
                 adjMultiplier = -1;
             }
@@ -1046,14 +1082,17 @@ public class Block {
             // Periodic connection
             if (j < 0) j = keypointsX.size() - 1;
             else if (j == keypointsX.size()) j = 0;
-            Vector2D directionVector = new Vector2D(keypointsX.get(i) - keypointsX.get(j), keypointsY.get(i) - keypointsY.get(j));
+            Vector2D directionVector = new Vector2D(keypointsX.get(i) - keypointsX.get(j),
+                                                    keypointsY.get(i) - keypointsY.get(j));
             directionVector.multiplyBy(adjMultiplier);
 
             // Normalise and return
             directionVector.divideBy(directionVector.norm());
             return directionVector;
 
-        } catch (Exception e) {
+        }
+        catch (Exception e)
+        {
             e.printStackTrace();
         }
 
@@ -1067,25 +1106,31 @@ public class Block {
      * @param point point to be rotated.
      * @return rotation angle required to rotate point onto the positive Y axis.
      */
-    private double getAngleToPositiveYAxis(Vector2D point) {
+    private double getAngleToPositiveYAxis(Vector2D point)
+    {
         double angle;
 
         // Different base expression for Y quadrant
-        if (point.getY() < 0.0) {
+        if (point.getY() < 0.0)
+        {
             angle = (Math.PI / 2.0) + Math.atan(Math.abs(point.getY() / point.getX()));
-        } else {
+        }
+        else
+        {
             angle = Math.atan(Math.abs(point.getX() / point.getY()));
         }
 
         // Change rotation direction based on X quadrant
-        if (point.getX() < 0.0) {
+        if (point.getX() < 0.0)
+        {
             angle *= -1.0;
         }
 
         return angle;
     }
 
-    private double quadraticXBezier(double t, Vector2D start, Vector2D intermediate, Vector2D end) {
+    private double quadraticXBezier(double t, Vector2D start, Vector2D intermediate, Vector2D end)
+    {
         // Helper Function that returns X value for a given t value
         // Which varies from 0 to 1 for a given start, control point, and end vector
 
@@ -1094,7 +1139,8 @@ public class Block {
                 + (end.getX() * (t * t));
     }
 
-    private double quadraticYBezier(double t, Vector2D start, Vector2D intermediate, Vector2D end) {
+    private double quadraticYBezier(double t, Vector2D start, Vector2D intermediate, Vector2D end)
+    {
         // Helper Function that returns Y value for a given t value
         // Which varies from 0 to 1 for a given start, control point, and end vector
 
@@ -1105,11 +1151,13 @@ public class Block {
 
     /**
      * Draws a quadratic bezier curve between 2 points for a given start, end and shaping? point
-     * @param start start vector you want the curve to start from
-     * @param Apex the point which shapes the bezier curve
-     * @param end the end vector you want the curve to stop at
+     *
+     * @param start        start vector you want the curve to start from
+     * @param controlPoint the point which shapes the bezier curve
+     * @param end          the end vector you want the curve to stop at
      */
-    public void addQuadraticBezierCurve(Vector2D start, Vector2D controlPoint, Vector2D end) {
+    public void addQuadraticBezierCurve(Vector2D start, Vector2D controlPoint, Vector2D end)
+    {
         // Calculate the number of points to draw
         int numPts = (int) Math.ceil(end.subtract(start).norm() * res);
 
@@ -1118,7 +1166,8 @@ public class Block {
         Vector2D tmp2 = new Vector2D(tmp);
 
         // For loop which calculates X and Y, adds them to the keypoints, as it iterates from t = 0 to t = 1
-        for (int i = 1; i < numPts - 1; i++) {
+        for (int i = 1; i < numPts - 1; i++)
+        {
             double t = ((double) i / ((double) numPts - 1));
             double x = quadraticXBezier(t, start, controlPoint, end);
             double y = quadraticYBezier(t, start, controlPoint, end);
@@ -1138,15 +1187,20 @@ public class Block {
      * @param endPoint   end position of curve
      * @param height     height of curve above a straight line joining start and end positions
      * @param dirNorm    direction of the centre of the circle
-     * @param otherSide Whether to draw the otherside of the circle
+     * @param otherSide  Whether to draw the otherside of the circle
      */
-    public void addCircularCurve(Vector2D startPoint, Vector2D endPoint, double height, boolean dirNorm, boolean otherSide) {
+    public void addCircularCurve(Vector2D startPoint, Vector2D endPoint, double height, boolean dirNorm,
+                                 boolean otherSide)
+    {
         // Get equation of line
         Vector2D direction = new Vector2D(endPoint.subtract(startPoint));
         Vector2D norm_dir;
-        if (dirNorm) {
+        if (dirNorm)
+        {
             norm_dir = new Vector2D(direction.getY(), -direction.getX());
-        } else {
+        }
+        else
+        {
             norm_dir = new Vector2D(-direction.getY(), direction.getX());
         }
         norm_dir.divideBy(norm_dir.norm());
@@ -1186,16 +1240,21 @@ public class Block {
         double th2 = Math.acos(xOffsetEnd / radius);
 
         // Quadrant check to get offset correct
-        if ((xOffsetStart < 0.0 && yOffsetStart < 0.0) || (xOffsetStart > 0.0 && yOffsetStart < 0.0)) {
+        if ((xOffsetStart < 0.0 && yOffsetStart < 0.0) || (xOffsetStart > 0.0 && yOffsetStart < 0.0))
+        {
             // Flip theta
             th1 *= -1.0;
         }
-        if ((xOffsetEnd < 0.0 && yOffsetEnd < 0.0) || (xOffsetEnd > 0.0 && yOffsetEnd < 0.0)) {
+        if ((xOffsetEnd < 0.0 && yOffsetEnd < 0.0) || (xOffsetEnd > 0.0 && yOffsetEnd < 0.0))
+        {
             // Flip theta
             th2 *= -1.0;
         }
 
-        if(otherSide) {th2 = (Math.PI * 2.0) + th2;}
+        if (otherSide)
+        {
+            th2 = (Math.PI * 2.0) + th2;
+        }
 
         double dcircum = Math.abs(th2 - th1) * radius;
         int numPts = (int) Math.ceil(dcircum * res);
@@ -1205,7 +1264,8 @@ public class Block {
         Vector2D tmp2 = new Vector2D(startPoint);
         double spacing = (th2 - th1) / (numPts - 1);
         double th;
-        for (int i = 1; i < numPts - 1; i++) {
+        for (int i = 1; i < numPts - 1; i++)
+        {
             th = th1 + i * spacing;
             tmp = new Vector2D(radius * Math.cos(th) + centrex, radius * Math.sin(th) + centrey);
             addKeypointNextTo(tmp, tmp2, EPosition.AFTER);
@@ -1213,75 +1273,50 @@ public class Block {
         }
     }
 
-    /**
-     * @param x1 x position of the center of circle 1
-     * @param x2 x position of the center of circle 2
-     * @param y1 y position of the center of circle 1
-     * @param y2 y position of the center of circle 2
-     * @param r1 length between point 1 and point of intersections
-     * @param r2 length between point 2 and point of intersections
-     * @return return a 2d array representing the 2 points of intersection [0][0] = x0, [0][1] = y0, [1][1] = x1, [1][1] = y1
-     */
-    public static double[][] circleIntersect(double x1, double x2, double y1, double y2, double r1, double r2) {
-        // Creation of return variable
-        double[][] xy = new double[2][2];
-
-        // Actual mathematics of finding intersect point between 2 circles by solving a quadaratic
-        // By expanding cartesian equation of a circle
-        double A = ((r2 * r2) - (r1 * r1) - (x2 * x2) + (x1 * x1) - (y2 * y2) + (y1 * y1)) / ((-2 * x2) + (2 * x1));
-        double D = ((-2.0 * y2) + (2.0 * y1)) / ((-2.0 * x2) + (2.0 * x1));
-        double a = (D * D) + 1.0;
-        double b = ((-2.0 * A * D) + (2.0 * D * x1) + (-2.0 * y1));
-        double c = (A * A) + (x1 * x1) + (-2.0 * A * x1) + (y1 * y1) - (r1 * r1);
-        double discriminant = (b * b) - (4.0 * a * c);
-        if (discriminant < 0.0) {
-            return xy;
-        } // Cannot sqrt a negative number without going into complex numbers
-
-        // TODO: circles do not intersect exception
-
-        // Calculating the x values after the y values have been calculated
-        xy[0][1] = ((-1.0 * b) + (Math.sqrt(discriminant))) / (2.0 * a);
-        xy[1][1] = ((-1.0 * b) - (Math.sqrt(discriminant))) / (2.0 * a);
-        xy[0][0] = A - (D * xy[0][1]);
-        xy[1][0] = A - (D * xy[1][1]);
-        return xy;
-    }
-
     //gets the length between 2 keypoints going in an anti-clockwise manner
-    public double getLengthBetweenPoints(Vector2D startPoint, Vector2D endPoint) {
+    public double getLengthBetweenPoints(Vector2D startPoint, Vector2D endPoint)
+    {
         double length = 0;
         int start = 0;
         int end = 0;
-        try {
+        try
+        {
             //gets the start and end vector keypoints
             //if start = vector point10, keypointNumber would  be 9
             start = getKeypointNumber(startPoint);
             end = getKeypointNumber(endPoint);
-        } catch (Exception e) {
+        }
+        catch (Exception e)
+        {
             e.printStackTrace();
             return 0;
         }
         //Length from point 10 to point 10 is 0
-        if (start == end) {
+        if (start == end)
+        {
             return 0;
         }
         //keep track of end as end is then used in the for loop further down
         int size = end;
         //this is to help with say, getting the size from point 10 to point 3 -> need to loop to 10,11,12,13,14,15...1,2,3
         //which is equal to the arraylist.size - start + end
-        if (end < start) {
+        if (end < start)
+        {
             size += keypointsX.size() - start;
-        } else {
+        }
+        else
+        {
             size -= start;
         }
         end = start + 1;
-        for (int i = 0; i < size; i++) {
+        for (int i = 0; i < size; i++)
+        {
 
             //gets the x and y values of the next keypoint and calculated the magnitude/norm between the next
             //and current value then sums up the magnitudes/norms
             //may need to use less sqrts/power functions
-            length += Math.sqrt((Math.pow(keypointsX.get(end) - keypointsX.get(start), 2) + Math.pow(keypointsY.get(end) - keypointsY.get(start), 2)));
+            length += Math.sqrt((Math.pow(keypointsX.get(end) - keypointsX.get(start), 2) + Math.pow(
+                    keypointsY.get(end) - keypointsY.get(start), 2)));
             //special case when you need to calculate length between point 12 and point 3, this is for the loop around
             //to help the for loop
             start = end;
@@ -1294,6 +1329,73 @@ public class Block {
         }
 
         return length;
+    }
+
+    /**
+     * Class encapsulating the reference frame mapping
+     */
+    private class ReferenceFrame
+    {
+        final Matrix2D R;
+        final Matrix2D Ri;
+        final Vector2D refStart;
+        final Vector2D refEnd;
+        final Vector2D shiftVector;
+        private double rotang;
+
+        /**
+         * Constructor
+         *
+         * @param startPoint   start point in physical space
+         * @param endPoint     end point in physical space
+         * @param dirStart     direction vector at the start in physical space
+         * @param angleAtStart angle of curve at start point
+         */
+        ReferenceFrame(Vector2D startPoint, Vector2D endPoint, Vector2D dirStart, double angleAtStart)
+        {
+            // To ensure the process is more robust we first map the two end points and their side directions onto a
+            // reference X axis. This is done by first shifting the start point to the reference origin then rotating the
+            // points and directions such that the start bounding line is coincident with the reference Y axis.
+            shiftVector = startPoint;
+
+            // Find rotation angle such that curve will start parallel to X axis:
+            rotang = Math.acos(dirStart.getY() / dirStart.norm()) - (Math.PI * (90.0 - angleAtStart) / 180.0);
+
+            // Check we have the correct rotation -- dirStart should map to X axis if correct i.e. Y = 0
+            double testY = Math.sin(rotang) * dirStart.getX() + Math.cos(rotang) * dirStart.getY();
+            if (Math.abs(testY) > tol) rotang = -rotang;
+
+            // Construct rotation matrix
+            R = new Matrix2D(2, 2,
+                             new double[][]{
+                                     {Math.cos(rotang), -Math.sin(rotang)},
+                                     {Math.sin(rotang), Math.cos(rotang)}
+                             }
+            );
+
+            // And reverse for later
+            Ri = new Matrix2D(2, 2,
+                              new double[][]{
+                                      {Math.cos(-rotang), -Math.sin(-rotang)},
+                                      {Math.sin(-rotang), Math.cos(-rotang)}
+                              }
+            );
+
+            //  Shift and rotate to get the reference start and end vectors
+            refStart = new Vector2D(R.postMultiply(shift(startPoint)));
+            refEnd = new Vector2D(R.postMultiply(shift(endPoint)));
+        }
+
+        /**
+         * Method to apply the shift to any vector
+         *
+         * @param vector vector to shift
+         * @return new vector with shift applied
+         */
+        VectorND shift(Vector2D vector)
+        {
+            return vector.subtract(shiftVector);
+        }
     }
 
 }

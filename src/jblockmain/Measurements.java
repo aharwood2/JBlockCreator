@@ -6,7 +6,6 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 
 /**
@@ -19,52 +18,14 @@ public class Measurements
      * Name of the input file
      */
     private String scanDataFileName;
-
-    /**
-     * Getter for the list of individuals in the measurements object.
-     * @return list of names
-     */
-    public ArrayList<String> getNames()
-    {
-        return userNames;
-    }
-
-    /**
-     * Nested class representing a measurement with an ID number, a human-readable name and a numerical value.
-     */
-    public class Measurement
-    {
-        private String id;
-        private String humanReadableName;
-        public double value;
-
-        /**
-         * Constructor.
-         * @param _id                   ID of measurement using the format [X00].
-         * @param _humanReadableName    Text description.
-         * @param _value                Numerical value.
-         */
-        public Measurement(String _id, String _humanReadableName, double _value)
-        {
-            this.id = _id;
-            this.humanReadableName = _humanReadableName;
-            this.value = _value;
-
-            // Update the hash map
-            allMeasurements.get(currentUser).put(id, this);
-        }
-    }
-
     /**
      * List of hashmaps of measurements, one for each individual read in from the input files.
      */
     private ArrayList<HashMap<String, Measurement>> allMeasurements;
-
     /**
      * Internal ID of current storeMap
      */
     private int currentUser;
-
     /**
      * List of individuals read in from the input files.
      */
@@ -84,7 +45,8 @@ public class Measurements
 
     /**
      * Constructor which takes an input file name.
-     * @param scanDataFileName  name of input file to read from.
+     *
+     * @param scanDataFileName name of input file to read from.
      */
     public Measurements(String scanDataFileName)
     {
@@ -149,8 +111,9 @@ public class Measurements
 
     /**
      * Method to check whether user has specified a measurement ID in the correct format. If not an exception is thrown.
-     * @param text  ID as text.
-     * @return      Indication whether format is correct.
+     *
+     * @param text ID as text.
+     * @return Indication whether format is correct.
      */
     public static boolean checkIdFormat(String text) throws Exception
     {
@@ -161,7 +124,7 @@ public class Measurements
         if (text.length() != 3) return false;
 
         // Check first character is capital letter
-        if ((int)text.charAt(0) < 65 || (int)text.charAt(0) > 90) return false;
+        if ((int) text.charAt(0) < 65 || (int) text.charAt(0) > 90) return false;
 
         // Check remaining characters are all numbers
         for (int ch = 1; ch < 3; ch++)
@@ -174,23 +137,18 @@ public class Measurements
     }
 
     /**
-     * Means of changing the map targeted by the get measurement method.
-     * @param num   user to target.
+     * Getter for the list of individuals in the measurements object.
+     *
+     * @return list of names
      */
-    public void setCurrentUser(int num)
+    public ArrayList<String> getNames()
     {
-        try
-        {
-            currentUser = num;
-        }
-        catch(Exception e)
-        {
-            e.printStackTrace();
-        }
+        return userNames;
     }
 
     /**
      * Getter for the input file name.
+     *
      * @return input file name.
      */
     public String getScanDataFileName()
@@ -200,7 +158,8 @@ public class Measurements
 
     /**
      * Getter for the current user.
-     * @return  current user name.
+     *
+     * @return current user name.
      */
     public String getName()
     {
@@ -209,7 +168,8 @@ public class Measurements
 
     /**
      * Getter for current user id.
-     * @return  current user id.
+     *
+     * @return current user id.
      */
     public int getCurrentUser()
     {
@@ -217,9 +177,27 @@ public class Measurements
     }
 
     /**
+     * Means of changing the map targeted by the get measurement method.
+     *
+     * @param num user to target.
+     */
+    public void setCurrentUser(int num)
+    {
+        try
+        {
+            currentUser = num;
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+    }
+
+    /**
      * Getter for a specific measurement for current user.
-     * @param id    measurement ID in conforming format.
-     * @return      value of the measurement.
+     *
+     * @param id measurement ID in conforming format.
+     * @return value of the measurement.
      * @throws MeasurementNotFoundException when measurement with specified ID does not exist.
      */
     public Measurement getMeasurement(String id) throws MeasurementNotFoundException
@@ -234,8 +212,9 @@ public class Measurements
 
     /**
      * Method to inspect each line of the input file and populate the measurements in the hashmaps.
-     * @param fileReader    An open file.
-     * @param isBatched     internal flag indicating whether the file uses the batch format or the serial format.
+     *
+     * @param fileReader An open file.
+     * @param isBatched  internal flag indicating whether the file uses the batch format or the serial format.
      */
     private void assignMeasurements(FileReader fileReader, boolean isBatched)
     {
@@ -289,16 +268,17 @@ public class Measurements
                 {
                     if (
                             dividedChunks[i].length() > 0 &&
-                            dividedChunks[i].charAt(0) == '[' &&
-                            Measurements.checkIdFormat(dividedChunks[i]) &&
-                            dividedChunks[i].charAt(4) == ']'
-                        )
+                                    dividedChunks[i].charAt(0) == '[' &&
+                                    Measurements.checkIdFormat(dividedChunks[i]) &&
+                                    dividedChunks[i].charAt(4) == ']'
+                    )
                     {
                         // Stash position in the list
                         validMeasurementPositions.add(i);
 
                         // Takes the ID number part of the array and stores it in the IDNumber array
-                        idNumber.add(dividedChunks[i].substring(dividedChunks[i].indexOf('[') + 1, dividedChunks[i].indexOf(']')));
+                        idNumber.add(dividedChunks[i].substring(dividedChunks[i].indexOf('[') + 1,
+                                                                dividedChunks[i].indexOf(']')));
 
                         // Takes the ID name part of the array and stores it in the IDName array
                         idName.add(dividedChunks[i].substring(dividedChunks[i].indexOf(']') + 2));
@@ -364,6 +344,33 @@ public class Measurements
         catch (Exception e)
         {
             e.printStackTrace();
+        }
+    }
+
+    /**
+     * Nested class representing a measurement with an ID number, a human-readable name and a numerical value.
+     */
+    public class Measurement
+    {
+        public double value;
+        private String id;
+        private String humanReadableName;
+
+        /**
+         * Constructor.
+         *
+         * @param _id                ID of measurement using the format [X00].
+         * @param _humanReadableName Text description.
+         * @param _value             Numerical value.
+         */
+        public Measurement(String _id, String _humanReadableName, double _value)
+        {
+            this.id = _id;
+            this.humanReadableName = _humanReadableName;
+            this.value = _value;
+
+            // Update the hash map
+            allMeasurements.get(currentUser).put(id, this);
         }
     }
 }

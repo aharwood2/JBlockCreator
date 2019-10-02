@@ -3,7 +3,8 @@ package jblockexceptions;
 /**
  * Wraps the NullPointerException to ensure the stack trace has a more useful name.
  */
-public class MeasurementNotFoundException extends NullPointerException
+public class MeasurementNotFoundException
+        extends NullPointerException
 {
     /**
      * Measurement ID which triggered the exception.
@@ -12,7 +13,8 @@ public class MeasurementNotFoundException extends NullPointerException
 
     /**
      * Constructor
-     * @param _measurementIdTrigger     ID of the measurement which trigger the exception.
+     *
+     * @param _measurementIdTrigger ID of the measurement which trigger the exception.
      */
     public MeasurementNotFoundException(String _measurementIdTrigger)
     {
@@ -23,7 +25,8 @@ public class MeasurementNotFoundException extends NullPointerException
 
     /**
      * Get the measurement ID which triggered the exception.
-     * @return  measurement ID
+     *
+     * @return measurement ID
      */
     public String getMeasurementId()
     {

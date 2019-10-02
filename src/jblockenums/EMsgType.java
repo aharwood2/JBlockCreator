@@ -11,8 +11,9 @@ public enum EMsgType
 
     /**
      * Method to convert the message enum to a string.
-     * @param type  enumeration.
-     * @return  string representation.
+     *
+     * @param type enumeration.
+     * @return string representation.
      */
     public String getStringType(EMsgType type)
     {

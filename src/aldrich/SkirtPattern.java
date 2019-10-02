@@ -3,13 +3,15 @@ package aldrich;
 import jblockenums.EGarment;
 import jblockenums.EMethod;
 import jblockexceptions.MeasurementNotFoundException;
-import jblockmain.*;
+import jblockmain.Block;
+import jblockmain.Measurements;
+import jblockmain.Pattern;
 import mathcontainers.Vector2D;
 
 import java.util.ArrayList;
 
 public class SkirtPattern
-    extends Pattern
+        extends Pattern
 {
     /* Skirt pattern block is constructed to fit on the 'natural waistline' */
 
@@ -110,7 +112,8 @@ public class SkirtPattern
     @Override
     protected boolean readMeasurements(Measurements dataStore)
     {
-        try {
+        try
+        {
             // Based on measurements for this pattern we can read the following from the scan:
             a_Waist = dataStore.getMeasurement("A26").value + dataStore.getMeasurement("A27").value;
             b_Hips = dataStore.getMeasurement("A31").value + dataStore.getMeasurement("A32").value;
@@ -122,7 +125,7 @@ public class SkirtPattern
 
             return true;
         }
-        catch(MeasurementNotFoundException e)
+        catch (MeasurementNotFoundException e)
         {
             addMissingMeasurement(dataStore.getName(), e.getMeasurementId());
             return false;
@@ -150,29 +153,31 @@ public class SkirtPattern
         fullBlock.addKeypoint(new Vector2D(d_SkirtLength, 0.0));
         fullBlock.addKeypoint(new Vector2D(d_SkirtLength, b_Hips / 4.0 + Arb_BackHipAdjustment));
         fullBlock.addKeypoint(new Vector2D(d_SkirtLength, b_Hips / 2.0 + Arb_BackHipAdjustment));
-        fullBlock.addKeypoint(new Vector2D(c_WaistToHip,b_Hips / 2.0 + Arb_BackHipAdjustment));
+        fullBlock.addKeypoint(new Vector2D(c_WaistToHip, b_Hips / 2.0 + Arb_BackHipAdjustment));
         fullBlock.addKeypoint(new Vector2D(0.0, b_Hips / 2.0 + Arb_BackHipAdjustment));
 
         // Construction lines for front/back block separation
-        fullBlock.addConstructionPoint(new Vector2D((Arb_WaistCurve - Arb_Con),(b_Hips / 4.0 + Arb_BackHipAdjustment)),
-                                       new Vector2D((d_SkirtLength + Arb_Con),(b_Hips / 4.0 + Arb_BackHipAdjustment)),
+        fullBlock.addConstructionPoint(new Vector2D((Arb_WaistCurve - Arb_Con), (b_Hips / 4.0 + Arb_BackHipAdjustment)),
+                                       new Vector2D((d_SkirtLength + Arb_Con), (b_Hips / 4.0 + Arb_BackHipAdjustment)),
                                        "");
 
         // Three major waistline points
-        fullBlock.addKeypoint(new Vector2D(Arb_WaistCurve, (b_Hips / 2.0 + Arb_BackHipAdjustment) - (a_Waist / 4.0 + Arb_FrontNaturalWaist)));
+        fullBlock.addKeypoint(new Vector2D(Arb_WaistCurve,
+                                           (b_Hips / 2.0 + Arb_BackHipAdjustment) - (a_Waist / 4.0 + Arb_FrontNaturalWaist)));
         fullBlock.addKeypoint(new Vector2D(c_WaistToHip, b_Hips / 4.0 + Arb_BackHipAdjustment));
         fullBlock.addKeypoint(new Vector2D(Arb_WaistCurve, a_Waist / 4.0 + Arb_BackNaturalWaist));
 
         // Adding the two side seam curves
-        fullBlock.addCircularCurve(new Vector2D(Arb_WaistCurve, (b_Hips / 2.0 + Arb_BackHipAdjustment) - (a_Waist / 4.0 + Arb_FrontNaturalWaist)),
+        fullBlock.addCircularCurve(new Vector2D(Arb_WaistCurve,
+                                                (b_Hips / 2.0 + Arb_BackHipAdjustment) - (a_Waist / 4.0 + Arb_FrontNaturalWaist)),
                                    new Vector2D(c_WaistToHip, b_Hips / 4.0 + Arb_HipAdjustment),
                                    1.0,
                                    true);
 
         fullBlock.addCircularCurve(new Vector2D(c_WaistToHip, b_Hips / 4.0 + Arb_HipAdjustment),
                                    new Vector2D(Arb_WaistCurve, a_Waist / 4.0 + Arb_BackNaturalWaist),
-                            1.0,
-                           true);
+                                   1.0,
+                                   true);
 
         // Add construction line for Hip line
         fullBlock.addConstructionPoint(new Vector2D(c_WaistToHip, -Arb_Con),
@@ -181,31 +186,37 @@ public class SkirtPattern
 
         // Add front dart
         ArrayList<Vector2D> dartEdges = fullBlock.addDart(new Vector2D(0.0, b_Hips / 2.0 + Arb_BackHipAdjustment),
-                new Vector2D(Arb_WaistCurve, (b_Hips / 2.0 + Arb_BackHipAdjustment) - (a_Waist / 4.0 + Arb_FrontNaturalWaist)),
-                Arb_FrontDartPlacement, Arb_FrontDartWidth, Arb_FrontDartDepth, true, true);
+                                                          new Vector2D(Arb_WaistCurve,
+                                                                       (b_Hips / 2.0 + Arb_BackHipAdjustment) - (a_Waist / 4.0 + Arb_FrontNaturalWaist)),
+                                                          Arb_FrontDartPlacement, Arb_FrontDartWidth,
+                                                          Arb_FrontDartDepth, true, true);
 
         // Add curves either side of dart ensuring the curve intersects the joining edges at a right angle.
         fullBlock.addRightAngleCurve(new Vector2D(0.0, b_Hips / 2.0 + Arb_BackHipAdjustment), dartEdges.get(0));
 
-        fullBlock.addRightAngleCurve(dartEdges.get(2), new Vector2D(Arb_WaistCurve, (b_Hips / 2.0 + Arb_BackHipAdjustment) - (a_Waist / 4.0 + Arb_FrontNaturalWaist)));
+        fullBlock.addRightAngleCurve(dartEdges.get(2), new Vector2D(Arb_WaistCurve,
+                                                                    (b_Hips / 2.0 + Arb_BackHipAdjustment) - (a_Waist / 4.0 + Arb_FrontNaturalWaist)));
 
         // Add second back dart - second as anticlockwise
-        ArrayList<Vector2D> dartEdges2 = fullBlock.addDart(new Vector2D(Arb_WaistCurve, a_Waist / 4.0 + Arb_BackNaturalWaist),
+        ArrayList<Vector2D> dartEdges2 = fullBlock.addDart(
+                new Vector2D(Arb_WaistCurve, a_Waist / 4.0 + Arb_BackNaturalWaist),
                 new Vector2D(0.0, 0.0),
                 Arb_BackDartPlacement, Arb_BackDartWidth, Arb_BackDartTwoDepth, true, false);
 
         // Add curves either side of dart ensuring the curve intersects the joining edges at a right angle.
-        fullBlock.addRightAngleCurve(new Vector2D(Arb_WaistCurve, a_Waist / 4.0 + Arb_BackNaturalWaist), dartEdges2.get(0));
+        fullBlock.addRightAngleCurve(new Vector2D(Arb_WaistCurve, a_Waist / 4.0 + Arb_BackNaturalWaist),
+                                     dartEdges2.get(0));
 
 
         // Add first back dart - first as anticlockwise
         ArrayList<Vector2D> dartEdges3 = fullBlock.addDart(dartEdges2.get(2),
-                new Vector2D(0.0, 0.0),
-                1.0 / 2.0, Arb_BackDartWidth, Arb_BackDartOneDepth, true, false);
+                                                           new Vector2D(0.0, 0.0),
+                                                           1.0 / 2.0, Arb_BackDartWidth, Arb_BackDartOneDepth, true,
+                                                           false);
 
 
         // Add curves either side of dart ensuring the curve intersects the joining edges at a right angle.
-        fullBlock.addRightAngleCurve(dartEdges2.get(2),dartEdges3.get(0));
-        fullBlock.addRightAngleCurve(dartEdges3.get(2),new Vector2D(0.0, 0.0));
+        fullBlock.addRightAngleCurve(dartEdges2.get(2), dartEdges3.get(0));
+        fullBlock.addRightAngleCurve(dartEdges3.get(2), new Vector2D(0.0, 0.0));
     }
 }

@@ -3,14 +3,20 @@ package gill;
 import jblockenums.EGarment;
 import jblockenums.EMethod;
 import jblockexceptions.MeasurementNotFoundException;
-import jblockmain.*;
+import jblockmain.Block;
+import jblockmain.Measurements;
+import jblockmain.Pattern;
+import jblockmain.easeMeasurement;
 import mathcontainers.Vector2D;
 
 import java.util.ArrayList;
 import java.util.Collections;
 
-public class TrouserPatternTwo extends Pattern {
+public class TrouserPatternTwo
+        extends Pattern
+{
 
+    protected static ArrayList<easeMeasurement> easeMeasurements = new ArrayList<>();
     private double optSmallofBackWaist;        // Measurement [A02]
     private double hipCircum;                  // Measurement [A03]
     private double waistToHipLength;           // Measurement [A15]
@@ -39,27 +45,57 @@ public class TrouserPatternTwo extends Pattern {
     private double hipWidth;                   // Measurement [A60]
     private double frontAbdomenZ;              // Measurement [A61]
     private double fullCrotchLength;           // Measurement [A62]
-
     private double waistEase;
     private double seatEase;
     private double hipEase;
     private double kneeEase;
     private double ankleEase;
 
+    public TrouserPatternTwo(Measurements dataStore)
+    {
+        if (!readMeasurements(dataStore)) return;
+        addEasement();
+
+        // Create the blocks
+        createBlocks();
+    }
+
+    public static void populateEaseMeasurements()
+    {
+        // Check to see it hasn't already been populated / it is empty so as to not re-write
+        if (easeMeasurements.size() > 0)
+        {
+            return;
+        }
+        // Add all the ease measurements to the array list with initial values
+        easeMeasurements.add(new easeMeasurement("Waist Ease", 2.0));
+        easeMeasurements.add(new easeMeasurement("Seat Ease", 6.0));
+        easeMeasurements.add(new easeMeasurement("Hip Ease", 6.0));
+        easeMeasurements.add(new easeMeasurement("Knee Ease", 15.0));
+        easeMeasurements.add(new easeMeasurement("Ankle Ease", 22.0));
+    }
+
+    public static ArrayList<easeMeasurement> getEaseMeasurement()
+    {
+        return easeMeasurements;
+    }
 
     /* Implement abstract methods from super class */
     @Override
-    protected EMethod assignMethod() {
+    protected EMethod assignMethod()
+    {
         return EMethod.GILL;
     }
 
     @Override
-    protected EGarment assignGarment() {
+    protected EGarment assignGarment()
+    {
         return EGarment.TROUSER;
     }
 
     @Override
-    protected void addEasement() throws IndexOutOfBoundsException {
+    protected void addEasement() throws IndexOutOfBoundsException
+    {
         // Ease values
         waistEase = easeMeasurements.get(0).getValue();
         seatEase = easeMeasurements.get(1).getValue();
@@ -68,17 +104,11 @@ public class TrouserPatternTwo extends Pattern {
         ankleEase = easeMeasurements.get(4).getValue();
     }
 
-    public TrouserPatternTwo(Measurements dataStore) {
-        if (!readMeasurements(dataStore)) return;
-        addEasement();
-
-        // Create the blocks
-        createBlocks();
-    }
-
     @Override
-    protected boolean readMeasurements(Measurements dataStore) {
-        try {
+    protected boolean readMeasurements(Measurements dataStore)
+    {
+        try
+        {
             // Based on measurements for this pattern we can read the following from the scan
             optSmallofBackWaist = dataStore.getMeasurement("A02").value;
             hipCircum = dataStore.getMeasurement("A03").value;
@@ -113,14 +143,17 @@ public class TrouserPatternTwo extends Pattern {
             userName = dataStore.getName();
 
             return true;
-        } catch (MeasurementNotFoundException e) {
+        }
+        catch (MeasurementNotFoundException e)
+        {
             addMissingMeasurement(dataStore.getName(), e.getMeasurementId());
             return false;
         }
     }
 
     @Override
-    protected void createBlocks() {
+    protected void createBlocks()
+    {
         Block frontBlock = new Block(userName + "_Gill_FrontBlock");
         blocks.add(frontBlock);
 
@@ -130,10 +163,13 @@ public class TrouserPatternTwo extends Pattern {
         double kneeXPosition = centreXpoint + crotchHeight - kneeCircumHeightR; //A43 - A42
         double ankleXPosition = centreXpoint + crotchHeight - ankleCircumHeightR; //A43 - A41
         double hipXPosition, seatXPosition;
-        if (waistToHipLength > waistToSeat) {
+        if (waistToHipLength > waistToSeat)
+        {
             hipXPosition = centreXpoint - (bodyRise - waistToHipLength); //A38 - A15
             seatXPosition = centreXpoint - (bodyRise - waistToSeat); //A38 - A34
-        } else {
+        }
+        else
+        {
             hipXPosition = centreXpoint - (bodyRise - waistToSeat); //A38 - A15
             seatXPosition = centreXpoint - (bodyRise - waistToHipLength); //A38 - A34
         }
@@ -151,7 +187,8 @@ public class TrouserPatternTwo extends Pattern {
         double interimFrontSideSeamShaping = (hipWidth - waistWidth) / 2.0;
         double interimFrontDartWidth = (frontAbdomenArc - frontWaistArc) / 2.0;
         double interimCBShaping = 0.0;
-        if (frontAbdomenZ > frontWaistZ) {
+        if (frontAbdomenZ > frontWaistZ)
+        {
             interimCBShaping = frontAbdomenZ - frontWaistZ;
         }
         double sumInterims = interimFrontDartWidth + interimFrontSideSeamShaping + interimCBShaping;
@@ -180,8 +217,10 @@ public class TrouserPatternTwo extends Pattern {
         Vector2D point10 = new Vector2D(waistXPosition, -(halfFrontCreaselineFromHipPoint -
                 (frontSeatExtension + halfOverallDiffFrHipToFrWaistWithEase * interimCBShaping / sumInterims))
                 + centreYpoint);
-        Vector2D point11 = new Vector2D(seatXPosition, -(halfFrontCreaselineFromHipPoint - frontSeatExtension + centreYpoint));
-        Vector2D point12 = new Vector2D(hipXPosition, -(halfFrontCreaselineFromHipPoint - frontCrotchExtension + centreYpoint));
+        Vector2D point11 = new Vector2D(seatXPosition,
+                                        -(halfFrontCreaselineFromHipPoint - frontSeatExtension + centreYpoint));
+        Vector2D point12 = new Vector2D(hipXPosition,
+                                        -(halfFrontCreaselineFromHipPoint - frontCrotchExtension + centreYpoint));
 
         // Point 1 and 2
         frontBlock.addKeypoint(point1);
@@ -189,10 +228,10 @@ public class TrouserPatternTwo extends Pattern {
 
         // Calculation of a point for the curve to go through which is 1/3rd the width 1/4 the heigh between them
         Vector2D point1and2 = new Vector2D((point1.getX() + ((point2.getX() - point1.getX())) / 3.0),
-                point1.getY() + ((point2.getY() - point1.getY()) * 0.75) + centreYpoint);
+                                           point1.getY() + ((point2.getY() - point1.getY()) * 0.75) + centreYpoint);
 
         frontBlock.addDirectedCurve(point1, point2, new Vector2D(point1and2.subtract(point1)),
-                new Vector2D(point3.subtract(point2)), new double[]{0.0, 0.0});
+                                    new Vector2D(point3.subtract(point2)), new double[]{0.0, 0.0});
 
         // Point 3,4,5,6,7
         frontBlock.addKeypoint(point3);
@@ -203,7 +242,7 @@ public class TrouserPatternTwo extends Pattern {
 
         // Curve between point 5 and 6 keeping angles at start and end 0 deg with respect to preceding and proceeding curves
         frontBlock.addDirectedCurve(point5, point6, new Vector2D(point5.subtract(point4)),
-                new Vector2D(point7.subtract(point6)), new double[]{0.0, 0.0});
+                                    new Vector2D(point7.subtract(point6)), new double[]{0.0, 0.0});
 
         // Point 8 and 9
         frontBlock.addKeypoint(point8);
@@ -223,11 +262,13 @@ public class TrouserPatternTwo extends Pattern {
         // Dart between 9 and 10
         // Solved a vector line of equation for lambda when y = 0 to calculate position
         Vector2D frontDartApexPos = new Vector2D((new Vector2D(point9.add(point10.subtract(point9).divide(2.0)))).getX()
-                + waistToAbdomen - 1.5, centreYpoint);
+                                                         + waistToAbdomen - 1.5, centreYpoint);
 
         ArrayList<Vector2D> frontDarts = frontBlock.addDart(point9, point10,
-                -point9.getY() / new Vector2D(point10.subtract(point9)).getY(),
-                (interimFrontDartWidth / sumInterims) * halfOverallDiffFrHipToFrWaistWithEase, frontDartApexPos, false);
+                                                            -point9.getY() / new Vector2D(
+                                                                    point10.subtract(point9)).getY(),
+                                                            (interimFrontDartWidth / sumInterims) * halfOverallDiffFrHipToFrWaistWithEase,
+                                                            frontDartApexPos, false);
 
         Vector2D frontDartStart = frontDarts.get(0);
         Vector2D frontDartEnd = frontDarts.get(2);
@@ -247,16 +288,24 @@ public class TrouserPatternTwo extends Pattern {
         double minFrontY = Collections.min(frontBlock.getPlottableKeypointsY()) - 5.0;
 
         // All the key construction points
-        frontBlock.addConstructionPoint(new Vector2D(waistXPosition, minFrontY), new Vector2D(waistXPosition, maxFrontY), "Waist");
-        frontBlock.addConstructionPoint(new Vector2D(seatXPosition, minFrontY), new Vector2D(seatXPosition, maxFrontY), "Seat");
-        frontBlock.addConstructionPoint(new Vector2D(hipXPosition, minFrontY), new Vector2D(hipXPosition, maxFrontY), "Hip");
-        frontBlock.addConstructionPoint(new Vector2D(centreXpoint, minFrontY), new Vector2D(centreXpoint, maxFrontY), "Crotch");
-        frontBlock.addConstructionPoint(new Vector2D(kneeXPosition, minFrontY), new Vector2D(kneeXPosition, maxFrontY), "Knee");
-        frontBlock.addConstructionPoint(new Vector2D(ankleXPosition, minFrontY), new Vector2D(ankleXPosition, maxFrontY), "Aankle");
+        frontBlock.addConstructionPoint(new Vector2D(waistXPosition, minFrontY),
+                                        new Vector2D(waistXPosition, maxFrontY), "Waist");
+        frontBlock.addConstructionPoint(new Vector2D(seatXPosition, minFrontY), new Vector2D(seatXPosition, maxFrontY),
+                                        "Seat");
+        frontBlock.addConstructionPoint(new Vector2D(hipXPosition, minFrontY), new Vector2D(hipXPosition, maxFrontY),
+                                        "Hip");
+        frontBlock.addConstructionPoint(new Vector2D(centreXpoint, minFrontY), new Vector2D(centreXpoint, maxFrontY),
+                                        "Crotch");
+        frontBlock.addConstructionPoint(new Vector2D(kneeXPosition, minFrontY), new Vector2D(kneeXPosition, maxFrontY),
+                                        "Knee");
+        frontBlock.addConstructionPoint(new Vector2D(ankleXPosition, minFrontY),
+                                        new Vector2D(ankleXPosition, maxFrontY), "Ankle");
 
         // Construction point representing the centre fold
         frontBlock.addConstructionPoint(new Vector2D(Collections.min(frontBlock.getPlottableKeypointsX()) - 5.0,
-                centreYpoint), new Vector2D(Collections.max(frontBlock.getPlottableKeypointsX()) + 5.0, centreYpoint), "CentreFold");
+                                                     centreYpoint),
+                                        new Vector2D(Collections.max(frontBlock.getPlottableKeypointsX()) + 5.0,
+                                                     centreYpoint), "CentreFold");
 
 
         Block backBlock = new Block(userName + "_Gill_BackBlock");
@@ -281,8 +330,10 @@ public class TrouserPatternTwo extends Pattern {
 
         // All keypoints except point 16 added as vectors
         Vector2D point13 = new Vector2D(centreXpoint + 1.0, halfBackCreaselineFromHipPoint + centreYpoint);
-        Vector2D point14 = new Vector2D(hipXPosition, halfBackCreaselineFromHipPoint - backCrotchExtension + centreYpoint);
-        Vector2D point15 = new Vector2D(seatXPosition, halfBackCreaselineFromHipPoint - backSeatExtension + centreYpoint);
+        Vector2D point14 = new Vector2D(hipXPosition,
+                                        halfBackCreaselineFromHipPoint - backCrotchExtension + centreYpoint);
+        Vector2D point15 = new Vector2D(seatXPosition,
+                                        halfBackCreaselineFromHipPoint - backSeatExtension + centreYpoint);
         double y16 = point15.getY() - (halfOverallDiffBkHipToBkWaistInclEase * interimBackCBShaping / backSumInterims);
         Vector2D point17 = new Vector2D(waistXPosition - sideStreamUpliftR, -(halfBackCreaselineFromHipPoint
                 - (halfOverallDiffBkHipToBkWaistInclEase / 2.0 * (interimBackSideSeamShaping / backSumInterims)) + centreYpoint));
@@ -314,7 +365,7 @@ public class TrouserPatternTwo extends Pattern {
         backBlock.addKeypoint(point21);
 
         backBlock.addDirectedCurve(point20, point21, new Vector2D(point20.subtract(point19)),
-                new Vector2D(point22.subtract(point21)), new double[]{0.0, 0.0});
+                                   new Vector2D(point22.subtract(point21)), new double[]{0.0, 0.0});
 
         backBlock.addKeypoint(point22);
         backBlock.addKeypoint(point24);
@@ -327,16 +378,16 @@ public class TrouserPatternTwo extends Pattern {
 
         // Added a new vector 1/4 height and 1/3 length for this curve to go through
         Vector2D point25and13 = new Vector2D(point13.getX() + ((point25.getX() - point13.getX()) / 3.0),
-                point13.getY() + ((point25.getY() - point13.getY()) * 0.75));
+                                             point13.getY() + ((point25.getY() - point13.getY()) * 0.75));
 
         backBlock.addDirectedCurve(point25, point13, new Vector2D(point25.subtract(point24)),
-                new Vector2D(point25and13.subtract(point13)), new double[]{0.0, 0.0});
+                                   new Vector2D(point25and13.subtract(point13)), new double[]{0.0, 0.0});
 
         backBlock.addKeypoint(point14);
         backBlock.addKeypoint(point15);
 
         backBlock.addDirectedCurve(point13, point14, new Vector2D(point13.subtract(point25and13)),
-                new Vector2D(point16Temp.subtract(point15)), new double[]{90.0, 0.0});
+                                   new Vector2D(point16Temp.subtract(point15)), new double[]{90.0, 0.0});
 
         // Calculate length point 16 needs to be moved in the -x direction by to keep overall crotch length constant
         double crotchExtension = fullCrotchLength - (frontBlock.getLengthBetweenPoints(point10, point1)
@@ -356,7 +407,8 @@ public class TrouserPatternTwo extends Pattern {
         double lambda = (waistToSeat - 5.0) / Math.sqrt(Math.pow(((point15.getX()
                 - point16.getX())), 2.0) + Math.pow(((point15.getY() - point16.getY())), 2.0));
 
-        Vector2D Apex = new Vector2D(point16.add(D16D17.divide(2.0)).add(new Vector2D(point15.subtract(point16)).multiply(lambda)));
+        Vector2D Apex = new Vector2D(
+                point16.add(D16D17.divide(2.0)).add(new Vector2D(point15.subtract(point16)).multiply(lambda)));
 
         ArrayList<Vector2D> backDarts = backBlock.addDart(point16, point17, 0.5, dartWidth, Apex, true);
         backBlock.addRightAngleCurve(point16, backDarts.get(0));
@@ -368,35 +420,24 @@ public class TrouserPatternTwo extends Pattern {
         double minBackY = Collections.min(backBlock.getPlottableKeypointsY()) - 5;
 
         // All the key construction points
-        backBlock.addConstructionPoint(new Vector2D(waistXPosition, minBackY), new Vector2D(waistXPosition, maxBackY), "Waist");
-        backBlock.addConstructionPoint(new Vector2D(seatXPosition, minBackY), new Vector2D(seatXPosition, maxBackY), "Seat");
-        backBlock.addConstructionPoint(new Vector2D(hipXPosition, minBackY), new Vector2D(hipXPosition, maxBackY), "Hip");
-        backBlock.addConstructionPoint(new Vector2D(centreXpoint, minBackY), new Vector2D(centreXpoint, maxBackY), "Crotch");
-        backBlock.addConstructionPoint(new Vector2D(kneeXPosition, minBackY), new Vector2D(kneeXPosition, maxBackY), "Knee");
-        backBlock.addConstructionPoint(new Vector2D(ankleXPosition, minBackY), new Vector2D(ankleXPosition, maxBackY), "Ankle");
+        backBlock.addConstructionPoint(new Vector2D(waistXPosition, minBackY), new Vector2D(waistXPosition, maxBackY),
+                                       "Waist");
+        backBlock.addConstructionPoint(new Vector2D(seatXPosition, minBackY), new Vector2D(seatXPosition, maxBackY),
+                                       "Seat");
+        backBlock.addConstructionPoint(new Vector2D(hipXPosition, minBackY), new Vector2D(hipXPosition, maxBackY),
+                                       "Hip");
+        backBlock.addConstructionPoint(new Vector2D(centreXpoint, minBackY), new Vector2D(centreXpoint, maxBackY),
+                                       "Crotch");
+        backBlock.addConstructionPoint(new Vector2D(kneeXPosition, minBackY), new Vector2D(kneeXPosition, maxBackY),
+                                       "Knee");
+        backBlock.addConstructionPoint(new Vector2D(ankleXPosition, minBackY), new Vector2D(ankleXPosition, maxBackY),
+                                       "Ankle");
 
         // Construction point representing the centre fold
         backBlock.addConstructionPoint(new Vector2D(Collections.min(backBlock.getPlottableKeypointsX()) - 5.0,
-                centreYpoint), new Vector2D(Collections.max(backBlock.getPlottableKeypointsX()) + 5.0, centreYpoint), "CentreFold");
-    }
-
-    protected static ArrayList<easeMeasurement> easeMeasurements = new ArrayList<>();
-
-    public static void populateEaseMeasurements()
-    {
-        // Check to see it hasn't already been populated / it is empty so as to not re-write
-        if (easeMeasurements.size() > 0) {return;}
-        // Add all the ease measurements to the array list with initial values
-        easeMeasurements.add(new easeMeasurement("Waist Ease", 2.0));
-        easeMeasurements.add(new easeMeasurement("Seat Ease", 6.0));
-        easeMeasurements.add(new easeMeasurement("Hip Ease", 6.0));
-        easeMeasurements.add(new easeMeasurement("Knee Ease", 15.0));
-        easeMeasurements.add(new easeMeasurement("Ankle Ease", 22.0));
-    }
-
-    public static ArrayList<easeMeasurement> getEaseMeasurement()
-    {
-        return easeMeasurements;
+                                                    centreYpoint),
+                                       new Vector2D(Collections.max(backBlock.getPlottableKeypointsX()) + 5.0,
+                                                    centreYpoint), "CentreFold");
     }
 
 }

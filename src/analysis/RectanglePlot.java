@@ -11,16 +11,13 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 
-public class RectanglePlot implements IPlottable
+public class RectanglePlot
+        implements IPlottable
 {
     /* Technique Specific Variables */
 
-    // List of Rectangles in this plot
-    private ArrayList<Rectangle> rectangles;
-
     // Enum for analysis type
     private final EAnalysis analysis = EAnalysis.RECTANGLEPLOT;
-
     // Variables for x,y axis measurement ID
     private final String xAxisID;
     private final String yAxisID;
@@ -29,6 +26,8 @@ public class RectanglePlot implements IPlottable
     private final boolean isRect;
     private final int numUsers;
     private final Measurements measurements;
+    // List of Rectangles in this plot
+    private ArrayList<Rectangle> rectangles;
 
     // Constructor
     public RectanglePlot(Measurements _measurements, String measurementIdX, String measurementIdY,
@@ -63,7 +62,8 @@ public class RectanglePlot implements IPlottable
     /* Interface implementation */
     private void rangeCheck(int blockNumber)
     {
-        if (blockNumber > rectangles.size()) throw new IndexOutOfBoundsException("Accessing out of range of number of blocks!");
+        if (blockNumber > rectangles.size())
+            throw new IndexOutOfBoundsException("Accessing out of range of number of blocks!");
     }
 
     @Override
@@ -132,9 +132,12 @@ public class RectanglePlot implements IPlottable
                 String filename = names.get(i) + "_" + xAxisID + "_" + yAxisID + "_Rectangle_Plot" + timeStamp;
                 DxfFile file = new DxfFile(path.toString() + "/" + filename);
 
-                try {
+                try
+                {
                     file.addLines(getXPoints(i), getYPoints(i));
-                } catch (Exception e) {
+                }
+                catch (Exception e)
+                {
                     e.printStackTrace();
                 }
                 file.writeFile(filename, dxfLayerChooser);

@@ -3,27 +3,29 @@ package gill;
 import jblockenums.EGarment;
 import jblockenums.EMethod;
 import jblockexceptions.MeasurementNotFoundException;
-import jblockmain.*;
+import jblockmain.Block;
+import jblockmain.Measurements;
+import jblockmain.Pattern;
 import mathcontainers.Vector2D;
 
 import java.util.ArrayList;
 
 public class SkirtPattern
-    extends Pattern
+        extends Pattern
 {
     /* Pattern-specific Measurements */
-    private double a_FrWaistArc             = 38.6;
-    private double b_BkWaistArc             = 44.4;
-    private double c_FrAbdomenArc           = 41.8;
-    private double d_BkAbdomenArc           = 44.4;
-    private double e_BkSeatArc              = 52.7;
-    private double f_FrHipArc               = 44.5;
-    private double g_BkHipArc               = 53.3;
-    private double h_WaistToAbdomen         = 10.6;
-    private double i_WaistToSeat            = 20.6;
-    private double j_WaistToHip             = 25.6;
-    private double k_WaistToKnee            = 65.3;
-    private double l_SideseamUplift         = 0.7;
+    private double a_FrWaistArc = 38.6;
+    private double b_BkWaistArc = 44.4;
+    private double c_FrAbdomenArc = 41.8;
+    private double d_BkAbdomenArc = 44.4;
+    private double e_BkSeatArc = 52.7;
+    private double f_FrHipArc = 44.5;
+    private double g_BkHipArc = 53.3;
+    private double h_WaistToAbdomen = 10.6;
+    private double i_WaistToSeat = 20.6;
+    private double j_WaistToHip = 25.6;
+    private double k_WaistToKnee = 65.3;
+    private double l_SideseamUplift = 0.7;
 
     // Difference between waist and hip
     private double waisthipsuppression;
@@ -54,8 +56,8 @@ public class SkirtPattern
         // Populate arbitrary measurements
         Arb_HemLevelX = 6.5;
         Arb_HemLevelY = 5.0;
-        Arb_FrontDartPlacement = 2.0/ 3.0;
-        Arb_BackDartPlacement = 1.0/ 2.0;
+        Arb_FrontDartPlacement = 2.0 / 3.0;
+        Arb_BackDartPlacement = 1.0 / 2.0;
         Arb_FrontDartLength = h_WaistToAbdomen - 1.5;
         Arb_BackDartLength = i_WaistToSeat - 1.5;
 
@@ -86,7 +88,8 @@ public class SkirtPattern
     @Override
     protected boolean readMeasurements(Measurements dataStore)
     {
-        try {
+        try
+        {
             // Based on measurements for this pattern we can read the following from the scan:
             a_FrWaistArc = dataStore.getMeasurement("A26").value;
             b_BkWaistArc = dataStore.getMeasurement("A27").value;
@@ -106,7 +109,7 @@ public class SkirtPattern
 
             return true;
         }
-        catch(MeasurementNotFoundException e)
+        catch (MeasurementNotFoundException e)
         {
             addMissingMeasurement(dataStore.getName(), e.getMeasurementId());
             return false;
@@ -135,7 +138,7 @@ public class SkirtPattern
         Block fullBlock = blocks.get(0);
 
         // Predefining the max Y value to make the code look tidier
-        double maxY = ((g_BkHipArc / 2.0) + (Arb_HemLevelY / 4.0) + ((f_FrHipArc / 2.0)  + (Arb_HemLevelY / 4.0)));
+        double maxY = ((g_BkHipArc / 2.0) + (Arb_HemLevelY / 4.0) + ((f_FrHipArc / 2.0) + (Arb_HemLevelY / 4.0)));
 
         // Add all the fixed points to the block that coincide with the basic rectangle. These points do not move
         // throughout the drafting process.
@@ -154,8 +157,9 @@ public class SkirtPattern
 
         // Construction lines for front/back block separation
         fullBlock.addConstructionPoint(new Vector2D(-1.25 - Arb_Con, g_BkHipArc / 2 + Arb_HemLevelY / 4),
-                new Vector2D(k_WaistToKnee + Arb_HemLevelX + Arb_Con, g_BkHipArc / 2 + Arb_HemLevelY / 4),
-                "");
+                                       new Vector2D(k_WaistToKnee + Arb_HemLevelX + Arb_Con,
+                                                    g_BkHipArc / 2 + Arb_HemLevelY / 4),
+                                       "");
 
         // Point 10 has an if condition to allow for more accurate pattern creation
         double frontdartwidth = ((((g_BkHipArc + f_FrHipArc) / 2.0) - ((b_BkWaistArc + a_FrWaistArc)) / 2.0) * 0.18);
@@ -163,7 +167,8 @@ public class SkirtPattern
         if (l_SideseamUplift >= 1.25)
         {
 
-            fullBlock.addKeypoint(new Vector2D(-l_SideseamUplift, (maxY - (a_FrWaistArc / 2.0) - 0.35 - frontdartwidth)));
+            fullBlock.addKeypoint(
+                    new Vector2D(-l_SideseamUplift, (maxY - (a_FrWaistArc / 2.0) - 0.35 - frontdartwidth)));
             pointtenif = -l_SideseamUplift;
         }
         else
@@ -192,49 +197,58 @@ public class SkirtPattern
 
         // Curve between point 10 and point 11
         fullBlock.addCircularCurve(new Vector2D(pointtenif, (maxY - (a_FrWaistArc / 2.0) - 0.35 - frontdartwidth)),
-                new Vector2D(j_WaistToHip, g_BkHipArc / 2 + Arb_HemLevelY / 4.0),
-                0.5,
-                true);
+                                   new Vector2D(j_WaistToHip, g_BkHipArc / 2 + Arb_HemLevelY / 4.0),
+                                   0.5,
+                                   true);
 
         // Curve between point 11 and point 12
         fullBlock.addCircularCurve(new Vector2D(j_WaistToHip, g_BkHipArc / 2 + Arb_HemLevelY / 4.0),
-                new Vector2D(pointtwelveif, ((b_BkWaistArc / 2.0) + 0.35 + backdartwidth)),
-                0.5,
-                true);
+                                   new Vector2D(pointtwelveif, ((b_BkWaistArc / 2.0) + 0.35 + backdartwidth)),
+                                   0.5,
+                                   true);
 
         // Add front dart.
         ArrayList<Vector2D> dartEdges = fullBlock.addDart(new Vector2D(0.0, maxY),
-                new Vector2D(pointtenif, (maxY - (a_FrWaistArc / 2.0) - 0.35 - frontdartwidth)),
-                Arb_FrontDartPlacement,
-                frontdartwidth,
-                Arb_FrontDartLength,
-                true,
-                false);
+                                                          new Vector2D(pointtenif,
+                                                                       (maxY - (a_FrWaistArc / 2.0) - 0.35 - frontdartwidth)),
+                                                          Arb_FrontDartPlacement,
+                                                          frontdartwidth,
+                                                          Arb_FrontDartLength,
+                                                          true,
+                                                          false);
 
         // Add curves either side of dart ensuring the curve intersects the joining edges at a right angle.
         fullBlock.addRightAngleCurve(new Vector2D(0.0, maxY), dartEdges.get(0));
 
-        fullBlock.addRightAngleCurve(dartEdges.get(2), new Vector2D(pointtenif, (maxY - (a_FrWaistArc / 2.0) - 0.35 - frontdartwidth)));
+        fullBlock.addRightAngleCurve(dartEdges.get(2),
+                                     new Vector2D(pointtenif, (maxY - (a_FrWaistArc / 2.0) - 0.35 - frontdartwidth)));
 
         // Add back dart
         dartEdges = fullBlock.addDart(new Vector2D(pointtwelveif, ((b_BkWaistArc / 2.0) + 0.35 + backdartwidth)),
-                new Vector2D(0.0, 0.0),
-                Arb_BackDartPlacement,
-                backdartwidth,
-                Arb_BackDartLength, true, false);
+                                      new Vector2D(0.0, 0.0),
+                                      Arb_BackDartPlacement,
+                                      backdartwidth,
+                                      Arb_BackDartLength, true, false);
 
         // Add curves
-        fullBlock.addRightAngleCurve(new Vector2D(pointtwelveif, ((b_BkWaistArc / 2.0) + 0.35 + backdartwidth)), dartEdges.get(0));
+        fullBlock.addRightAngleCurve(new Vector2D(pointtwelveif, ((b_BkWaistArc / 2.0) + 0.35 + backdartwidth)),
+                                     dartEdges.get(0));
 
         fullBlock.addRightAngleCurve(dartEdges.get(2), new Vector2D(0.0, 0.0));
 
         // Add construction keypoints for Abdomen Level
-        fullBlock.addConstructionPoint(new Vector2D(h_WaistToAbdomen, 0.0 - Arb_Con), new Vector2D(h_WaistToAbdomen, (g_BkHipArc / 2 + Arb_HemLevelY / 4) + (f_FrHipArc / 2 + Arb_HemLevelY / 4) + Arb_Con), "Abdomen");
+        fullBlock.addConstructionPoint(new Vector2D(h_WaistToAbdomen, 0.0 - Arb_Con), new Vector2D(h_WaistToAbdomen,
+                                                                                                   (g_BkHipArc / 2 + Arb_HemLevelY / 4) + (f_FrHipArc / 2 + Arb_HemLevelY / 4) + Arb_Con),
+                                       "Abdomen");
 
         // Add construction keypoints for Hip Level
-        fullBlock.addConstructionPoint(new Vector2D(i_WaistToSeat, 0.0 - Arb_Con), new Vector2D(i_WaistToSeat, g_BkHipArc / 2 + Arb_HemLevelY / 4 + 3.0 * Arb_Con), "Seat");
+        fullBlock.addConstructionPoint(new Vector2D(i_WaistToSeat, 0.0 - Arb_Con),
+                                       new Vector2D(i_WaistToSeat, g_BkHipArc / 2 + Arb_HemLevelY / 4 + 3.0 * Arb_Con),
+                                       "Seat");
 
         // Add construction keypoints for Abdomen Level
-        fullBlock.addConstructionPoint(new Vector2D(j_WaistToHip, 0.0 - Arb_Con), new Vector2D(j_WaistToHip, (g_BkHipArc / 2 + Arb_HemLevelY / 4) + (f_FrHipArc / 2 + Arb_HemLevelY / 4) + Arb_Con), "Hip");
+        fullBlock.addConstructionPoint(new Vector2D(j_WaistToHip, 0.0 - Arb_Con), new Vector2D(j_WaistToHip,
+                                                                                               (g_BkHipArc / 2 + Arb_HemLevelY / 4) + (f_FrHipArc / 2 + Arb_HemLevelY / 4) + Arb_Con),
+                                       "Hip");
     }
 }

@@ -9,49 +9,47 @@ import mathcontainers.Vector2D;
 
 import java.util.ArrayList;
 
-/** Class to construct a fitted bodice using the Beazley and Bond drafting method. */
+/**
+ * Class to construct a fitted bodice using the Beazley and Bond drafting method.
+ */
 public class BodicePattern
-    extends Pattern
+        extends Pattern
 {
 
+    protected static ArrayList<easeMeasurement> easeMeasurements = new ArrayList<>();
     /* Pattern-specific Measurements */
     // In future will be simply extracted from the Measurements object.
-    private double a_Bust           = 88.0;
-    private double b_Waist          = 70.0;
-    private double c_Neck           = 38.0;
-    private double d_BackNeckRise   = 2.0;
-    private double e_NapeToWaist    = 41.0;
-    private double f_ArmholeDepth   = 21.0;
-    private double g_FrNeckToBust   = 27.0;
-    private double h_FrNeckToWaist  = 44.0;
-    private double i_AcrossBack     = 35.0;
-    private double j_AcrossFront    = 32.0;
-    private double k_Shoulder       = 13.0;
-    private double l_WidthBustProm  = 19.0;
-    private double m_WidthArmhole   = 10.0;
+    private double a_Bust = 88.0;
+    private double b_Waist = 70.0;
+    private double c_Neck = 38.0;
+    private double d_BackNeckRise = 2.0;
+    private double e_NapeToWaist = 41.0;
+    private double f_ArmholeDepth = 21.0;
+    private double g_FrNeckToBust = 27.0;
+    private double h_FrNeckToWaist = 44.0;
+    private double i_AcrossBack = 35.0;
+    private double j_AcrossFront = 32.0;
+    private double k_Shoulder = 13.0;
+    private double l_WidthBustProm = 19.0;
 
     /* Arbitrary Measurements */
-    
+    private double m_WidthArmhole = 10.0;
     // Use default (size 12) values of m_WidthArmhole and a_Bust to compute a ratio
-    private final double Arb_ArmholeRatio = (m_WidthArmhole + easeMeasurements.get(6).getValue()) / (a_Bust + easeMeasurements.get(0).getValue());
-
+    private final double Arb_ArmholeRatio = (m_WidthArmhole + easeMeasurements.get(
+            6).getValue()) / (a_Bust + easeMeasurements.get(0).getValue());
     // This relates to the height of the basic rectangle which includes this amount for suppression of back waist dart
     // and the side seam.
     private double Arb_BackWaistDartSuppression;
-
     // Level corresponding to the across back measurement is chosen as halfway between the armhole level and the neck
     private double Arb_AcrossBackLevel;
     private double Arb_BackArmholeTouchX;
-
     // Setting of side seam position from the centre back (CB) at base of rectangle plus arbitrary 1.5cm
     private double Arb_SideSeamFromCentreBack;
-
     // Neck width and depth derived from the neck measurement
     private double Arb_HalfFrontNeckWidth;
     private double Arb_FrontNeckDepth;
     private double Arb_HalfBackNeckWidth;
     private double Arb_BackNeckRise;
-
     // Shoulder Level parameters. Shoulder slant measured in degrees.
     private double Arb_ShoulderSlant;
     private double Arb_FrontShoulderDartWidth;
@@ -61,7 +59,6 @@ public class BodicePattern
     private double Arb_BackShoulderLevel;
     private double Arb_BackShoulderDartPositionOnArmholeLevel;
     private double Arb_BackShoulderDartLength;
-
     // Waist suppression
     private double Arb_CBtoCF;
     private double Arb_BackFrontWaistDartWidth;
@@ -76,7 +73,7 @@ public class BodicePattern
     {
         if (!readMeasurements(dataStore)) return;
         addEasement();
-        
+
         // Rule for armhole width (applied after ease)
         if (a_Bust * Arb_ArmholeRatio > m_WidthArmhole) m_WidthArmhole = a_Bust * Arb_ArmholeRatio;
 
@@ -86,7 +83,8 @@ public class BodicePattern
         Arb_BackWaistDartSuppression = 1.5;
         Arb_AcrossBackLevel = f_ArmholeDepth / 2.0;
         Arb_BackArmholeTouchX = Arb_AcrossBackLevel + 2.0;
-        Arb_SideSeamFromCentreBack = ((a_Bust - easeMeasurements.get(0).getValue()) / 4.0) + 1.5;  // Deducted ease from bust measurement in this case
+        Arb_SideSeamFromCentreBack = ((a_Bust - easeMeasurements.get(
+                0).getValue()) / 4.0) + 1.5;  // Deducted ease from bust measurement in this case
         Arb_HalfFrontNeckWidth = (c_Neck / 5.0) - 1.5;
         Arb_FrontNeckDepth = c_Neck / 5.0;
         Arb_HalfBackNeckWidth = (c_Neck / 5.0) - 0.5;
@@ -107,6 +105,27 @@ public class BodicePattern
 
         // Create blocks
         createBlocks();
+    }
+
+    public static void populateEaseMeasurements()
+    {
+        // Check to see it hasn't already been populated / it is empty
+        if (easeMeasurements.size() > 0)
+        {
+            return;
+        }
+        easeMeasurements.add(new easeMeasurement("Bust Ease", 6.0));
+        easeMeasurements.add(new easeMeasurement("Waist Ease", 4.0));
+        easeMeasurements.add(new easeMeasurement("Neck Ease", 2.0));
+        easeMeasurements.add(new easeMeasurement("Armhole Depth Ease", 3.0));
+        easeMeasurements.add(new easeMeasurement("Across Back Ease", 2.0));
+        easeMeasurements.add(new easeMeasurement("Across Front Ease", 1.0));
+        easeMeasurements.add(new easeMeasurement("Armhole Width Ease", 1.5));
+    }
+
+    public static ArrayList<easeMeasurement> getEaseMeasurement()
+    {
+        return easeMeasurements;
     }
 
     /* Implement abstract methods from super class */
@@ -139,7 +158,7 @@ public class BodicePattern
     protected boolean readMeasurements(Measurements dataStore)
     {
         try
-        {        
+        {
             // Get measurements from the scan data store
             a_Bust = dataStore.getMeasurement("A01").value;
             b_Waist = dataStore.getMeasurement("A02").value;
@@ -158,7 +177,7 @@ public class BodicePattern
 
             return true;
         }
-        catch(MeasurementNotFoundException e)
+        catch (MeasurementNotFoundException e)
         {
             addMissingMeasurement(dataStore.getName(), e.getMeasurementId());
             return false;
@@ -198,7 +217,8 @@ public class BodicePattern
         );
 
         // 3. Add keypoint for the back shoulder line start point
-        double backShoulderLineY = Block.triangleGetAdjacentFromSide(Arb_BackShoulderLevel + Arb_BackNeckRise, Arb_BackShoulderLine);
+        double backShoulderLineY = Block.triangleGetAdjacentFromSide(Arb_BackShoulderLevel + Arb_BackNeckRise,
+                                                                     Arb_BackShoulderLine);
         mainBlock.addKeypoint(new Vector2D(Arb_BackShoulderLevel, Arb_HalfBackNeckWidth + backShoulderLineY));
 
         // 4. Add keypoints for back neck rise
@@ -214,32 +234,35 @@ public class BodicePattern
         mainBlock.addKeypoint(refBottomRight);
 
         // 6. Compute the new top left point (knowing that measurement h is made up of two parts)
-        mainBlock.addKeypoint(new Vector2D(refBustPoint.getX() + (h_FrNeckToWaist - g_FrNeckToBust), refTopRight.getY()));
+        mainBlock.addKeypoint(
+                new Vector2D(refBustPoint.getX() + (h_FrNeckToWaist - g_FrNeckToBust), refTopRight.getY()));
 
         // 7. Add front neck curve
         mainBlock.addDirectedCurveWithApexTangent(new Vector2D(Arb_HalfFrontNeckWidth, refTopLeft.getY()),
                                                   new Vector2D(0.0, refTopLeft.getY() - Arb_HalfFrontNeckWidth),
-                                                  new Vector2D(Arb_HalfFrontNeckWidth, refTopLeft.getY() - Arb_HalfFrontNeckWidth),
+                                                  new Vector2D(Arb_HalfFrontNeckWidth,
+                                                               refTopLeft.getY() - Arb_HalfFrontNeckWidth),
                                                   2.0,
-                                                  new double[] {90.0, 90.0},
-                                                  new int[] {-1, 1});
+                                                  new double[]{90.0, 90.0},
+                                                  new int[]{-1, 1});
 
         // 8. Add back neck curve
         mainBlock.addDirectedCurveWithApexTangent(new Vector2D(-Arb_BackNeckRise, Arb_HalfBackNeckWidth),
                                                   refBottomLeft,
                                                   new Vector2D(0.0, Arb_HalfBackNeckWidth),
                                                   1.75,
-                                                  new double[] {90.0, 90.0},
-                                                  new int[] {-1, -1});
+                                                  new double[]{90.0, 90.0},
+                                                  new int[]{-1, -1});
 
         // 9. Add front shoulder dart
         ArrayList<Vector2D> frontDartPoints =
-        mainBlock.addDart(new Vector2D(0.0, refTopLeft.getY() - Arb_HalfFrontNeckWidth),
-                          new Vector2D(frontShoulderLineX, refTopLeft.getY() - Arb_HalfFrontNeckWidth - frontShoulderLineY),
-                          0.5,
-                          Arb_FrontShoulderDartWidth,
-                          refBustPoint,
-                          true);
+                mainBlock.addDart(new Vector2D(0.0, refTopLeft.getY() - Arb_HalfFrontNeckWidth),
+                                  new Vector2D(frontShoulderLineX,
+                                               refTopLeft.getY() - Arb_HalfFrontNeckWidth - frontShoulderLineY),
+                                  0.5,
+                                  Arb_FrontShoulderDartWidth,
+                                  refBustPoint,
+                                  true);
 
         // 10. Add back shoulder dart computing the apex point manually
         // Use similar triangles with the backShoulderTriangle constructed earlier
@@ -265,13 +288,13 @@ public class BodicePattern
         // Construction lines for armhole
         mainBlock.addConstructionPoint(new Vector2D(0.0 - 3.0 * Arb_Con, i_AcrossBack / 2.0),
                                        new Vector2D(f_ArmholeDepth + Arb_Con, i_AcrossBack / 2.0),
-                                       "Bk_Arm" );
+                                       "Bk_Arm");
         mainBlock.addConstructionPoint(new Vector2D(0.0 - 3.0 * Arb_Con, i_AcrossBack / 2.0 + m_WidthArmhole),
                                        new Vector2D(f_ArmholeDepth + Arb_Con, i_AcrossBack / 2.0 + m_WidthArmhole),
-                                       "Ft_Arm" );
+                                       "Ft_Arm");
         mainBlock.addConstructionPoint(new Vector2D(f_ArmholeDepth, 0.0 - Arb_Con),
                                        new Vector2D(f_ArmholeDepth, Arb_CBtoCF + Arb_Con),
-                                       "Armhole" );
+                                       "Armhole");
 
 
         // 11. Add armhole as four separate curves
@@ -297,7 +320,7 @@ public class BodicePattern
                                                        endPt,
                                                        new Vector2D(startPt.subtract(preStartPt)),
                                                        new Vector2D(1.0, 0.0),
-                                                       new double[] {90.0, 0.0});
+                                                       new double[]{90.0, 0.0});
 
         mainBlock.addKeypointNextTo(endPt, adjPoint, EPosition.AFTER);
 
@@ -314,8 +337,8 @@ public class BodicePattern
                                                              dirStart, dirEnd,
                                                              new Vector2D(f_ArmholeDepth, touchFront.getY()),
                                                              2.5,
-                                                             new double[] {0.0, 0.0},
-                                                             new int[] {-1, -1});
+                                                             new double[]{0.0, 0.0},
+                                                             new int[]{-1, -1});
 
         mainBlock.addKeypointNextTo(endPt, adjPoint, EPosition.AFTER);
 
@@ -332,8 +355,8 @@ public class BodicePattern
                                                              dirStart, dirEnd,
                                                              new Vector2D(f_ArmholeDepth, touchBack.getY()),
                                                              3.0,
-                                                             new double[] {0.0, 0.0},
-                                                             new int[] {-1, 1});
+                                                             new double[]{0.0, 0.0},
+                                                             new int[]{-1, 1});
 
         mainBlock.addKeypointNextTo(endPt, adjPoint, EPosition.AFTER);
 
@@ -346,15 +369,17 @@ public class BodicePattern
         mainBlock.addDirectedCurve(startPt, endPt,
                                    new Vector2D(-1.0, 0.0),
                                    new Vector2D(-Arb_BackNeckRise - endPt.getX(), Arb_HalfBackNeckWidth - endPt.getY()),
-                                   new double[] {0.0, 90.0});
+                                   new double[]{0.0, 90.0});
 
         // Compute waist suppression
         double intWaistSuppression = Arb_CBtoCF - (b_Waist / 2.0);  // Can be used in future to compute dart widths
 
         // Get start, end and apex points of dart
         Vector2D apex = new Vector2D(refBustPoint.getX() + Arb_FrontWaistDartApexFromBP, refBustPoint.getY());
-        startPt = new Vector2D(refBustPoint.getX() + (h_FrNeckToWaist - g_FrNeckToBust), apex.getY() - (Arb_BackFrontWaistDartWidth / 2.0));
-        endPt = new Vector2D(refBustPoint.getX() + (h_FrNeckToWaist - g_FrNeckToBust), apex.getY() + (Arb_BackFrontWaistDartWidth / 2.0));
+        startPt = new Vector2D(refBustPoint.getX() + (h_FrNeckToWaist - g_FrNeckToBust),
+                               apex.getY() - (Arb_BackFrontWaistDartWidth / 2.0));
+        endPt = new Vector2D(refBustPoint.getX() + (h_FrNeckToWaist - g_FrNeckToBust),
+                             apex.getY() + (Arb_BackFrontWaistDartWidth / 2.0));
         Vector2D refPt = new Vector2D(refBustPoint.getX() + (h_FrNeckToWaist - g_FrNeckToBust), refTopRight.getY());
 
         // 12. Add front waist dart
@@ -370,7 +395,7 @@ public class BodicePattern
         apex = new Vector2D(f_ArmholeDepth + JBlockCreator.tol, Arb_SideSeamFromCentreBack);
 
         // 13. Add side seam dart
-        ArrayList<Vector2D> dartPts2 = mainBlock.addDart(startPt, endPt, apex, dartPts1.get(0),EPosition.BEFORE);
+        ArrayList<Vector2D> dartPts2 = mainBlock.addDart(startPt, endPt, apex, dartPts1.get(0), EPosition.BEFORE);
 
         // Update values for back waist dart
         startPt = new Vector2D(refBottomRight.getX() + Arb_SideWaistLevel,
@@ -380,40 +405,21 @@ public class BodicePattern
         apex = midCBArmHolePoint;
 
         // 14. Add back waist dart
-        ArrayList<Vector2D> dartPts3 = mainBlock.addDart(startPt, endPt, apex, dartPts2.get(0),EPosition.BEFORE);
+        ArrayList<Vector2D> dartPts3 = mainBlock.addDart(startPt, endPt, apex, dartPts2.get(0), EPosition.BEFORE);
 
 
         // Compute the touch point (arbitrarily chosen as the mid point as we cannot enforce curve length yet)
-        Vector2D waistTouch = new Vector2D(refBottomRight.getX(), 0.5 * (dartPts3.get(2).getY() + dartPts2.get(0).getY()));
+        Vector2D waistTouch = new Vector2D(refBottomRight.getX(),
+                                           0.5 * (dartPts3.get(2).getY() + dartPts2.get(0).getY()));
         mainBlock.addKeypointNextTo(waistTouch, dartPts3.get(2), EPosition.AFTER);
 
         // 15. Add waist line curve back to side seam
-        mainBlock.addDirectedCurve(dartPts3.get(2), waistTouch, new double[] {90.0, 0.0});
-        mainBlock.addDirectedCurve(waistTouch, dartPts2.get(0), new double[] {0.0, 90.0});
+        mainBlock.addDirectedCurve(dartPts3.get(2), waistTouch, new double[]{90.0, 0.0});
+        mainBlock.addDirectedCurve(waistTouch, dartPts2.get(0), new double[]{0.0, 90.0});
 
         // 16. Add waist line curve side seam to front
-        mainBlock.addDirectedCurve(dartPts2.get(2), dartPts1.get(0), new double[] {90.0, 90.0});
+        mainBlock.addDirectedCurve(dartPts2.get(2), dartPts1.get(0), new double[]{90.0, 90.0});
 
-    }
-
-    protected static ArrayList<easeMeasurement> easeMeasurements = new ArrayList<>();
-
-    public static void populateEaseMeasurements()
-    {
-        // Check to see it hasn't already been populated / it is empty
-        if (easeMeasurements.size() > 0) {return;}
-        easeMeasurements.add(new easeMeasurement("Bust Ease", 6.0));
-        easeMeasurements.add(new easeMeasurement("Waist Ease", 4.0));
-        easeMeasurements.add(new easeMeasurement("Neck Ease", 2.0));
-        easeMeasurements.add(new easeMeasurement("Armhole Depth Ease", 3.0));
-        easeMeasurements.add(new easeMeasurement("Across Back Ease", 2.0));
-        easeMeasurements.add(new easeMeasurement("Across Front Ease", 1.0));
-        easeMeasurements.add(new easeMeasurement("Armhole Width Ease", 1.5));
-    }
-
-    public static ArrayList<easeMeasurement> getEaseMeasurement()
-    {
-        return easeMeasurements;
     }
 
 }

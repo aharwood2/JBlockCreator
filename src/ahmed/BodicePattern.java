@@ -2,18 +2,19 @@ package ahmed;
 
 import jblockenums.EGarment;
 import jblockenums.EMethod;
-import jblockenums.EPosition;
 import jblockexceptions.MeasurementNotFoundException;
-import jblockmain.*;
+import jblockmain.Block;
+import jblockmain.Measurements;
+import jblockmain.Pattern;
+import jblockmain.easeMeasurement;
 import mathcontainers.Vector2D;
 
-import javax.accessibility.AccessibleRole;
-import javax.sound.midi.SysexMessage;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.Vector;
 
-public class BodicePattern extends Pattern {
+public class BodicePattern
+        extends Pattern
+{
+    protected static ArrayList<easeMeasurement> easeMeasurements = new ArrayList<>();
     private double halfBackCentreTapeMeasure;
     private double sideNeckToBustLengthR;
     private double sideNeckToBustToWaistR;
@@ -35,7 +36,6 @@ public class BodicePattern extends Pattern {
     private double frontNeckDepth;
     private double backNeckDepth;
     private double shoulderToWaistDepth;
-
     private double armholeDepthEase;
     private double acrossBackEase;
     private double shoulderSlopeEase;
@@ -44,18 +44,49 @@ public class BodicePattern extends Pattern {
     private double waistEase;
     private double shoulderRightX;
 
+    public BodicePattern(Measurements dataStore)
+    {
+        if (!readMeasurements(dataStore)) return;
+        addEasement();
+
+        createBlocks();
+    }
+
+    public static void populateEaseMeasurements()
+    {
+        // Check to see it hasn't already been populated / it is empty
+        if (easeMeasurements.size() > 0)
+        {
+            return;
+        }
+        easeMeasurements.add(new easeMeasurement("Armhole Depth", 1.7));
+        easeMeasurements.add(new easeMeasurement("Across Back Ease", 0.5));
+        easeMeasurements.add(new easeMeasurement("Shoulder Slop Ease", 0.3));
+        easeMeasurements.add(new easeMeasurement("Front Bust Arc Ease", 1.0));
+        easeMeasurements.add(new easeMeasurement("Back Bust Arc Ease", 3.0));
+        easeMeasurements.add(new easeMeasurement("Waist Ease", 1.5));
+    }
+
+    public static ArrayList<easeMeasurement> getEaseMeasurement()
+    {
+        return easeMeasurements;
+    }
+
     @Override
-    protected EMethod assignMethod() {
+    protected EMethod assignMethod()
+    {
         return EMethod.AHMED;
     }
 
     @Override
-    protected EGarment assignGarment() {
+    protected EGarment assignGarment()
+    {
         return EGarment.BODICE;
     }
 
     @Override
-    protected void addEasement() throws IndexOutOfBoundsException {
+    protected void addEasement() throws IndexOutOfBoundsException
+    {
         // Refer to the populateEaseMeasurements static method for the order
         armholeDepthEase = easeMeasurements.get(0).getValue();
         acrossBackEase = easeMeasurements.get(1).getValue();
@@ -65,17 +96,12 @@ public class BodicePattern extends Pattern {
         waistEase = easeMeasurements.get(5).getValue();
     }
 
-    public BodicePattern(Measurements dataStore) {
-        if (!readMeasurements(dataStore)) return;
-        addEasement();
-
-        createBlocks();
-    }
-
     @Override
-    protected boolean readMeasurements(Measurements dataStore) {
+    protected boolean readMeasurements(Measurements dataStore)
+    {
 
-        try {
+        try
+        {
             halfBackCentreTapeMeasure = dataStore.getMeasurement("A04").value;
             sideNeckToBustLengthR = dataStore.getMeasurement("A07").value;
             sideNeckToBustToWaistR = dataStore.getMeasurement("A08").value;
@@ -103,14 +129,17 @@ public class BodicePattern extends Pattern {
             userName = dataStore.getName();
 
             return true;
-        } catch (MeasurementNotFoundException e) {
+        }
+        catch (MeasurementNotFoundException e)
+        {
             addMissingMeasurement(dataStore.getName(), e.getMeasurementId());
             return false;
         }
     }
 
     @Override
-    protected void createBlocks() {
+    protected void createBlocks()
+    {
         Block fullBlock = new Block(userName + "_Ahmed_Bodice_Block");
         blocks.add(fullBlock);
 
@@ -142,13 +171,17 @@ public class BodicePattern extends Pattern {
 
         // Calculation of point 5 as the intersect between two circles of point 4 and point 6 given their lengths
         circleP = Block.circleIntersect(point4.getX(), point6.getX(),
-                point4.getY(), point6.getY(),
-                (backWaistArc / 2.0) + 1.5 + backWaistDartWidth, sideSeamDepth - armholeDepthEase);
+                                        point4.getY(), point6.getY(),
+                                        (backWaistArc / 2.0) + 1.5 + backWaistDartWidth,
+                                        sideSeamDepth - armholeDepthEase);
 
         // Pick the one with smaller Y for now as point5
-        if (circleP[0][1] < circleP[1][1]) {
+        if (circleP[0][1] < circleP[1][1])
+        {
             point5 = new Vector2D(circleP[0][0], circleP[0][1]);
-        } else {
+        }
+        else
+        {
             point5 = new Vector2D(circleP[1][0], circleP[1][1]);
         }
 
@@ -157,25 +190,33 @@ public class BodicePattern extends Pattern {
 
         // Calculation of point 7 as the intersect between 2 circles of point 6 and point 8 with their lengths
         circleP = Block.circleIntersect(point6.getX(), point8.getX(),
-                point6.getY(), point8.getY(),
-                sideSeamDepth - armholeDepthEase, (frontWaistArc / 2.0) + 1.5 + frontWaistDartWidth);
+                                        point6.getY(), point8.getY(),
+                                        sideSeamDepth - armholeDepthEase,
+                                        (frontWaistArc / 2.0) + 1.5 + frontWaistDartWidth);
 
         // Pick the one with a smaller y for point7 based on inspection of where the 2 points of intersection are
         // and which one looks more correct
-        if (circleP[0][1] < circleP[1][1]) {
+        if (circleP[0][1] < circleP[1][1])
+        {
             point7 = new Vector2D(circleP[0][0], circleP[0][1]);
-        } else {
+        }
+        else
+        {
             point7 = new Vector2D(circleP[1][0], circleP[1][1]);
         }
 
         // A bunch of vector key points calculated
         Vector2D point10 = new Vector2D(point8.getX(), point3.getY());
-        Vector2D point11 = new Vector2D(point8.getX(), point8.getY() + ((sideNeckToBustToWaistR - frontNeckDepth) * 0.75));
+        Vector2D point11 = new Vector2D(point8.getX(),
+                                        point8.getY() + ((sideNeckToBustToWaistR - frontNeckDepth) * 0.75));
         Vector2D point12 = new Vector2D(point8.getX(), point8.getY() + (sideNeckToBustToWaistR - frontNeckDepth));
-        Vector2D point13 = new Vector2D(point12.getX() - (neckWidthFrontandBack / 2.0), point12.getY() + frontNeckDepth);
+        Vector2D point13 = new Vector2D(point12.getX() - (neckWidthFrontandBack / 2.0),
+                                        point12.getY() + frontNeckDepth);
 
         // Y9 temporarily stores a height which is used in calculating the actual y position of point 9 vector-ially
-        double y9 = Math.sqrt(Math.pow(sideNeckToBustLengthR, 2.0) - Math.pow((bustWidth / 2.0) - (neckWidthFrontandBack / 2.0), 2.0));
+        double y9 = Math.sqrt(
+                Math.pow(sideNeckToBustLengthR, 2.0) - Math.pow((bustWidth / 2.0) - (neckWidthFrontandBack / 2.0),
+                                                                2.0));
         Vector2D point9 = new Vector2D(point8.getX(), point13.getY() - y9);
         Vector2D bustPoint = new Vector2D(point9.getX() - (bustWidth) / 2.0, point9.getY());
 
@@ -185,15 +226,18 @@ public class BodicePattern extends Pattern {
 
         // Point14x: starting from point13, subtract bust dart width, then x14 to get x position
         // Point14y: from point13, go down by shoulder slope value
-        Vector2D point14 = new Vector2D(point13.getX() - ((frontBustArc + backBustArc) * 0.08) - x14, point13.getY() - shoulderSlope);
+        Vector2D point14 = new Vector2D(point13.getX() - ((frontBustArc + backBustArc) * 0.08) - x14,
+                                        point13.getY() - shoulderSlope);
 
         // Calculation of point 16,18
-        Vector2D point16 = new Vector2D(point2.getX() + (acrossBackTapeMeasurement / 2.0) + acrossBackEase, point2.getY());
+        Vector2D point16 = new Vector2D(point2.getX() + (acrossBackTapeMeasurement / 2.0) + acrossBackEase,
+                                        point2.getY());
         Vector2D point17;
         Vector2D point18 = new Vector2D(point1.getX() + (neckWidthFrontandBack / 2.0), 0.0);
 
         // First calculate the intermediate point between point 18 and 17
-        Vector2D point17_18 = new Vector2D(point1.getX() + acrossShoulderBackandFront / 2.0, point18.getY() - shoulderSlope);
+        Vector2D point17_18 = new Vector2D(point1.getX() + acrossShoulderBackandFront / 2.0,
+                                           point18.getY() - shoulderSlope);
 
         // Use point 17_18 to direct point 18 to calculate location of point 17 where 1.0 is the dart width
         dx = point17_18.getX() - point18.getX();
@@ -236,8 +280,8 @@ public class BodicePattern extends Pattern {
         // x15temp1-x15temp2 gives the width of the dart at Y = point15 which we then add since when the dart is closed,
         // It will be subtracted
         Vector2D point15 = new Vector2D(point11.getX() -
-                ((acrossChestArmToArmLength / 2) + (x15temp1 - x15temp2)),
-                point11.getY());
+                                                ((acrossChestArmToArmLength / 2) + (x15temp1 - x15temp2)),
+                                        point11.getY());
 
         // Apex points used in directing the curves of the armhole
         // Not used anymore in the new calculation of armhole curves
@@ -264,8 +308,9 @@ public class BodicePattern extends Pattern {
         fullBlock.addKeypoint(point6_2);
 
         ArrayList<Vector2D> Dart4_5 = fullBlock.addDart(point4, point5,
-                (backWaistArc / 4.0) / (new Vector2D(point5.subtract(point4)).norm()),
-                backWaistDartWidth, waistToArmpitDepth - 2.5, true, false);
+                                                        (backWaistArc / 4.0) / (new Vector2D(
+                                                                point5.subtract(point4)).norm()),
+                                                        backWaistDartWidth, waistToArmpitDepth - 2.5, true, false);
 
         /* Get a directional vector from midpoint of 17->18 to the apex of the back waist dart
          This is required as the dart between 17 and 18 needs to be linked to the dart between 4 and 5
@@ -298,26 +343,8 @@ public class BodicePattern extends Pattern {
         lamda = (bustPoint.getX() - point7.getX()) / (D.getX());
 
         ArrayList<Vector2D> Dart7_8 = fullBlock.addDart(point7, point8, lamda,
-                frontWaistDartWidth, new Vector2D(bustPoint.getX(),
-                        bustPoint.getY() - 2.5), false);
-    }
-
-    protected static ArrayList<easeMeasurement> easeMeasurements = new ArrayList<>();
-
-    public static void populateEaseMeasurements() {
-        // Check to see it hasn't already been populated / it is empty
-        if (easeMeasurements.size() > 0) {
-            return;
-        }
-        easeMeasurements.add(new easeMeasurement("Armhole Depth", 1.7));
-        easeMeasurements.add(new easeMeasurement("Across Back Ease", 0.5));
-        easeMeasurements.add(new easeMeasurement("Shoulder Slop Ease", 0.3));
-        easeMeasurements.add(new easeMeasurement("Front Bust Arc Ease", 1.0));
-        easeMeasurements.add(new easeMeasurement("Back Bust Arc Ease", 3.0));
-        easeMeasurements.add(new easeMeasurement("Waist Ease", 1.5));
-    }
-
-    public static ArrayList<easeMeasurement> getEaseMeasurement() {
-        return easeMeasurements;
+                                                        frontWaistDartWidth, new Vector2D(bustPoint.getX(),
+                                                                                          bustPoint.getY() - 2.5),
+                                                        false);
     }
 }
