@@ -11,6 +11,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.io.FileWriter;
+import java.util.Date;
 
 
 /** Interface to be implemented by every pattern added to the module. */
@@ -52,6 +53,7 @@ public abstract class Pattern implements IPlottable
      * Common store of missing measurements.
      */
     protected static ArrayList<String> missingMeasurements = new ArrayList<String>();
+
 
     /**
      * Constructor
@@ -173,7 +175,7 @@ public abstract class Pattern implements IPlottable
     }
 
     @Override
-    public void writeToDXF(File fileOutput, boolean[] dxfLayerChooser)
+    public void writeToDXF(File fileOutput, boolean[] dxfLayerChooser, String timeStamp)
     {
         for (int i = 0; i < getNumberOfBlocksToPlot(); i++)
         {
@@ -191,7 +193,11 @@ public abstract class Pattern implements IPlottable
             }
 
             // Create new DXF file
-            DxfFile file = new DxfFile(path.toString() + "/" + blocks.get(i).getName());
+            DxfFile file = null;
+            if (timeStamp == null)
+                file = new DxfFile(path.toString() + "/" + blocks.get(i).getName());
+            else
+                file = new DxfFile(path.toString() + "/" + blocks.get(i).getName() + "_" + timeStamp);
 
             try
             {
@@ -205,4 +211,12 @@ public abstract class Pattern implements IPlottable
             file.writeFile(blocks.get(i).getName(), dxfLayerChooser);
         }
     }
+
+    protected final static ArrayList<easeMeasurement> easeMeasurements = null;
+    public static ArrayList<easeMeasurement> getEaseMeasurement()
+    {
+        return easeMeasurements;
+    }
+    public static void populateEaseMeasurements(){}
+
 }

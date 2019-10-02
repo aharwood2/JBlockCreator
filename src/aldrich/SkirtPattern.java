@@ -208,5 +208,4 @@ public class SkirtPattern
         fullBlock.addRightAngleCurve(dartEdges2.get(2),dartEdges3.get(0));
         fullBlock.addRightAngleCurve(dartEdges3.get(2),new Vector2D(0.0, 0.0));
     }
-
 }
