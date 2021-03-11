@@ -7,7 +7,7 @@ custom methods as desired by extending the `Pattern` class and adding the releva
 retained by the The University of Manchester.
 
 # Journal Publication #
-This software is soon to be published in the journal SoftwareX. We will provide a link to the article when it is released. 
+This software is [published in SoftwareX](https://www.sciencedirect.com/science/article/pii/S2352711018302528). 
 If you use or modify our software (which we hope you will), we ask that you cite this article somewhere.
 
 # Compiling and Running #
@@ -22,7 +22,7 @@ The current release has no known bugs, however testing has identified a number o
 which are recorded on the issue tracker where appropriate. Please add more issues to the tracker if you find any problems.
 
 # Release Notes #
-**Version 1.5**
+**Version 1.5**    
 Issue #76: Add timestamp to pattern outputs.    
 Issue #74: Added Gill sweatshirt pattern.    
 Issue #62: Added UI for adding custom ease values for most of the patterns.    
