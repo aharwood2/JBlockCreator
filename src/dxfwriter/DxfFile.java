@@ -1,7 +1,5 @@
 package dxfwriter;
 
-import jblockmain.JBlockCreator;
-
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -9,6 +7,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
+import java.util.ResourceBundle;
 
 /**
  * A class that encapsulates a DXF file and the methods required to write it from arrays of points which represent line
@@ -337,8 +336,8 @@ public class DxfFile
 
             /* Add specific annotation text on layer 15 as per the ASTM spec */
             writeAnnotationText("ASTM/D13 Proposal 1 VERSION:10");
-            writeAnnotationText("AUTHOR:JBLOCKCREATOR_" + JBlockCreator.bundle.getString("maj_ver") + "_"
-                                        + JBlockCreator.bundle.getString("min_ver"));
+            writeAnnotationText("AUTHOR:JBLOCKCREATOR_" + ResourceBundle.getBundle("string.properties").getString("maj_ver") + "_"
+                                        + ResourceBundle.getBundle("string.properties").getString("min_ver"));
             writeAnnotationText("CREATION DATE:" + new SimpleDateFormat("dd-MM-yyyy").format(dDate));
             writeAnnotationText("CREATION TIME:" + new SimpleDateFormat("hh:mm").format(dDate));
             writeAnnotationText("UNITS:METRIC");

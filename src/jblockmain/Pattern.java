@@ -11,6 +11,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.ResourceBundle;
 
 
 /**
@@ -19,6 +20,8 @@ import java.util.ArrayList;
 public abstract class Pattern
         implements IPlottable
 {
+    protected double tol;
+
     protected final static ArrayList<easeMeasurement> easeMeasurements = null;
     /**
      * Common store of missing measurements.
@@ -52,6 +55,7 @@ public abstract class Pattern
      */
     public Pattern()
     {
+        tol = Double.parseDouble(ResourceBundle.getBundle("string.properties").getString("tolerance"));
         blocks = new ArrayList<Block>();
         method = assignMethod();
         garment = assignGarment();
@@ -68,7 +72,7 @@ public abstract class Pattern
         {
             try
             {
-                FileWriter writer = new FileWriter(fileoutput + "/" + JBlockCreator.failedOutputsFilename);
+                FileWriter writer = new FileWriter(fileoutput + "/" + ResourceBundle.getBundle("strings.properties").getString("failedOutputsFilename"));
                 BufferedWriter writer2 = new BufferedWriter(writer);
                 for (String str : missingMeasurements)
                 {

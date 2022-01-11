@@ -7,8 +7,7 @@ import mathcontainers.Vector2D;
 import mathcontainers.VectorND;
 
 import java.util.ArrayList;
-
-import static jblockmain.JBlockCreator.tol;
+import java.util.ResourceBundle;
 
 /**
  * Class that represents a block as a series of connected keypoints.
@@ -17,6 +16,7 @@ import static jblockmain.JBlockCreator.tol;
  */
 public class Block
 {
+    private double tol;
     /**
      * Global resolution for some curves (points per cm)
      */
@@ -45,6 +45,14 @@ public class Block
      * Names of the construction points.
      */
     private ArrayList<String> constructionNames;
+
+    /**
+     * Ctor
+     */
+    public Block()
+    {
+        tol = Double.parseDouble(ResourceBundle.getBundle("string.properties").getString("tolerance"));
+    }
 
     /**
      * Constructor.
