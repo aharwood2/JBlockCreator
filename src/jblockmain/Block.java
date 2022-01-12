@@ -51,7 +51,7 @@ public class Block
      */
     public Block()
     {
-        tol = Double.parseDouble(ResourceBundle.getBundle("string.properties").getString("tolerance"));
+        tol = Double.parseDouble(ResourceBundle.getBundle("strings").getString("tolerance"));
     }
 
     /**

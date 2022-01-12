@@ -55,7 +55,7 @@ public abstract class Pattern
      */
     public Pattern()
     {
-        tol = Double.parseDouble(ResourceBundle.getBundle("string.properties").getString("tolerance"));
+        tol = Double.parseDouble(ResourceBundle.getBundle("string").getString("tolerance"));
         blocks = new ArrayList<Block>();
         method = assignMethod();
         garment = assignGarment();
@@ -72,7 +72,7 @@ public abstract class Pattern
         {
             try
             {
-                FileWriter writer = new FileWriter(fileoutput + "/" + ResourceBundle.getBundle("strings.properties").getString("failedOutputsFilename"));
+                FileWriter writer = new FileWriter(fileoutput + "/" + ResourceBundle.getBundle("strings").getString("failedOutputsFilename"));
                 BufferedWriter writer2 = new BufferedWriter(writer);
                 for (String str : missingMeasurements)
                 {

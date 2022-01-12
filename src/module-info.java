@@ -7,6 +7,7 @@ module JBlockCreator {
     requires org.kordamp.ikonli.javafx;
     requires org.kordamp.bootstrapfx.core;
 
-    opens jblockmain to javafx.fxml;
     exports jblockmain;
+    opens jblockui to javafx.fxml;
+    exports jblockui;
 }
