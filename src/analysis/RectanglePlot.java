@@ -3,7 +3,7 @@ package analysis;
 import dxfwriter.DxfFile;
 import jblockenums.EAnalysis;
 import jblockmain.IPlottable;
-import jblockmain.Measurements;
+import jblockmain.InputFileData;
 
 import java.io.File;
 import java.nio.file.Files;
@@ -21,39 +21,33 @@ public class RectanglePlot
     // Variables for x,y axis measurement ID
     private final String xAxisID;
     private final String yAxisID;
-    private final String measurementFileName;
     private final boolean isLayered;
     private final boolean isRect;
-    private final int numUsers;
-    private final Measurements measurements;
+    private final InputFileData fileData;
     // List of Rectangles in this plot
-    private ArrayList<Rectangle> rectangles;
+    private final ArrayList<Rectangle> rectangles = new ArrayList<>();
 
     // Constructor
-    public RectanglePlot(Measurements _measurements, String measurementIdX, String measurementIdY,
+    public RectanglePlot(InputFileData inputFileData, String measurementIdX, String measurementIdY,
                          boolean isLayeredPlot, boolean isRectangle)
     {
-        measurements = _measurements;
-        rectangles = new ArrayList<>();
+        fileData = inputFileData;
         xAxisID = measurementIdX;
         yAxisID = measurementIdY;
-        measurementFileName = measurements.getScanDataFileName();
         isLayered = isLayeredPlot;
         isRect = isRectangle;
-        numUsers = measurements.getNames().size();
-
     }
 
     // Method to add a new Rectangle to the plot
-    public void addNewRectangle()
+    public void addNewRectangle(String userName)
     {
         // Add new rectangle
         rectangles.add(
                 new Rectangle(
                         0.0,
                         0.0,
-                        measurements.getMeasurement(xAxisID).value,
-                        measurements.getMeasurement(yAxisID).value
+                        fileData.getInputValue(userName, xAxisID).value,
+                        fileData.getInputValue(userName, yAxisID).value
                 )
         );
 
@@ -94,12 +88,6 @@ public class RectanglePlot
         return null;
     }
 
-    private ArrayList<String> getNames(int blockNumber) throws IndexOutOfBoundsException
-    {
-        rangeCheck(blockNumber);
-        return null;
-    }
-
     @Override
     public int getNumberOfBlocksToPlot()
     {
@@ -124,7 +112,7 @@ public class RectanglePlot
 
         if (isRect)
         {
-            ArrayList<String> names = measurements.getNames();
+            ArrayList<String> names = fileData.getUserNames();
             for (int i = 0; i < rectangles.size(); i++)
             {
 

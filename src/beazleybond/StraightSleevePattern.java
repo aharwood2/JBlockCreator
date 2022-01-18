@@ -2,10 +2,7 @@ package beazleybond;
 
 import jblockenums.EPattern;
 import jblockexceptions.MeasurementNotFoundException;
-import jblockmain.Block;
-import jblockmain.Measurements;
-import jblockmain.Pattern;
-import jblockmain.easeMeasurement;
+import jblockmain.*;
 import mathcontainers.Vector2D;
 
 import java.util.ArrayList;
@@ -13,53 +10,9 @@ import java.util.ArrayList;
 public class StraightSleevePattern
         extends Pattern
 {
-    /* Straight sleeve pattern */
-
-    protected static ArrayList<easeMeasurement> easeMeasurements = new ArrayList<>();
-    /* Pattern-specific Measurements */
-    private double a_UpperArmGirth = 28.0;
-    private double b_FullLength = 59.0;
-    private double c_DepthOfSleeveHead = 15.0;
-
-    /* Arbitrary Measurements */
-    private double d_SleeveHeadToElbow = 35.0;
-    // Sleeve head height shaping
-    private double Arb_SleeveShaping;
-    // Wrist shortening
-    private double Arb_ForeArmShortening;
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    /* Methods */
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    // Underarm seam shortening
-    private double Arb_UnderarmShortening;
-
-    public StraightSleevePattern(Measurements dataStore)
+    public StraightSleevePattern(String userName, InputFileData dataStore)
     {
-        if (!readMeasurements(dataStore)) return;
-        addEasement();
-
-        // Populate arbitrary measurements
-        Arb_SleeveShaping = 1.5;
-        Arb_ForeArmShortening = 1.0;
-        Arb_UnderarmShortening = 0.5;
-        // Create the blocks
-        createBlocks();
-    }
-
-    public static void populateEaseMeasurements()
-    {
-        // Check to see it hasn't already been populated / it is empty
-        if (easeMeasurements.size() > 0)
-        {
-            return;
-        }
-        easeMeasurements.add(new easeMeasurement("Upper Arm Girth Ease", 6.0));
-    }
-
-    public static ArrayList<easeMeasurement> getEaseMeasurement()
-    {
-        return easeMeasurements;
+        super(userName, dataStore);
     }
 
     /* Implement abstract methods from super class */
@@ -70,32 +23,19 @@ public class StraightSleevePattern
     }
 
     @Override
-    protected void addEasement() throws IndexOutOfBoundsException
+    protected void defineRequiredMeasurements() throws Exception
     {
-        a_UpperArmGirth += easeMeasurements.get(0).getValue();
-    }
+        measurements.addMeasurement(new Measurement("a_UpperArmGirth", "A24"));
+        measurements.addMeasurement(new Measurement("b_FullLength", "A23"));
+        measurements.addMeasurement(new Measurement("c_DepthOfSleeveHead", "A35"));
+        measurements.addMeasurement(new Measurement("d_SleeveHeadToElbow", "A25"));
 
-    @Override
-    protected boolean readMeasurements(Measurements dataStore)
-    {
-        try
-        {
-            // Based on measurements for this pattern we can read the following from the scan:
-            a_UpperArmGirth = dataStore.getMeasurement("A24").value;
-            b_FullLength = dataStore.getMeasurement("A23").value;
-            c_DepthOfSleeveHead = dataStore.getMeasurement("A35").value;
-            d_SleeveHeadToElbow = dataStore.getMeasurement("A25").value;
+        // Arbitrary
+        measurements.addMeasurement(new Measurement("Arb_ForeArmShortening", 1.0));
+        measurements.addMeasurement(new Measurement("Arb_UnderarmShortening", 0.5));
 
-            // Get name
-            userName = dataStore.getName();
-
-            return true;
-        }
-        catch (MeasurementNotFoundException e)
-        {
-            addMissingMeasurement(dataStore.getName(), e.getMeasurementId());
-            return false;
-        }
+        // Ease
+        measurements.addMeasurement(new Measurement("upperArmGirthEase", 6.0));
     }
 
     /**
@@ -104,6 +44,14 @@ public class StraightSleevePattern
     @Override
     protected void createBlocks()
     {
+        // Pull from store
+        var a_UpperArmGirth = get("a_UpperArmGirth") + get("upperArmGirthEase");
+        var b_FullLength = get("b_FullLength");
+        var c_DepthOfSleeveHead = get("c_DepthOfSleeveHead");
+        var d_SleeveHeadToElbow = get("d_SleeveHeadToElbow");
+        var Arb_ForeArmShortening = get("Arb_ForeArmShortening");
+        var Arb_UnderarmShortening = get("Arb_UnderarmShortening");
+
         // Points that make up the shape are listed in a strict anti-clockwise order to maintain correct connectivity for
         // plotting. The bottom left corner of the space to be the origin.
 

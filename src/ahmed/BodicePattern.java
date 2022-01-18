@@ -2,10 +2,7 @@ package ahmed;
 
 import jblockenums.EPattern;
 import jblockexceptions.MeasurementNotFoundException;
-import jblockmain.Block;
-import jblockmain.Measurements;
-import jblockmain.Pattern;
-import jblockmain.easeMeasurement;
+import jblockmain.*;
 import mathcontainers.Vector2D;
 
 import java.util.ArrayList;
@@ -13,57 +10,9 @@ import java.util.ArrayList;
 public class BodicePattern
         extends Pattern
 {
-    protected static ArrayList<easeMeasurement> easeMeasurements = new ArrayList<>();
-    private double halfBackCentreTapeMeasure;
-    private double sideNeckToBustLengthR;
-    private double sideNeckToBustToWaistR;
-    private double acrossBackTapeMeasurement;
-    private double acrossChestArmToArmLength;
-    private double shoulderLengthRight;
-    private double bustWidth;
-    private double frontWaistArc;
-    private double backWaistArc;
-    private double frontBustArc;
-    private double backBustArc;
-    private double scyeDepth;
-    private double shoulderSlope;
-    private double sideSeamDepth;
-    private double acrossShoulderBackandFront;
-    private double waistToArmpitDepth;
-    private double midShoulderToShoulderBlades;
-    private double neckWidthFrontandBack;
-    private double frontNeckDepth;
-    private double backNeckDepth;
-    private double shoulderToWaistDepth;
-    private double armholeDepthEase;
-    private double acrossBackEase;
-    private double shoulderSlopeEase;
-    private double frontBustArcEase;
-    private double backBustArcEase;
-    private double waistEase;
-    private double shoulderRightX;
-
-    public BodicePattern(Measurements dataStore)
+    public BodicePattern(String username, InputFileData dataStore)
     {
-        if (!readMeasurements(dataStore)) return;
-        addEasement();
-
-        createBlocks();
-    }
-
-    public static void populateEaseMeasurements()
-    {
-        // Check to see it hasn't already been populated / it is empty
-        if (easeMeasurements.size() > 0)
-        {
-            return;
-        }
-        easeMeasurements.add(new easeMeasurement("Armhole Depth", 1.7));
-        easeMeasurements.add(new easeMeasurement("Across Back Ease", 0.5));
-        easeMeasurements.add(new easeMeasurement("Shoulder Slop Ease", 0.3));
-        easeMeasurements.add(new easeMeasurement("Front Bust Arc Ease", 1.0));
-        easeMeasurements.add(new easeMeasurement("Back Bust Arc Ease", 3.0));
-        easeMeasurements.add(new easeMeasurement("Waist Ease", 1.5));
+        super(username, dataStore);
     }
 
     @Override
@@ -72,67 +21,71 @@ public class BodicePattern
         return EPattern.AHMED_BODICE;
     }
 
-    public static ArrayList<easeMeasurement> getEaseMeasurement()
-    {
-        return easeMeasurements;
-    }
-
     @Override
-    protected void addEasement() throws IndexOutOfBoundsException
+    protected void defineRequiredMeasurements() throws Exception
     {
-        // Refer to the populateEaseMeasurements static method for the order
-        armholeDepthEase = easeMeasurements.get(0).getValue();
-        acrossBackEase = easeMeasurements.get(1).getValue();
-        shoulderSlopeEase = easeMeasurements.get(2).getValue();
-        frontBustArcEase = easeMeasurements.get(3).getValue();
-        backBustArcEase = easeMeasurements.get(4).getValue();
-        waistEase = easeMeasurements.get(5).getValue();
-    }
+        measurements.addMeasurement(new Measurement("halfBackCentreTapeMeasure", "A04"));
+        measurements.addMeasurement(new Measurement("sideNeckToBustLengthR", "A07"));
+        measurements.addMeasurement(new Measurement("sideNeckToBustToWaistR", "A08"));
+        measurements.addMeasurement(new Measurement("acrossBackTapeMeasurement", "A09"));
+        measurements.addMeasurement(new Measurement("acrossChestArmToArmLength", "A10"));
+        measurements.addMeasurement(new Measurement("shoulderLengthRight", "A11"));
+        measurements.addMeasurement(new Measurement("bustWidth", "A12"));
+        measurements.addMeasurement(new Measurement("frontWaistArc", "A26"));
+        measurements.addMeasurement(new Measurement("backWaistArc", "A27"));
+        measurements.addMeasurement(new Measurement("frontBustArc", "A56"));
+        measurements.addMeasurement(new Measurement("backBustArc", "A57"));
+        measurements.addMeasurement(new Measurement("scyeDepth", "B01"));
+        measurements.addMeasurement(new Measurement("shoulderSlope", "B04"));
+        measurements.addMeasurement(new Measurement("sideSeamDepth", "B05"));
+        measurements.addMeasurement(new Measurement("acrossShoulderBackandFront", "B06"));
+        measurements.addMeasurement(new Measurement("waistToArmpitDepth", "B07"));
+        measurements.addMeasurement(new Measurement("midShoulderToShoulderBlades", "B08"));
+        measurements.addMeasurement(new Measurement("neckWidthFrontandBack", "B09"));
+        measurements.addMeasurement(new Measurement("frontNeckDepth", "B10"));
+        measurements.addMeasurement(new Measurement("backNeckDepth", "B11"));
+        measurements.addMeasurement(new Measurement("shoulderToWaistDepth", "B16"));
+        measurements.addMeasurement(new Measurement("shoulderRightX", "B19"));
 
-    @Override
-    protected boolean readMeasurements(Measurements dataStore)
-    {
-
-        try
-        {
-            halfBackCentreTapeMeasure = dataStore.getMeasurement("A04").value;
-            sideNeckToBustLengthR = dataStore.getMeasurement("A07").value;
-            sideNeckToBustToWaistR = dataStore.getMeasurement("A08").value;
-            acrossBackTapeMeasurement = dataStore.getMeasurement("A09").value;
-            acrossChestArmToArmLength = dataStore.getMeasurement("A10").value;
-            shoulderLengthRight = dataStore.getMeasurement("A11").value;
-            bustWidth = dataStore.getMeasurement("A12").value;
-            frontWaistArc = dataStore.getMeasurement("A26").value;
-            backWaistArc = dataStore.getMeasurement("A27").value;
-            frontBustArc = dataStore.getMeasurement("A56").value;
-            backBustArc = dataStore.getMeasurement("A57").value;
-            scyeDepth = dataStore.getMeasurement("B01").value;
-            shoulderSlope = dataStore.getMeasurement("B04").value;
-            sideSeamDepth = dataStore.getMeasurement("B05").value;
-            acrossShoulderBackandFront = dataStore.getMeasurement("B06").value;
-            waistToArmpitDepth = dataStore.getMeasurement("B07").value;
-            midShoulderToShoulderBlades = dataStore.getMeasurement("B08").value;
-            neckWidthFrontandBack = dataStore.getMeasurement("B09").value;
-            frontNeckDepth = dataStore.getMeasurement("B10").value;
-            backNeckDepth = dataStore.getMeasurement("B11").value;
-            shoulderToWaistDepth = dataStore.getMeasurement("B16").value;
-            // The body scanner outputs a negative number, need to make it negative
-            shoulderRightX = -dataStore.getMeasurement("B19").value;
-
-            userName = dataStore.getName();
-
-            return true;
-        }
-        catch (MeasurementNotFoundException e)
-        {
-            addMissingMeasurement(dataStore.getName(), e.getMeasurementId());
-            return false;
-        }
+        // Add ease as measurements with default values
+        measurements.addMeasurement(new Measurement("armholeDepthEase", 1.7));
+        measurements.addMeasurement(new Measurement("acrossBackEase", 0.5));
+        measurements.addMeasurement(new Measurement("shoulderSlopeEase", 0.3));
+        measurements.addMeasurement(new Measurement("frontBustArcEase", 1.0));
+        measurements.addMeasurement(new Measurement("backBustArcEase", 3.0));
+        measurements.addMeasurement(new Measurement("waistEase", 1.5));
     }
 
     @Override
     protected void createBlocks()
     {
+        // Pull from store
+        var halfBackCentreTapeMeasure = get("halfBackCentreTapeMeasure");
+        var sideNeckToBustLengthR= get("sideNeckToBustLengthR");
+        var sideNeckToBustToWaistR= get("sideNeckToBustToWaistR");
+        var acrossBackTapeMeasurement= get("acrossBackTapeMeasurement");
+        var acrossChestArmToArmLength= get("acrossChestArmToArmLength");
+        var shoulderLengthRight= get("shoulderLengthRight");
+        var bustWidth= get("bustWidth");
+        var frontWaistArc= get("frontWaistArc");
+        var backWaistArc= get("backWaistArc");
+        var frontBustArc= get("frontBustArc");
+        var backBustArc= get("backBustArc");
+        var scyeDepth= get("scyeDepth");
+        var shoulderSlope= get("shoulderSlope");
+        var sideSeamDepth= get("sideSeamDepth");
+        var acrossShoulderBackandFront= get("acrossShoulderBackandFront");
+        var waistToArmpitDepth= get("waistToArmpitDepth");
+        var midShoulderToShoulderBlades= get("midShoulderToShoulderBlades");
+        var neckWidthFrontandBack= get("neckWidthFrontandBack");
+        var frontNeckDepth= get("frontNeckDepth");
+        var backNeckDepth= get("backNeckDepth");
+        var shoulderToWaistDepth= get("shoulderToWaistDepth");
+        var armholeDepthEase= get("armholeDepthEase");
+        var acrossBackEase= get("acrossBackEase");
+        var shoulderSlopeEase= get("shoulderSlopeEase");
+        var shoulderRightX= get("shoulderRightX");
+
         Block fullBlock = new Block(userName + "_Ahmed_Bodice_Block");
         blocks.add(fullBlock);
 
@@ -142,7 +95,7 @@ public class BodicePattern
         double backWaistDartWidth = overallDiffTotalPatternWidthToWaistWithEase * 0.30;
         double frontWaistDartWidth = overallDiffTotalPatternWidthToWaistWithEase * 0.37;
 
-        // Initialization of the double the will store the solution for cirlce intersections to calculate certain points
+        // Initialization of the double that will store the solution for circle intersections to calculate certain points
         double[][] circleP;
         // Initialization of temporary variables used in calculation further down
         double lamda, dx, dy;
@@ -256,7 +209,7 @@ public class BodicePattern
 
         // Calculation of point15 -> need to add the length of the dart at this y position to push point 15
         // So that when the dart closes, the distance between point 11 and 15 is exactly a10/2
-        // First calcuation direction vector from point 13 to bust
+        // First calculation direction vector from point 13 to bust
         Vector2D D = new Vector2D(bustPoint.subtract(point13));
 
         // Solve Vector line equation for Y = point11 Y as point15 has this Y value

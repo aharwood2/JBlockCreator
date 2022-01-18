@@ -2,15 +2,13 @@ package jblockmain;
 
 import dxfwriter.DxfFile;
 import jblockenums.EPattern;
+import jblockexceptions.MeasurementNotFoundException;
 
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileWriter;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.ResourceBundle;
 
 
 /**
@@ -19,13 +17,10 @@ import java.util.ResourceBundle;
 public abstract class Pattern
         implements IPlottable
 {
-    protected double tol;
-
-    protected final static ArrayList<easeMeasurement> easeMeasurements = null;
     /**
-     * Common store of missing measurements.
+     * Measurement store based on required measurements for the pattern
      */
-    protected static ArrayList<String> missingMeasurements = new ArrayList<String>();
+    protected MeasurementSet measurements;
 
     /**
      * The type of pattern
@@ -36,61 +31,42 @@ public abstract class Pattern
      * Offset used for drawing of construction lines
      */
     protected double Arb_Con = 2.0;
+
     /**
-     * User associated with the pattern
+     * User associated with this pattern object
      */
-    protected String userName;
+    protected final String userName;
+
     /**
      * Blocks that comprise the pattern
      */
-    protected ArrayList<Block> blocks;
-
+    protected ArrayList<Block> blocks = new ArrayList<Block>();;
 
     /**
      * Constructor
      */
-    public Pattern()
+    public Pattern(String userName, InputFileData dataStore)
     {
-        tol = Double.parseDouble(ResourceBundle.getBundle("string").getString("tolerance"));
-        blocks = new ArrayList<Block>();
+        this.userName = userName;
         patternType = assignPattern();
-    }
 
-    /**
-     * Method to print the missing measurements record to a file.
-     *
-     * @param fileoutput path to file.
-     */
-    protected static void printMissingMeasurements(File fileoutput)
-    {
-        if (missingMeasurements.size() > 0)
+        // Initialises the measurement set
+        try
         {
-            try
-            {
-                FileWriter writer = new FileWriter(fileoutput + "/" + ResourceBundle.getBundle("strings").getString("failedOutputsFilename"));
-                BufferedWriter writer2 = new BufferedWriter(writer);
-                for (String str : missingMeasurements)
-                {
-                    writer2.append(str);
-                    writer2.newLine();
-                }
-                writer2.close();
-                writer.close();
-            }
-            catch (Exception e)
-            {
-                e.printStackTrace();
-            }
+            defineRequiredMeasurements();
         }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+
+        // If we have a data store object then read the measurements from it
+        if (dataStore != null) readMeasurements(dataStore);
     }
 
-    public static ArrayList<easeMeasurement> getEaseMeasurement()
+    public Pattern(String userName)
     {
-        return easeMeasurements;
-    }
-
-    public static void populateEaseMeasurements()
-    {
+        this(userName, null);
     }
 
     /**
@@ -101,28 +77,26 @@ public abstract class Pattern
     protected abstract EPattern assignPattern();
 
     /**
-     * Method to add information about a failed pattern creation due to missing measurements.
-     *
-     * @param userid name of the user concerned.
-     * @param id     ID of the measurement which caused the failure.
+     * Method which defines the required measurements for this pattern.
      */
-    protected void addMissingMeasurement(String userid, String id)
+    protected abstract void defineRequiredMeasurements() throws Exception;
+
+    /**
+     * Read measurements into the measurement set from the input file.
+     *
+     * @param inputData the object holding all acquired input data from the file.
+     */
+    protected final void readMeasurements(InputFileData inputData)
     {
-        missingMeasurements.add(userid + "/" + patternType + " : Measurement ID = " + id);
-    }
-
-    /**
-     * Obtain measurements from the measurements hashmap as required by the pattern.
-     *
-     * @param dataStore the object holding all acquired measurement data.
-     * @return indication as to whether reading was successful.
-     */
-    protected abstract boolean readMeasurements(Measurements dataStore);
-
-    /**
-     * Modify any measurements by adding easement.
-     */
-    protected abstract void addEasement();
+        try
+        {
+            measurements.mapFromInputData(userName, inputData);
+        }
+        catch (MeasurementNotFoundException e)
+        {
+            e.printStackTrace();
+        }
+    };
 
     /**
      * Create the blocks for this pattern.
@@ -130,11 +104,21 @@ public abstract class Pattern
     protected abstract void createBlocks();
 
     /**
+     * Method to get a measurement from the measurement set
+     * @param name name of the measurement to get
+     * @return the value of the measurement
+     */
+    protected final double get(String name)
+    {
+        return measurements.getMeasurement(name).getValue();
+    }
+
+    /**
      * Method to check that a block number index is within the range of blocks stored in the pattern.
      *
      * @param blockNumber number to check.
      */
-    private void rangeCheck(int blockNumber)
+    private final void rangeCheck(int blockNumber)
     {
         if (blockNumber > blocks.size())
             throw new IndexOutOfBoundsException("Accessing out of range of number of blocks!");

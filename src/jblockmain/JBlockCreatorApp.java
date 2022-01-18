@@ -29,7 +29,7 @@ public class JBlockCreatorApp extends Application
         subPanes.put("GettingStarted", (VBox)FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/jblockui/GettingStarted.fxml"))));
         subPanes.put("Analysis", (VBox)FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/jblockui/Analysis.fxml"))));
         subPanes.put("PatternSelection", (VBox)FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/jblockui/PatternSelection.fxml"))));
-        subPanes.put("Measurements", (VBox)FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/jblockui/Measurements.fxml"))));
+        subPanes.put("InputFileData", (VBox)FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/jblockui/Measurements.fxml"))));
         subPanes.put("Outputs", (VBox)FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/jblockui/Outputs.fxml"))));
 
         // Load the container

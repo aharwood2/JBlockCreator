@@ -16,7 +16,11 @@ import java.util.ResourceBundle;
  */
 public class Block
 {
-    private double tol;
+    /**
+     * Tolerance
+     */
+    public static final double tolerance = Double.parseDouble(ResourceBundle.getBundle("strings").getString("tolerance"));
+
     /**
      * Global resolution for some curves (points per cm)
      */
@@ -51,7 +55,6 @@ public class Block
      */
     public Block()
     {
-        tol = Double.parseDouble(ResourceBundle.getBundle("strings").getString("tolerance"));
     }
 
     /**
@@ -183,8 +186,8 @@ public class Block
         int i = 0;
         while (i < keypointsX.size())
         {
-            if (Math.abs(keypointsX.get(i) - xy.getX()) < tol &&
-                    Math.abs(keypointsY.get(i) - xy.getY()) < tol)
+            if (Math.abs(keypointsX.get(i) - xy.getX()) < tolerance &&
+                    Math.abs(keypointsY.get(i) - xy.getY()) < tolerance)
             {
                 // Point found
                 break;
@@ -353,7 +356,7 @@ public class Block
 
         // Check the rotation works as expected
         Vector2D baseStartRef = new Vector2D(R.postMultiply(baseStartShifted));
-        if (Math.abs(baseStartRef.getX() - 0.0) > tol) System.out.println("Dart reference rotation inaccurate!");
+        if (Math.abs(baseStartRef.getX() - 0.0) > tolerance) System.out.println("Dart reference rotation inaccurate!");
 
         // Calculation to find the apex angle (angle we need to close the dart by)
         double phi = getAngleToPositiveYAxis(baseEndRef);
@@ -367,7 +370,7 @@ public class Block
 
         // Check the rotation works as expected
         Vector2D baseEndRefClosed = new Vector2D(RApex.postMultiply(baseEndRef));
-        if (Math.abs(baseEndRefClosed.getX() - 0.0) > tol) System.out.println("Dart closure rotation inaccurate!");
+        if (Math.abs(baseEndRefClosed.getX() - 0.0) > tolerance) System.out.println("Dart closure rotation inaccurate!");
 
         // Direction of line from start point to end point
         Vector2D directionLineClosed = new Vector2D(lineEndRefClosed.subtract(lineStartRef));
@@ -912,7 +915,7 @@ public class Block
         test.subtractThis(constants);
         for (int i = 0; i < test.size(); i++)
         {
-            if (Math.abs(test.get(i)) > tol)
+            if (Math.abs(test.get(i)) > tolerance)
             {
                 System.out.println("Cubic spline solver is potentially inaccurate!");
             }
@@ -1371,7 +1374,7 @@ public class Block
 
             // Check we have the correct rotation -- dirStart should map to X axis if correct i.e. Y = 0
             double testY = Math.sin(rotang) * dirStart.getX() + Math.cos(rotang) * dirStart.getY();
-            if (Math.abs(testY) > tol) rotang = -rotang;
+            if (Math.abs(testY) > tolerance) rotang = -rotang;
 
             // Construct rotation matrix
             R = new Matrix2D(2, 2,
