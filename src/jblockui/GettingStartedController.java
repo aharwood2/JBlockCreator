@@ -27,9 +27,6 @@ public class GettingStartedController extends BaseController
     private Label outputPathLabel;
 
     @FXML
-    private Button nextButton;
-
-    @FXML
     private Button inputButton;
 
     @FXML
