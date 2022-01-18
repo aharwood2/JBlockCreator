@@ -15,7 +15,12 @@ public class JBlockCreatorApp extends Application
 {
     private AnchorPane root;
     private final HashMap<String, VBox> subPanes = new HashMap<>();
-    private final UiModel uiState = new UiModel();
+    private static JBlockCreatorApp instance;
+
+    public static JBlockCreatorApp getInstance()
+    {
+        return instance;
+    }
 
     @Override
     public void start(Stage stage) throws IOException
@@ -38,6 +43,7 @@ public class JBlockCreatorApp extends Application
         stage.setTitle(title);
         stage.setScene(scene);
         stage.show();
+        instance = this;
     }
 
     public static void main(String[] args) {
@@ -46,7 +52,7 @@ public class JBlockCreatorApp extends Application
 
     /**
      * Sets the content of the container
-     * @param key
+     * @param key sub pane key
      */
     public void setContent(String key)
     {
