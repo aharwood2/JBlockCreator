@@ -1,8 +1,7 @@
 package jblockmain;
 
 import dxfwriter.DxfFile;
-import jblockenums.EGarment;
-import jblockenums.EMethod;
+import jblockenums.EPattern;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -27,15 +26,12 @@ public abstract class Pattern
      * Common store of missing measurements.
      */
     protected static ArrayList<String> missingMeasurements = new ArrayList<String>();
-    /**
-     * Method associated with pattern
-     */
-    protected final EMethod method;
 
     /**
-     * Type of garment pattern represents
+     * The type of pattern
      */
-    protected final EGarment garment;
+    protected final EPattern patternType;
+
     /**
      * Offset used for drawing of construction lines
      */
@@ -57,8 +53,7 @@ public abstract class Pattern
     {
         tol = Double.parseDouble(ResourceBundle.getBundle("string").getString("tolerance"));
         blocks = new ArrayList<Block>();
-        method = assignMethod();
-        garment = assignGarment();
+        patternType = assignPattern();
     }
 
     /**
@@ -99,18 +94,11 @@ public abstract class Pattern
     }
 
     /**
-     * Abstract method to assign final method type.
+     * Abstract method to assign final pattern type.
      *
      * @return method type to assign to the method field.
      */
-    protected abstract EMethod assignMethod();
-
-    /**
-     * Abstract method to assign final garment type.
-     *
-     * @return method type to assign to the garment field.
-     */
-    protected abstract EGarment assignGarment();
+    protected abstract EPattern assignPattern();
 
     /**
      * Method to add information about a failed pattern creation due to missing measurements.
@@ -120,7 +108,7 @@ public abstract class Pattern
      */
     protected void addMissingMeasurement(String userid, String id)
     {
-        missingMeasurements.add(userid + "/" + method + "/" + garment + " : Measurement ID = " + id);
+        missingMeasurements.add(userid + "/" + patternType + " : Measurement ID = " + id);
     }
 
     /**
@@ -199,7 +187,7 @@ public abstract class Pattern
         for (int i = 0; i < getNumberOfBlocksToPlot(); i++)
         {
             // Construct output path
-            Path path = Paths.get(fileOutput.toString() + "/" + method + "/" + garment + "/");
+            Path path = Paths.get(fileOutput.toString() + "/" + patternType + "/");
 
             // Create directory structure if required
             try

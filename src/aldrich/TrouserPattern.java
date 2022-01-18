@@ -1,7 +1,6 @@
 package aldrich;
 
-import jblockenums.EGarment;
-import jblockenums.EMethod;
+import jblockenums.EPattern;
 import jblockexceptions.MeasurementNotFoundException;
 import jblockmain.Block;
 import jblockmain.Measurements;
@@ -53,15 +52,9 @@ public class TrouserPattern
 
     /* Implement abstract methods from super class */
     @Override
-    protected EMethod assignMethod()
+    protected EPattern assignPattern()
     {
-        return EMethod.ALDRICH;
-    }
-
-    @Override
-    protected EGarment assignGarment()
-    {
-        return EGarment.TROUSER;
+        return EPattern.ALDRICH_TROUSER;
     }
 
     @Override

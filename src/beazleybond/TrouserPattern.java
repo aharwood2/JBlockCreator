@@ -1,7 +1,6 @@
 package beazleybond;
 
-import jblockenums.EGarment;
-import jblockenums.EMethod;
+import jblockenums.EPattern;
 import jblockexceptions.MeasurementNotFoundException;
 import jblockmain.Block;
 import jblockmain.Measurements;
@@ -126,15 +125,9 @@ public class TrouserPattern
 
     /* Implement abstract methods from super class */
     @Override
-    protected EMethod assignMethod()
+    protected EPattern assignPattern()
     {
-        return EMethod.BEAZLEYBOND;
-    }
-
-    @Override
-    protected EGarment assignGarment()
-    {
-        return EGarment.TROUSER;
+        return EPattern.BEAZLEYBOND_TROUSER;
     }
 
     @Override

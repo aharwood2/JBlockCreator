@@ -1,7 +1,6 @@
 package gill;
 
-import jblockenums.EGarment;
-import jblockenums.EMethod;
+import jblockenums.EPattern;
 import jblockexceptions.MeasurementNotFoundException;
 import jblockmain.Block;
 import jblockmain.Measurements;
@@ -77,15 +76,9 @@ public class SweatShirtPattern
 
     /* Implement abstract methods from super class */
     @Override
-    protected EMethod assignMethod()
+    protected EPattern assignPattern()
     {
-        return EMethod.GILL;
-    }
-
-    @Override
-    protected EGarment assignGarment()
-    {
-        return EGarment.SWEATSHIRT;
+        return EPattern.GILL_SWEATSHIRT;
     }
 
     @Override

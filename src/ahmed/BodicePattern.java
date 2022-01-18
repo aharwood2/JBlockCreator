@@ -1,7 +1,6 @@
 package ahmed;
 
-import jblockenums.EGarment;
-import jblockenums.EMethod;
+import jblockenums.EPattern;
 import jblockexceptions.MeasurementNotFoundException;
 import jblockmain.Block;
 import jblockmain.Measurements;
@@ -67,21 +66,15 @@ public class BodicePattern
         easeMeasurements.add(new easeMeasurement("Waist Ease", 1.5));
     }
 
+    @Override
+    protected EPattern assignPattern()
+    {
+        return EPattern.AHMED_BODICE;
+    }
+
     public static ArrayList<easeMeasurement> getEaseMeasurement()
     {
         return easeMeasurements;
-    }
-
-    @Override
-    protected EMethod assignMethod()
-    {
-        return EMethod.AHMED;
-    }
-
-    @Override
-    protected EGarment assignGarment()
-    {
-        return EGarment.BODICE;
     }
 
     @Override
