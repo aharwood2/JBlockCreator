@@ -3,13 +3,14 @@ package jblockmain;
 import jblockexceptions.MeasurementNotFoundException;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A set of measurements
  */
 public class MeasurementSet
 {
-    private final ArrayList<Measurement> measurements = new ArrayList<>();
+    private final List<Measurement> measurements = new ArrayList<>();
 
     public Measurement getMeasurement(String name) throws MeasurementNotFoundException
     {
@@ -45,5 +46,25 @@ public class MeasurementSet
         {
             m.setValue(inputData.getInputValue(userName, m.getInputId()).value);
         }
+    }
+
+    /**
+     * Gets measurements for which there is an ID
+     * @return List of IDs
+     */
+    public List<String> getIds()
+    {
+        var ids = new ArrayList<String>();
+        for (var m : measurements)
+        {
+            var id = m.getInputId();
+            if (id != null) ids.add(id);
+        }
+        return ids;
+    }
+
+    public List<Measurement> getAllMeasurements()
+    {
+        return measurements;
     }
 }

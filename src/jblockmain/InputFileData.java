@@ -7,6 +7,7 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * Encapsulates the input data files which follow the prescribed format.
@@ -26,7 +27,7 @@ public class InputFileData
     /**
      * Local cache of the names and IDs of the measures available in the file
      */
-    private ArrayList<InputValue> valuesAvailable;
+    private List<InputValue> valuesAvailable;
 
     /**
      * Constructor which takes an input file name.
@@ -139,14 +140,15 @@ public class InputFileData
      * @param line heading line.
      * @return list of input values with no values
      */
-    private ArrayList<InputValue> processHeadings(String line)
+    private List<InputValue> processHeadings(String line)
     {
         var inputValues = new ArrayList<InputValue>();
         // Split the line into the id and the name
         var headings = line.split(",");
         for (var h : headings)
         {
-            int splitEnd = line.indexOf("]");
+            if (h.isBlank()) continue;
+            int splitEnd = h.indexOf("]");
             String id = h.substring(line.indexOf("["), splitEnd).trim();
             String name = h.substring(splitEnd + 1, h.length()).trim();
             inputValues.add(new InputValue(id, name, 0));
@@ -157,15 +159,21 @@ public class InputFileData
     /**
      * Method to read in the input values from the file on a given line
      * @param line input line of text
-     * @throws Exception when value cannot tbe parsed
+     * @throws Exception when value cannot be parsed
      */
     private void processInputValues(String line) throws Exception
     {
+        // If we haven't processed the header row then skip
+        if (valuesAvailable == null)
+        {
+            return;
+        }
+
         // Split by comma
         var values = line.split(",");
 
-        // Should be the same number as the headings
-        assert values.length == valuesAvailable.size();
+        // Should be the same number as the headings minus the username
+        assert values.length == valuesAvailable.size() - 1;
 
         // Process the values
         String username = null;
@@ -179,21 +187,21 @@ public class InputFileData
                 var val = Double.parseDouble(values[i]);
                 set.add(
                         new InputValue(
-                                valuesAvailable.get(i).id,
-                                valuesAvailable.get(i).name,
+                                valuesAvailable.get(i - 1).id,
+                                valuesAvailable.get(i - 1).name,
                                 val
                         )
                 );
             }
-            if (!username.isBlank()) inputValuesByUser.put(username, set);
         }
+        if (!username.isBlank()) inputValuesByUser.put(username, set);
     }
 
     /**
      * Gets a list of input value ID and name pairs
      * @return list of pairs
      */
-    public ArrayList<Pair<String, String>> getInputValues()
+    public List<Pair<String, String>> getInputValues()
     {
         var pairs = new ArrayList<Pair<String, String>>();
         for (var i : valuesAvailable)
@@ -201,5 +209,19 @@ public class InputFileData
             pairs.add(new Pair<>(i.id, i.name));
         }
         return pairs;
+    }
+
+    /**
+     * Gets a list of IDs of the input values
+     * @return list of IDs
+     */
+    public List<String> getInputValueIds()
+    {
+        var ids = new ArrayList<String>();
+        for (var i : valuesAvailable)
+        {
+            ids.add(i.id);
+        }
+        return ids;
     }
 }
