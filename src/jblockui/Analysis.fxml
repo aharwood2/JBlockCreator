@@ -13,6 +13,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
+<?import javafx.scene.layout.HBox?>
 <VBox alignment="CENTER" prefHeight="400.0" prefWidth="600.0" spacing="20.0" xmlns="http://javafx.com/javafx/14" xmlns:fx="http://javafx.com/fxml/1" fx:controller="jblockui.AnalysisController">
     <children>
       <Label text="Analysis" textAlignment="CENTER" underline="true">
@@ -23,9 +24,9 @@
       <Separator prefWidth="200.0" />
         <GridPane alignment="CENTER" hgap="5.0" vgap="5.0">
             <columnConstraints>
-                <ColumnConstraints hgrow="SOMETIMES" maxWidth="328.6665852864583" minWidth="10.0" prefWidth="229.99995930989584" />
-                <ColumnConstraints hgrow="SOMETIMES" maxWidth="479.333251953125" minWidth="10.0" prefWidth="165.6666259765625" />
-                <ColumnConstraints hgrow="SOMETIMES" maxWidth="479.333251953125" minWidth="10.0" prefWidth="181.3333740234375" />
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
             </columnConstraints>
             <rowConstraints>
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
@@ -38,19 +39,22 @@
                 <Label text="Choose vertical axis measurement:" GridPane.rowIndex="2" />
                 <RadioButton mnemonicParsing="false" selected="true" text="Rectangle Plot" GridPane.columnIndex="1">
                     <toggleGroup>
-                        <ToggleGroup fx:id="interactiveRadioGrp" />
+                        <ToggleGroup fx:id="plotRadioGrp" />
                     </toggleGroup>
                 </RadioButton>
-                <RadioButton mnemonicParsing="false" text="Layered Plot" toggleGroup="$interactiveRadioGrp" GridPane.columnIndex="2" />
-            <ComboBox prefWidth="250.0" promptText="&lt;Select Measurement&gt;" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="2" />
-            <ComboBox prefWidth="250.0" promptText="&lt;Select Measurement&gt;" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="1" />
+                <RadioButton mnemonicParsing="false" text="Layered Plot" toggleGroup="$plotRadioGrp" GridPane.columnIndex="2" />
+            <ComboBox fx:id="comboMeasX" prefWidth="250.0" promptText="&lt;Select Measurement&gt;" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="1" />
+            <ComboBox fx:id="comboMeasY" prefWidth="250.0" promptText="&lt;Select Measurement&gt;" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="2" />
             </children>
             <padding>
                 <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
             </padding>
         </GridPane>
         <Separator prefWidth="200.0" />
-        <Button mnemonicParsing="false" onAction="#onNextButtonClick" text="Next" />
+        <HBox alignment="CENTER" spacing="10.0">
+            <Button fx:id="backButton" mnemonicParsing="false" text="Back" />
+            <Button fx:id="nextButton" mnemonicParsing="false" text="Next" />
+        </HBox>
     </children>
     <padding>
         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />

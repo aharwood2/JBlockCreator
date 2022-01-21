@@ -13,4 +13,11 @@ public abstract class BaseController
 
     @FXML
     public abstract void initialize();
+
+    /**
+     * Do things that must be done when the view is displayed rather than created
+     */
+    public void onDisplayed()
+    {
+    };
 }
