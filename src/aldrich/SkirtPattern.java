@@ -47,7 +47,7 @@ public class SkirtPattern
         measurements.addMeasurement(new Measurement("Arb_FrontDartDepth", 12.0));
         measurements.addMeasurement(new Measurement("Arb_FrontDartWidth", 2.5));
         measurements.addMeasurement(new Measurement("Arb_FrontDartPlacement", 2.0 / 3.0));
-        measurements.addMeasurement(new Measurement("rb_BackDartPlacement", 1.0 / 3.0));
+        measurements.addMeasurement(new Measurement("Arb_BackDartPlacement", 1.0 / 3.0));
     }
 
     /**
