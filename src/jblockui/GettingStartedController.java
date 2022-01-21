@@ -8,10 +8,7 @@ import javafx.scene.control.RadioButton;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import jblockenums.EActivityType;
-import jblockenums.EInputType;
-import jblockmain.JBlockCreatorApp;
 
-import java.io.File;
 import java.nio.file.InvalidPathException;
 import java.nio.file.Paths;
 
@@ -55,19 +52,11 @@ public class GettingStartedController extends BaseController
     final DirectoryChooser directoryChooser = new DirectoryChooser();
 
     // Public
-    public EInputType inputType = EInputType.INTERACTIVE;
     public EActivityType activityType = EActivityType.DRAFTING;
 
+    @Override
     public void initialize()
     {
-        inputRadioGrp.selectedToggleProperty().addListener((changed, oldVal, newVal) ->
-            {
-                RadioButton rb = (RadioButton)newVal;
-                inputType = rb == radioInputInteractive ? EInputType.INTERACTIVE : EInputType.FILE;
-                Validate();
-            }
-        );
-
         activityRadioGrp.selectedToggleProperty().addListener((changed, oldVal, newVal) ->
             {
                 RadioButton rb = (RadioButton)newVal;
@@ -78,27 +67,33 @@ public class GettingStartedController extends BaseController
 
         inputButton.setOnAction(e ->
         {
-            File file = fileChooser.showOpenDialog(null);
-            if (file != null)
-            {
-                inputFilePathLabel.setText(file.getPath());
-            }
+//            File file = fileChooser.showOpenDialog(null);
+//            if (file != null)
+//            {
+//                inputFilePathLabel.setText(file.getPath());
+//            }
+            inputFilePathLabel.setText("C:\\Apps\\JBlockCreator\\input\\Batch5.TXT");
             Validate();
         });
 
         outputButton.setOnAction(e ->
         {
-            File file = directoryChooser.showDialog(null);
-            if (file != null)
-            {
-                outputPathLabel.setText(file.getPath());
-            }
+//            File file = directoryChooser.showDialog(null);
+//            if (file != null)
+//            {
+//                outputPathLabel.setText(file.getPath());
+//            }
+            outputPathLabel.setText("C:\\");
             Validate();
         });
 
         nextButton.setOnAction(e ->
         {
-            JBlockCreatorApp.getInstance().setContent(activityType == EActivityType.ANALYSIS ? "Analysis" : "PatternSelection");
+            UiModel.getInstance().activityType = activityType;
+            UiModel.getInstance().inputFile = inputFilePathLabel.getText();
+            UiModel.getInstance().outputPath = outputPathLabel.getText();
+            UiModel.getInstance().setContent(activityType == EActivityType.ANALYSIS ? "Analysis" : "PatternSelection");
+            if (activityType == EActivityType.ANALYSIS) UiModel.getInstance().onDisplayed("Analysis");
         });
 
         Validate();
@@ -109,15 +104,9 @@ public class GettingStartedController extends BaseController
      */
     private void Validate()
     {
-        // Set input step
-        var enabledInput = inputType == EInputType.FILE;
-        inputButton.setDisable(!enabledInput);
-        inputFilePathLabel.setDisable(!enabledInput);
-        stepInputLabel.setDisable(!enabledInput);
-
         // Set next button
         var valid =
-            (inputType == EInputType.INTERACTIVE || (inputType == EInputType.FILE && isValidPath(inputFilePathLabel.getText()))) &&
+            (isValidPath(inputFilePathLabel.getText())) &&
             isValidPath(outputPathLabel.getText());
         nextButton.setDisable(!valid);
     }
