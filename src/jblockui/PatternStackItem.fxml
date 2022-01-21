@@ -8,20 +8,18 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
 
-<GridPane alignment="CENTER_LEFT" hgap="10.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" vgap="10.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="jblockui.PatternStackItemController">
+<GridPane alignment="CENTER" hgap="10.0" vgap="10.0" xmlns="http://javafx.com/javafx/14" xmlns:fx="http://javafx.com/fxml/1" fx:controller="jblockui.PatternStackItemController">
   <columnConstraints>
-    <ColumnConstraints hgrow="ALWAYS" maxWidth="1.7976931348623157E308" minWidth="10.0" prefWidth="200.0" />
-      <ColumnConstraints fillWidth="false" halignment="CENTER" hgrow="SOMETIMES" maxWidth="222.666748046875" minWidth="10.0" prefWidth="150.0" />
-      <ColumnConstraints fillWidth="false" halignment="RIGHT" hgrow="NEVER" maxWidth="222.666748046875" minWidth="10.0" />
+      <ColumnConstraints halignment="LEFT" hgrow="ALWAYS" minWidth="10.0" maxWidth="Infinity" />
+      <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="200" />
+      <ColumnConstraints halignment="RIGHT" hgrow="NEVER" minWidth="10.0" />
   </columnConstraints>
   <rowConstraints>
     <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
   </rowConstraints>
-   <children>
-      <Label fx:id="statusLabel" text="&lt;Status&gt;" GridPane.columnIndex="1" />
-      <CheckBox fx:id="checkInclude" mnemonicParsing="false" text="&lt;PatternName&gt;" />
-      <Button fx:id="measurementButton" mnemonicParsing="false" text="Set Measurements" wrapText="true" GridPane.columnIndex="2" />
-   </children>
+    <CheckBox fx:id="checkInclude" mnemonicParsing="false" text="&lt;PatternName&gt;" />
+    <Label fx:id="statusLabel" text="&lt;Status&gt;" GridPane.columnIndex="1" />
+  <Button fx:id="measurementButton" mnemonicParsing="false" text="Set Measurements" wrapText="true" GridPane.columnIndex="2" />
    <padding>
       <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
    </padding>

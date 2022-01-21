@@ -20,7 +20,7 @@ public abstract class Pattern
     /**
      * Measurement store based on required measurements for the pattern
      */
-    protected MeasurementSet measurements;
+    protected MeasurementSet measurements = new MeasurementSet();
 
     /**
      * The type of pattern
@@ -203,4 +203,8 @@ public abstract class Pattern
         }
     }
 
+    public MeasurementSet getMeasurementSet()
+    {
+        return measurements;
+    }
 }
