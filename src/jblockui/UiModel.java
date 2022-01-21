@@ -34,6 +34,9 @@ public class UiModel
     private final HashMap<String, VBox> subViews = new HashMap<>();
     private final HashMap<String, BaseController> controllers = new HashMap<>();
 
+    // Processing elements
+    private final HashMap<EPattern, MeasurementSet> measurements = new HashMap<>();
+
     // Properties from panes
     public ArrayList<EPattern> selectedPatterns = new ArrayList<>();
     public EActivityType activityType;
@@ -69,7 +72,7 @@ public class UiModel
     /**
      * Loads in the sub views
      * @param name name of subview file
-     * @throws IOException
+     * @throws IOException if resource not found
      */
     private void loadSubView(String name) throws IOException
     {
@@ -82,8 +85,9 @@ public class UiModel
     /**
      * Sets the content of the container
      * @param key sub view key
+     * @return the controller for the view
      */
-    public void setContent(String key)
+    public BaseController setContent(String key)
     {
         var view = subViews.get(key);
         if (view != null && root != null)
@@ -95,6 +99,7 @@ public class UiModel
             AnchorPane.setLeftAnchor(view, 0.0);
             AnchorPane.setRightAnchor(view, 0.0);
         }
+        return controllers.get(key);
     }
 
     /**
@@ -113,9 +118,32 @@ public class UiModel
         }
     }
 
-    public void setMeasurementsInController(MeasurementSet measurementSet)
+    /**
+     * Stores the master measurement set generated on pattern enable
+     * @param key
+     * @param value
+     */
+    public void storeMeasurements(EPattern key, MeasurementSet value)
     {
-        var ctrl = (MeasurementsController)controllers.get("Measurements");
-        ctrl.setMeasurements(measurementSet);
+        measurements.put(key, value);
+    }
+
+    /**
+     * Remove a master measurement set when pattern is disabled
+     * @param key
+     */
+    public void removeMeasurements(EPattern key)
+    {
+        measurements.remove(key);
+    }
+
+    /**
+     * Gets the stored master measurement set generated on pattern enable
+     * @param key
+     * @return
+     */
+    public MeasurementSet getMeasurements(EPattern key)
+    {
+        return measurements.get(key);
     }
 }

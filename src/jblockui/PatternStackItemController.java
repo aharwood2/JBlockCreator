@@ -9,6 +9,8 @@ import jblockmain.InputFileData;
 import jblockmain.MeasurementSet;
 import jblockmain.PatternFactory;
 
+import java.util.Objects;
+
 public class PatternStackItemController extends BaseController
 {
     @FXML
@@ -38,8 +40,9 @@ public class PatternStackItemController extends BaseController
 
         measurementButton.setOnAction(e ->
         {
-            UiModel.getInstance().setContent("Measurements");
-            UiModel.getInstance().setMeasurementsInController(requiredMeasurements);
+            var ctrl = (MeasurementsController) UiModel.getInstance().setContent("Measurements");
+            ctrl.initialiseMeasurements(patternType);
+
         });
 
         Validate();
@@ -55,7 +58,11 @@ public class PatternStackItemController extends BaseController
         if (checked)
         {
             var available = new InputFileData(UiModel.getInstance().inputFile).getInputValueIds();
-            requiredMeasurements = PatternFactory.Create(patternType, null, null).getMeasurementSet();
+            requiredMeasurements = Objects.requireNonNull(PatternFactory.Create(patternType, null, null))
+                    .getMeasurementSet();
+
+            // Store measurements in the model
+            UiModel.getInstance().storeMeasurements(patternType, requiredMeasurements);
 
             // Check each measurement with an ID in the required set are in the input file
             for (var id : requiredMeasurements.getIds())
@@ -67,6 +74,11 @@ public class PatternStackItemController extends BaseController
                     break;
                 }
             }
+        }
+        else
+        {
+            // Remove measurements from the model
+            UiModel.getInstance().removeMeasurements(patternType);
         }
         statusLabel.setText(statusText);
         if (parent != null) parent.onErrorChanged(patternType, hasError);

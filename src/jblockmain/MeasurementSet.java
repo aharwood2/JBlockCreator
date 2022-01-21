@@ -25,8 +25,11 @@ public class MeasurementSet
     {
         for (var m : measurements)
         {
-            if (m.name.equals(name)) m.setValue(value);
-            return;
+            if (m.name.equals(name))
+            {
+                m.setValue(value);
+                return;
+            }
         }
         throw new MeasurementNotFoundException(name);
     }

@@ -8,15 +8,16 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox alignment="CENTER" prefHeight="400.0" prefWidth="600.0" spacing="20.0" xmlns="http://javafx.com/javafx/14" xmlns:fx="http://javafx.com/fxml/1" fx:controller="jblockui.MeasurementsController">
+<?import javafx.scene.layout.HBox?>
+<VBox alignment="CENTER" spacing="20.0" xmlns="http://javafx.com/javafx/14" xmlns:fx="http://javafx.com/fxml/1" fx:controller="jblockui.MeasurementsController">
     <children>
         <Label text="Set Measurements" textAlignment="CENTER" underline="true">
             <font>
                 <Font size="24.0" />
             </font>
         </Label>
-        <Separator prefWidth="200.0" />
-        <ScrollPane prefHeight="200.0" prefWidth="200.0">
+        <Separator />
+        <ScrollPane >
             <content>
                 <VBox fx:id="measurementsStack" alignment="CENTER" />
             </content>
@@ -24,8 +25,13 @@
                 <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
             </padding>
         </ScrollPane>
-        <Separator prefWidth="200.0" />
-        <Button mnemonicParsing="false" onAction="#onNextButtonClick" text="Done" />
+        <Separator />
+        <HBox alignment="CENTER" spacing="10.0">
+            <children>
+                <Button fx:id="backButton" mnemonicParsing="false" text="Cancel" />
+                <Button fx:id="nextButton" mnemonicParsing="false" text="Save" />
+            </children>
+        </HBox>
     </children>
     <padding>
         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />

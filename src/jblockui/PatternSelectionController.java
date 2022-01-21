@@ -2,12 +2,9 @@ package jblockui;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import jblockenums.EPattern;
-
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Objects;
 
@@ -25,6 +22,7 @@ public class PatternSelectionController extends  BaseController
         try
         {
             // Build views in pattern selection stack from known patterns
+            patternStack.getChildren().clear();
             EPattern[] patternTypes = EPattern.class.getEnumConstants();
             for (var p : patternTypes)
             {
