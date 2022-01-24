@@ -57,7 +57,7 @@ public class PatternStackItemController extends BaseController
         // Check we have the measurements we need in the input file
         if (checked)
         {
-            var available = new InputFileData(UiModel.getInstance().inputFile).getInputValueIds();
+            var available = new InputFileData(UiModel.getInstance().getInputFile()).getInputValueIds();
             requiredMeasurements = Objects.requireNonNull(PatternFactory.Create(patternType, null, null))
                     .getMeasurementSet();
 

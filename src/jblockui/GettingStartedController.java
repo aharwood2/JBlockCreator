@@ -15,9 +15,6 @@ import java.nio.file.Paths;
 public class GettingStartedController extends BaseController
 {
     @FXML
-    private Label stepInputLabel;
-
-    @FXML
     private Label inputFilePathLabel;
 
     @FXML
@@ -28,15 +25,6 @@ public class GettingStartedController extends BaseController
 
     @FXML
     private Button outputButton;
-
-    @FXML
-    ToggleGroup inputRadioGrp;
-
-    @FXML
-    RadioButton radioInputInteractive;
-
-    @FXML
-    RadioButton radioInputFile;
 
     @FXML
     ToggleGroup activityRadioGrp;
@@ -58,12 +46,11 @@ public class GettingStartedController extends BaseController
     public void initialize()
     {
         activityRadioGrp.selectedToggleProperty().addListener((changed, oldVal, newVal) ->
-            {
-                RadioButton rb = (RadioButton)newVal;
-                activityType = rb == radioActivityDrafting ? EActivityType.DRAFTING : EActivityType.ANALYSIS;
-                Validate();
-            }
-        );
+        {
+            RadioButton rb = (RadioButton)newVal;
+            activityType = rb == radioActivityDrafting ? EActivityType.DRAFTING : EActivityType.ANALYSIS;
+            Validate();
+        });
 
         inputButton.setOnAction(e ->
         {
@@ -89,9 +76,9 @@ public class GettingStartedController extends BaseController
 
         nextButton.setOnAction(e ->
         {
-            UiModel.getInstance().activityType = activityType;
-            UiModel.getInstance().inputFile = inputFilePathLabel.getText();
-            UiModel.getInstance().outputPath = outputPathLabel.getText();
+            UiModel.getInstance().setActivityType(activityType);
+            UiModel.getInstance().setInputFile(inputFilePathLabel.getText());
+            UiModel.getInstance().setOutputPath(outputPathLabel.getText());
             UiModel.getInstance().setContent(activityType == EActivityType.ANALYSIS ? "Analysis" : "PatternSelection");
             if (activityType == EActivityType.ANALYSIS) UiModel.getInstance().onDisplayed("Analysis");
         });
