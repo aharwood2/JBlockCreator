@@ -5,11 +5,13 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import jblockenums.EActivityType;
 import jblockenums.EPattern;
+import jblockenums.EPlotType;
 import jblockmain.MeasurementSet;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Objects;
 
 public class UiModel
@@ -36,12 +38,14 @@ public class UiModel
 
     // Processing elements
     private final HashMap<EPattern, MeasurementSet> measurements = new HashMap<>();
-
-    // Properties from panes
-    public ArrayList<EPattern> selectedPatterns = new ArrayList<>();
-    public EActivityType activityType;
-    public String inputFile;
-    public String outputPath;
+    private final List<String> outputChecks = new ArrayList<>();
+    private final ArrayList<EPattern> selectedPatterns = new ArrayList<>();
+    private EActivityType activityType;
+    private EPlotType plotType;
+    private String inputFile;
+    private String outputPath;
+    private String analysisIdX;
+    private String analysisIdY;
 
     /**
      * Initialise the scene and pre-load all views
@@ -120,8 +124,8 @@ public class UiModel
 
     /**
      * Stores the master measurement set generated on pattern enable
-     * @param key
-     * @param value
+     * @param key the pattern
+     * @param value the measurement set
      */
     public void storeMeasurements(EPattern key, MeasurementSet value)
     {
@@ -130,7 +134,7 @@ public class UiModel
 
     /**
      * Remove a master measurement set when pattern is disabled
-     * @param key
+     * @param key the pattern
      */
     public void removeMeasurements(EPattern key)
     {
@@ -139,11 +143,68 @@ public class UiModel
 
     /**
      * Gets the stored master measurement set generated on pattern enable
-     * @param key
-     * @return
+     * @param key the pattern
+     * @return the measurement set
      */
     public MeasurementSet getMeasurements(EPattern key)
     {
         return measurements.get(key);
+    }
+
+    /**
+     * Method to run the software
+     */
+    public void run()
+    {
+        // TODO: Complete
+    }
+
+    /**
+     * Set the state of the checkboxes
+     * @param key the name of the checkbox
+     * @param newVal its state
+     */
+    public void setCheck(String key, Boolean newVal)
+    {
+        if (newVal) outputChecks.add(key);
+        else outputChecks.remove(key);
+    }
+
+    // Getters and Setters //
+
+    public EActivityType getActivity()
+    {
+        return activityType;
+    }
+
+    public String getInputFile()
+    {
+        return inputFile;
+    }
+
+    public void setActivityType(EActivityType activityType)
+    {
+        this.activityType = activityType;
+    }
+
+    public void setInputFile(String inputFile)
+    {
+        this.inputFile = inputFile;
+    }
+
+    public void setOutputPath(String outputPath)
+    {
+        this.outputPath = outputPath;
+    }
+
+    public void setIds(String idX, String idY)
+    {
+        analysisIdX = idX;
+        analysisIdY = idY;
+    }
+
+    public void setPlotType(EPlotType plotType)
+    {
+        this.plotType = plotType;
     }
 }
