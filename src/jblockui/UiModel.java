@@ -64,7 +64,7 @@ public class UiModel
 
             // Load the container
             root = (AnchorPane) FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/jblockui/UiContainer.fxml")));
-            setContent("GettingStarted");
+            setContent("Outputs");
         }
         catch (IOException e)
         {

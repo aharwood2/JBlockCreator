@@ -336,8 +336,8 @@ public class DxfFile
 
             /* Add specific annotation text on layer 15 as per the ASTM spec */
             writeAnnotationText("ASTM/D13 Proposal 1 VERSION:10");
-            writeAnnotationText("AUTHOR:JBLOCKCREATOR_" + ResourceBundle.getBundle("strings").getString("maj_ver") + "_"
-                                        + ResourceBundle.getBundle("strings").getString("min_ver"));
+            writeAnnotationText("AUTHOR:JBLOCKCREATOR_" + ResourceBundle.getBundle("settings").getString("maj_ver") + "_"
+                                        + ResourceBundle.getBundle("settings").getString("min_ver"));
             writeAnnotationText("CREATION DATE:" + new SimpleDateFormat("dd-MM-yyyy").format(dDate));
             writeAnnotationText("CREATION TIME:" + new SimpleDateFormat("hh:mm").format(dDate));
             writeAnnotationText("UNITS:METRIC");

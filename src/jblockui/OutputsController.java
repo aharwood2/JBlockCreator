@@ -2,6 +2,7 @@ package jblockui;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.CheckBox;
+import javafx.scene.control.SplitPane;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
 import jblockenums.EActivityType;
@@ -104,8 +105,9 @@ public class OutputsController extends BaseController
         for (var i : files)
         {
             var imgView = new ImageView(i);
-            imgView.setFitHeight(200);
-            imgView.setFitWidth(200);
+            imgView.setPreserveRatio(true);
+            imgView.setFitHeight(400);
+            imgView.setFitWidth(400);
             layers.add(imgView);
         }
     }

@@ -19,7 +19,7 @@ public class Block
     /**
      * Tolerance
      */
-    public static final double tolerance = Double.parseDouble(ResourceBundle.getBundle("strings").getString("tolerance"));
+    public static final double tolerance = Double.parseDouble(ResourceBundle.getBundle("settings").getString("tolerance"));
 
     /**
      * Global resolution for some curves (points per cm)

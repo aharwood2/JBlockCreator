@@ -43,13 +43,19 @@ public class AnalysisController extends BaseController
 
         comboMeasX.valueProperty().addListener((obs, oldVal, newVal) ->
         {
-            idX = newVal.getKey();
+            if (newVal != null)
+            {
+                idX = newVal.getKey();
+            }
             Validate();
         });
 
         comboMeasY.valueProperty().addListener((obs, oldVal, newVal) ->
         {
-            idY = newVal.getKey();
+            if (newVal != null)
+            {
+                idY = newVal.getKey();
+            }
             Validate();
         });
 

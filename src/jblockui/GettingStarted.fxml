@@ -11,70 +11,61 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.layout.HBox?>
 
-<VBox alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="20.0" xmlns="http://javafx.com/javafx/14" xmlns:fx="http://javafx.com/fxml/1" fx:controller="jblockui.GettingStartedController">
-   <children>
-       <Label text="Getting Started" textAlignment="CENTER" underline="true">
-           <font>
-               <Font size="24.0" />
-           </font>
-       </Label>
+<VBox alignment="TOP_CENTER" spacing="20.0" xmlns="http://javafx.com/javafx/14" xmlns:fx="http://javafx.com/fxml/1" fx:controller="jblockui.GettingStartedController">
+       <GridPane>
+           <columnConstraints>
+               <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" percentWidth="80" halignment="LEFT" />
+               <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" percentWidth="20" halignment="RIGHT" />
+           </columnConstraints>
+           <rowConstraints>
+               <RowConstraints valignment="BASELINE" />
+           </rowConstraints>
+           <Label text="Getting Started" underline="true">
+               <font>
+                   <Font size="24.0" />
+               </font>
+           </Label>
+           <ImageView GridPane.columnIndex="1">
+               <Image url ="file:images/logo_small.jpg"/>
+           </ImageView>
+       </GridPane>
        <Separator />
       <GridPane alignment="CENTER" hgap="5.0" vgap="5.0">
         <columnConstraints>
-            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="218.66668701171875" />
-            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="215.66662597656253" />
-            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="205.66670735677076" />
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" percentWidth="20" />
+            <ColumnConstraints hgrow="ALWAYS" minWidth="10.0" percentWidth="70" />
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" percentWidth="10" halignment="RIGHT" />
         </columnConstraints>
         <rowConstraints>
             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
-         <children>
             <Label text="Choose activity:" />
-            <Label fx:id="stepInputLabel" text="Select input file:" GridPane.rowIndex="1" />
+            <Label text="Select input file:" GridPane.rowIndex="1" />
             <Label text="Select output path:" GridPane.rowIndex="2" />
-            <RadioButton fx:id="radioActivityDrafting" mnemonicParsing="false" selected="true" text="Drafting" GridPane.columnIndex="1">
+          <HBox spacing="10" GridPane.columnIndex="1">
+            <RadioButton fx:id="radioActivityDrafting" mnemonicParsing="false" selected="true" text="Drafting">
                <toggleGroup>
                   <ToggleGroup fx:id="activityRadioGrp" />
                </toggleGroup>
             </RadioButton>
-            <RadioButton fx:id="radioActivityAnalysis" mnemonicParsing="false" text="Analysis" toggleGroup="$activityRadioGrp" GridPane.columnIndex="2" />
-            <GridPane GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="1">
-              <columnConstraints>
-                <ColumnConstraints hgrow="SOMETIMES" minWidth="50.0" prefWidth="150" />
-                <ColumnConstraints hgrow="SOMETIMES" minWidth="20.0" prefWidth="20" />
-              </columnConstraints>
-              <rowConstraints>
-                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-              </rowConstraints>
-               <children>
-                  <Label fx:id="inputFilePathLabel" text="&lt;Choose input file&gt;" />
-                  <Button fx:id="inputButton" mnemonicParsing="false" text="Choose" GridPane.columnIndex="1" />
-               </children>
-            </GridPane>
-            <GridPane GridPane.columnIndex="1" GridPane.columnSpan="2147483647" GridPane.rowIndex="2">
-               <columnConstraints>
-                  <ColumnConstraints hgrow="SOMETIMES" minWidth="50.0" prefWidth="150" />
-                  <ColumnConstraints hgrow="SOMETIMES" minWidth="20.0" prefWidth="20" />
-               </columnConstraints>
-               <rowConstraints>
-                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-               </rowConstraints>
-               <children>
-                  <Label fx:id="outputPathLabel" text="&lt;Choose output directory&gt;" />
-                  <Button fx:id="outputButton" mnemonicParsing="false" text="Choose" GridPane.columnIndex="1" />
-               </children>
-            </GridPane>
-         </children>
+            <RadioButton fx:id="radioActivityAnalysis" mnemonicParsing="false" text="Analysis" toggleGroup="$activityRadioGrp" />
+          </HBox>
+          <Label fx:id="inputFilePathLabel" text="&lt;Choose input file&gt;" GridPane.rowIndex="1" GridPane.columnIndex="1" />
+          <Button fx:id="inputButton" mnemonicParsing="false" text="Choose" GridPane.rowIndex="1" GridPane.columnIndex="2" />
+          <Label fx:id="outputPathLabel" text="&lt;Choose output directory&gt;" GridPane.rowIndex="2" GridPane.columnIndex="1" />
+          <Button fx:id="outputButton" mnemonicParsing="false" text="Choose" GridPane.rowIndex="2" GridPane.columnIndex="2" />
          <padding>
             <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
          </padding>
       </GridPane>
       <Separator />
       <Button fx:id="nextButton" mnemonicParsing="false" text="Next" />
-   </children>
    <padding>
       <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
    </padding>

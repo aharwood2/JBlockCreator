@@ -13,7 +13,7 @@
 <GridPane hgap="5.0" vgap="5.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/14" fx:controller="jblockui.MeasurementStackItemController">
     <columnConstraints>
         <ColumnConstraints hgrow="ALWAYS" minWidth="10.0" />
-        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
+        <ColumnConstraints hgrow="NEVER" minWidth="10.0" />
         <ColumnConstraints hgrow="NEVER" minWidth="10.0" />
     </columnConstraints>
     <rowConstraints>

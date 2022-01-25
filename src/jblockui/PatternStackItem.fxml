@@ -6,17 +6,13 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
-<?import javafx.scene.layout.RowConstraints?>
 
 <GridPane alignment="CENTER" hgap="10.0" vgap="10.0" xmlns="http://javafx.com/javafx/14" xmlns:fx="http://javafx.com/fxml/1" fx:controller="jblockui.PatternStackItemController">
   <columnConstraints>
-      <ColumnConstraints halignment="LEFT" hgrow="ALWAYS" minWidth="10.0" maxWidth="Infinity" />
-      <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="200" />
-      <ColumnConstraints halignment="RIGHT" hgrow="NEVER" minWidth="10.0" />
+      <ColumnConstraints halignment="LEFT" minWidth="10.0" percentWidth="40" />
+      <ColumnConstraints halignment="LEFT" minWidth="10.0" percentWidth="40" hgrow="ALWAYS" />
+      <ColumnConstraints halignment="RIGHT" minWidth="10.0" percentWidth="20" />
   </columnConstraints>
-  <rowConstraints>
-    <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
-  </rowConstraints>
     <CheckBox fx:id="checkInclude" mnemonicParsing="false" text="&lt;PatternName&gt;" />
     <Label fx:id="statusLabel" text="&lt;Status&gt;" GridPane.columnIndex="1" />
   <Button fx:id="measurementButton" mnemonicParsing="false" text="Set Measurements" wrapText="true" GridPane.columnIndex="2" />
