@@ -2,7 +2,7 @@ package jblockmain;
 
 import jblockenums.EMsgType;
 
-import javax.swing.*;
+//import javax.swing.*;
 
 /**
  * Class to wrap various message box initialisations.
@@ -18,8 +18,8 @@ class Prompts
      */
     public static void infoBox(String infoMessage, String titleBar, EMsgType type)
     {
-        JOptionPane.showMessageDialog(null,
-                                      infoMessage,
-                                      type + ": " + titleBar, JOptionPane.INFORMATION_MESSAGE);
+//        JOptionPane.showMessageDialog(null,
+//                                      infoMessage,
+//                                      type + ": " + titleBar, JOptionPane.INFORMATION_MESSAGE);
     }
 }

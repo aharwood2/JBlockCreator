@@ -1,12 +1,11 @@
 package jblockmain;
 
 import dxfwriter.DxfFile;
-import jblockenums.EGarment;
-import jblockenums.EMethod;
+import dxfwriter.DxfFileConfiguration;
+import jblockenums.EPattern;
+import jblockexceptions.MeasurementNotFoundException;
 
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileWriter;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -19,130 +18,112 @@ import java.util.ArrayList;
 public abstract class Pattern
         implements IPlottable
 {
-    protected final static ArrayList<easeMeasurement> easeMeasurements = null;
     /**
-     * Common store of missing measurements.
+     * Measurement store based on required measurements for the pattern
      */
-    protected static ArrayList<String> missingMeasurements = new ArrayList<String>();
-    /**
-     * Method associated with pattern
-     */
-    protected final EMethod method;
+    protected MeasurementSet measurements = new MeasurementSet();
 
     /**
-     * Type of garment pattern represents
+     * The type of pattern
      */
-    protected final EGarment garment;
+    protected final EPattern patternType;
+
     /**
      * Offset used for drawing of construction lines
      */
     protected double Arb_Con = 2.0;
+
     /**
-     * User associated with the pattern
+     * User associated with this pattern object
      */
-    protected String userName;
+    protected final String userName;
+
     /**
      * Blocks that comprise the pattern
      */
-    protected ArrayList<Block> blocks;
-
+    protected ArrayList<Block> blocks = new ArrayList<Block>();;
 
     /**
      * Constructor
      */
-    public Pattern()
+    public Pattern(String userName, InputFileData dataStore, MeasurementSet template)
     {
-        blocks = new ArrayList<Block>();
-        method = assignMethod();
-        garment = assignGarment();
-    }
+        this.userName = userName;
+        patternType = assignPattern();
 
-    /**
-     * Method to print the missing measurements record to a file.
-     *
-     * @param fileoutput path to file.
-     */
-    protected static void printMissingMeasurements(File fileoutput)
-    {
-        if (missingMeasurements.size() > 0)
+        // Initialises the measurement set
+        try
         {
-            try
-            {
-                FileWriter writer = new FileWriter(fileoutput + "/" + JBlockCreator.failedOutputsFilename);
-                BufferedWriter writer2 = new BufferedWriter(writer);
-                for (String str : missingMeasurements)
-                {
-                    writer2.append(str);
-                    writer2.newLine();
-                }
-                writer2.close();
-                writer.close();
-            }
-            catch (Exception e)
-            {
-                e.printStackTrace();
-            }
+            defineRequiredMeasurements();
         }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+
+        // Pass the data store and templates through for mapping
+        readMeasurements(dataStore, template);
     }
 
-    public static ArrayList<easeMeasurement> getEaseMeasurement()
+    public Pattern(String userName)
     {
-        return easeMeasurements;
-    }
-
-    public static void populateEaseMeasurements()
-    {
+        this(userName, null, null);
     }
 
     /**
-     * Abstract method to assign final method type.
+     * Abstract method to assign final pattern type.
      *
      * @return method type to assign to the method field.
      */
-    protected abstract EMethod assignMethod();
+    protected abstract EPattern assignPattern();
 
     /**
-     * Abstract method to assign final garment type.
-     *
-     * @return method type to assign to the garment field.
+     * Method which defines the required measurements for this pattern by defining a measurement set.
      */
-    protected abstract EGarment assignGarment();
+    protected abstract void defineRequiredMeasurements() throws Exception;
 
     /**
-     * Method to add information about a failed pattern creation due to missing measurements.
+     * Read measurements into the measurement set from the input file.
      *
-     * @param userid name of the user concerned.
-     * @param id     ID of the measurement which caused the failure.
+     * @param inputData the object holding all acquired input data from the file.
      */
-    protected void addMissingMeasurement(String userid, String id)
+    protected final void readMeasurements(InputFileData inputData, MeasurementSet template)
     {
-        missingMeasurements.add(userid + "/" + method + "/" + garment + " : Measurement ID = " + id);
-    }
+        try
+        {
+            // Map template values into the measurement set
+            if (template != null) measurements.mapFromTemplate(template);
 
-    /**
-     * Obtain measurements from the measurements hashmap as required by the pattern.
-     *
-     * @param dataStore the object holding all acquired measurement data.
-     * @return indication as to whether reading was successful.
-     */
-    protected abstract boolean readMeasurements(Measurements dataStore);
-
-    /**
-     * Modify any measurements by adding easement.
-     */
-    protected abstract void addEasement();
+            // Map the values from the input data into the measurement set
+            if (inputData != null) measurements.mapFromInputData(userName, inputData);
+        }
+        catch (MeasurementNotFoundException e)
+        {
+            e.printStackTrace();
+        }
+    };
 
     /**
      * Create the blocks for this pattern.
      */
-    protected abstract void createBlocks();
+    public abstract void createBlocks();
+
+    /**
+     * Method to get a measurement from the measurement set
+     * @param name name of the measurement to get
+     * @return the value of the measurement
+     */
+    protected final double get(String name)
+    {
+        return measurements.getMeasurement(name).getValue();
+    }
 
     /**
      * Method to check that a block number index is within the range of blocks stored in the pattern.
      *
      * @param blockNumber number to check.
      */
-    private void rangeCheck(int blockNumber)
+    private final void rangeCheck(int blockNumber)
     {
         if (blockNumber > blocks.size())
             throw new IndexOutOfBoundsException("Accessing out of range of number of blocks!");
@@ -190,12 +171,12 @@ public abstract class Pattern
     }
 
     @Override
-    public void writeToDXF(File fileOutput, boolean[] dxfLayerChooser, String timeStamp)
+    public void writeToDXF(File fileOutput, DxfFileConfiguration config)
     {
         for (int i = 0; i < getNumberOfBlocksToPlot(); i++)
         {
             // Construct output path
-            Path path = Paths.get(fileOutput.toString() + "/" + method + "/" + garment + "/");
+            Path path = Paths.get(fileOutput.toString() + "/" + patternType + "/");
 
             // Create directory structure if required
             try
@@ -209,10 +190,10 @@ public abstract class Pattern
 
             // Create new DXF file
             DxfFile file = null;
-            if (timeStamp == null)
+            if (config.getTimeStamp() == null)
                 file = new DxfFile(path.toString() + "/" + blocks.get(i).getName());
             else
-                file = new DxfFile(path.toString() + "/" + blocks.get(i).getName() + "_" + timeStamp);
+                file = new DxfFile(path.toString() + "/" + blocks.get(i).getName() + "_" + config.getTimeStamp());
 
             try
             {
@@ -223,8 +204,12 @@ public abstract class Pattern
             {
                 e.printStackTrace();
             }
-            file.writeFile(blocks.get(i).getName(), dxfLayerChooser);
+            file.writeFile(blocks.get(i).getName(), config);
         }
     }
 
+    public MeasurementSet getMeasurementSet()
+    {
+        return measurements;
+    }
 }

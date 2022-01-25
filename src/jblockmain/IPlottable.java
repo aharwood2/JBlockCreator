@@ -1,5 +1,7 @@
 package jblockmain;
 
+import dxfwriter.DxfFileConfiguration;
+
 import java.io.File;
 import java.util.ArrayList;
 
@@ -55,8 +57,7 @@ public interface IPlottable
      * Write all blocks to DXF files showing the information indicated by the dxfLayerChooser array.
      *
      * @param fileOutput      output file path.
-     * @param dxfLayerChooser array of flags indicating content to write to drawing.
+     * @param config          configuration of the file.
      */
-    // TODO: Need to improve this definition as boolean[] should have a defined length if in an interface. Ideally should be its own class.
-    void writeToDXF(File fileOutput, boolean[] dxfLayerChooser, String timeStamp);
+    void writeToDXF(File fileOutput, DxfFileConfiguration config);
 }
