@@ -51,7 +51,7 @@
                 <Label text="Choose horizontal axis measurement:" GridPane.rowIndex="1" />
                 <Label text="Choose vertical axis measurement:" GridPane.rowIndex="2" />
             <HBox spacing="10.0" GridPane.columnIndex="1" >
-                <RadioButton fx:id="radioPlotRectangle" mnemonicParsing="false" selected="true" text="Rectangle Plot" GridPane.columnIndex="1">
+                <RadioButton fx:id="radioPlotRectangle" mnemonicParsing="false" text="Rectangle Plot" GridPane.columnIndex="1">
                     <toggleGroup>
                         <ToggleGroup fx:id="plotRadioGrp" />
                     </toggleGroup>

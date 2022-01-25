@@ -2,10 +2,7 @@ package gill;
 
 import jblockenums.EPattern;
 import jblockexceptions.MeasurementNotFoundException;
-import jblockmain.Block;
-import jblockmain.InputFileData;
-import jblockmain.Measurement;
-import jblockmain.Pattern;
+import jblockmain.*;
 import mathcontainers.Vector2D;
 
 import java.util.ArrayList;
@@ -14,9 +11,9 @@ public class SkirtPattern
         extends Pattern
 {
 
-    public SkirtPattern(String userName, InputFileData dataStore)
+    public SkirtPattern(String userName, InputFileData dataStore, MeasurementSet template)
     {
-        super(userName, dataStore);
+        super(userName, dataStore, template);
     }
 
     /* Implement abstract methods from super class */
@@ -50,7 +47,7 @@ public class SkirtPattern
      * The actual block creation process following the drafting method of Gill.
      */
     @Override
-    protected void createBlocks()
+    public void createBlocks()
     {
         // Pull from store
         var a_FrWaistArc = get("a_FrWaistArc");

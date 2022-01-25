@@ -52,15 +52,15 @@ public class MeasurementsController extends BaseController
                     measurementSet.setValue(c.measurementNameLabel.getText(), Double.parseDouble(c.valueEntry.getText()));
                 }
             }
-            UiModel.getInstance().storeMeasurements(patternType, measurementSet);
+            UiModel.getInstance().storeMeasurementTemplate(patternType, measurementSet);
             UiModel.getInstance().setContent("PatternSelection");
         });
     }
 
-    public void initialiseMeasurements(EPattern type)
+    public void initialiseMeasurementsFromTemplate(EPattern type)
     {
         this.patternType = type;
-        this.measurementSet = UiModel.getInstance().getMeasurements(patternType);
+        this.measurementSet = UiModel.getInstance().getMeasurementTemplate(patternType);
 
         try
         {

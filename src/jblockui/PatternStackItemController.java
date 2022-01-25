@@ -41,7 +41,7 @@ public class PatternStackItemController extends BaseController
         measurementButton.setOnAction(e ->
         {
             var ctrl = (MeasurementsController) UiModel.getInstance().setContent("Measurements");
-            ctrl.initialiseMeasurements(patternType);
+            ctrl.initialiseMeasurementsFromTemplate(patternType);
 
         });
 
@@ -57,12 +57,12 @@ public class PatternStackItemController extends BaseController
         // Check we have the measurements we need in the input file
         if (checked)
         {
-            var available = new InputFileData(UiModel.getInstance().getInputFile()).getInputValueIds();
-            requiredMeasurements = Objects.requireNonNull(PatternFactory.Create(patternType, null, null))
+            var available = new InputFileData(UiModel.getInstance().getInputFile(), true).getAvailableInputValueIds();
+            requiredMeasurements = Objects.requireNonNull(PatternFactory.Create(patternType, null, null, null))
                     .getMeasurementSet();
 
             // Store measurements in the model
-            UiModel.getInstance().storeMeasurements(patternType, requiredMeasurements);
+            UiModel.getInstance().storeMeasurementTemplate(patternType, requiredMeasurements);
 
             // Check each measurement with an ID in the required set are in the input file
             for (var id : requiredMeasurements.getIds())
@@ -78,7 +78,7 @@ public class PatternStackItemController extends BaseController
         else
         {
             // Remove measurements from the model
-            UiModel.getInstance().removeMeasurements(patternType);
+            UiModel.getInstance().removeMeasurementTemplate(patternType);
         }
         statusLabel.setText(statusText);
         if (parent != null) parent.onErrorChanged(patternType, hasError);

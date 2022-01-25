@@ -70,7 +70,7 @@ public class GettingStartedController extends BaseController
 //            {
 //                outputPathLabel.setText(file.getPath());
 //            }
-            outputPathLabel.setText("C:\\");
+            outputPathLabel.setText("C:\\Temp\\JBC_Test");
             Validate();
         });
 
@@ -82,6 +82,9 @@ public class GettingStartedController extends BaseController
             UiModel.getInstance().setContent(activityType == EActivityType.ANALYSIS ? "Analysis" : "PatternSelection");
             if (activityType == EActivityType.ANALYSIS) UiModel.getInstance().onDisplayed("Analysis");
         });
+
+        // Set default
+        activityRadioGrp.selectToggle(radioActivityDrafting);
 
         Validate();
     }

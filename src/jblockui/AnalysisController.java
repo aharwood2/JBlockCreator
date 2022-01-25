@@ -7,7 +7,6 @@ import javafx.scene.control.RadioButton;
 import javafx.scene.control.ToggleGroup;
 import javafx.util.Pair;
 import javafx.util.StringConverter;
-import jblockenums.EActivityType;
 import jblockenums.EPlotType;
 import jblockmain.InputFileData;
 
@@ -67,6 +66,9 @@ public class AnalysisController extends BaseController
             plotType = rb == radioPlotRectangle ? EPlotType.RECTANGLE : EPlotType.LAYERED;
             Validate();
         });
+
+        // Set default selection
+        plotRadioGrp.selectToggle(radioPlotRectangle);
     }
 
     private void Validate()
@@ -80,7 +82,7 @@ public class AnalysisController extends BaseController
         super.onDisplayed();
 
         // Populate the combo boxes
-        var available = new InputFileData(UiModel.getInstance().getInputFile()).getInputValues();
+        var available = new InputFileData(UiModel.getInstance().getInputFile(), true).getAvailableInputValues();
         var strConverter = new StringConverter<Pair<String, String>>()
         {
             @Override

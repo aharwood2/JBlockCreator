@@ -131,9 +131,9 @@ public class DxfFile
      * Writes the contents of the DXF file.
      *
      * @param blockName       name of the block to be overlaid on the DXF drawing
-     * @param dxfLayerChooser array of flags indicating which features should be written
+     * @param config          configuration of the file
      */
-    public void writeFile(String blockName, boolean[] dxfLayerChooser)
+    public void writeFile(String blockName, DxfFileConfiguration config)
     {
         if (bIsOpen)
         {
@@ -276,7 +276,7 @@ public class DxfFile
             writeDxfLine("70", "0");            // Block flag (see DXF references)
 
             // Add the pattern outline to the block definition
-            if (dxfLayerChooser.length > 1 && dxfLayerChooser[1])
+            if (config.getLayers().contains("checkOutline"))
             {
                 // Start of polyline
                 writeDxfLine("0", "POLYLINE");
@@ -345,7 +345,7 @@ public class DxfFile
             writeAnnotationText("SAMPLE SIZE:0");
 
             // Write the rest of the information on custom layers
-            if (dxfLayerChooser.length > 4 && dxfLayerChooser[4])
+            if (config.getLayers().contains("checkCon"))
             {
                 // Add construction line entities one at a time
                 for (int i = 0; i < ConX.size() - 1; i++)
@@ -378,7 +378,7 @@ public class DxfFile
                 }
             }
 
-            if (dxfLayerChooser.length > 2 && dxfLayerChooser[2])
+            if (config.getLayers().contains("checkCircles"))
             {
                 // Marks the keypoints used as individual circles on a separate layer
                 for (int i = 0; i < linesX.size(); i++)
@@ -392,7 +392,7 @@ public class DxfFile
                 }
             }
 
-            if (dxfLayerChooser.length > 3 && dxfLayerChooser[3])
+            if (config.getLayers().contains("checkCoord"))
             {
                 // Add point coordinates one at a time
                 for (int i = 0; i < linesX.size() - 1; i++)
@@ -411,7 +411,7 @@ public class DxfFile
                 }
             }
 
-            if (dxfLayerChooser.length > 0 && dxfLayerChooser[0])
+            if (config.getLayers().contains("checkScale"))
             {
                 // Write lines to create a 100 x 100 mm square off to bottom left of pattern
                 float[] scaleSqX = {-50.0f, -50.0f, 50.0f, 50.0f};

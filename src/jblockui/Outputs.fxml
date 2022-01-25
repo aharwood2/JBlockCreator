@@ -17,6 +17,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.image.Image?>
 
+<?import javafx.scene.control.ProgressBar?>
 <VBox alignment="TOP_CENTER" spacing="20.0" xmlns="http://javafx.com/javafx/14" xmlns:fx="http://javafx.com/fxml/1" fx:controller="jblockui.OutputsController">
     <GridPane>
         <columnConstraints>
@@ -38,17 +39,17 @@
     <Separator />
     <GridPane>
         <columnConstraints>
-            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" percentWidth="30" />
             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" percentWidth="70" />
+            <ColumnConstraints hgrow="NEVER" minWidth="10.0" percentWidth="30" halignment="RIGHT" />
         </columnConstraints>
         <ScrollPane>
             <VBox spacing="5.0">
-                <CheckBox fx:id="checkScaleBoxAndUser" text="Scale box and user ID" selected="true" />
-                <CheckBox fx:id="checkPatternOutline" text="Pattern outline" selected="true"/>
-                <CheckBox fx:id="checkKeypointsAsCircles" text="Keypoints as circles" selected="true"/>
-                <CheckBox fx:id="checkKeypointCoordinates" text="Keypoint coordinates" selected="true"/>
-                <CheckBox fx:id="checkConstructionLines" text="Construction lines" selected="true"/>
-                <CheckBox fx:id="timeStampCheckBox" text="Time stamp" selected="true"/>
+                <CheckBox fx:id="checkScaleBoxAndUser" text="Scale box and user ID" />
+                <CheckBox fx:id="checkPatternOutline" text="Pattern outline" />
+                <CheckBox fx:id="checkKeypointsAsCircles" text="Keypoints as circles" />
+                <CheckBox fx:id="checkKeypointCoordinates" text="Keypoint coordinates" />
+                <CheckBox fx:id="checkConstructionLines" text="Construction lines" />
+                <CheckBox fx:id="checkTimeStamp" text="Time stamp" />
             </VBox>
             <padding>
                 <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
@@ -56,7 +57,7 @@
         </ScrollPane>
         <VBox alignment="TOP_CENTER" GridPane.columnIndex="1">
           <Label text="Preview" underline="true" />
-          <StackPane fx:id="previewView" />
+          <StackPane fx:id="previewView"/>
         </VBox>
         </GridPane>
         <Separator />
@@ -64,6 +65,7 @@
             <Button fx:id="backButton" mnemonicParsing="false" text="Back" />
             <Button fx:id="nextButton" mnemonicParsing="false" text="Finish" />
         </HBox>
+    <ProgressBar fx:id="progressBar" visible="false" />
     <padding>
         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
     </padding>

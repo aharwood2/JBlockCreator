@@ -42,6 +42,7 @@ public class PatternSelectionController extends  BaseController
 
         nextButton.setOnAction(e ->
         {
+            UiModel.getInstance().setPatterns(patternsChecked);
             UiModel.getInstance().setContent("Outputs");
         });
 

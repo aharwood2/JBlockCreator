@@ -49,7 +49,7 @@
             <Label text="Select input file:" GridPane.rowIndex="1" />
             <Label text="Select output path:" GridPane.rowIndex="2" />
           <HBox spacing="10" GridPane.columnIndex="1">
-            <RadioButton fx:id="radioActivityDrafting" mnemonicParsing="false" selected="true" text="Drafting">
+            <RadioButton fx:id="radioActivityDrafting" mnemonicParsing="false" text="Drafting">
                <toggleGroup>
                   <ToggleGroup fx:id="activityRadioGrp" />
                </toggleGroup>

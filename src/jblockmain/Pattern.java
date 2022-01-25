@@ -1,6 +1,7 @@
 package jblockmain;
 
 import dxfwriter.DxfFile;
+import dxfwriter.DxfFileConfiguration;
 import jblockenums.EPattern;
 import jblockexceptions.MeasurementNotFoundException;
 
@@ -45,7 +46,7 @@ public abstract class Pattern
     /**
      * Constructor
      */
-    public Pattern(String userName, InputFileData dataStore)
+    public Pattern(String userName, InputFileData dataStore, MeasurementSet template)
     {
         this.userName = userName;
         patternType = assignPattern();
@@ -60,13 +61,13 @@ public abstract class Pattern
             e.printStackTrace();
         }
 
-        // If we have a data store object then read the measurements from it
-        if (dataStore != null) readMeasurements(dataStore);
+        // Pass the data store and templates through for mapping
+        readMeasurements(dataStore, template);
     }
 
     public Pattern(String userName)
     {
-        this(userName, null);
+        this(userName, null, null);
     }
 
     /**
@@ -77,7 +78,7 @@ public abstract class Pattern
     protected abstract EPattern assignPattern();
 
     /**
-     * Method which defines the required measurements for this pattern.
+     * Method which defines the required measurements for this pattern by defining a measurement set.
      */
     protected abstract void defineRequiredMeasurements() throws Exception;
 
@@ -86,11 +87,15 @@ public abstract class Pattern
      *
      * @param inputData the object holding all acquired input data from the file.
      */
-    protected final void readMeasurements(InputFileData inputData)
+    protected final void readMeasurements(InputFileData inputData, MeasurementSet template)
     {
         try
         {
-            measurements.mapFromInputData(userName, inputData);
+            // Map template values into the measurement set
+            if (template != null) measurements.mapFromTemplate(template);
+
+            // Map the values from the input data into the measurement set
+            if (inputData != null) measurements.mapFromInputData(userName, inputData);
         }
         catch (MeasurementNotFoundException e)
         {
@@ -101,7 +106,7 @@ public abstract class Pattern
     /**
      * Create the blocks for this pattern.
      */
-    protected abstract void createBlocks();
+    public abstract void createBlocks();
 
     /**
      * Method to get a measurement from the measurement set
@@ -166,7 +171,7 @@ public abstract class Pattern
     }
 
     @Override
-    public void writeToDXF(File fileOutput, boolean[] dxfLayerChooser, String timeStamp)
+    public void writeToDXF(File fileOutput, DxfFileConfiguration config)
     {
         for (int i = 0; i < getNumberOfBlocksToPlot(); i++)
         {
@@ -185,10 +190,10 @@ public abstract class Pattern
 
             // Create new DXF file
             DxfFile file = null;
-            if (timeStamp == null)
+            if (config.getTimeStamp() == null)
                 file = new DxfFile(path.toString() + "/" + blocks.get(i).getName());
             else
-                file = new DxfFile(path.toString() + "/" + blocks.get(i).getName() + "_" + timeStamp);
+                file = new DxfFile(path.toString() + "/" + blocks.get(i).getName() + "_" + config.getTimeStamp());
 
             try
             {
@@ -199,7 +204,7 @@ public abstract class Pattern
             {
                 e.printStackTrace();
             }
-            file.writeFile(blocks.get(i).getName(), dxfLayerChooser);
+            file.writeFile(blocks.get(i).getName(), config);
         }
     }
 

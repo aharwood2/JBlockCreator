@@ -1,13 +1,18 @@
 package jblockui;
 
+import analysis.RectanglePlot;
+import dxfwriter.DxfFileConfiguration;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import jblockenums.EActivityType;
 import jblockenums.EPattern;
 import jblockenums.EPlotType;
+import jblockmain.InputFileData;
 import jblockmain.MeasurementSet;
+import jblockmain.PatternFactory;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -17,6 +22,7 @@ import java.util.Objects;
 public class UiModel
 {
     private static UiModel instance;
+    private boolean isRunning;
 
     private UiModel(){}
 
@@ -64,7 +70,7 @@ public class UiModel
 
             // Load the container
             root = (AnchorPane) FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/jblockui/UiContainer.fxml")));
-            setContent("Outputs");
+            setContent("GettingStarted");
         }
         catch (IOException e)
         {
@@ -127,7 +133,7 @@ public class UiModel
      * @param key the pattern
      * @param value the measurement set
      */
-    public void storeMeasurements(EPattern key, MeasurementSet value)
+    public void storeMeasurementTemplate(EPattern key, MeasurementSet value)
     {
         measurements.put(key, value);
     }
@@ -136,7 +142,7 @@ public class UiModel
      * Remove a master measurement set when pattern is disabled
      * @param key the pattern
      */
-    public void removeMeasurements(EPattern key)
+    public void removeMeasurementTemplate(EPattern key)
     {
         measurements.remove(key);
     }
@@ -146,7 +152,7 @@ public class UiModel
      * @param key the pattern
      * @return the measurement set
      */
-    public MeasurementSet getMeasurements(EPattern key)
+    public MeasurementSet getMeasurementTemplate(EPattern key)
     {
         return measurements.get(key);
     }
@@ -156,7 +162,84 @@ public class UiModel
      */
     public void run()
     {
-        // TODO: Complete
+        if (!isRunning)
+        {
+            isRunning = true;
+            var ctrl = (OutputsController)controllers.get("Outputs");
+            double i = 0;
+
+            try
+            {
+                setContent("Running");
+
+                String timeStamp = null;
+                if (outputChecks.contains("checkTime"))
+                {
+                    timeStamp = new java.text.SimpleDateFormat("yyyy-MM-dd_HH-mm-ss").format(new java.util.Date());
+                }
+
+                // Open output file
+                File outputDirectory = new File(outputPath);
+
+                // Read in the full set of measurements
+                var inputData = new InputFileData(inputFile, false);
+                var names = inputData.getUserNames();
+
+                // Create DXF config
+                var config = new DxfFileConfiguration(timeStamp, outputChecks);
+
+                // Perform drafting
+                if (activityType == EActivityType.DRAFTING)
+                {
+                    // Loop over the patterns chosen
+                    for (var p : selectedPatterns)
+                    {
+                        // Loop over the users in the input data
+                        for (var user : names)
+                        {
+                            // Update progress bar
+                            ctrl.setProgress(i / (selectedPatterns.size() * names.size()));
+
+                            // Construct the pattern
+                            var pattern = PatternFactory.Create(p, user, inputData, getMeasurementTemplate(p));
+                            assert pattern != null;
+
+                            // Construct the blocks
+                            pattern.createBlocks();
+
+                            // Write out the file
+                            pattern.writeToDXF(outputDirectory, config);
+
+                            // Count
+                            i++;
+                        }
+                    }
+                }
+
+                // Perform analysis
+                else
+                {
+                    var plot = new RectanglePlot(inputData, analysisIdX, analysisIdY, plotType);
+                    for (var user : names)
+                    {
+                        ctrl.setProgress(i / (names.size()));
+                        plot.addNewRectangle(user);
+                        i++;
+                    }
+                    plot.writeToDXF(outputDirectory, config);
+                }
+            }
+            catch (Exception ex)
+            {
+                ex.printStackTrace();
+            }
+            finally
+            {
+                ctrl.setProgress(0);
+                setContent("GettingStarted");
+                isRunning = false;
+            }
+        }
     }
 
     /**
@@ -206,5 +289,11 @@ public class UiModel
     public void setPlotType(EPlotType plotType)
     {
         this.plotType = plotType;
+    }
+
+    public void setPatterns(ArrayList<EPattern> patternsChecked)
+    {
+        selectedPatterns.clear();
+        selectedPatterns.addAll(patternsChecked);
     }
 }

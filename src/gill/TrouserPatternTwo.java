@@ -11,9 +11,9 @@ import java.util.Collections;
 public class TrouserPatternTwo
         extends Pattern
 {
-    public TrouserPatternTwo(String userName, InputFileData dataStore)
+    public TrouserPatternTwo(String userName, InputFileData dataStore, MeasurementSet template)
     {
-        super(userName, dataStore);
+        super(userName, dataStore, template);
     }
 
     /* Implement abstract methods from super class */
@@ -62,7 +62,7 @@ public class TrouserPatternTwo
     }
 
     @Override
-    protected void createBlocks()
+    public void createBlocks()
     {
         // Pull from store
         var waistToHipLength= get("waistToHipLength");

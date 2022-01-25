@@ -10,9 +10,9 @@ import java.util.ArrayList;
 public class TrouserPattern
         extends Pattern
 {
-    public TrouserPattern(String userName, InputFileData dataStore)
+    public TrouserPattern(String userName, InputFileData dataStore, MeasurementSet template)
     {
-        super(userName, dataStore);
+        super(userName, dataStore, template);
     }
 
     /* Implement abstract methods from super class */
@@ -53,7 +53,7 @@ public class TrouserPattern
      * The actual block creation process following the drafting method of Gill.
      */
     @Override
-    protected void createBlocks()
+    public void createBlocks()
     {
         // Pull from store
         var c_KneeCircR = get("c_KneeCircR");

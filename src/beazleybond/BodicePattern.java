@@ -13,9 +13,9 @@ import java.util.ArrayList;
 public class BodicePattern
         extends Pattern
 {
-    public BodicePattern(String userName, InputFileData dataStore)
+    public BodicePattern(String userName, InputFileData dataStore, MeasurementSet template)
     {
-        super(userName, dataStore);
+        super(userName, dataStore, template);
     }
 
     /* Implement abstract methods from super class */
@@ -69,7 +69,7 @@ public class BodicePattern
      * The actual block creation process following the drafting method of Beazley and Bond.
      */
     @Override
-    protected void createBlocks()
+    public void createBlocks()
     {
         // Pull from store
         var a_Bust = get("a_Bust") + get("bustEase");

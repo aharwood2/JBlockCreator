@@ -2,10 +2,7 @@ package aldrich;
 
 import jblockenums.EPattern;
 import jblockexceptions.MeasurementNotFoundException;
-import jblockmain.Block;
-import jblockmain.InputFileData;
-import jblockmain.Measurement;
-import jblockmain.Pattern;
+import jblockmain.*;
 import mathcontainers.Vector2D;
 
 import java.util.ArrayList;
@@ -13,9 +10,9 @@ import java.util.ArrayList;
 public class TrouserPattern
         extends Pattern
 {
-    public TrouserPattern(String userName, InputFileData dataStore)
+    public TrouserPattern(String userName, InputFileData dataStore, MeasurementSet template)
     {
-        super(userName, dataStore);
+        super(userName, dataStore, template);
     }
 
     /* Implement abstract methods from super class */
@@ -44,7 +41,7 @@ public class TrouserPattern
      * NOTE: This is using a step-by-step guide created for easier coding
      */
     @Override
-    protected void createBlocks()
+    public void createBlocks()
     {
         // Points that make up the shape are listed in a strict anti-clockwise order to maintain correct connectivity for
         // plotting. The bottom left corner of the space to be the origin.

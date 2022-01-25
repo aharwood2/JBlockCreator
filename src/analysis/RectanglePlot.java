@@ -1,7 +1,9 @@
 package analysis;
 
 import dxfwriter.DxfFile;
+import dxfwriter.DxfFileConfiguration;
 import jblockenums.EAnalysis;
+import jblockenums.EPlotType;
 import jblockmain.IPlottable;
 import jblockmain.InputFileData;
 
@@ -21,21 +23,21 @@ public class RectanglePlot
     // Variables for x,y axis measurement ID
     private final String xAxisID;
     private final String yAxisID;
-    private final boolean isLayered;
-    private final boolean isRect;
+    private final EPlotType plotType;
     private final InputFileData fileData;
     // List of Rectangles in this plot
     private final ArrayList<Rectangle> rectangles = new ArrayList<>();
 
     // Constructor
-    public RectanglePlot(InputFileData inputFileData, String measurementIdX, String measurementIdY,
-                         boolean isLayeredPlot, boolean isRectangle)
+    public RectanglePlot(InputFileData inputFileData,
+                         String measurementIdX,
+                         String measurementIdY,
+                         EPlotType plotType)
     {
         fileData = inputFileData;
         xAxisID = measurementIdX;
         yAxisID = measurementIdY;
-        isLayered = isLayeredPlot;
-        isRect = isRectangle;
+        this.plotType = plotType;
     }
 
     // Method to add a new Rectangle to the plot
@@ -54,37 +56,27 @@ public class RectanglePlot
     }
 
     /* Interface implementation */
-    private void rangeCheck(int blockNumber)
-    {
-        if (blockNumber > rectangles.size())
-            throw new IndexOutOfBoundsException("Accessing out of range of number of blocks!");
-    }
-
     @Override
     public ArrayList<Double> getXPoints(int blockNumber) throws Exception
     {
-        rangeCheck(blockNumber);
         return rectangles.get(blockNumber).getX();
     }
 
     @Override
     public ArrayList<Double> getYPoints(int blockNumber) throws Exception
     {
-        rangeCheck(blockNumber);
         return rectangles.get(blockNumber).getY();
     }
 
     @Override
     public ArrayList<Double> getXCtPoints(int blockNumber) throws Exception
     {
-        rangeCheck(blockNumber);
         return null;
     }
 
     @Override
     public ArrayList<Double> getYCtPoints(int blockNumber) throws Exception
     {
-        rangeCheck(blockNumber);
         return null;
     }
 
@@ -95,7 +87,7 @@ public class RectanglePlot
     }
 
     @Override
-    public void writeToDXF(File fileOutput, boolean[] dxfLayerChooser, String timeStamp)
+    public void writeToDXF(File fileOutput, DxfFileConfiguration config)
     {
         // Construct output path
         Path path = Paths.get(fileOutput.toString() + "/" + analysis + "/");
@@ -110,14 +102,14 @@ public class RectanglePlot
             System.err.println("Cannot create directories - " + e);
         }
 
-        if (isRect)
+        if (plotType == EPlotType.RECTANGLE)
         {
             ArrayList<String> names = fileData.getUserNames();
             for (int i = 0; i < rectangles.size(); i++)
             {
-
-                // Create new DXF file
-                String filename = names.get(i) + "_" + xAxisID + "_" + yAxisID + "_Rectangle_Plot" + timeStamp;
+                // Create new DXF file for each rectangle
+                String filename = names.get(i) + "_" + xAxisID + "_" + yAxisID;
+                if (config.getTimeStamp() != null) filename += "_" + config.getTimeStamp();;
                 DxfFile file = new DxfFile(path.toString() + "/" + filename);
 
                 try
@@ -128,18 +120,15 @@ public class RectanglePlot
                 {
                     e.printStackTrace();
                 }
-                file.writeFile(filename, dxfLayerChooser);
+                file.writeFile(filename, config);
             }
         }
 
-        if (isLayered)
+        else
         {
-            // Create new DXF file
-            String filename;
-            if (timeStamp == null)
-                filename = "Layered_" + xAxisID + "_" + yAxisID + "_Rectangle_Plot";
-            else
-                filename = "Layered_" + xAxisID + "_" + yAxisID + "_Rectangle_Plot" + "_" + timeStamp;
+            // Create new DXF file with all rectangles on one plot
+            String filename = "Layered_" + xAxisID + "_" + yAxisID;
+            if (config.getTimeStamp() != null) filename += "_" + config.getTimeStamp();
 
             DxfFile file = new DxfFile(path.toString() + "/" + filename);
             try
@@ -153,7 +142,7 @@ public class RectanglePlot
             {
                 e.printStackTrace();
             }
-            file.writeFile(filename, dxfLayerChooser);
+            file.writeFile(filename, config);
         }
     }
 }

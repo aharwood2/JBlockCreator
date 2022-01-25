@@ -33,8 +33,9 @@ public class InputFileData
      * Constructor which takes an input file name.
      *
      * @param scanDataFileName name of input file to read from.
+     * @param headersOnly just read the headers and not the values.
      */
-    public InputFileData(String scanDataFileName)
+    public InputFileData(String scanDataFileName, boolean headersOnly)
     {
         try
         {
@@ -52,6 +53,7 @@ public class InputFileData
                 if (line.contains("[") && line.contains("]"))
                 {
                     valuesAvailable = processHeadings(line);
+                    if (headersOnly) break;
                 }
                 else if (line.length() > 0)
                 {
@@ -201,7 +203,7 @@ public class InputFileData
      * Gets a list of input value ID and name pairs
      * @return list of pairs
      */
-    public List<Pair<String, String>> getInputValues()
+    public List<Pair<String, String>> getAvailableInputValues()
     {
         var pairs = new ArrayList<Pair<String, String>>();
         for (var i : valuesAvailable)
@@ -215,7 +217,7 @@ public class InputFileData
      * Gets a list of IDs of the input values
      * @return list of IDs
      */
-    public List<String> getInputValueIds()
+    public List<String> getAvailableInputValueIds()
     {
         var ids = new ArrayList<String>();
         for (var i : valuesAvailable)

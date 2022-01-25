@@ -11,9 +11,9 @@ import java.util.Collections;
 public class SweatShirtPattern
         extends Pattern
 {
-    public SweatShirtPattern(String userName, InputFileData dataStore)
+    public SweatShirtPattern(String userName, InputFileData dataStore, MeasurementSet template)
     {
-        super(userName, dataStore);
+        super(userName, dataStore, template);
     }
 
     /* Implement abstract methods from super class */
@@ -57,7 +57,7 @@ public class SweatShirtPattern
      * The actual block creation process following the drafting method of Gill.
      */
     @Override
-    protected void createBlocks()
+    public void createBlocks()
     {
         // Pull from store
         var BustChestEase = get("BustChestEase");

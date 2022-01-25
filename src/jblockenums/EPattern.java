@@ -6,8 +6,8 @@ package jblockenums;
 public enum EPattern
 {
     AHMED_BODICE("Ahmed Bodice"),
-    ALDRICH_SKIRT("Alrich Skirt"),
-    ALDRICH_TROUSER("Alrich Trouser"),
+    ALDRICH_SKIRT("Aldrich Skirt"),
+    ALDRICH_TROUSER("Aldrich Trouser"),
     BEAZLEYBOND_BODICE("Beazley Bond Bodice"),
     BEAZLEYBOND_SKIRT("Beazley Bond Skirt"),
     BEAZLEYBOND_STRAIGHTSLEEVE("Beazley Bond Straight Sleeve"),

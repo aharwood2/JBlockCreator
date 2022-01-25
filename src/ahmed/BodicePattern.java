@@ -10,9 +10,9 @@ import java.util.ArrayList;
 public class BodicePattern
         extends Pattern
 {
-    public BodicePattern(String username, InputFileData dataStore)
+    public BodicePattern(String username, InputFileData dataStore, MeasurementSet template)
     {
-        super(username, dataStore);
+        super(username, dataStore, template);
     }
 
     @Override
@@ -57,7 +57,7 @@ public class BodicePattern
     }
 
     @Override
-    protected void createBlocks()
+    public void createBlocks()
     {
         // Pull from store
         var halfBackCentreTapeMeasure = get("halfBackCentreTapeMeasure");

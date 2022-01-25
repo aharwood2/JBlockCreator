@@ -2,7 +2,7 @@ package jblockui;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.CheckBox;
-import javafx.scene.control.SplitPane;
+import javafx.scene.control.ProgressBar;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
 import jblockenums.EActivityType;
@@ -31,7 +31,10 @@ public class OutputsController extends BaseController
     private CheckBox checkConstructionLines;
 
     @FXML
-    private CheckBox timeStampCheckBox;
+    private CheckBox checkTimeStamp;
+
+    @FXML
+    ProgressBar progressBar;
 
     @Override
     public void initialize()
@@ -48,6 +51,17 @@ public class OutputsController extends BaseController
         {
             UiModel.getInstance().run();
         });
+
+        var imgFiles = new ArrayList<String>()
+        {{
+            add("file:images/PatternSample_00000.png");
+            add("file:images/PatternSample_00001.png");
+            add("file:images/PatternSample_00010.png");
+            add("file:images/PatternSample_00100.png");
+            add("file:images/PatternSample_01000.png");
+            add("file:images/PatternSample_10000.png");
+        }};
+        initialisePreviewLayers(imgFiles);
 
         checkScaleBoxAndUser.selectedProperty().addListener((obs, oldVal, newVal) ->
         {
@@ -79,24 +93,33 @@ public class OutputsController extends BaseController
             previewView.getChildren().get(1).setVisible(newVal);
         });
 
-        timeStampCheckBox.selectedProperty().addListener((obs, oldVal, newVal) ->
+        checkTimeStamp.selectedProperty().addListener((obs, oldVal, newVal) ->
         {
             UiModel.getInstance().setCheck("checkTime", newVal);
         });
 
-        // Hide the timestamp if analysis
-        timeStampCheckBox.setVisible(UiModel.getInstance().getActivity() == EActivityType.DRAFTING);
+        // Set all the checks to true by default
+        checkScaleBoxAndUser.setSelected(true);
+        checkPatternOutline.setSelected(true);
+        checkKeypointsAsCircles.setSelected(true);
+        checkKeypointCoordinates.setSelected(true);
+        checkConstructionLines.setSelected(true);
+        checkTimeStamp.setSelected(true);
 
-        var imgFiles = new ArrayList<String>()
-        {{
-            add("file:images/PatternSample_00000.png");
-            add("file:images/PatternSample_00001.png");
-            add("file:images/PatternSample_00010.png");
-            add("file:images/PatternSample_00100.png");
-            add("file:images/PatternSample_01000.png");
-            add("file:images/PatternSample_10000.png");
-        }};
-        initialisePreviewLayers(imgFiles);
+        // Hide the timestamp if analysis
+        checkTimeStamp.setVisible(UiModel.getInstance().getActivity() == EActivityType.DRAFTING);
+
+
+    }
+
+    public void setProgress(double value)
+    {
+        if (value == 0.0) progressBar.setVisible(false);
+        else
+        {
+            progressBar.setVisible(true);
+            progressBar.setProgress(value);
+        }
     }
 
     private void initialisePreviewLayers(List<String> files)

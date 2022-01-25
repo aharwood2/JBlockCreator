@@ -10,9 +10,9 @@ import java.util.ArrayList;
 public class StraightSleevePattern
         extends Pattern
 {
-    public StraightSleevePattern(String userName, InputFileData dataStore)
+    public StraightSleevePattern(String userName, InputFileData dataStore, MeasurementSet template)
     {
-        super(userName, dataStore);
+        super(userName, dataStore, template);
     }
 
     /* Implement abstract methods from super class */
@@ -42,7 +42,7 @@ public class StraightSleevePattern
      * The actual block creation process following the drafting method of Beazley Bond.
      */
     @Override
-    protected void createBlocks()
+    public void createBlocks()
     {
         // Pull from store
         var a_UpperArmGirth = get("a_UpperArmGirth") + get("upperArmGirthEase");
