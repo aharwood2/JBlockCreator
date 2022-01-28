@@ -120,7 +120,8 @@ public class InputFileData
         {
             if (h == null || h.length() < 3) continue;
             int splitEnd = h.indexOf("]");
-            String id = h.substring(line.indexOf("["), splitEnd).trim();
+            int splitStart = h.indexOf("[") + 1;
+            String id = h.substring(splitStart, splitEnd).trim();
             String name = h.substring(splitEnd + 1, h.length()).trim();
             inputValues.add(new InputValue(id, name, 0));
         }
