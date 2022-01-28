@@ -59,7 +59,7 @@ public class GettingStartedController extends BaseController
 //            {
 //                inputFilePathLabel.setText(file.getPath());
 //            }
-            inputFilePathLabel.setText("C:\\Apps\\JBlockCreator\\input\\Batch5.TXT");
+            inputFilePathLabel.setText("C:\\Apps\\JBlockCreator\\input\\Batch5.csv");
             Validate();
         });
 
