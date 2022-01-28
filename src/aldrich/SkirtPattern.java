@@ -1,6 +1,7 @@
 package aldrich;
 
 import jblockenums.EPattern;
+import jblockenums.EUnitType;
 import jblockexceptions.MeasurementNotFoundException;
 import jblockmain.*;
 import mathcontainers.Vector2D;
@@ -43,8 +44,8 @@ public class SkirtPattern
         measurements.addMeasurement(new Measurement("Arb_FrontNaturalWaist", 2.5));
         measurements.addMeasurement(new Measurement("Arb_FrontDartDepth", 12.0));
         measurements.addMeasurement(new Measurement("Arb_FrontDartWidth", 2.5));
-        measurements.addMeasurement(new Measurement("Arb_FrontDartPlacement", 2.0 / 3.0));
-        measurements.addMeasurement(new Measurement("Arb_BackDartPlacement", 1.0 / 3.0));
+        measurements.addMeasurement(new Measurement("Arb_FrontDartPlacement", 66, EUnitType.PERCENTAGE));
+        measurements.addMeasurement(new Measurement("Arb_BackDartPlacement", 33, EUnitType.PERCENTAGE));
     }
 
     /**
@@ -68,8 +69,8 @@ public class SkirtPattern
         var Arb_FrontNaturalWaist = get("Arb_FrontNaturalWaist");
         var Arb_FrontDartDepth = get("Arb_FrontDartDepth");
         var Arb_FrontDartWidth = get("Arb_FrontDartWidth");
-        var Arb_FrontDartPlacement = get("Arb_FrontDartPlacement");
-        var Arb_BackDartPlacement = get("Arb_BackDartPlacement");
+        var Arb_FrontDartPlacement = get("Arb_FrontDartPlacement") / 100.0;
+        var Arb_BackDartPlacement = get("Arb_BackDartPlacement") / 100.0;
         
         // Points that make up the shape are listed in a strict anti-clockwise order to maintain correct connectivity for
         // plotting. The bottom left corner of the space to be the origin.

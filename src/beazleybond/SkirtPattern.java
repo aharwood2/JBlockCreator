@@ -2,6 +2,7 @@ package beazleybond;
 
 import jblockenums.EPattern;
 import jblockenums.EPosition;
+import jblockenums.EUnitType;
 import jblockexceptions.MeasurementNotFoundException;
 import jblockmain.*;
 import mathcontainers.Vector2D;
@@ -38,13 +39,13 @@ public class SkirtPattern
         // Arbitrary
         measurements.addMeasurement(new Measurement("Arb_WaistLevel", 1.0));
         measurements.addMeasurement(new Measurement("Arb_UpperHipLevel", 10.0));
-        measurements.addMeasurement(new Measurement("Arb_BackDartPercent", 0.35));
-        measurements.addMeasurement(new Measurement("Arb_FrontDartPercent", 0.20));
-        measurements.addMeasurement(new Measurement("Arb_SideSeamPercent", 0.45));
+        measurements.addMeasurement(new Measurement("Arb_BackDartPercent", 35, EUnitType.PERCENTAGE));
+        measurements.addMeasurement(new Measurement("Arb_FrontDartPercent", 20, EUnitType.PERCENTAGE));
+        measurements.addMeasurement(new Measurement("Arb_SideSeamPercent", 45, EUnitType.PERCENTAGE));
         measurements.addMeasurement(new Measurement("Arb_BackDartLength", 14.0));
         measurements.addMeasurement(new Measurement("Arb_FrontDartLength", 8.0));
-        measurements.addMeasurement(new Measurement("Arb_BackDartPlacement", 0.5));
-        measurements.addMeasurement(new Measurement("Arb_FrontDartPlacement", 1.0 / 3.0));
+        measurements.addMeasurement(new Measurement("Arb_BackDartPlacement", 50, EUnitType.PERCENTAGE));
+        measurements.addMeasurement(new Measurement("Arb_FrontDartPlacement", 33, EUnitType.PERCENTAGE));
 
         // Ease
         measurements.addMeasurement(new Measurement("WaistEase", 2.0));
@@ -66,13 +67,13 @@ public class SkirtPattern
         var g_HipLevel = get("g_HipLevel");
         var Arb_WaistLevel = get("Arb_WaistLevel");
         var Arb_UpperHipLevel = get("Arb_UpperHipLevel");
-        var Arb_BackDartPercent = get("Arb_BackDartPercent");
-        var Arb_FrontDartPercent = get("Arb_FrontDartPercent");
-        var Arb_SideSeamPercent = get("Arb_SideSeamPercent");
+        var Arb_BackDartPercent = get("Arb_BackDartPercent") / 100.0;
+        var Arb_FrontDartPercent = get("Arb_FrontDartPercent") / 100.0;
+        var Arb_SideSeamPercent = get("Arb_SideSeamPercent") / 100.0;
         var Arb_BackDartLength = get("Arb_BackDartLength");
         var Arb_FrontDartLength = get("Arb_FrontDartLength");
-        var Arb_BackDartPlacement = get("Arb_BackDartPlacement");
-        var Arb_FrontDartPlacement = get("Arb_FrontDartPlacement");
+        var Arb_BackDartPlacement = get("Arb_BackDartPlacement") / 100.0;
+        var Arb_FrontDartPlacement = get("Arb_FrontDartPlacement") / 100.0;
 
         // Points that make up the shape are listed in a strict anti-clockwise order to maintain correct connectivity for
         // plotting. The bottom left corner of the space to be the origin.

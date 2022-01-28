@@ -22,6 +22,9 @@ public class MeasurementStackItemController extends BaseController
     @FXML
     Button minusButton;
 
+    @FXML
+    Label unitLabel;
+
     private Measurement measurement;
     private boolean isValid = true;
 
@@ -91,6 +94,7 @@ public class MeasurementStackItemController extends BaseController
         catch (NumberFormatException ignored)
         {
         }
+        unitLabel.setText(m.getUnitName());
         valueEntry.setText(m.getInputId() == null ? String.valueOf(value) : m.getInputId());
         valueEntry.setDisable(m.getInputId() != null);
         plusButton.setDisable(m.getInputId() != null);

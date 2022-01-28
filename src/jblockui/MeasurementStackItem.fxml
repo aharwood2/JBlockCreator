@@ -14,6 +14,7 @@
     <columnConstraints>
         <ColumnConstraints hgrow="ALWAYS" minWidth="10.0" />
         <ColumnConstraints hgrow="NEVER" minWidth="10.0" />
+        <ColumnConstraints hgrow="NEVER" prefWidth="50.0" />
         <ColumnConstraints hgrow="NEVER" minWidth="10.0" />
     </columnConstraints>
     <rowConstraints>
@@ -21,7 +22,8 @@
     </rowConstraints>
     <Label fx:id="measurementNameLabel" text="&lt;MeasurementName&gt;" />
     <TextField fx:id="valueEntry" GridPane.columnIndex="1" />
-    <HBox GridPane.columnIndex="2" spacing="5.0">
+    <Label fx:id="unitLabel" GridPane.columnIndex="2" />
+    <HBox GridPane.columnIndex="3" spacing="5.0">
         <Button fx:id="plusButton" text="+" prefWidth="30" prefHeight="30" />
         <Button fx:id="minusButton" text="-" prefWidth="30" prefHeight="30" />
     </HBox>
