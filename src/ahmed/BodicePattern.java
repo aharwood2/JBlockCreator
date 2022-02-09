@@ -1,7 +1,6 @@
 package ahmed;
 
 import jblockenums.EPattern;
-import jblockexceptions.MeasurementNotFoundException;
 import jblockmain.*;
 import mathcontainers.Vector2D;
 
@@ -278,9 +277,9 @@ public class BodicePattern
 
         // Alternative method of making the armhole curve using bezier curves, less strict but more appealing to the eye
         fullBlock.addQuadraticBezierCurve(point15, controlPoint1, point6);
-        fullBlock.addDirectedCurve(point14, point15, new double[]{90.0, 0.0});
+        fullBlock.addDirectedCubicSpline(point14, point15, new double[]{90.0, 0.0});
         fullBlock.addQuadraticBezierCurve(point6_2, controlPoint2, point16);
-        fullBlock.addDirectedCurve(point16, point17, new double[]{0.0, 90.0});
+        fullBlock.addDirectedCubicSpline(point16, point17, new double[]{0.0, 90.0});
 
         fullBlock.addQuadraticBezierCurve(point18, new Vector2D(point18.getX(), point1.getY()), point1);
 

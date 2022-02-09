@@ -1,7 +1,6 @@
 package gill;
 
 import jblockenums.EPattern;
-import jblockexceptions.MeasurementNotFoundException;
 import jblockmain.*;
 import mathcontainers.Vector2D;
 
@@ -173,7 +172,7 @@ public class TrouserPatternTwo
         Vector2D point1and2 = new Vector2D((point1.getX() + ((point2.getX() - point1.getX())) / 3.0),
                                            point1.getY() + ((point2.getY() - point1.getY()) * 0.75) + centreYpoint);
 
-        frontBlock.addDirectedCurve(point1, point2, new Vector2D(point1and2.subtract(point1)),
+        frontBlock.addDirectedCubicSpline(point1, point2, new Vector2D(point1and2.subtract(point1)),
                                     new Vector2D(point3.subtract(point2)), new double[]{0.0, 0.0});
 
         // Point 3,4,5,6,7
@@ -184,7 +183,7 @@ public class TrouserPatternTwo
         frontBlock.addKeypoint(point7);
 
         // Curve between point 5 and 6 keeping angles at start and end 0 deg with respect to preceding and proceeding curves
-        frontBlock.addDirectedCurve(point5, point6, new Vector2D(point5.subtract(point4)),
+        frontBlock.addDirectedCubicSpline(point5, point6, new Vector2D(point5.subtract(point4)),
                                     new Vector2D(point7.subtract(point6)), new double[]{0.0, 0.0});
 
         // Point 8 and 9
@@ -192,11 +191,11 @@ public class TrouserPatternTwo
         frontBlock.addKeypoint(point9);
 
         // Circular curve between 8 and 9 making sure apex is lower than height of point 8
-        frontBlock.addCircularCurve(point8, point9, (point9.getY()
+        frontBlock.addCircularArc(point8, point9, (point9.getY()
                 - (new Vector2D(point8.add(point9.subtract(point8).divide(2.0)))).getY()) / 2.0, false);
 
         // Curve that connect point 7 and 8 together as a circular curve
-        frontBlock.addCircularCurve(point7, point8, (point8.getY()
+        frontBlock.addCircularArc(point7, point8, (point8.getY()
                 - (new Vector2D(point7.add(point8.subtract(point7).divide(2.0)))).getY()) / 2.0, true);
 
         // Point 10
@@ -224,7 +223,7 @@ public class TrouserPatternTwo
         frontBlock.addKeypoint(point11);
 
         // Final steep curve that connects to crotch point point 12 not added as a keypoint but through curve function
-        frontBlock.addDirectedCurve(point11, point1, point12, 0.0);
+        frontBlock.addDirectedCubicSpline(point11, point1, point12, 0.0);
 
         // Get the max and min y with a small additional buffer of 5cm for the construction lines
         double maxFrontY = Collections.max(frontBlock.getPlottableKeypointsY()) + 5.0;
@@ -300,21 +299,21 @@ public class TrouserPatternTwo
         backBlock.addKeypoint(point18);
 
         // Curve between 17 and 18
-        backBlock.addCircularCurve(point17, point18, (point18.getY()
+        backBlock.addCircularArc(point17, point18, (point18.getY()
                 - (new Vector2D(point17.add(point18.subtract(point17).divide(2.0)))).getY()) / 2.0, false);
 
         backBlock.addKeypoint(point19);
         backBlock.addKeypoint(point20);
         backBlock.addKeypoint(point21);
 
-        backBlock.addDirectedCurve(point20, point21, new Vector2D(point20.subtract(point19)),
+        backBlock.addDirectedCubicSpline(point20, point21, new Vector2D(point20.subtract(point19)),
                                    new Vector2D(point22.subtract(point21)), new double[]{0.0, 0.0});
 
         backBlock.addKeypoint(point22);
         backBlock.addKeypoint(point24);
 
         // Circular curve with height 1 to ensure keypoint 23 is added
-        backBlock.addCircularCurve(point22, point24, 1.0, true);
+        backBlock.addCircularArc(point22, point24, 1.0, true);
 
         backBlock.addKeypoint(point25);
         backBlock.addKeypoint(point13);
@@ -323,13 +322,13 @@ public class TrouserPatternTwo
         Vector2D point25and13 = new Vector2D(point13.getX() + ((point25.getX() - point13.getX()) / 3.0),
                                              point13.getY() + ((point25.getY() - point13.getY()) * 0.75));
 
-        backBlock.addDirectedCurve(point25, point13, new Vector2D(point25.subtract(point24)),
+        backBlock.addDirectedCubicSpline(point25, point13, new Vector2D(point25.subtract(point24)),
                                    new Vector2D(point25and13.subtract(point13)), new double[]{0.0, 0.0});
 
         backBlock.addKeypoint(point14);
         backBlock.addKeypoint(point15);
 
-        backBlock.addDirectedCurve(point13, point14, new Vector2D(point13.subtract(point25and13)),
+        backBlock.addDirectedCubicSpline(point13, point14, new Vector2D(point13.subtract(point25and13)),
                                    new Vector2D(point16Temp.subtract(point15)), new double[]{90.0, 0.0});
 
         // Calculate length point 16 needs to be moved in the -x direction by to keep overall crotch length constant

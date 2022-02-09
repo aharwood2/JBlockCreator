@@ -1,7 +1,6 @@
 package beazleybond;
 
 import jblockenums.EPattern;
-import jblockexceptions.MeasurementNotFoundException;
 import jblockmain.*;
 import mathcontainers.Vector2D;
 
@@ -147,13 +146,13 @@ public class TrouserPattern
                 new Vector2D(0.0, Arb_CentreFrontFromInsideLeg + (a_Waist / 4.0) + Arb_FrontDartSuppression));
 
         // Insert the inside leg curve -- circular curve will do the job rather than something more complicated
-        frontBlock.addCircularCurve(new Vector2D(i_Crutch, 0.0),
+        frontBlock.addCircularArc(new Vector2D(i_Crutch, 0.0),
                                     new Vector2D(j_Knee, Arb_FrontCreaseLineFromInsideLeg - Arb_FrontHalfKneeWidth),
                                     0.5,
                                     false);
 
         // Insert crutch curve
-        frontBlock.addDirectedCurveWithApexTangent(
+        frontBlock.addDirectedCubicSplineWithApexTangent(
                 new Vector2D(h_Hip, Arb_CentreFrontFromInsideLeg),
                 new Vector2D(i_Crutch, 0.0),
                 new Vector2D(i_Crutch, Arb_CentreFrontFromInsideLeg),
@@ -193,7 +192,7 @@ public class TrouserPattern
                                                  Arb_CentreFrontFromInsideLeg + (a_Waist / 4.0) + Arb_FrontDartSuppression);
         double frontHipWaistY = (frontHipWaistStart.getY() - frontHipWaistEnd.getY()) / 2.0;
         Vector2D frontHipWaistInt = new Vector2D(Arb_UpperHipLevel, frontHipWaistEnd.getY() + frontHipWaistY);
-        frontBlock.addDirectedCurve(frontHipWaistStart, frontHipWaistEnd, frontHipWaistInt, 0.0);
+        frontBlock.addDirectedCubicSpline(frontHipWaistStart, frontHipWaistEnd, frontHipWaistInt, 0.0);
 
 
         // Add construction keypoints for Upper Hip Level
@@ -292,14 +291,14 @@ public class TrouserPattern
                           true, false);
 
         // Add inside leg curve -- again as we don't really have much information try a circular curve for now
-        backBlock.addCircularCurve(new Vector2D(i_Crutch + 1.0, 0.0),
+        backBlock.addCircularArc(new Vector2D(i_Crutch + 1.0, 0.0),
                                    new Vector2D(j_Knee, Arb_BackCreaseLineFromInsideLeg - Arb_BackHalfKneeWidth),
                                    1.5,
                                    false);
 
 
         // Add crutch curve -- approximate angle between inside leg curve as it looks less than 90 degrees.
-        backBlock.addDirectedCurveWithApexTangent(
+        backBlock.addDirectedCubicSplineWithApexTangent(
                 new Vector2D(h_Hip, Arb_CentreBackFromInsideLeg),
                 new Vector2D(i_Crutch + 1.0, 0.0),
                 new Vector2D(i_Crutch, Arb_CentreBackFromInsideLeg),
@@ -313,7 +312,7 @@ public class TrouserPattern
         Vector2D backHipWaistEnd = new Vector2D(0.0, Arb_CentreBackFromInsideLeg + 2.0 + yOffset);
         double backHipWaistY = (backHipWaistStart.getY() - backHipWaistEnd.getY()) / 2.0;
         Vector2D backHipWaistInt = new Vector2D(Arb_UpperHipLevel, backHipWaistEnd.getY() + backHipWaistY);
-        backBlock.addDirectedCurve(backHipWaistStart, backHipWaistEnd, backHipWaistInt, 0.0);
+        backBlock.addDirectedCubicSpline(backHipWaistStart, backHipWaistEnd, backHipWaistInt, 0.0);
 
         // Add construction keypoints for Upper Hip Level
         backBlock.addConstructionPoint(new Vector2D((Arb_UpperHip), 0.0 - Arb_Con),

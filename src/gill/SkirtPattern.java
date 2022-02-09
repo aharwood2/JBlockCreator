@@ -2,7 +2,6 @@ package gill;
 
 import jblockenums.EPattern;
 import jblockenums.EUnitType;
-import jblockexceptions.MeasurementNotFoundException;
 import jblockmain.*;
 import mathcontainers.Vector2D;
 
@@ -133,13 +132,13 @@ public class SkirtPattern
         }
 
         // Curve between point 10 and point 11
-        fullBlock.addCircularCurve(new Vector2D(pointtenif, (maxY - (a_FrWaistArc / 2.0) - 0.35 - frontdartwidth)),
+        fullBlock.addCircularArc(new Vector2D(pointtenif, (maxY - (a_FrWaistArc / 2.0) - 0.35 - frontdartwidth)),
                                    new Vector2D(j_WaistToHip, g_BkHipArc / 2 + Arb_HemLevelY / 4.0),
                                    0.5,
                                    true);
 
         // Curve between point 11 and point 12
-        fullBlock.addCircularCurve(new Vector2D(j_WaistToHip, g_BkHipArc / 2 + Arb_HemLevelY / 4.0),
+        fullBlock.addCircularArc(new Vector2D(j_WaistToHip, g_BkHipArc / 2 + Arb_HemLevelY / 4.0),
                                    new Vector2D(pointtwelveif, ((b_BkWaistArc / 2.0) + 0.35 + backdartwidth)),
                                    0.5,
                                    true);

@@ -1,7 +1,6 @@
 package aldrich;
 
 import jblockenums.EPattern;
-import jblockexceptions.MeasurementNotFoundException;
 import jblockmain.*;
 import mathcontainers.Vector2D;
 
@@ -112,7 +111,7 @@ public class TrouserPattern
         );
 
         // Adding curve from Step 9 --> 15
-        frontblock.addCircularCurve(new Vector2D(d_BodyRise, -(((b_Hips / 12.0) + 2.0) + ((b_Hips / 16.0) + 1.0))),
+        frontblock.addCircularArc(new Vector2D(d_BodyRise, -(((b_Hips / 12.0) + 2.0) + ((b_Hips / 16.0) + 1.0))),
                                     new Vector2D((d_BodyRise + ((h_CrotchHeight / 2.0) - 5.0)),
                                                  -((Arb_HemWidth / 2.0) - 0.5 + 1.3)),
                                     1.5,
@@ -120,7 +119,7 @@ public class TrouserPattern
         );
 
         // Adding curve from Step 13 --> 8
-        frontblock.addCircularCurve(
+        frontblock.addCircularArc(
                 new Vector2D((d_BodyRise + ((h_CrotchHeight / 2.0) - 5.0)), ((Arb_HemWidth / 2.0) - 0.5 + 1.3)),
                 new Vector2D(c_WaistToHip, ((b_Hips / 4.0) + 0.5) - ((b_Hips / 12) + 2)),
                 0.5,
@@ -128,14 +127,14 @@ public class TrouserPattern
         );
 
         // Adding curve from Step 8 --> 11
-        frontblock.addCircularCurve(new Vector2D(c_WaistToHip, ((b_Hips / 4.0) + 0.5) - ((b_Hips / 12) + 2)),
+        frontblock.addCircularArc(new Vector2D(c_WaistToHip, ((b_Hips / 4.0) + 0.5) - ((b_Hips / 12) + 2)),
                                     new Vector2D(0.0, ((b_Hips / 4.0) + 1.0) - ((b_Hips / 12.0) + 2)),
                                     0.5,
                                     true
         );
 
         // Adding curve from Step 6 --> 9
-        frontblock.addCircularCurve(new Vector2D(c_WaistToHip, -((b_Hips / 12.0) + 2.0)),
+        frontblock.addCircularArc(new Vector2D(c_WaistToHip, -((b_Hips / 12.0) + 2.0)),
                                     new Vector2D(d_BodyRise, -(((b_Hips / 12.0) + 2.0) + ((b_Hips / 16.0) + 1.0))),
                                     1.5,
                                     false
@@ -239,7 +238,7 @@ public class TrouserPattern
         );
 
         // Adding curve from Step 24 --> 29
-        backblock.addCircularCurve(new Vector2D((d_BodyRise + 0.5),
+        backblock.addCircularArc(new Vector2D((d_BodyRise + 0.5),
                                                 -((b_Hips / 12) + 2 + (b_Hips / 16) + 1 + 0.8 + (((b_Hips / 16) + 1) / 2))),
                                    new Vector2D((d_BodyRise + ((h_CrotchHeight / 2.0) - 5.0)),
                                                 -((Arb_HemWidth / 2.0) - 0.5 + 1.3) - 1.0),
@@ -248,21 +247,21 @@ public class TrouserPattern
         );
 
         // Adding curve from Step 28 --> 28.1
-        backblock.addCircularCurve(new Vector2D((c_WaistToHip + g_HipCHeight), -((Arb_HemWidth / 2.0) - 0.5) - 1.0),
+        backblock.addCircularArc(new Vector2D((c_WaistToHip + g_HipCHeight), -((Arb_HemWidth / 2.0) - 0.5) - 1.0),
                                    new Vector2D(((c_WaistToHip + g_HipCHeight) + 1.0), 0.0),
                                    0.25,
                                    true
         );
 
         // Adding curve from Step 28.1 --> 26
-        backblock.addCircularCurve(new Vector2D(((c_WaistToHip + g_HipCHeight) + 1.0), 0.0),
+        backblock.addCircularArc(new Vector2D(((c_WaistToHip + g_HipCHeight) + 1.0), 0.0),
                                    new Vector2D((c_WaistToHip + g_HipCHeight), ((Arb_HemWidth / 2.0) - 0.5) + 1.0),
                                    0.25,
                                    true
         );
 
         // Adding curve from Step 27 --> 25
-        backblock.addCircularCurve(
+        backblock.addCircularArc(
                 new Vector2D((d_BodyRise + ((h_CrotchHeight / 2.0) - 5.0)), ((Arb_HemWidth / 2.0) - 0.5 + 1.3) + 1.0),
                 new Vector2D(c_WaistToHip,
                              (((b_Hips / 4.0) + 4.0) - ((b_Hips / 12.0) + 2.0) - (((b_Hips / 12.0) + 2.0) / 4.0))),
@@ -271,7 +270,7 @@ public class TrouserPattern
         );
 
         // Adding curve from Step 25 --> 22
-        backblock.addCircularCurve(new Vector2D(c_WaistToHip,
+        backblock.addCircularArc(new Vector2D(c_WaistToHip,
                                                 (((b_Hips / 4.0) + 4.0) - ((b_Hips / 12.0) + 2.0) - (((b_Hips / 12.0) + 2.0) / 4.0))),
                                    new Vector2D(0.0,
                                                 ((b_Hips / 4.0) - ((b_Hips / 12.0) + 2.0) - (((b_Hips / 12.0) + 2.0) / 4.0))),
@@ -280,7 +279,7 @@ public class TrouserPattern
         );
 
         // Adding curve from Step 19 --> 24
-        backblock.addCircularCurve(
+        backblock.addCircularArc(
                 new Vector2D((d_BodyRise / 2.0), (-(((b_Hips / 12.0) + 2) - ((((b_Hips / 12.0)) + 2.0) / 4.0)))),
                 new Vector2D((d_BodyRise + 0.5),
                              -((b_Hips / 12) + 2 + (b_Hips / 16) + 1 + 0.8 + (((b_Hips / 16) + 1) / 2))),

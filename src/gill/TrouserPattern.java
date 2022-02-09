@@ -1,7 +1,6 @@
 package gill;
 
 import jblockenums.EPattern;
-import jblockexceptions.MeasurementNotFoundException;
 import jblockmain.*;
 import mathcontainers.Vector2D;
 
@@ -226,21 +225,21 @@ public class TrouserPattern
                                            point1.getY() + ((point2.getY() - point1.getY()) * 0.75));
 
         // A bunch of curves
-        fullBlock.addDirectedCurve(
+        fullBlock.addDirectedCubicSpline(
                 point1, point2,
                 new Vector2D(point1and2.subtract(point1)),
                 new Vector2D(point3.subtract(point2)),
                 new double[]{0.0, 0.0});
 
-        fullBlock.addCircularCurve(point3, point5, 1.0, true);
+        fullBlock.addCircularArc(point3, point5, 1.0, true);
 
-        fullBlock.addDirectedCurve(
+        fullBlock.addDirectedCubicSpline(
                 point6, point7,
                 new Vector2D(point6.subtract(point5)),
                 new Vector2D(point8.subtract(point7)),
                 new double[]{0.0, 0.0});
 
-        fullBlock.addCircularCurve(
+        fullBlock.addCircularArc(
                 point9, point10,
                 (point10.getY() - (new Vector2D(point9.add(point10.subtract(point9).divide(2.0)))).getY()) / 2.0,
                 false);
@@ -258,18 +257,18 @@ public class TrouserPattern
         fullBlock.addRightAngleCurve(point10, dartPoints.get(0));
         fullBlock.addRightAngleCurve(dartPoints.get(2), point11);
 
-        fullBlock.addDirectedCurve(
+        fullBlock.addDirectedCubicSpline(
                 point13, point1,
                 new Vector2D(point12.subtract(point11)),
                 new Vector2D(point1and2.subtract(point1)),
                 new double[]{0.0, 90.0});
 
-        fullBlock.addCircularCurve(
+        fullBlock.addCircularArc(
                 point19, point20,
                 (point20.getY() - (new Vector2D(point19.add(point20.subtract(point19).divide(2.0)))).getY()) / 2.0,
                 false);
 
-        fullBlock.addDirectedCurve(
+        fullBlock.addDirectedCubicSpline(
                 point22, point23,
                 new Vector2D(1.0, 0.0),
                 new Vector2D(point24.subtract(point23)), new double[]{0.0, 0.0});
@@ -279,12 +278,12 @@ public class TrouserPattern
         Vector2D point26and15 = new Vector2D((point15.getX() + (point26.getX()
                 - point15.getX())) / 3.0, point15.getY() + ((point26.getY() - point15.getY()) * 0.75));
 
-        fullBlock.addDirectedCurve(
+        fullBlock.addDirectedCubicSpline(
                 point26, point15,
                 new Vector2D(point26.subtract(point25)),
                 new Vector2D(point15.subtract(point26and15)), new double[]{0.0, 0.0});
 
-        fullBlock.addDirectedCurve(
+        fullBlock.addDirectedCubicSpline(
                 point15, point16,
                 new Vector2D(point15.subtract(point26and15)),
                 new Vector2D(point18.subtract(point16)), new double[]{90.0, 0.0});

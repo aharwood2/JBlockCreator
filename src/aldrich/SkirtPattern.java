@@ -2,7 +2,6 @@ package aldrich;
 
 import jblockenums.EPattern;
 import jblockenums.EUnitType;
-import jblockexceptions.MeasurementNotFoundException;
 import jblockmain.*;
 import mathcontainers.Vector2D;
 
@@ -102,13 +101,13 @@ public class SkirtPattern
         fullBlock.addKeypoint(new Vector2D(Arb_WaistCurve, a_Waist / 4.0 + Arb_BackNaturalWaist));
 
         // Adding the two side seam curves
-        fullBlock.addCircularCurve(new Vector2D(Arb_WaistCurve,
+        fullBlock.addCircularArc(new Vector2D(Arb_WaistCurve,
                                                 (b_Hips / 2.0 + Arb_BackHipAdjustment) - (a_Waist / 4.0 + Arb_FrontNaturalWaist)),
                                    new Vector2D(c_WaistToHip, b_Hips / 4.0 + Arb_HipAdjustment),
                                    1.0,
                                    true);
 
-        fullBlock.addCircularCurve(new Vector2D(c_WaistToHip, b_Hips / 4.0 + Arb_HipAdjustment),
+        fullBlock.addCircularArc(new Vector2D(c_WaistToHip, b_Hips / 4.0 + Arb_HipAdjustment),
                                    new Vector2D(Arb_WaistCurve, a_Waist / 4.0 + Arb_BackNaturalWaist),
                                    1.0,
                                    true);
