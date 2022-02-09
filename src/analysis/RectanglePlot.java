@@ -19,7 +19,7 @@ public class RectanglePlot
     /* Technique Specific Variables */
 
     // Enum for analysis type
-    private final EAnalysis analysis = EAnalysis.RECTANGLEPLOT;
+    private final EAnalysis analysis = EAnalysis.RECTANGLE_PLOT;
     // Variables for x,y axis measurement ID
     private final String xAxisID;
     private final String yAxisID;

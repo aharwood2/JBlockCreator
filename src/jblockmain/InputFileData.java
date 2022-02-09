@@ -1,5 +1,7 @@
 package jblockmain;
 
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.util.Pair;
 import jblockexceptions.MeasurementNotFoundException;
 
@@ -68,34 +70,11 @@ public class InputFileData
         catch (Exception e)
         {
             e.printStackTrace();
+            var a = new Alert(Alert.AlertType.ERROR);
+            a.setHeaderText("There was a problem understanding your input file");
+            a.setContentText("Please go back and check its format or choose a different file");
+            a.show();
         }
-    }
-
-    /**
-     * Method to check whether user has specified a measurement ID in the correct format. If not an exception is thrown.
-     *
-     * @param text ID as text.
-     * @return Indication whether format is correct.
-     */
-    private boolean checkIdFormat(String text) throws Exception
-    {
-        // If it has leading and trailing brackets remove them first
-        if (text.contains("[") && text.contains("]")) text = text.substring(text.indexOf('[') + 1, text.indexOf(']'));
-
-        // Check that it is 3 characters long
-        if (text.length() != 3) return false;
-
-        // Check first character is capital letter
-        if ((int) text.charAt(0) < 65 || (int) text.charAt(0) > 90) return false;
-
-        // Check remaining characters are all numbers
-        for (int ch = 1; ch < 3; ch++)
-        {
-            if ((int) text.charAt(ch) < 48 || (int) text.charAt(ch) > 57) return false;
-        }
-
-        // If all tests passed then should be OK
-        return true;
     }
 
     /**
@@ -105,17 +84,7 @@ public class InputFileData
      */
     public ArrayList<String> getUserNames()
     {
-        return new ArrayList<String>(inputValuesByUser.keySet());
-    }
-
-    /**
-     * Getter for the input file name.
-     *
-     * @return input file name.
-     */
-    public String getScanDataFileName()
-    {
-        return scanDataFileName;
+        return new ArrayList<>(inputValuesByUser.keySet());
     }
 
     /**
@@ -149,9 +118,10 @@ public class InputFileData
         var headings = line.split(",");
         for (var h : headings)
         {
-            if (h.isBlank()) continue;
+            if (h == null || h.length() < 3) continue;
             int splitEnd = h.indexOf("]");
-            String id = h.substring(line.indexOf("["), splitEnd).trim();
+            int splitStart = h.indexOf("[") + 1;
+            String id = h.substring(splitStart, splitEnd).trim();
             String name = h.substring(splitEnd + 1, h.length()).trim();
             inputValues.add(new InputValue(id, name, 0));
         }
@@ -196,7 +166,7 @@ public class InputFileData
                 );
             }
         }
-        if (!username.isBlank()) inputValuesByUser.put(username, set);
+        if (username != null && !username.isBlank()) inputValuesByUser.put(username, set);
     }
 
     /**

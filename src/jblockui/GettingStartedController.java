@@ -9,8 +9,10 @@ import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import jblockenums.EActivityType;
 
+import java.io.File;
 import java.nio.file.InvalidPathException;
 import java.nio.file.Paths;
+import  java.util.prefs.*;
 
 public class GettingStartedController extends BaseController
 {
@@ -39,12 +41,31 @@ public class GettingStartedController extends BaseController
     final FileChooser fileChooser = new FileChooser();
     final DirectoryChooser directoryChooser = new DirectoryChooser();
 
+    // Preference keys for this package
+    private static final String INPUT_PATH = "in_path";
+    private static final String OUTPUT_PATH = "out_path";
+    private final Preferences prefs = Preferences.userNodeForPackage(GettingStartedController.class);
+
     // Public
     public EActivityType activityType = EActivityType.DRAFTING;
 
     @Override
     public void initialize()
     {
+        // Initialise paths
+        var path = prefs.get(INPUT_PATH, null);
+        if (path != null)
+        {
+            inputFilePathLabel.setText(path);
+            fileChooser.setInitialDirectory(new File(new File(path).getParent()));
+        }
+        path = prefs.get(OUTPUT_PATH, null);
+        if (path != null)
+        {
+            outputPathLabel.setText(path);
+            directoryChooser.setInitialDirectory(new File(path));
+        }
+
         activityRadioGrp.selectedToggleProperty().addListener((changed, oldVal, newVal) ->
         {
             RadioButton rb = (RadioButton)newVal;
@@ -54,23 +75,25 @@ public class GettingStartedController extends BaseController
 
         inputButton.setOnAction(e ->
         {
-//            File file = fileChooser.showOpenDialog(null);
-//            if (file != null)
-//            {
-//                inputFilePathLabel.setText(file.getPath());
-//            }
-            inputFilePathLabel.setText("C:\\Apps\\JBlockCreator\\input\\Batch5.TXT");
+            File file = fileChooser.showOpenDialog(null);
+            if (file != null)
+            {
+                inputFilePathLabel.setText(file.getPath());
+                prefs.put(INPUT_PATH, file.getPath());
+                fileChooser.setInitialDirectory(new File(file.getParent()));
+            }
             Validate();
         });
 
         outputButton.setOnAction(e ->
         {
-//            File file = directoryChooser.showDialog(null);
-//            if (file != null)
-//            {
-//                outputPathLabel.setText(file.getPath());
-//            }
-            outputPathLabel.setText("C:\\Temp\\JBC_Test");
+            File file = directoryChooser.showDialog(null);
+            if (file != null)
+            {
+                outputPathLabel.setText(file.getPath());
+                prefs.put(OUTPUT_PATH, file.getPath());
+                directoryChooser.setInitialDirectory(file);
+            }
             Validate();
         });
 

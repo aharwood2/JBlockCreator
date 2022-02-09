@@ -18,8 +18,9 @@ public class DxfFile
     /**
      * Some parameters for the annotation text writing
      */
-    double baselineSkip = 10.0;
+    double baselineSkip = 8.0;
     double textHeight = baselineSkip * 0.8;
+    double textHeightSmall = 2.5;
     /**
      * Flag indicating whether file is ready
      */
@@ -402,7 +403,7 @@ public class DxfFile
                     writeDxfLine("62", "256");              // Colour of line using index colour
                     writeDxfLine("1", "(" + String.format("%.2f", linesX.get(i) * 10.0) + ", " +
                             String.format("%.2f", linesY.get(i) * 10.0) + ")");
-                    writeDxfLine("40", "5.0");              // Text height (i.e size)
+                    writeDxfLine("40", Double.toString(textHeightSmall));         // Text height (i.e size)
                     writeDxfLine("50", "45");               // Text rotation angle
                     writeDxfLine("10", Double.toString(linesX.get(i) * 10.0)); // X coordinate start
                     writeDxfLine("20", Double.toString(linesY.get(i) * 10.0)); // Y coordinate start
@@ -500,6 +501,4 @@ public class DxfFile
         writeDxfLine("1", text);
         currentBaseline -= baselineSkip;     // Decrement the text vertical position by the baseline skip
     }
-
-
 }

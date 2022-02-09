@@ -1,6 +1,7 @@
 package gill;
 
 import jblockenums.EPattern;
+import jblockenums.EUnitType;
 import jblockexceptions.MeasurementNotFoundException;
 import jblockmain.*;
 import mathcontainers.Vector2D;
@@ -43,7 +44,7 @@ public class SweatShirtPattern
 
         // Arbitrary
         measurements.addMeasurement(new Measurement("CBNeckDepthDefault", 2.0));
-        measurements.addMeasurement(new Measurement("CrownWidthMultiplier", 1.0));
+        measurements.addMeasurement(new Measurement("CrownWidthMultiplier", 1.0, EUnitType.NONE));
 
         // Ease
         measurements.addMeasurement(new Measurement("BustChestEase", 16.0));
