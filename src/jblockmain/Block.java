@@ -89,6 +89,8 @@ public class Block
 
     }
 
+    // region Helpers
+
     /**
      * Get the hypotenuse of a right-angled triangle given the other two sides
      *
@@ -173,6 +175,77 @@ public class Block
         xy[1][0] = A - (D * xy[1][1]);
         return xy;
     }
+
+    /**
+     * Gets the length between 2 keypoints by summing the length of every line segment between them going around the
+     * block outline in an anti-clockwise manner.
+     * @param startPoint position of the start point
+     * @param endPoint position of the end point
+     * @return the length
+     */
+    public double getLengthBetweenPoints(Vector2D startPoint, Vector2D endPoint)
+    {
+        try
+        {
+            // Gets the start and end vector keypoint numbers
+            var startPointNumber = getKeypointNumber(startPoint);
+            var endPointNumber = getKeypointNumber(endPoint);
+
+            // Length from point X to point X is 0
+            if (startPointNumber == endPointNumber)
+            {
+                return 0;
+            }
+
+            // Keep track of end as then used in the for loop further down
+            int finalPointNumber = endPointNumber;
+
+            // May need to loop round the end of the numbering system
+            // e.g. getting the size from point 10 to point 3 -> need to loop to 10,11,12,13,14,15...1,2,3
+            // which is equal to the arraylist.size - start + end
+            if (endPointNumber < startPointNumber)
+            {
+                finalPointNumber += keypointsX.size() - startPointNumber;
+            }
+            else
+            {
+                finalPointNumber -= startPointNumber;
+            }
+            endPointNumber = startPointNumber + 1;
+
+            // Loop
+            var length = 0;
+            for (int i = 0; i < finalPointNumber; i++)
+            {
+                // Gets the x and y values of the next keypoint and calculated the magnitude/norm between the next
+                // and current value then sums up the magnitudes/norms
+                var diffX = keypointsX.get(endPointNumber) - keypointsX.get(startPointNumber);
+                var diffY = keypointsY.get(endPointNumber) - keypointsY.get(startPointNumber);
+                length += Math.sqrt(diffX * diffX + diffY * diffY);
+
+                // Increment
+                startPointNumber = endPointNumber;
+                endPointNumber++;
+
+                // Special case for looping beyond the end of the numbering system
+                // Reset the end point number
+                if (endPointNumber == keypointsX.size())
+                {
+                    endPointNumber = 0;
+                }
+            }
+            return length;
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            return 0;
+        }
+    }
+
+    // endregion Helpers
+
+    // region Keypoints
 
     /**
      * Method to retrieve the number of a keypoint given its position.
@@ -318,6 +391,40 @@ public class Block
         }
     }
 
+    // endregion Keypoints
+
+    // region Darts
+
+    /**
+     * Computes the rotation angle about the origin in the anti-clockwise sense in the standard X-Y plane between a
+     * position vector drawn between the origin and the point supplied and the positive Y axis.
+     *
+     * @param point point to be rotated.
+     * @return rotation angle required to rotate point onto the positive Y axis.
+     */
+    private double getAngleToPositiveYAxis(Vector2D point)
+    {
+        double angle;
+
+        // Different base expression for Y quadrant
+        if (point.getY() < 0.0)
+        {
+            angle = (Math.PI / 2.0) + Math.atan(Math.abs(point.getY() / point.getX()));
+        }
+        else
+        {
+            angle = Math.atan(Math.abs(point.getX() / point.getY()));
+        }
+
+        // Change rotation direction based on X quadrant
+        if (point.getX() < 0.0)
+        {
+            angle *= -1.0;
+        }
+
+        return angle;
+    }
+
     /**
      * Method to adjust the end points of the dart if applied to a straight line to ensure the edge is correct when the
      * dart closes.
@@ -404,52 +511,6 @@ public class Block
     }
 
     /**
-     * Method to add a dart given the end points of the line segment on which to add the dart, position along the
-     * segment and the dimensions of the dart. Start and end points must be specified in the strict anti-clockwise order
-     * for connectivity to be correct for plotting.
-     *
-     * @param lineStart    position of start of segment
-     * @param lineEnd      position of end of segment
-     * @param position     position of dart centre in dimensionless units along edge
-     * @param width        width of dart at base
-     * @param length       depth of dart assuming it is symmetrical
-     * @param dirNorm      flag indicating the direction of the dart (left or right)
-     * @param straightSide is side to which dart is to be added going to remain straight
-     * @return list of points of the dart edges
-     */
-    public ArrayList<Vector2D> addDart(Vector2D lineStart, Vector2D lineEnd, double position,
-                                       double width, double length, boolean dirNorm, boolean straightSide)
-    {
-        // Find the equation of the line to find normal
-        Vector2D direction = new Vector2D(lineEnd.subtract(lineStart));
-        Vector2D normal = new Vector2D(direction.getY(), -direction.getX());
-        if (dirNorm) normal.multiplyBy(-1.0);
-
-        // Normalise the direction vectors
-        direction.divideBy(direction.norm());
-        normal.divideBy(normal.norm());
-
-        // Find dart point
-        double side_length = lineEnd.subtract(lineStart).norm();
-        Vector2D point = new Vector2D(lineStart.add(direction.multiply(position * side_length)));
-
-        // Package points
-        ArrayList<Vector2D> pointsOfDart = new ArrayList<>();
-        pointsOfDart.add(new Vector2D(point.subtract(direction.multiply(width / 2.0))));
-        pointsOfDart.add(new Vector2D(point.add(normal.multiply(length))));
-        pointsOfDart.add(new Vector2D(point.add(direction.multiply(width / 2.0))));
-
-        // Correct points if necessary
-        if (straightSide) pointsOfDart = adjustDartPointsForStraightEdge(pointsOfDart, lineStart, lineEnd);
-
-        // Add keypoints
-        addDartKeypoints(lineStart, pointsOfDart, EPosition.AFTER);
-
-        // Return the corrected points
-        return pointsOfDart;
-    }
-
-    /**
      * Method to add a dart given the two points at the base of the dart, its apex point and a point before or which to
      * insert it. Dart points must be in the strict anti-clockwise order.
      *
@@ -474,13 +535,34 @@ public class Block
 
     /**
      * Method to add a dart given the end points of the line segment on which to add the dart, position along the
+     * segment and the dimensions of the dart. Start and end points must be specified in the strict anti-clockwise order
+     * for connectivity to be correct for plotting.
+     *
+     * @param lineStart    position of start of segment
+     * @param lineEnd      position of end of segment
+     * @param position     position of dart centre in dimensionless units along edge
+     * @param width        width of dart at base
+     * @param length       depth of dart assuming it is symmetrical
+     * @param dirNorm      flag indicating the direction of the dart (left or right)
+     * @param straightSide is side to which dart is to be added going to remain straight
+     * @return list of points of the dart edges
+     */
+    public ArrayList<Vector2D> addDart(Vector2D lineStart, Vector2D lineEnd, double position,
+                                       double width, double length, boolean dirNorm, boolean straightSide)
+    {
+        // Return the corrected points
+        return addDart(lineStart, lineEnd, position, width, null, length, dirNorm, straightSide);
+    }
+
+    /**
+     * Method to add a dart given the end points of the line segment on which to add the dart, position along the
      * segment and the apex of the dart. Start and end points must be specified in the strict anti-clockwise order
      * for connectivity to be correct for plotting.
      *
      * @param lineStart    position of start of segment
      * @param lineEnd      position of end of segment
      * @param position     position of dart centre in dimensionless units along edge
-     * @param width        width of dart at base.
+     * @param width        width of dart at base
      * @param apex         position of the dart apex
      * @param straightSide is side to which dart is to be added going to remain straight
      * @return list of points of the dart edges
@@ -488,11 +570,29 @@ public class Block
     public ArrayList<Vector2D> addDart(Vector2D lineStart, Vector2D lineEnd, double position,
                                        double width, Vector2D apex, boolean straightSide)
     {
-        // TODO: Really need to generalise this and the version above as they share a lot of the same code
+        // Return the corrected points
+        return addDart(lineStart, lineEnd, position, width, apex, 0, false, straightSide);
+    }
 
-        // Find the equation of the line
+    /**
+     * Internal method to add a dart called by the public wrappers
+     * @param lineStart         position of start of segment
+     * @param lineEnd           position of end of segment
+     * @param position          position of dart centre in dimensionless units along edge
+     * @param width             width of dart at base
+     * @param apex              position of the dart apex (can be null if supplying length)
+     * @param length            depth of dart assuming it is symmetrical (not used if supplying apex)
+     * @param dirNorm           flag indicating the direction of the dart (left or right) (not used if supplying apex)
+     * @param straightSide      is side to which dart is to be added going to remain straight
+     * @return list of points of the dart edges
+     */
+    private ArrayList<Vector2D> addDart(Vector2D lineStart, Vector2D lineEnd, double position, double width,
+                                        Vector2D apex, double length, boolean dirNorm, boolean straightSide)
+    {
+        // Find the equation of the line to find normal
         Vector2D direction = new Vector2D(lineEnd.subtract(lineStart));
-        Vector2D normal = new Vector2D(-direction.getY(), direction.getX());
+        Vector2D normal = new Vector2D(direction.getY(), -direction.getX());
+        if (apex == null) if (dirNorm) normal.multiplyBy(-1.0);
 
         // Normalise the direction vectors
         direction.divideBy(direction.norm());
@@ -505,7 +605,14 @@ public class Block
         // Package points
         ArrayList<Vector2D> pointsOfDart = new ArrayList<>();
         pointsOfDart.add(new Vector2D(point.subtract(direction.multiply(width / 2.0))));
-        pointsOfDart.add(apex);
+        if (apex == null)
+        {
+            pointsOfDart.add(new Vector2D(point.add(normal.multiply(length)))); //
+        }
+        else
+        {
+            pointsOfDart.add(apex);
+        }
         pointsOfDart.add(new Vector2D(point.add(direction.multiply(width / 2.0))));
 
         // Correct points if necessary
@@ -542,6 +649,10 @@ public class Block
         addKeypointNextTo(points.get(2), points.get(1), EPosition.AFTER);
     }
 
+    // endregion Darts
+
+    // region Arcs
+
     /**
      * Add a curve given the height of curve above the centre of a line joining the two points. Assumes the curve is
      * cut from a circle and hence given points are on the circle circumference. Direction of normal is indicated by
@@ -553,7 +664,25 @@ public class Block
      * @param height     height of curve above a straight line joining start and end positions
      * @param dirNorm    direction of the centre of the circle
      */
-    public void addCircularCurve(Vector2D startPoint, Vector2D endPoint, double height, boolean dirNorm)
+    public void addCircularArc(Vector2D startPoint, Vector2D endPoint, double height, boolean dirNorm)
+    {
+        addCircularArc(startPoint, endPoint, height, dirNorm, false);
+    }
+
+    /**
+     * Add a curve given the height of curve above the centre of a line joining the two points. Assumes the curve is
+     * cut from a circle and hence given points are on the circle circumference. Direction of normal is indicated by
+     * boolean value -- true for right hand normal and false for left hand normal -- which tells the method which way
+     * to curve. Start and end points must be specified in the strict anti-clockwise order of the keypoints list.
+     *
+     * @param startPoint start position of curve
+     * @param endPoint   end position of curve
+     * @param height     height of curve above a straight line joining start and end positions
+     * @param dirNorm    direction of the centre of the circle
+     * @param reverseArc whether to draw the arc with theta increasing in the other direction
+     */
+    public void addCircularArc(Vector2D startPoint, Vector2D endPoint, double height, boolean dirNorm,
+                               boolean reverseArc)
     {
         // Get equation of line
         Vector2D direction = new Vector2D(endPoint.subtract(startPoint));
@@ -614,6 +743,11 @@ public class Block
             th2 *= -1.0;
         }
 
+        if (reverseArc)
+        {
+            th2 = (Math.PI * 2.0) + th2;
+        }
+
         double dcircum = Math.abs(th2 - th1) * radius;
         int numPts = (int) Math.ceil(dcircum * res);
 
@@ -631,6 +765,53 @@ public class Block
         }
     }
 
+    // endregion Arcs
+
+    // region Cubic Splines
+
+    /**
+     * Method to get a direction vector at a given point on the curve based on an adjacent keypoint.
+     *
+     * @param keypoint  point at which direction vector is required.
+     * @param adjacency connecting point from which to infer direction.
+     * @return normalised direction vector.
+     */
+    private Vector2D getDirectionAtKeypoint(Vector2D keypoint, EPosition adjacency)
+    {
+        try
+        {
+            int i = getKeypointNumber(keypoint);
+
+            // Approximate direction using linear connection to the adjacent point in the list
+            int j = i;
+            int adjMultiplier = 1;
+            if (adjacency == EPosition.BEFORE) j--;
+            else
+            {
+                j++;
+                adjMultiplier = -1;
+            }
+
+            // Periodic connection
+            if (j < 0) j = keypointsX.size() - 1;
+            else if (j == keypointsX.size()) j = 0;
+            Vector2D directionVector = new Vector2D(keypointsX.get(i) - keypointsX.get(j),
+                    keypointsY.get(i) - keypointsY.get(j));
+            directionVector.multiplyBy(adjMultiplier);
+
+            // Normalise and return
+            directionVector.divideBy(directionVector.norm());
+            return directionVector;
+
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+
+        return new Vector2D(-1.0, -1.0);
+    }
+
     /**
      * Method to add a curve which has specified start and end point positions and gradients as well as an apex at which
      * the curve must have a stationary point. Fully qualified version requires user to specify the current directions
@@ -646,10 +827,10 @@ public class Block
      * @param offsetDirection    unit vector indicating quadrant of offset
      * @return final point on the curve
      */
-    public Vector2D addDirectedCurveWithApexTangent(Vector2D startPoint, Vector2D endPoint,
-                                                    Vector2D dirStart, Vector2D dirEnd,
-                                                    Vector2D tangentCorner, double tangentPointOffset,
-                                                    double[] anglesAtEnds, int[] offsetDirection)
+    public Vector2D addDirectedCubicSplineWithApexTangent(Vector2D startPoint, Vector2D endPoint,
+                                                          Vector2D dirStart, Vector2D dirEnd,
+                                                          Vector2D tangentCorner, double tangentPointOffset,
+                                                          double[] anglesAtEnds, int[] offsetDirection)
     {
         // Specify the tangent point using corner and offset
         Vector2D tangentPoint = new Vector2D(
@@ -673,14 +854,14 @@ public class Block
         Vector2D tangentDirection = new Vector2D(apexToCorner.getY(), -apexToCorner.getX());
 
         // Now we can construct the first part of the curve
-        addDirectedCurve(startPoint,
+        addDirectedCubicSpline(startPoint,
                          tangentPoint,
                          dirStart,
                          tangentDirection, new double[]{anglesAtEnds[0], 0.0}
         );
 
         // Construct the second part of the curve (intersect at end is 90 degrees)
-        return addDirectedCurve(tangentPoint,
+        return addDirectedCubicSpline(tangentPoint,
                                 endPoint,
                                 tangentDirection,
                                 dirEnd,
@@ -700,16 +881,16 @@ public class Block
      * @param offsetDirection    unit vector indicating quadrant of offset
      * @return final point on the curve
      */
-    public Vector2D addDirectedCurveWithApexTangent(Vector2D startPoint, Vector2D endPoint,
-                                                    Vector2D tangentCorner, double tangentPointOffset,
-                                                    double[] anglesAtEnds, int[] offsetDirection)
+    public Vector2D addDirectedCubicSplineWithApexTangent(Vector2D startPoint, Vector2D endPoint,
+                                                          Vector2D tangentCorner, double tangentPointOffset,
+                                                          double[] anglesAtEnds, int[] offsetDirection)
     {
         // Get directions
         Vector2D dirStart = getDirectionAtKeypoint(startPoint, EPosition.BEFORE);
         Vector2D dirEnd = getDirectionAtKeypoint(endPoint, EPosition.AFTER);
 
         // Pass to fully qualified version
-        return addDirectedCurveWithApexTangent(startPoint, endPoint,
+        return addDirectedCubicSplineWithApexTangent(startPoint, endPoint,
                                                dirStart, dirEnd,
                                                tangentCorner, tangentPointOffset,
                                                anglesAtEnds, offsetDirection);
@@ -724,14 +905,14 @@ public class Block
      * @param angleAtEnds desired angle at each end of the curve
      * @return final point on the curve
      */
-    public Vector2D addDirectedCurve(Vector2D startPoint, Vector2D endPoint, double[] angleAtEnds)
+    public Vector2D addDirectedCubicSpline(Vector2D startPoint, Vector2D endPoint, double[] angleAtEnds)
     {
         // Get directions
         Vector2D dirStart = getDirectionAtKeypoint(startPoint, EPosition.BEFORE);
         Vector2D dirEnd = getDirectionAtKeypoint(endPoint, EPosition.AFTER);
 
         // Pass on arguments
-        return addDirectedCurve(startPoint, endPoint, dirStart, dirEnd, angleAtEnds);
+        return addDirectedCubicSpline(startPoint, endPoint, dirStart, dirEnd, angleAtEnds);
     }
 
     /**
@@ -746,9 +927,9 @@ public class Block
      * @param angleAtEnds desired angle at each end of the curve
      * @return final point on the curve
      */
-    public Vector2D addDirectedCurve(Vector2D startPoint, Vector2D endPoint,
-                                     Vector2D dirStart, Vector2D dirEnd,
-                                     double[] angleAtEnds)
+    public Vector2D addDirectedCubicSpline(Vector2D startPoint, Vector2D endPoint,
+                                           Vector2D dirStart, Vector2D dirEnd,
+                                           double[] angleAtEnds)
     {
         // Construct the reference frame
         ReferenceFrame f = new ReferenceFrame(startPoint, endPoint, dirStart, angleAtEnds[0]);
@@ -819,14 +1000,14 @@ public class Block
      * @param angleAtStart the angle between the curve and the start edge
      * @return final point on the curve
      */
-    public Vector2D addDirectedCurve(Vector2D startPoint, Vector2D endPoint,
-                                     Vector2D intermediate, double angleAtStart)
+    public Vector2D addDirectedCubicSpline(Vector2D startPoint, Vector2D endPoint,
+                                           Vector2D intermediate, double angleAtStart)
     {
         // Get direction
         Vector2D dirStart = getDirectionAtKeypoint(startPoint, EPosition.BEFORE);
 
         // Pass on arguments
-        return addDirectedCurve(startPoint, endPoint, intermediate, dirStart, angleAtStart);
+        return addDirectedCubicSpline(startPoint, endPoint, intermediate, dirStart, angleAtStart);
     }
 
     /**
@@ -841,9 +1022,9 @@ public class Block
      * @param angleAtStart the angle between the curve and the start edge
      * @return final point on the curve
      */
-    public Vector2D addDirectedCurve(Vector2D startPoint, Vector2D endPoint,
-                                     Vector2D intermediate, Vector2D dirStart,
-                                     double angleAtStart)
+    public Vector2D addDirectedCubicSpline(Vector2D startPoint, Vector2D endPoint,
+                                           Vector2D intermediate, Vector2D dirStart,
+                                           double angleAtStart)
     {
         // Construct the reference frame
         ReferenceFrame f = new ReferenceFrame(startPoint, endPoint, dirStart, angleAtStart);
@@ -969,7 +1150,7 @@ public class Block
     public Vector2D addRightAngleCurve(Vector2D startPoint, Vector2D endPoint)
     {
         double[] angles = new double[]{90.0, 90.0};
-        return addDirectedCurve(startPoint, endPoint, angles);
+        return addDirectedCubicSpline(startPoint, endPoint, angles);
     }
 
     /**
@@ -982,8 +1163,12 @@ public class Block
     public Vector2D addBlendedCurve(Vector2D startPoint, Vector2D endPoint)
     {
         double[] angles = new double[]{0.0, 0.0};
-        return addDirectedCurve(startPoint, endPoint, angles);
+        return addDirectedCubicSpline(startPoint, endPoint, angles);
     }
+
+    // endregion Cubic Splines
+
+    // region Getters
 
     /**
      * Method to get a plottable list of keypoints -- adds the wrap around necessary to close the shape.
@@ -1067,78 +1252,9 @@ public class Block
         return name;
     }
 
-    /**
-     * Method to get a direction vector at a given point on the curve based on an adjacent keypoint.
-     *
-     * @param keypoint  point at which direction vector is required.
-     * @param adjacency connecting point from which to infer direction.
-     * @return normalised direction vector.
-     */
-    private Vector2D getDirectionAtKeypoint(Vector2D keypoint, EPosition adjacency)
-    {
-        try
-        {
-            int i = getKeypointNumber(keypoint);
+    // endregion Getters
 
-            // Approximate direction using linear connection to the adjacent point in the list
-            int j = i;
-            int adjMultiplier = 1;
-            if (adjacency == EPosition.BEFORE) j--;
-            else
-            {
-                j++;
-                adjMultiplier = -1;
-            }
-
-            // Periodic connection
-            if (j < 0) j = keypointsX.size() - 1;
-            else if (j == keypointsX.size()) j = 0;
-            Vector2D directionVector = new Vector2D(keypointsX.get(i) - keypointsX.get(j),
-                                                    keypointsY.get(i) - keypointsY.get(j));
-            directionVector.multiplyBy(adjMultiplier);
-
-            // Normalise and return
-            directionVector.divideBy(directionVector.norm());
-            return directionVector;
-
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-        }
-
-        return new Vector2D(-1.0, -1.0);
-    }
-
-    /**
-     * Computes the rotation angle about the origin in the anti-clockwise sense in the standard X-Y plane between a
-     * position vector drawn between the origin and the point supplied and the positive Y axis.
-     *
-     * @param point point to be rotated.
-     * @return rotation angle required to rotate point onto the positive Y axis.
-     */
-    private double getAngleToPositiveYAxis(Vector2D point)
-    {
-        double angle;
-
-        // Different base expression for Y quadrant
-        if (point.getY() < 0.0)
-        {
-            angle = (Math.PI / 2.0) + Math.atan(Math.abs(point.getY() / point.getX()));
-        }
-        else
-        {
-            angle = Math.atan(Math.abs(point.getX() / point.getY()));
-        }
-
-        // Change rotation direction based on X quadrant
-        if (point.getX() < 0.0)
-        {
-            angle *= -1.0;
-        }
-
-        return angle;
-    }
+    // region Bezier
 
     private double quadraticXBezier(double t, Vector2D start, Vector2D intermediate, Vector2D end)
     {
@@ -1188,159 +1304,7 @@ public class Block
         }
     }
 
-    /**
-     * Add a curve given the height of curve above the centre of a line joining the two points. Assumes the curve is
-     * cut from a circle and hence given points are on the circle circumference. Direction of normal is indicated by
-     * boolean value -- true for right hand normal and false for left hand normal -- which tells the method which way
-     * to curve. Start and end points must be specified in the strict anti-clockwise order of the keypoints list.
-     *
-     * @param startPoint start position of curve
-     * @param endPoint   end position of curve
-     * @param height     height of curve above a straight line joining start and end positions
-     * @param dirNorm    direction of the centre of the circle
-     * @param otherSide  Whether to draw the otherside of the circle
-     */
-    public void addCircularCurve(Vector2D startPoint, Vector2D endPoint, double height, boolean dirNorm,
-                                 boolean otherSide)
-    {
-        // Get equation of line
-        Vector2D direction = new Vector2D(endPoint.subtract(startPoint));
-        Vector2D norm_dir;
-        if (dirNorm)
-        {
-            norm_dir = new Vector2D(direction.getY(), -direction.getX());
-        }
-        else
-        {
-            norm_dir = new Vector2D(-direction.getY(), direction.getX());
-        }
-        norm_dir.divideBy(norm_dir.norm());
-
-        // Use normalised direction to find midpoint
-        Vector2D midpt = new Vector2D(startPoint.add(direction.multiply(0.5)));
-
-        // Find the 3rd point required for the arc
-        Vector2D crestpt = new Vector2D(midpt.add(norm_dir.multiply(height)));
-
-        // Solve for coefficients
-        double lam1 = -Math.pow(startPoint.getX(), 2) - Math.pow(startPoint.getY(), 2);
-        double lam2 = -Math.pow(endPoint.getX(), 2) - Math.pow(endPoint.getY(), 2);
-        double lam3 = -Math.pow(crestpt.getX(), 2) - Math.pow(crestpt.getY(), 2);
-        double lam23 = lam2 - lam3;
-        double lam13 = lam1 - lam3;
-        double y23 = endPoint.getY() - crestpt.getY();
-        double y13 = startPoint.getY() - crestpt.getY();
-        double x23 = endPoint.getX() - crestpt.getX();
-        double x13 = startPoint.getX() - crestpt.getX();
-        double alp = (lam23 - (y23 / y13) * lam13) / ((x23 * y13 - y23 * x13) / y13);
-        double bet = (lam13 - x13 * alp) / y13;
-        double gam = lam1 - startPoint.getY() * bet - startPoint.getX() * alp;
-
-        // Convert to standard form of equation for circle
-        double centrex = -alp / 2.0;
-        double centrey = -bet / 2.0;
-        double radius = Math.sqrt(centrex * centrex + centrey * centrey - gam);
-
-        // Discretise equation of circle using specified resolution and correct for quadrant
-        double xOffsetStart = startPoint.getX() - centrex;
-        double yOffsetStart = startPoint.getY() - centrey;
-        double th1 = Math.acos(xOffsetStart / radius);
-
-        double xOffsetEnd = endPoint.getX() - centrex;
-        double yOffsetEnd = endPoint.getY() - centrey;
-        double th2 = Math.acos(xOffsetEnd / radius);
-
-        // Quadrant check to get offset correct
-        if ((xOffsetStart < 0.0 && yOffsetStart < 0.0) || (xOffsetStart > 0.0 && yOffsetStart < 0.0))
-        {
-            // Flip theta
-            th1 *= -1.0;
-        }
-        if ((xOffsetEnd < 0.0 && yOffsetEnd < 0.0) || (xOffsetEnd > 0.0 && yOffsetEnd < 0.0))
-        {
-            // Flip theta
-            th2 *= -1.0;
-        }
-
-        if (otherSide)
-        {
-            th2 = (Math.PI * 2.0) + th2;
-        }
-
-        double dcircum = Math.abs(th2 - th1) * radius;
-        int numPts = (int) Math.ceil(dcircum * res);
-
-        // Specify in polar coordinates then convert to Cartesian
-        Vector2D tmp;
-        Vector2D tmp2 = new Vector2D(startPoint);
-        double spacing = (th2 - th1) / (numPts - 1);
-        double th;
-        for (int i = 1; i < numPts - 1; i++)
-        {
-            th = th1 + i * spacing;
-            tmp = new Vector2D(radius * Math.cos(th) + centrex, radius * Math.sin(th) + centrey);
-            addKeypointNextTo(tmp, tmp2, EPosition.AFTER);
-            tmp2 = new Vector2D(tmp);
-        }
-    }
-
-    //gets the length between 2 keypoints going in an anti-clockwise manner
-    public double getLengthBetweenPoints(Vector2D startPoint, Vector2D endPoint)
-    {
-        double length = 0;
-        int start = 0;
-        int end = 0;
-        try
-        {
-            //gets the start and end vector keypoints
-            //if start = vector point10, keypointNumber would  be 9
-            start = getKeypointNumber(startPoint);
-            end = getKeypointNumber(endPoint);
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-            return 0;
-        }
-        //Length from point 10 to point 10 is 0
-        if (start == end)
-        {
-            return 0;
-        }
-        //keep track of end as end is then used in the for loop further down
-        int size = end;
-        //this is to help with say, getting the size from point 10 to point 3 -> need to loop to 10,11,12,13,14,15...1,2,3
-        //which is equal to the arraylist.size - start + end
-        if (end < start)
-        {
-            size += keypointsX.size() - start;
-        }
-        else
-        {
-            size -= start;
-        }
-        end = start + 1;
-        for (int i = 0; i < size; i++)
-        {
-
-            //gets the x and y values of the next keypoint and calculated the magnitude/norm between the next
-            //and current value then sums up the magnitudes/norms
-            //may need to use less sqrts/power functions
-            length += Math.sqrt((Math.pow(keypointsX.get(end) - keypointsX.get(start), 2) + Math.pow(
-                    keypointsY.get(end) - keypointsY.get(start), 2)));
-            //special case when you need to calculate length between point 12 and point 3, this is for the loop around
-            //to help the for loop
-            start = end;
-            end++;
-            if (end == keypointsX.size()) //need to reset to 0 to deal with null pointer exception
-            {
-                end = 0; //for the loop around
-            }
-
-        }
-
-        return length;
-    }
+    // endregion Bezier
 
     /**
      * Class encapsulating the reference frame mapping
@@ -1408,5 +1372,4 @@ public class Block
             return vector.subtract(shiftVector);
         }
     }
-
 }

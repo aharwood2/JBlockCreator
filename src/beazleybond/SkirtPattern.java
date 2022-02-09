@@ -3,7 +3,6 @@ package beazleybond;
 import jblockenums.EPattern;
 import jblockenums.EPosition;
 import jblockenums.EUnitType;
-import jblockexceptions.MeasurementNotFoundException;
 import jblockmain.*;
 import mathcontainers.Vector2D;
 
@@ -108,7 +107,7 @@ public class SkirtPattern
 
         // Add curve between waist point and hip point (rather than upper-hip as stipulated in BB).
         // Assume for now, in the absence of vary form curve that this is a curve defined by a circle.
-        backBlock.addCircularCurve(new Vector2D(g_HipLevel, c_Hip / 4.0),
+        backBlock.addCircularArc(new Vector2D(g_HipLevel, c_Hip / 4.0),
                                    new Vector2D(0.0, Int_SuppressedSS), 0.5, true);
 
 

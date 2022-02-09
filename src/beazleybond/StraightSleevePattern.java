@@ -1,11 +1,8 @@
 package beazleybond;
 
 import jblockenums.EPattern;
-import jblockexceptions.MeasurementNotFoundException;
 import jblockmain.*;
 import mathcontainers.Vector2D;
-
-import java.util.ArrayList;
 
 public class StraightSleevePattern
         extends Pattern
@@ -117,25 +114,25 @@ public class StraightSleevePattern
                                        "");
 
         // Underarm to forearm arm hole curve
-        fullBlock.addCircularCurve(new Vector2D(c_DepthOfSleeveHead, a_UpperArmGirth),
+        fullBlock.addCircularArc(new Vector2D(c_DepthOfSleeveHead, a_UpperArmGirth),
                                    new Vector2D(c_DepthOfSleeveHead / 2.0, 3.0 * (a_UpperArmGirth / 4.0)),
                                    1.75,
                                    false);
 
         // Forearm to centre arm hole curve
-        fullBlock.addCircularCurve(new Vector2D(c_DepthOfSleeveHead / 2.0, 3.0 * (a_UpperArmGirth / 4.0)),
+        fullBlock.addCircularArc(new Vector2D(c_DepthOfSleeveHead / 2.0, 3.0 * (a_UpperArmGirth / 4.0)),
                                    new Vector2D(0.0, a_UpperArmGirth / 2.0),
                                    1.75,
                                    true);
 
         // Centre to back arm arm hole curve
-        fullBlock.addCircularCurve(new Vector2D(0.0, a_UpperArmGirth / 2.0),
+        fullBlock.addCircularArc(new Vector2D(0.0, a_UpperArmGirth / 2.0),
                                    new Vector2D(c_DepthOfSleeveHead / 2.0, a_UpperArmGirth / 4.0),
                                    1.25,
                                    true);
 
         // Back arm to underarm arm hole curve
-        fullBlock.addCircularCurve(new Vector2D(c_DepthOfSleeveHead / 2.0, a_UpperArmGirth / 4.0),
+        fullBlock.addCircularArc(new Vector2D(c_DepthOfSleeveHead / 2.0, a_UpperArmGirth / 4.0),
                                    new Vector2D(c_DepthOfSleeveHead, 0.0),
                                    1.25,
                                    false);

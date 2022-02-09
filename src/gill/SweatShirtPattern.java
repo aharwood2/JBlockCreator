@@ -2,11 +2,9 @@ package gill;
 
 import jblockenums.EPattern;
 import jblockenums.EUnitType;
-import jblockexceptions.MeasurementNotFoundException;
 import jblockmain.*;
 import mathcontainers.Vector2D;
 
-import java.util.ArrayList;
 import java.util.Collections;
 
 public class SweatShirtPattern
@@ -113,12 +111,12 @@ public class SweatShirtPattern
 
         backBlock.addQuadraticBezierCurve(point5, new Vector2D(point5.getX(), point6.getY()), point6);
 
-        backBlock.addDirectedCurve(point6, point7,
+        backBlock.addDirectedCubicSpline(point6, point7,
                                    new Vector2D(-1.0, 0.0),
                                    new Vector2D(point8.subtract(point7)),
                                    new double[]{0.0, 90.0});
 
-        backBlock.addDirectedCurve(point8, point1, new double[]{90.0, 90.0});
+        backBlock.addDirectedCubicSpline(point8, point1, new double[]{90.0, 90.0});
 
         // Get the max and min y with a small additional buffer of 5cm for the construction lines
         double maxY = Collections.max(backBlock.getPlottableKeypointsY()) + 5.0;
@@ -149,12 +147,12 @@ public class SweatShirtPattern
 
         frontBlock.addQuadraticBezierCurve(point13, new Vector2D(point13.getX(), point14.getY()), point14);
 
-        frontBlock.addDirectedCurve(point14, point15,
+        frontBlock.addDirectedCubicSpline(point14, point15,
                                     new Vector2D(-1.0, 0.0),
                                     new Vector2D(point8.subtract(point15)),
                                     new double[]{0.0, 90.0});
 
-        frontBlock.addDirectedCurveWithApexTangent(point16, point9, new Vector2D(point9.getX(), point16.getY()),
+        frontBlock.addDirectedCubicSplineWithApexTangent(point16, point9, new Vector2D(point9.getX(), point16.getY()),
                                                    Math.sqrt(point9.getX() - point16.getX()), new double[]{90.0, 90.0},
                                                    new int[]{-1, -1});
 
@@ -251,12 +249,12 @@ public class SweatShirtPattern
         sleeveBlock.addKeypoint(internalPoint9_10);
         sleeveBlock.addKeypoint(point10);
 
-        sleeveBlock.addCircularCurve(internalPoint8_9, internalPoint9_10,
+        sleeveBlock.addCircularArc(internalPoint8_9, internalPoint9_10,
                                      (point9.getX() - (internalPoint8_9.getX())),
                                      false, true);
 
-        sleeveBlock.addDirectedCurve(point7, point8, new double[]{90.0, 0.0});
-        sleeveBlock.addDirectedCurve(point10, point1, new double[]{0.0, 90.0});
+        sleeveBlock.addDirectedCubicSpline(point7, point8, new double[]{90.0, 0.0});
+        sleeveBlock.addDirectedCubicSpline(point10, point1, new double[]{0.0, 90.0});
 
         maxY = Collections.max(sleeveBlock.getPlottableKeypointsY()) + 5.0;
         minY = Collections.min(sleeveBlock.getPlottableKeypointsY()) - 5.0;
@@ -327,12 +325,12 @@ public class SweatShirtPattern
         sleeveBlockTwo.addKeypoint(internalPoint8_9);
         sleeveBlockTwo.addKeypoint(point7);
 
-        sleeveBlockTwo.addCircularCurve(internalPoint8_9, internalPoint9_10,
+        sleeveBlockTwo.addCircularArc(internalPoint8_9, internalPoint9_10,
                                         point13.getX() - internalPoint8_9.getX(),
                                         false, true);
 
-        sleeveBlockTwo.addDirectedCurve(point10, point11, new double[]{90.0, 0.0});
-        sleeveBlockTwo.addDirectedCurve(point15, point1, new double[]{0.0, 90.0});
+        sleeveBlockTwo.addDirectedCubicSpline(point10, point11, new double[]{90.0, 0.0});
+        sleeveBlockTwo.addDirectedCubicSpline(point15, point1, new double[]{0.0, 90.0});
 
 
         sleeveBlockTwo.addConstructionPoint(new Vector2D(point13.getX(), minY), new Vector2D(point13.getX(), maxY),

@@ -158,7 +158,7 @@ public class BodicePattern
                 new Vector2D(refBustPoint.getX() + (h_FrNeckToWaist - g_FrNeckToBust), refTopRight.getY()));
 
         // 7. Add front neck curve
-        mainBlock.addDirectedCurveWithApexTangent(new Vector2D(Arb_HalfFrontNeckWidth, refTopLeft.getY()),
+        mainBlock.addDirectedCubicSplineWithApexTangent(new Vector2D(Arb_HalfFrontNeckWidth, refTopLeft.getY()),
                                                   new Vector2D(0.0, refTopLeft.getY() - Arb_HalfFrontNeckWidth),
                                                   new Vector2D(Arb_HalfFrontNeckWidth,
                                                                refTopLeft.getY() - Arb_HalfFrontNeckWidth),
@@ -167,7 +167,7 @@ public class BodicePattern
                                                   new int[]{-1, 1});
 
         // 8. Add back neck curve
-        mainBlock.addDirectedCurveWithApexTangent(new Vector2D(-Arb_BackNeckRise, Arb_HalfBackNeckWidth),
+        mainBlock.addDirectedCubicSplineWithApexTangent(new Vector2D(-Arb_BackNeckRise, Arb_HalfBackNeckWidth),
                                                   refBottomLeft,
                                                   new Vector2D(0.0, Arb_HalfBackNeckWidth),
                                                   1.75,
@@ -236,7 +236,7 @@ public class BodicePattern
         Vector2D endPt = new Vector2D(touchFront);
 
         // a. Add first curve plus its end point as a keypoint
-        Vector2D adjPoint = mainBlock.addDirectedCurve(startPt,
+        Vector2D adjPoint = mainBlock.addDirectedCubicSpline(startPt,
                                                        endPt,
                                                        new Vector2D(startPt.subtract(preStartPt)),
                                                        new Vector2D(1.0, 0.0),
@@ -253,7 +253,7 @@ public class BodicePattern
         Vector2D dirEnd = new Vector2D(0.0, -1.0);
 
         // b. Add second part of curve and point after
-        adjPoint = mainBlock.addDirectedCurveWithApexTangent(startPt, endPt,
+        adjPoint = mainBlock.addDirectedCubicSplineWithApexTangent(startPt, endPt,
                                                              dirStart, dirEnd,
                                                              new Vector2D(f_ArmholeDepth, touchFront.getY()),
                                                              2.5,
@@ -271,7 +271,7 @@ public class BodicePattern
         dirEnd = new Vector2D(-1.0, 0.0);
 
         // c. Add third part of curve
-        adjPoint = mainBlock.addDirectedCurveWithApexTangent(startPt, endPt,
+        adjPoint = mainBlock.addDirectedCubicSplineWithApexTangent(startPt, endPt,
                                                              dirStart, dirEnd,
                                                              new Vector2D(f_ArmholeDepth, touchBack.getY()),
                                                              3.0,
@@ -286,7 +286,7 @@ public class BodicePattern
         endPt = new Vector2D(Arb_BackShoulderLevel, Arb_HalfBackNeckWidth + backShoulderLineY);
 
         // d. Add final part of armhole
-        mainBlock.addDirectedCurve(startPt, endPt,
+        mainBlock.addDirectedCubicSpline(startPt, endPt,
                                    new Vector2D(-1.0, 0.0),
                                    new Vector2D(-Arb_BackNeckRise - endPt.getX(), Arb_HalfBackNeckWidth - endPt.getY()),
                                    new double[]{0.0, 90.0});
@@ -334,11 +334,11 @@ public class BodicePattern
         mainBlock.addKeypointNextTo(waistTouch, dartPts3.get(2), EPosition.AFTER);
 
         // 15. Add waist line curve back to side seam
-        mainBlock.addDirectedCurve(dartPts3.get(2), waistTouch, new double[]{90.0, 0.0});
-        mainBlock.addDirectedCurve(waistTouch, dartPts2.get(0), new double[]{0.0, 90.0});
+        mainBlock.addDirectedCubicSpline(dartPts3.get(2), waistTouch, new double[]{90.0, 0.0});
+        mainBlock.addDirectedCubicSpline(waistTouch, dartPts2.get(0), new double[]{0.0, 90.0});
 
         // 16. Add waist line curve side seam to front
-        mainBlock.addDirectedCurve(dartPts2.get(2), dartPts1.get(0), new double[]{90.0, 90.0});
+        mainBlock.addDirectedCubicSpline(dartPts2.get(2), dartPts1.get(0), new double[]{90.0, 90.0});
 
     }
 
