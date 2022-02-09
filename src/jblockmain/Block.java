@@ -177,6 +177,68 @@ public class Block
     }
 
     /**
+     * Computes the point where the two lines intersect or throws an exception if they are parallel (don't intersect).
+     * Lines are assumed to be of the form A + B * c where c is a variable denoting the position along the line, A is a
+     * point on the line and B is the normalised direction vector of the line.
+     * @param a1    a point on line 1
+     * @param b1    normalised direction of line 1
+     * @param a2    a point on line 2
+     * @param b2    normalised direction of line 2
+     * @return      the intersection of the lines
+     */
+    public Vector2D vectorIntersect(Vector2D a1, Vector2D b1, Vector2D a2, Vector2D b2) throws Exception
+    {
+        // Split out scalars
+        var a1x = a1.getX();
+        var b1x = b1.getX();
+        var a1y = a1.getY();
+        var b1y = b1.getY();
+        var a2x = a2.getX();
+        var b2x = b2.getX();
+        var a2y = a2.getY();
+        var b2y = b2.getY();
+
+        // Check whether lines are parallel
+        // Dot product of directions will equal magnitude multiplied
+        if (Math.abs(b1.dot(b2) - b1.norm() * b2.norm()) < tolerance)
+        {
+            throw new Exception("Cannot compute intersection. Lines are parallel!");
+        }
+
+        // Compute intermediates
+        var top = a2x * b2y - a1x * b2y + b2x * (a1y - a2y);
+        var bottom = b1x * b2y - b1y * b2x;
+
+        // Compute the variable c1
+        var c1 = top / bottom;
+
+        // Compute the variable c2 using appropriate equation
+        double c2;
+        if (Math.abs(b2x) > tolerance)
+        {
+            c2 = (a1x - a2x + c1 * b1x) / b2x;
+        }
+        else if (Math.abs(b2y) > tolerance)
+        {
+            c2 = (a1y - a2y + c1 * b1y) / b2y;
+        }
+        else
+        {
+            throw new Exception("Cannot solve line intersection!");
+        }
+
+        // Check both equations arrive at the same point
+        var d1 = a1x + c1 * b1x;
+        var d2 = a1y + c1 * b1y;
+        var e1 = a2x + c2 * b2x;
+        var e2 = a2y + c2 * b2y;
+        if (Math.abs(d1 - e1) > tolerance || Math.abs(d2 - e2) > tolerance)
+            throw new Exception("Something went wrong solving line intersection!");
+
+        return new Vector2D(d1, d2);
+    }
+
+    /**
      * Gets the length between 2 keypoints by summing the length of every line segment between them going around the
      * block outline in an anti-clockwise manner.
      * @param startPoint position of the start point
@@ -1256,28 +1318,28 @@ public class Block
 
     // region Bezier
 
-    private double quadraticXBezier(double t, Vector2D start, Vector2D intermediate, Vector2D end)
+    private double quadraticXBezier(double t, Vector2D start, Vector2D controlPoint, Vector2D end)
     {
         // Helper Function that returns X value for a given t value
         // Which varies from 0 to 1 for a given start, control point, and end vector
 
-        return (start.getX() * ((1 - t) * (1 - t)))
-                + (2 * intermediate.getX() * (t * (1 - t)))
-                + (end.getX() * (t * t));
+        return (start.getX() * (1 - t) * (1 - t))
+                + (2 * controlPoint.getX() * t * (1 - t))
+                + (end.getX() * t * t);
     }
 
-    private double quadraticYBezier(double t, Vector2D start, Vector2D intermediate, Vector2D end)
+    private double quadraticYBezier(double t, Vector2D start, Vector2D controlPoint, Vector2D end)
     {
         // Helper Function that returns Y value for a given t value
         // Which varies from 0 to 1 for a given start, control point, and end vector
 
         return (start.getY() * (1 - t) * (1 - t))
-                + ((2 * intermediate.getY() * t * (1 - t)))
+                + (2 * controlPoint.getY() * t * (1 - t))
                 + (end.getY() * t * t);
     }
 
     /**
-     * Draws a quadratic bezier curve between 2 points for a given start, end and shaping? point
+     * Draws a quadratic Bezier curve between 2 points for a given start, end and control point
      *
      * @param start        start vector you want the curve to start from
      * @param controlPoint the point which shapes the bezier curve
@@ -1301,6 +1363,34 @@ public class Block
             tmp = new Vector2D(x, y);
             addKeypointNextTo(tmp, tmp2, EPosition.AFTER);
             tmp2 = new Vector2D(tmp);
+        }
+    }
+
+    /**
+     * Add a quadratic Bezier curve between the end points where the angle of the curve at either end blends in with the
+     * direction of the lines leaving each end point. The start and end points must be specified in a strict order as
+     * the keypoints used to infer the direction are the preceding and following points for the start and end
+     * respectively.
+     * @param startPoint    start of the curve
+     * @param endPoint      end of the curve
+     */
+    public void addQuadraticBezierCurve(Vector2D startPoint, Vector2D endPoint)
+    {
+        try
+        {
+            // Get direction vectors at start and end using adjacent keypoints
+            Vector2D dirStart = getDirectionAtKeypoint(startPoint, EPosition.BEFORE);
+            Vector2D dirEnd = getDirectionAtKeypoint(endPoint, EPosition.AFTER);
+
+            // Calculate intersection of lines which represents the control point
+            var control = vectorIntersect(startPoint, dirStart, endPoint, dirEnd);
+
+            // Add the curve
+            addQuadraticBezierCurve(startPoint, control, endPoint);
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
         }
     }
 
