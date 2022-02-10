@@ -2,6 +2,7 @@ package beazleybond;
 
 import jblockenums.EPattern;
 import jblockenums.EPosition;
+import jblockenums.EUnitType;
 import jblockmain.*;
 import mathcontainers.Vector2D;
 
@@ -54,6 +55,7 @@ public class BodicePattern
         measurements.addMeasurement(new Measurement("Arb_SideSeamWaistDartWidth", 3.5));
         measurements.addMeasurement(new Measurement("Arb_FrontWaistDartApexFromBP", 3.0));
         measurements.addMeasurement(new Measurement("Arb_SideWaistLevel", 0.5));
+        measurements.addMeasurement(new Measurement("Arb_ScyeWidthPercent", 24.5, EUnitType.PERCENTAGE));
 
         // Ease
         measurements.addMeasurement(new Measurement("bustEase", 6.0));
@@ -96,20 +98,20 @@ public class BodicePattern
         var Arb_BackFrontWaistDartWidth = get("Arb_BackFrontWaistDartWidth");
         var Arb_SideWaistLevel = get("Arb_SideWaistLevel");
         var Arb_SideSeamWaistDartWidth = get("Arb_SideSeamWaistDartWidth");
-        var Arb_WidthArmhole = get("Arb_WidthArmhole") + get("armholeWidthEase");
+        var Arb_ScyeWidthPercent = get("Arb_ScyeWidthPercent");
+        var Arb_WidthArmhole = Math.max(
+                get("Arb_WidthArmhole") + get("armholeWidthEase"),
+                0.5 * a_Bust * Arb_ScyeWidthPercent / 100.0
+        );
 
         var Arb_AcrossBackLevel = f_ArmholeDepth / 2.0;
         var Arb_BackArmholeTouchX = Arb_AcrossBackLevel + 2.0;
         var Arb_SideSeamFromCentreBack = ((a_Bust - get("bustEase")) / 4.0) + 1.5;  // Deducted ease from bust measurement in this case
         var Arb_HalfFrontNeckWidth = (c_Neck / 5.0) - 1.5;
-        var Arb_FrontNeckDepth = c_Neck / 5.0;
         var Arb_HalfBackNeckWidth = (c_Neck / 5.0) - 0.5;
         var Arb_FrontShoulderLine = k_Shoulder + Arb_FrontShoulderDartWidth;
         var Arb_BackShoulderLine = k_Shoulder + Arb_BackShoulderDartWidth;
         var Arb_CBtoCF = (a_Bust / 2.0) + Arb_BackWaistDartSuppression;
-        var Arb_ArmholeRatio = (Arb_WidthArmhole + get("armholeWidthEase")) / (a_Bust + get("bustEase"));
-
-        if (a_Bust * Arb_ArmholeRatio > Arb_WidthArmhole) Arb_WidthArmhole = a_Bust * Arb_ArmholeRatio;
 
         // Points that make up the shape are listed in a strict anti-clockwise order to maintain correct connectivity
         // for plotting. The bottom left corner of the space to be the origin.
