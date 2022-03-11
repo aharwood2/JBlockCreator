@@ -3,10 +3,8 @@
   
   
   <property file="build.properties"/>
-  <!-- Uncomment the following property if no tests compilation is needed -->
-  <!-- 
+
   <property name="skip.tests" value="true"/>
-   -->
   
   <!-- Compiler options -->
   
@@ -15,7 +13,6 @@
   <property name="compiler.args" value=""/>
   <property name="compiler.max.memory" value="700m"/>
   <patternset id="ignored.files">
-    <exclude name="**/*.hprof/**"/>
     <exclude name="**/*.pyc/**"/>
     <exclude name="**/*.pyo/**"/>
     <exclude name="**/*.rbc/**"/>
@@ -32,14 +29,14 @@
     <exclude name="**/vssver2.scc/**"/>
   </patternset>
   <patternset id="library.patterns">
+    <include name="*.egg"/>
+    <include name="*.zip"/>
     <include name="*.war"/>
     <include name="*.swc"/>
-    <include name="*.apk"/>
-    <include name="*.zip"/>
-    <include name="*.egg"/>
-    <include name="*.ane"/>
-    <include name="*.jar"/>
     <include name="*.ear"/>
+    <include name="*.jar"/>
+    <include name="*.klib"/>
+    <include name="*.ane"/>
   </patternset>
   <patternset id="compiler.resources">
     <exclude name="**/?*.java"/>
@@ -55,49 +52,111 @@
   
   <!-- JDK definitions -->
   
-  <property name="jdk.bin.1.8" value="${jdk.home.1.8}/bin"/>
-  <path id="jdk.classpath.1.8">
-    <fileset dir="${jdk.home.1.8}">
-      <include name="jre/lib/charsets.jar"/>
-      <include name="jre/lib/deploy.jar"/>
-      <include name="jre/lib/ext/access-bridge-64.jar"/>
-      <include name="jre/lib/ext/cldrdata.jar"/>
-      <include name="jre/lib/ext/dnsns.jar"/>
-      <include name="jre/lib/ext/jaccess.jar"/>
-      <include name="jre/lib/ext/jfxrt.jar"/>
-      <include name="jre/lib/ext/localedata.jar"/>
-      <include name="jre/lib/ext/nashorn.jar"/>
-      <include name="jre/lib/ext/sunec.jar"/>
-      <include name="jre/lib/ext/sunjce_provider.jar"/>
-      <include name="jre/lib/ext/sunmscapi.jar"/>
-      <include name="jre/lib/ext/sunpkcs11.jar"/>
-      <include name="jre/lib/ext/zipfs.jar"/>
-      <include name="jre/lib/javaws.jar"/>
-      <include name="jre/lib/jce.jar"/>
-      <include name="jre/lib/jfr.jar"/>
-      <include name="jre/lib/jfxswt.jar"/>
-      <include name="jre/lib/jsse.jar"/>
-      <include name="jre/lib/management-agent.jar"/>
-      <include name="jre/lib/plugin.jar"/>
-      <include name="jre/lib/resources.jar"/>
-      <include name="jre/lib/rt.jar"/>
+  <property name="jdk.bin.14" value="${jdk.home.14}/bin"/>
+  <path id="jdk.classpath.14">
+    <fileset dir="${jdk.home.14}">
+      <include name="../jdk-14.0.1!/java.base"/>
+      <include name="../jdk-14.0.1!/java.compiler"/>
+      <include name="../jdk-14.0.1!/java.datatransfer"/>
+      <include name="../jdk-14.0.1!/java.desktop"/>
+      <include name="../jdk-14.0.1!/java.instrument"/>
+      <include name="../jdk-14.0.1!/java.logging"/>
+      <include name="../jdk-14.0.1!/java.management"/>
+      <include name="../jdk-14.0.1!/java.management.rmi"/>
+      <include name="../jdk-14.0.1!/java.naming"/>
+      <include name="../jdk-14.0.1!/java.net.http"/>
+      <include name="../jdk-14.0.1!/java.prefs"/>
+      <include name="../jdk-14.0.1!/java.rmi"/>
+      <include name="../jdk-14.0.1!/java.scripting"/>
+      <include name="../jdk-14.0.1!/java.se"/>
+      <include name="../jdk-14.0.1!/java.security.jgss"/>
+      <include name="../jdk-14.0.1!/java.security.sasl"/>
+      <include name="../jdk-14.0.1!/java.smartcardio"/>
+      <include name="../jdk-14.0.1!/java.sql"/>
+      <include name="../jdk-14.0.1!/java.sql.rowset"/>
+      <include name="../jdk-14.0.1!/java.transaction.xa"/>
+      <include name="../jdk-14.0.1!/java.xml"/>
+      <include name="../jdk-14.0.1!/java.xml.crypto"/>
+      <include name="../jdk-14.0.1!/jdk.accessibility"/>
+      <include name="../jdk-14.0.1!/jdk.aot"/>
+      <include name="../jdk-14.0.1!/jdk.attach"/>
+      <include name="../jdk-14.0.1!/jdk.charsets"/>
+      <include name="../jdk-14.0.1!/jdk.compiler"/>
+      <include name="../jdk-14.0.1!/jdk.crypto.cryptoki"/>
+      <include name="../jdk-14.0.1!/jdk.crypto.ec"/>
+      <include name="../jdk-14.0.1!/jdk.crypto.mscapi"/>
+      <include name="../jdk-14.0.1!/jdk.dynalink"/>
+      <include name="../jdk-14.0.1!/jdk.editpad"/>
+      <include name="../jdk-14.0.1!/jdk.hotspot.agent"/>
+      <include name="../jdk-14.0.1!/jdk.httpserver"/>
+      <include name="../jdk-14.0.1!/jdk.incubator.foreign"/>
+      <include name="../jdk-14.0.1!/jdk.incubator.jpackage"/>
+      <include name="../jdk-14.0.1!/jdk.internal.ed"/>
+      <include name="../jdk-14.0.1!/jdk.internal.jvmstat"/>
+      <include name="../jdk-14.0.1!/jdk.internal.le"/>
+      <include name="../jdk-14.0.1!/jdk.internal.opt"/>
+      <include name="../jdk-14.0.1!/jdk.internal.vm.ci"/>
+      <include name="../jdk-14.0.1!/jdk.internal.vm.compiler"/>
+      <include name="../jdk-14.0.1!/jdk.internal.vm.compiler.management"/>
+      <include name="../jdk-14.0.1!/jdk.jartool"/>
+      <include name="../jdk-14.0.1!/jdk.javadoc"/>
+      <include name="../jdk-14.0.1!/jdk.jcmd"/>
+      <include name="../jdk-14.0.1!/jdk.jconsole"/>
+      <include name="../jdk-14.0.1!/jdk.jdeps"/>
+      <include name="../jdk-14.0.1!/jdk.jdi"/>
+      <include name="../jdk-14.0.1!/jdk.jdwp.agent"/>
+      <include name="../jdk-14.0.1!/jdk.jfr"/>
+      <include name="../jdk-14.0.1!/jdk.jlink"/>
+      <include name="../jdk-14.0.1!/jdk.jshell"/>
+      <include name="../jdk-14.0.1!/jdk.jsobject"/>
+      <include name="../jdk-14.0.1!/jdk.jstatd"/>
+      <include name="../jdk-14.0.1!/jdk.localedata"/>
+      <include name="../jdk-14.0.1!/jdk.management"/>
+      <include name="../jdk-14.0.1!/jdk.management.agent"/>
+      <include name="../jdk-14.0.1!/jdk.management.jfr"/>
+      <include name="../jdk-14.0.1!/jdk.naming.dns"/>
+      <include name="../jdk-14.0.1!/jdk.naming.rmi"/>
+      <include name="../jdk-14.0.1!/jdk.net"/>
+      <include name="../jdk-14.0.1!/jdk.nio.mapmode"/>
+      <include name="../jdk-14.0.1!/jdk.rmic"/>
+      <include name="../jdk-14.0.1!/jdk.scripting.nashorn"/>
+      <include name="../jdk-14.0.1!/jdk.scripting.nashorn.shell"/>
+      <include name="../jdk-14.0.1!/jdk.sctp"/>
+      <include name="../jdk-14.0.1!/jdk.security.auth"/>
+      <include name="../jdk-14.0.1!/jdk.security.jgss"/>
+      <include name="../jdk-14.0.1!/jdk.unsupported"/>
+      <include name="../jdk-14.0.1!/jdk.unsupported.desktop"/>
+      <include name="../jdk-14.0.1!/jdk.xml.dom"/>
+      <include name="../jdk-14.0.1!/jdk.zipfs"/>
     </fileset>
   </path>
   
-  <property name="project.jdk.home" value="${jdk.home.1.8}"/>
-  <property name="project.jdk.bin" value="${jdk.bin.1.8}"/>
-  <property name="project.jdk.classpath" value="jdk.classpath.1.8"/>
   <property name="idea.home" value="./intellij"/>
+  <property name="project.jdk.home" value="${jdk.home.14}"/>
+  <property name="project.jdk.bin" value="${jdk.bin.14}"/>
+  <property name="project.jdk.classpath" value="jdk.classpath.14"/>
   
   
   <!-- Project Libraries -->
   
-  <path id="library.forms_rt.classpath">
-    <pathelement location="${idea.home}/lib/forms_rt.jar"/>
-  </path>
-  
-  <path id="library.javac2.classpath">
-    <pathelement location="${idea.home}/lib/javac2.jar"/>
+  <path id="library.lib.classpath">
+    <pathelement location="${basedir}/intellij/lib/asm-all.jar"/>
+    <pathelement location="${basedir}/intellij/lib/bootstrapfx-core-0.4.0.jar"/>
+    <pathelement location="${basedir}/intellij/lib/controlsfx-11.1.0.jar"/>
+    <pathelement location="${basedir}/intellij/lib/forms-1.1-preview.jar"/>
+    <pathelement location="${basedir}/intellij/lib/forms_rt.jar"/>
+    <pathelement location="${basedir}/intellij/lib/formsfx-core-11.3.2.jar"/>
+    <pathelement location="${basedir}/intellij/lib/ikonli-core-12.2.0.jar"/>
+    <pathelement location="${basedir}/intellij/lib/ikonli-javafx-12.2.0.jar"/>
+    <pathelement location="${basedir}/intellij/lib/javac2.jar"/>
+    <pathelement location="${basedir}/intellij/lib/javafx-base-14.0.2.1-win.jar"/>
+    <pathelement location="${basedir}/intellij/lib/javafx-controls-14.0.2.1-win.jar"/>
+    <pathelement location="${basedir}/intellij/lib/javafx-fxml-14.0.2.1-win.jar"/>
+    <pathelement location="${basedir}/intellij/lib/javafx-graphics-14.0.2.1-win.jar"/>
+    <pathelement location="${basedir}/intellij/lib/javafx-media-11-win.jar"/>
+    <pathelement location="${basedir}/intellij/lib/javafx-web-11-win.jar"/>
+    <pathelement location="${basedir}/intellij/lib/jdom.jar"/>
+    <pathelement location="${basedir}/intellij/lib/jmetro-11.6.15.jar"/>
   </path>
   
   <!-- Register Custom Compiler Taskdefs -->
@@ -108,7 +167,7 @@
       <include name="jdom.jar"/>
       <include name="asm-all*.jar"/>
       <include name="forms-*.jar"/>
-	  <include name="forms_*.jar"/>
+      <include name="forms_rt.jar"/>
     </fileset>
   </path>
   
@@ -128,19 +187,9 @@
   <property name="module.jdk.bin.jblockcreator" value="${project.jdk.bin}"/>
   <property name="module.jdk.classpath.jblockcreator" value="${project.jdk.classpath}"/>
   
-  <property name="compiler.args.jblockcreator" value="-encoding UTF-8 -source 8 -target 8 ${compiler.args}"/>
+  <property name="compiler.args.jblockcreator" value="-encoding UTF-8 -source 14 -target 14 ${compiler.args}"/>
   
-  <property name="jblockcreator.output.dir" value="${module.jblockcreator.basedir}/out/production/JBlockCreator"/>
-  
-  <path id="jblockcreator.module.bootclasspath">
-    <!-- Paths to be included in compilation bootclasspath -->
-  </path>
-  
-  <path id="jblockcreator.module.production.classpath">
-    <path refid="${module.jdk.classpath.jblockcreator}"/>
-    <path refid="library.forms_rt.classpath"/>
-    <path refid="library.javac2.classpath"/>
-  </path>  
+  <property name="jblockcreator.output.dir" value="${module.jblockcreator.basedir}/out/production/JBlockCreator"/> 
   
   <patternset id="excluded.from.module.jblockcreator">
     <patternset refid="ignored.files"/>
@@ -164,8 +213,7 @@
     
 	<javac2 destdir="${jblockcreator.output.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}" memorymaximumsize="${compiler.max.memory}" fork="true" executable="${module.jdk.bin.jblockcreator}/javac">
       <compilerarg line="${compiler.args.jblockcreator}"/>
-      <bootclasspath refid="jblockcreator.module.bootclasspath"/>
-      <classpath refid="jblockcreator.module.production.classpath"/>
+	  <modulepath refid="library.lib.classpath"/>
       <src refid="jblockcreator.module.sourcepath"/>
       <patternset refid="excluded.from.compilation.jblockcreator"/>
     </javac2>
@@ -200,6 +248,7 @@
   <target name="init.artifacts">
     <property name="artifacts.temp.dir" value="${basedir}/__artifacts_temp"/>
     <property name="artifact.output.jblockcreator:jar" value="${basedir}/bin"/>
+	<property name="img.dir" value="${basedir}/images"/>
     <mkdir dir="${artifacts.temp.dir}"/>
     <property name="temp.jar.path.JBlockCreator.jar" value="${artifacts.temp.dir}/JBlockCreator.jar"/>
   </target>
@@ -212,7 +261,7 @@
 	  <zipfileset dir="${module.jblockcreator.basedir}/intellij"/>
       <zipfileset file="${basedir}/META-INF/MANIFEST.MF" prefix="META-INF"/>
 	  <manifest>
-		<attribute name="Main-Class" value="jblockmain.JBlockCreator" />
+		<attribute name="Main-Class" value="jblockmain.JBlockCreatorApp" />
 	  </manifest>
     </jar>
     <copy file="${temp.jar.path.JBlockCreator.jar}" tofile="${artifact.temp.output.jblockcreator:jar}/JBlockCreator.jar"/>
@@ -220,8 +269,12 @@
   
   <target name="build.all.artifacts" depends="artifact.jblockcreator:jar" description="Build all artifacts">
     <mkdir dir="${artifact.output.jblockcreator:jar}"/>
+	<mkdir dir="${artifact.output.jblockcreator:jar}/images"/>
     <copy todir="${artifact.output.jblockcreator:jar}">
       <fileset dir="${artifact.temp.output.jblockcreator:jar}"/>
+    </copy>
+	<copy todir="${artifact.output.jblockcreator:jar}/images">
+      <fileset dir="${img.dir}"/>
     </copy>
     
     <!-- Delete temporary files -->
@@ -230,7 +283,10 @@
   
   <!-- Run Target -->
   <target name="run" depends="all">
-	<java jar="${artifact.output.jblockcreator:jar}/JBlockCreator.jar" fork="true"/>
+	<java jar="${artifact.output.jblockcreator:jar}/JBlockCreator.jar" fork="true">
+	<jvmarg line="--module-path ${idea.home}/lib"/>
+    <jvmarg line="--add-modules javafx.controls,javafx.fxml,org.jfxtras.styles.jmetro"/>
+	</java>
   </target>
   
   <target name="all" depends="build.modules, build.all.artifacts" description="build all"/>
