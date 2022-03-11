@@ -19,6 +19,7 @@ public class PatternFactory
             case GILL_SWEATSHIRT -> { return new gill.SweatShirtPattern(userName, data, template); }
             case GILL_TROUSER -> { return new gill.TrouserPattern(userName, data, template); }
             case GILL_TROUSER2 -> { return new gill.TrouserPatternTwo(userName, data, template); }
+            case GILL_TROUSER3 -> { return new gill.TrouserPatternThree(userName, data, template); }
         }
         return null;
     }
