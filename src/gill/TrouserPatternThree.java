@@ -109,20 +109,6 @@ public class TrouserPatternThree
         Block frontBlock = new Block(userName + "_Gill_FrontBlock");
         blocks.add(frontBlock);
 
-        // Add construction lines
-        var xMin = frontBlock.getMinimumX() - Arb_Con;
-        var xMax = frontBlock.getMaximumX() + Arb_Con;
-        frontBlock.addConstructionPoint(new Vector2D(xMin, waistLevel), new Vector2D(xMax, waistLevel), "Waist Level");
-        frontBlock.addConstructionPoint(new Vector2D(xMin, abdomenLevel), new Vector2D(xMax, abdomenLevel), "Abdomen Level");
-        frontBlock.addConstructionPoint(new Vector2D(xMin, seatLevel), new Vector2D(xMax, seatLevel), "Seat Level");
-        frontBlock.addConstructionPoint(new Vector2D(xMin, crotchLevel), new Vector2D(xMax, crotchLevel), "Crotch Level");
-        frontBlock.addConstructionPoint(new Vector2D(xMin, upperThighLevel), new Vector2D(xMax, upperThighLevel), "Upper Thigh Level");
-        frontBlock.addConstructionPoint(new Vector2D(xMin, midThighLevel), new Vector2D(xMax, midThighLevel), "Mid Thigh Level");
-        frontBlock.addConstructionPoint(new Vector2D(xMin, kneeLevel), new Vector2D(xMax, kneeLevel), "Knee Level");
-        frontBlock.addConstructionPoint(new Vector2D(xMin, calfLevel), new Vector2D(xMax, calfLevel), "Calf Level");
-        frontBlock.addConstructionPoint(new Vector2D(xMin, lowerLegLevel), new Vector2D(xMax, lowerLegLevel), "Lower Leg Level");
-        frontBlock.addConstructionPoint(new Vector2D(xMin, ankleLevel), new Vector2D(xMax, ankleLevel), "Ankle Level");
-
         // Add points
         var point1X = (frontSeatArc + backSeatArc) * arbCFSeatToCreaseLinePercent;
         frontBlock.addKeypoint(new Vector2D(point1X, seatLevel));   // Point 1
@@ -151,8 +137,64 @@ public class TrouserPatternThree
         frontBlock.addKeypoint(new Vector2D(point1X, crotchLevel)); // Point 21
         frontBlock.addKeypoint(new Vector2D(point22X, crotchLevel)); // Point 22
 
-        // TODO: Back block
+        // Add construction lines
+        var xMin = frontBlock.getMinimumX() - Arb_Con;
+        var xMax = frontBlock.getMaximumX() + Arb_Con;
+        frontBlock.addConstructionPoint(new Vector2D(xMin, waistLevel), new Vector2D(xMax, waistLevel), "Waist Level");
+        frontBlock.addConstructionPoint(new Vector2D(xMin, abdomenLevel), new Vector2D(xMax, abdomenLevel), "Abdomen Level");
+        frontBlock.addConstructionPoint(new Vector2D(xMin, seatLevel), new Vector2D(xMax, seatLevel), "Seat Level");
+        frontBlock.addConstructionPoint(new Vector2D(xMin, crotchLevel), new Vector2D(xMax, crotchLevel), "Crotch Level");
+        frontBlock.addConstructionPoint(new Vector2D(xMin, upperThighLevel), new Vector2D(xMax, upperThighLevel), "Upper Thigh Level");
+        frontBlock.addConstructionPoint(new Vector2D(xMin, midThighLevel), new Vector2D(xMax, midThighLevel), "Mid Thigh Level");
+        frontBlock.addConstructionPoint(new Vector2D(xMin, kneeLevel), new Vector2D(xMax, kneeLevel), "Knee Level");
+        frontBlock.addConstructionPoint(new Vector2D(xMin, calfLevel), new Vector2D(xMax, calfLevel), "Calf Level");
+        frontBlock.addConstructionPoint(new Vector2D(xMin, lowerLegLevel), new Vector2D(xMax, lowerLegLevel), "Lower Leg Level");
+        frontBlock.addConstructionPoint(new Vector2D(xMin, ankleLevel), new Vector2D(xMax, ankleLevel), "Ankle Level");
 
+        // Build block
+        Block backBlock = new Block(userName + "_Gill_backBlock");
+        blocks.add(backBlock);
+
+        // Add points
+        point1X = (frontSeatArc + backSeatArc) * arbCBSeatToCreaseLinePercent;
+        backBlock.addKeypoint(new Vector2D(-point1X, seatLevel));   // Point 1
+        backBlock.addKeypoint(new Vector2D(-point1X, abdomenLevel));    // Point 2
+        backBlock.addKeypoint(new Vector2D(-point1X, waistLevel)); // Point 3
+        backBlock.addKeypoint(new Vector2D(((optSmallBackWaistTapeMeasure * 0.25) - (frontSeatArc + backSeatArc) * arbCBSeatToCreaseLinePercent), waistLevel)); // Point 4
+        backBlock.addKeypoint(new Vector2D((((frontAbdomenArc + backAbdomenArc) * 0.25) - (frontSeatArc + backSeatArc) * arbCBSeatToCreaseLinePercent), abdomenLevel)); // Point 5
+        point6X = (((frontSeatArc + backSeatArc) * 0.25 - (frontSeatArc + backSeatArc) * arbCBSeatToCreaseLinePercent));
+        backBlock.addKeypoint(new Vector2D(point6X, seatLevel));   // Point 6
+        backBlock.addKeypoint(new Vector2D(point6X, crotchLevel)); // Point 7
+        point22X = point1X + (seatDepth * arbFrontCrotchExtPercent);
+        temp = (crotchCircumMinus1cm / 2) - (point6X + point22X);
+        if (temp > 0) backBlock.addKeypoint(new Vector2D(temp - point6X, crotchLevel)); // Point 8
+        backBlock.addKeypoint(new Vector2D(thighCircumR * arbBackLegPercent, upperThighLevel)); // Point 9
+        backBlock.addKeypoint(new Vector2D(midThighCircumR * arbBackLegPercent, midThighLevel)); // Point 10
+        backBlock.addKeypoint(new Vector2D(kneeCircumR * arbBackLegPercent, kneeLevel)); // Point 11
+        backBlock.addKeypoint(new Vector2D(calfCircumR * arbBackLegPercent, calfLevel)); // Point 12
+        backBlock.addKeypoint(new Vector2D(minLowerLegCircumR * arbBackLegPercent, lowerLegLevel)); // Point 13
+        backBlock.addKeypoint(new Vector2D(ankleCircumR * arbBackLegPercent, ankleLevel)); // Point 14
+        backBlock.addKeypoint(new Vector2D(-ankleCircumR * arbBackLegPercent, ankleLevel)); // Point 15
+        backBlock.addKeypoint(new Vector2D(-minLowerLegCircumR * arbBackLegPercent, lowerLegLevel)); // Point 16
+        backBlock.addKeypoint(new Vector2D(-calfCircumR * arbBackLegPercent, calfLevel)); // Point 17
+        backBlock.addKeypoint(new Vector2D(-kneeCircumR * arbBackLegPercent, kneeLevel)); // Point 18
+        backBlock.addKeypoint(new Vector2D(-midThighCircumR * arbBackLegPercent, midThighLevel)); // Point 19
+        backBlock.addKeypoint(new Vector2D(-thighCircumR * arbBackLegPercent, upperThighLevel)); // Point 20
+        backBlock.addKeypoint(new Vector2D(-point1X, crotchLevel)); // Point 21
+        backBlock.addKeypoint(new Vector2D(-point22X, crotchLevel)); // Point 22
+
+        // Add construction lines
+        xMin = backBlock.getMinimumX() - Arb_Con;
+        xMax = backBlock.getMaximumX() + Arb_Con;
+        backBlock.addConstructionPoint(new Vector2D(xMin, waistLevel), new Vector2D(xMax, waistLevel), "Waist Level");
+        backBlock.addConstructionPoint(new Vector2D(xMin, abdomenLevel), new Vector2D(xMax, abdomenLevel), "Abdomen Level");
+        backBlock.addConstructionPoint(new Vector2D(xMin, seatLevel), new Vector2D(xMax, seatLevel), "Seat Level");
+        backBlock.addConstructionPoint(new Vector2D(xMin, crotchLevel), new Vector2D(xMax, crotchLevel), "Crotch Level");
+        backBlock.addConstructionPoint(new Vector2D(xMin, upperThighLevel), new Vector2D(xMax, upperThighLevel), "Upper Thigh Level");
+        backBlock.addConstructionPoint(new Vector2D(xMin, midThighLevel), new Vector2D(xMax, midThighLevel), "Mid Thigh Level");
+        backBlock.addConstructionPoint(new Vector2D(xMin, kneeLevel), new Vector2D(xMax, kneeLevel), "Knee Level");
+        backBlock.addConstructionPoint(new Vector2D(xMin, calfLevel), new Vector2D(xMax, calfLevel), "Calf Level");
+        backBlock.addConstructionPoint(new Vector2D(xMin, lowerLegLevel), new Vector2D(xMax, lowerLegLevel), "Lower Leg Level");
+        backBlock.addConstructionPoint(new Vector2D(xMin, ankleLevel), new Vector2D(xMax, ankleLevel), "Ankle Level");
     }
-
 }
