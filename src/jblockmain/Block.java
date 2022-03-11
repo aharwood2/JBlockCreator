@@ -92,6 +92,36 @@ public class Block
     // region Helpers
 
     /**
+     * Get the minimum X coordinate of all the keypoints in the block
+     * @return minimum value
+     */
+    public double getMinimumX()
+    {
+        if (keypointsX.size() == 0) return 0;
+        var min = keypointsX.get(0);
+        for (var keypoint : keypointsX)
+        {
+            if (keypoint < min) min = keypoint;
+        }
+        return min;
+    }
+
+    /**
+     * Get the maximum X coordinate of all the keypoints in the block
+     * @return maximum value
+     */
+    public double getMaximumX()
+    {
+        if (keypointsX.size() == 0) return 0;
+        var max = keypointsX.get(0);
+        for (var keypoint : keypointsX)
+        {
+            if (keypoint > max) max = keypoint;
+        }
+        return max;
+    }
+
+    /**
      * Get the hypotenuse of a right-angled triangle given the other two sides
      *
      * @param side1 adjacent side
