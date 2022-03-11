@@ -21,7 +21,18 @@ on the Wiki.
 The current release has no known bugs, however testing has identified a number of limitations in the drafting procedures 
 which are recorded on the issue tracker where appropriate. Please add more issues to the tracker if you find any problems.
 
-# Release Notes #
+# Release Notes #    
+**Version 1.6**    
+Issue #7: Fixed armhole issue with new relational rule    
+Issue #78: Reduced text size on plots    
+Issue #82: Extended Bexier functions to take angle arguments    
+Issue #83: Rationalised methods in the block base class    
+Issue #89: Fixed missing measurements in sample input file    
+Issue #91: Made it possible to see measurements required for patterns    
+Issue #92: Added new trouser projection pattern    
+Issue #93: Reworked UI to make it more modular    
+Issue #97: Added popup to warn of a broken input file    
+
 **Version 1.5**    
 Issue #76: Add timestamp to pattern outputs.    
 Issue #74: Added Gill sweatshirt pattern.    
