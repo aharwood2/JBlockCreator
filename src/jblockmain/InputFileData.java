@@ -121,6 +121,11 @@ public class InputFileData
             if (h == null || h.length() < 3) continue;
             int splitEnd = h.indexOf("]");
             int splitStart = h.indexOf("[") + 1;
+            if (splitEnd < splitStart)
+            {
+                System.out.println("Could not extract ID from heading: " + h);
+                continue;
+            }
             String id = h.substring(splitStart, splitEnd).trim();
             String name = h.substring(splitEnd + 1, h.length()).trim();
             inputValues.add(new InputValue(id, name, 0));
