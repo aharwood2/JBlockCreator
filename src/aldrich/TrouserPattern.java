@@ -1,11 +1,7 @@
 package aldrich;
 
-import jblockenums.EGarment;
-import jblockenums.EMethod;
-import jblockexceptions.MeasurementNotFoundException;
-import jblockmain.Block;
-import jblockmain.Measurements;
-import jblockmain.Pattern;
+import jblockenums.EPattern;
+import jblockmain.*;
 import mathcontainers.Vector2D;
 
 import java.util.ArrayList;
@@ -13,85 +9,30 @@ import java.util.ArrayList;
 public class TrouserPattern
         extends Pattern
 {
-    /* Pattern-specific Measurements */
-
-    // Measurements listed in the Aldrich book
-    private double a_Waist;
-    private double b_Hips;                      // Actually used
-    private double c_WaistToHip;                // Actually used
-    private double d_BodyRise;                  // Actually used
-    private double e_WaistToFloor;
-    private double f_TrouserBottomWidth;
-
-    // Custom measurement used for block creation
-    private double g_HipCHeight;                // Actually used
-    private double h_CrotchHeight;              // Actually used
-
-    /* Arbitrary Measurements */
-
-    // Arb measurement for hem width
-    private double Arb_HemWidth;
-
-    // Arb measurements for front dart
-    private double Arb_FrontDartWidth;
-    private double Arb_FrontDartLength;
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    /* Methods */
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    public TrouserPattern(Measurements dataStore)
+    public TrouserPattern(String userName, InputFileData dataStore, MeasurementSet template)
     {
-        if (!readMeasurements(dataStore)) return;
-        addEasement();
-
-        // Populate arbitrary measurements
-        Arb_HemWidth = 22.0;
-
-        // Create the blocks
-        createBlocks();
+        super(userName, dataStore, template);
     }
 
     /* Implement abstract methods from super class */
     @Override
-    protected EMethod assignMethod()
+    protected EPattern assignPattern()
     {
-        return EMethod.ALDRICH;
+        return EPattern.ALDRICH_TROUSER;
     }
 
     @Override
-    protected EGarment assignGarment()
+    protected void defineRequiredMeasurements() throws Exception
     {
-        return EGarment.TROUSER;
-    }
+        measurements.addMeasurement(new Measurement("b_HipsFrontArc", "A31"));
+        measurements.addMeasurement(new Measurement("b_HipsBackArc", "A32"));
+        measurements.addMeasurement(new Measurement("c_WaistToHip", "A15"));
+        measurements.addMeasurement(new Measurement("d_BodyRise", "A38"));
+        measurements.addMeasurement(new Measurement("g_HipCHeight", "A44"));
+        measurements.addMeasurement(new Measurement("h_CrotchHeight", "A43"));
 
-    @Override
-    protected void addEasement()
-    {
-        // No easement needed
-    }
-
-    @Override
-    protected boolean readMeasurements(Measurements dataStore)
-    {
-        try
-        {
-            // Based on measurements for this pattern we can read the following from the scan
-            b_Hips = dataStore.getMeasurement("A31").value + dataStore.getMeasurement("A32").value;
-            c_WaistToHip = dataStore.getMeasurement("A15").value;
-            d_BodyRise = dataStore.getMeasurement("A38").value;
-            g_HipCHeight = dataStore.getMeasurement("A44").value;
-            h_CrotchHeight = dataStore.getMeasurement("A43").value;
-
-            // Get name
-            userName = dataStore.getName();
-
-            return true;
-        }
-        catch (MeasurementNotFoundException e)
-        {
-            addMissingMeasurement(dataStore.getName(), e.getMeasurementId());
-            return false;
-        }
+        // Arbitrary measurement
+        measurements.addMeasurement(new Measurement("Arb_HemWidth", 22.0));
     }
 
     /**
@@ -99,10 +40,20 @@ public class TrouserPattern
      * NOTE: This is using a step-by-step guide created for easier coding
      */
     @Override
-    protected void createBlocks()
+    public void createBlocks()
     {
         // Points that make up the shape are listed in a strict anti-clockwise order to maintain correct connectivity for
         // plotting. The bottom left corner of the space to be the origin.
+
+        // Pull from store
+        var b_Hips = get("b_HipsFrontArc") + get("b_HipsBackArc");
+        var c_WaistToHip = get("c_WaistToHip");
+        var d_BodyRise = get("d_BodyRise");
+        var g_HipCHeight = get("g_HipCHeight");
+        var h_CrotchHeight = get("h_CrotchHeight");
+        var Arb_HemWidth = get("Arb_HemWidth");
+        var Arb_FrontDartWidth = get("Arb_FrontDartWidth");
+        var Arb_FrontDartLength = get("Arb_FrontDartLength");
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         /* Front Half Block */
@@ -160,7 +111,7 @@ public class TrouserPattern
         );
 
         // Adding curve from Step 9 --> 15
-        frontblock.addCircularCurve(new Vector2D(d_BodyRise, -(((b_Hips / 12.0) + 2.0) + ((b_Hips / 16.0) + 1.0))),
+        frontblock.addCircularArc(new Vector2D(d_BodyRise, -(((b_Hips / 12.0) + 2.0) + ((b_Hips / 16.0) + 1.0))),
                                     new Vector2D((d_BodyRise + ((h_CrotchHeight / 2.0) - 5.0)),
                                                  -((Arb_HemWidth / 2.0) - 0.5 + 1.3)),
                                     1.5,
@@ -168,7 +119,7 @@ public class TrouserPattern
         );
 
         // Adding curve from Step 13 --> 8
-        frontblock.addCircularCurve(
+        frontblock.addCircularArc(
                 new Vector2D((d_BodyRise + ((h_CrotchHeight / 2.0) - 5.0)), ((Arb_HemWidth / 2.0) - 0.5 + 1.3)),
                 new Vector2D(c_WaistToHip, ((b_Hips / 4.0) + 0.5) - ((b_Hips / 12) + 2)),
                 0.5,
@@ -176,14 +127,14 @@ public class TrouserPattern
         );
 
         // Adding curve from Step 8 --> 11
-        frontblock.addCircularCurve(new Vector2D(c_WaistToHip, ((b_Hips / 4.0) + 0.5) - ((b_Hips / 12) + 2)),
+        frontblock.addCircularArc(new Vector2D(c_WaistToHip, ((b_Hips / 4.0) + 0.5) - ((b_Hips / 12) + 2)),
                                     new Vector2D(0.0, ((b_Hips / 4.0) + 1.0) - ((b_Hips / 12.0) + 2)),
                                     0.5,
                                     true
         );
 
         // Adding curve from Step 6 --> 9
-        frontblock.addCircularCurve(new Vector2D(c_WaistToHip, -((b_Hips / 12.0) + 2.0)),
+        frontblock.addCircularArc(new Vector2D(c_WaistToHip, -((b_Hips / 12.0) + 2.0)),
                                     new Vector2D(d_BodyRise, -(((b_Hips / 12.0) + 2.0) + ((b_Hips / 16.0) + 1.0))),
                                     1.5,
                                     false
@@ -287,7 +238,7 @@ public class TrouserPattern
         );
 
         // Adding curve from Step 24 --> 29
-        backblock.addCircularCurve(new Vector2D((d_BodyRise + 0.5),
+        backblock.addCircularArc(new Vector2D((d_BodyRise + 0.5),
                                                 -((b_Hips / 12) + 2 + (b_Hips / 16) + 1 + 0.8 + (((b_Hips / 16) + 1) / 2))),
                                    new Vector2D((d_BodyRise + ((h_CrotchHeight / 2.0) - 5.0)),
                                                 -((Arb_HemWidth / 2.0) - 0.5 + 1.3) - 1.0),
@@ -296,21 +247,21 @@ public class TrouserPattern
         );
 
         // Adding curve from Step 28 --> 28.1
-        backblock.addCircularCurve(new Vector2D((c_WaistToHip + g_HipCHeight), -((Arb_HemWidth / 2.0) - 0.5) - 1.0),
+        backblock.addCircularArc(new Vector2D((c_WaistToHip + g_HipCHeight), -((Arb_HemWidth / 2.0) - 0.5) - 1.0),
                                    new Vector2D(((c_WaistToHip + g_HipCHeight) + 1.0), 0.0),
                                    0.25,
                                    true
         );
 
         // Adding curve from Step 28.1 --> 26
-        backblock.addCircularCurve(new Vector2D(((c_WaistToHip + g_HipCHeight) + 1.0), 0.0),
+        backblock.addCircularArc(new Vector2D(((c_WaistToHip + g_HipCHeight) + 1.0), 0.0),
                                    new Vector2D((c_WaistToHip + g_HipCHeight), ((Arb_HemWidth / 2.0) - 0.5) + 1.0),
                                    0.25,
                                    true
         );
 
         // Adding curve from Step 27 --> 25
-        backblock.addCircularCurve(
+        backblock.addCircularArc(
                 new Vector2D((d_BodyRise + ((h_CrotchHeight / 2.0) - 5.0)), ((Arb_HemWidth / 2.0) - 0.5 + 1.3) + 1.0),
                 new Vector2D(c_WaistToHip,
                              (((b_Hips / 4.0) + 4.0) - ((b_Hips / 12.0) + 2.0) - (((b_Hips / 12.0) + 2.0) / 4.0))),
@@ -319,7 +270,7 @@ public class TrouserPattern
         );
 
         // Adding curve from Step 25 --> 22
-        backblock.addCircularCurve(new Vector2D(c_WaistToHip,
+        backblock.addCircularArc(new Vector2D(c_WaistToHip,
                                                 (((b_Hips / 4.0) + 4.0) - ((b_Hips / 12.0) + 2.0) - (((b_Hips / 12.0) + 2.0) / 4.0))),
                                    new Vector2D(0.0,
                                                 ((b_Hips / 4.0) - ((b_Hips / 12.0) + 2.0) - (((b_Hips / 12.0) + 2.0) / 4.0))),
@@ -328,7 +279,7 @@ public class TrouserPattern
         );
 
         // Adding curve from Step 19 --> 24
-        backblock.addCircularCurve(
+        backblock.addCircularArc(
                 new Vector2D((d_BodyRise / 2.0), (-(((b_Hips / 12.0) + 2) - ((((b_Hips / 12.0)) + 2.0) / 4.0)))),
                 new Vector2D((d_BodyRise + 0.5),
                              -((b_Hips / 12) + 2 + (b_Hips / 16) + 1 + 0.8 + (((b_Hips / 16) + 1) / 2))),

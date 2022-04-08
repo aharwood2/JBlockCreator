@@ -1,11 +1,8 @@
 package gill;
 
-import jblockenums.EGarment;
-import jblockenums.EMethod;
-import jblockexceptions.MeasurementNotFoundException;
-import jblockmain.Block;
-import jblockmain.Measurements;
-import jblockmain.Pattern;
+import jblockenums.EPattern;
+import jblockenums.EUnitType;
+import jblockmain.*;
 import mathcontainers.Vector2D;
 
 import java.util.ArrayList;
@@ -13,122 +10,61 @@ import java.util.ArrayList;
 public class SkirtPattern
         extends Pattern
 {
-    /* Pattern-specific Measurements */
-    private double a_FrWaistArc = 38.6;
-    private double b_BkWaistArc = 44.4;
-    private double c_FrAbdomenArc = 41.8;
-    private double d_BkAbdomenArc = 44.4;
-    private double e_BkSeatArc = 52.7;
-    private double f_FrHipArc = 44.5;
-    private double g_BkHipArc = 53.3;
-    private double h_WaistToAbdomen = 10.6;
-    private double i_WaistToSeat = 20.6;
-    private double j_WaistToHip = 25.6;
-    private double k_WaistToKnee = 65.3;
-    private double l_SideseamUplift = 0.7;
 
-    // Difference between waist and hip
-    private double waisthipsuppression;
-
-    /* Arbitrary Measurements */
-
-    //adjustment for setting the hem level x coordinate - same for everyone
-    private double Arb_HemLevelX;
-
-    //adjustment for setting the hem level y coordinate - average of many methods
-    //will change when more concrete theory is established
-    private double Arb_HemLevelY;
-
-    // Arb for darts
-    private double Arb_FrontDartPlacement;
-    private double Arb_BackDartPlacement;
-    private double Arb_FrontDartLength;
-    private double Arb_BackDartLength;
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    /* Methods */
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    public SkirtPattern(Measurements dataStore)
+    public SkirtPattern(String userName, InputFileData dataStore, MeasurementSet template)
     {
-        if (!readMeasurements(dataStore)) return;
-        addEasement();
-
-        // Populate arbitrary measurements
-        Arb_HemLevelX = 6.5;
-        Arb_HemLevelY = 5.0;
-        Arb_FrontDartPlacement = 2.0 / 3.0;
-        Arb_BackDartPlacement = 1.0 / 2.0;
-        Arb_FrontDartLength = h_WaistToAbdomen - 1.5;
-        Arb_BackDartLength = i_WaistToSeat - 1.5;
-
-        // Create the blocks
-        createBlocks();
+        super(userName, dataStore, template);
     }
 
     /* Implement abstract methods from super class */
     @Override
-    protected EMethod assignMethod()
+    protected EPattern assignPattern()
     {
-        return EMethod.GILL;
+        return EPattern.GILL_SKIRT;
     }
 
     @Override
-    protected EGarment assignGarment()
+    protected void defineRequiredMeasurements() throws Exception
     {
-        return EGarment.SKIRT;
-    }
+        measurements.addMeasurement(new Measurement("a_FrWaistArc", "A26"));
+        measurements.addMeasurement(new Measurement("b_BkWaistArc", "A27"));
+        measurements.addMeasurement(new Measurement("f_FrHipArc", "A31"));
+        measurements.addMeasurement(new Measurement("g_BkHipArc", "A32"));
+        measurements.addMeasurement(new Measurement("h_WaistToAbdomen", "A33"));
+        measurements.addMeasurement(new Measurement("i_WaistToSeat", "A34"));
+        measurements.addMeasurement(new Measurement("j_WaistToHip", "A15"));
+        measurements.addMeasurement(new Measurement("k_WaistToKnee", "A14"));
+        measurements.addMeasurement(new Measurement("l_SideseamUplift", "A37"));
 
-    @Override
-    protected void addEasement()
-    {
-        //no easement needed
-    }
-
-
-    @Override
-    protected boolean readMeasurements(Measurements dataStore)
-    {
-        try
-        {
-            // Based on measurements for this pattern we can read the following from the scan:
-            a_FrWaistArc = dataStore.getMeasurement("A26").value;
-            b_BkWaistArc = dataStore.getMeasurement("A27").value;
-            c_FrAbdomenArc = dataStore.getMeasurement("A28").value;
-            d_BkAbdomenArc = dataStore.getMeasurement("A29").value;
-            e_BkSeatArc = dataStore.getMeasurement("A30").value;
-            f_FrHipArc = dataStore.getMeasurement("A31").value;
-            g_BkHipArc = dataStore.getMeasurement("A32").value;
-            h_WaistToAbdomen = dataStore.getMeasurement("A33").value;
-            i_WaistToSeat = dataStore.getMeasurement("A34").value;
-            j_WaistToHip = dataStore.getMeasurement("A15").value;
-            k_WaistToKnee = dataStore.getMeasurement("A14").value;
-            l_SideseamUplift = dataStore.getMeasurement("A37").value;
-
-            // Get name
-            userName = dataStore.getName();
-
-            return true;
-        }
-        catch (MeasurementNotFoundException e)
-        {
-            addMissingMeasurement(dataStore.getName(), e.getMeasurementId());
-            return false;
-        }
+        // Arbitrary
+        measurements.addMeasurement(new Measurement("Arb_HemLevelX", 6.5));
+        measurements.addMeasurement(new Measurement("Arb_HemLevelY", 5.0));
+        measurements.addMeasurement(new Measurement("Arb_FrontDartPlacement", 66, EUnitType.PERCENTAGE));
+        measurements.addMeasurement(new Measurement("Arb_BackDartPlacement", 33, EUnitType.PERCENTAGE));
     }
 
     /**
      * The actual block creation process following the drafting method of Gill.
      */
     @Override
-    protected void createBlocks()
+    public void createBlocks()
     {
-        // Setting waist hip suppression variable
-        waisthipsuppression = ((f_FrHipArc + g_BkHipArc) - (a_FrWaistArc + b_BkWaistArc));
-
-        if (waisthipsuppression < 0)
-        {
-            waisthipsuppression = -waisthipsuppression;
-        }
+        // Pull from store
+        var a_FrWaistArc = get("a_FrWaistArc");
+        var b_BkWaistArc = get("b_BkWaistArc");
+        var f_FrHipArc = get("f_FrHipArc");
+        var g_BkHipArc = get("g_BkHipArc");
+        var h_WaistToAbdomen = get("h_WaistToAbdomen");
+        var i_WaistToSeat = get("i_WaistToSeat");
+        var j_WaistToHip = get("j_WaistToHip");
+        var k_WaistToKnee = get("k_WaistToKnee");
+        var l_SideseamUplift = get("l_SideseamUplift");
+        var Arb_HemLevelX = get("Arb_HemLevelX");
+        var Arb_HemLevelY = get("Arb_HemLevelY");
+        var Arb_FrontDartPlacement = get("Arb_FrontDartPlacement") / 100.0;
+        var Arb_BackDartPlacement = get("Arb_BackDartPlacement") / 100.0;
+        var Arb_FrontDartLength = get("h_WaistToAbdomen") - 1.5;
+        var Arb_BackDartLength = get("i_WaistToSeat") - 1.5;
 
         // Points that make up the shape are listed in a strict anti-clockwise order to maintain correct connectivity for
         // plotting. The bottom left corner of the space to be the origin.
@@ -196,13 +132,13 @@ public class SkirtPattern
         }
 
         // Curve between point 10 and point 11
-        fullBlock.addCircularCurve(new Vector2D(pointtenif, (maxY - (a_FrWaistArc / 2.0) - 0.35 - frontdartwidth)),
+        fullBlock.addCircularArc(new Vector2D(pointtenif, (maxY - (a_FrWaistArc / 2.0) - 0.35 - frontdartwidth)),
                                    new Vector2D(j_WaistToHip, g_BkHipArc / 2 + Arb_HemLevelY / 4.0),
                                    0.5,
                                    true);
 
         // Curve between point 11 and point 12
-        fullBlock.addCircularCurve(new Vector2D(j_WaistToHip, g_BkHipArc / 2 + Arb_HemLevelY / 4.0),
+        fullBlock.addCircularArc(new Vector2D(j_WaistToHip, g_BkHipArc / 2 + Arb_HemLevelY / 4.0),
                                    new Vector2D(pointtwelveif, ((b_BkWaistArc / 2.0) + 0.35 + backdartwidth)),
                                    0.5,
                                    true);
@@ -237,8 +173,8 @@ public class SkirtPattern
         fullBlock.addRightAngleCurve(dartEdges.get(2), new Vector2D(0.0, 0.0));
 
         // Add construction keypoints for Abdomen Level
-        fullBlock.addConstructionPoint(new Vector2D(h_WaistToAbdomen, 0.0 - Arb_Con), new Vector2D(h_WaistToAbdomen,
-                                                                                                   (g_BkHipArc / 2 + Arb_HemLevelY / 4) + (f_FrHipArc / 2 + Arb_HemLevelY / 4) + Arb_Con),
+        fullBlock.addConstructionPoint(new Vector2D(h_WaistToAbdomen, 0.0 - Arb_Con),
+                new Vector2D(h_WaistToAbdomen, (g_BkHipArc / 2 + Arb_HemLevelY / 4) + (f_FrHipArc / 2 + Arb_HemLevelY / 4) + Arb_Con),
                                        "Abdomen");
 
         // Add construction keypoints for Hip Level
@@ -247,8 +183,8 @@ public class SkirtPattern
                                        "Seat");
 
         // Add construction keypoints for Abdomen Level
-        fullBlock.addConstructionPoint(new Vector2D(j_WaistToHip, 0.0 - Arb_Con), new Vector2D(j_WaistToHip,
-                                                                                               (g_BkHipArc / 2 + Arb_HemLevelY / 4) + (f_FrHipArc / 2 + Arb_HemLevelY / 4) + Arb_Con),
+        fullBlock.addConstructionPoint(new Vector2D(j_WaistToHip, 0.0 - Arb_Con),
+                new Vector2D(j_WaistToHip, (g_BkHipArc / 2 + Arb_HemLevelY / 4) + (f_FrHipArc / 2 + Arb_HemLevelY / 4) + Arb_Con),
                                        "Hip");
     }
 }

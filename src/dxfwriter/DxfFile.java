@@ -1,7 +1,5 @@
 package dxfwriter;
 
-import jblockmain.JBlockCreator;
-
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -9,6 +7,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
+import java.util.ResourceBundle;
 
 /**
  * A class that encapsulates a DXF file and the methods required to write it from arrays of points which represent line
@@ -19,8 +18,9 @@ public class DxfFile
     /**
      * Some parameters for the annotation text writing
      */
-    double baselineSkip = 10.0;
+    double baselineSkip = 8.0;
     double textHeight = baselineSkip * 0.8;
+    double textHeightSmall = 2.5;
     /**
      * Flag indicating whether file is ready
      */
@@ -132,9 +132,9 @@ public class DxfFile
      * Writes the contents of the DXF file.
      *
      * @param blockName       name of the block to be overlaid on the DXF drawing
-     * @param dxfLayerChooser array of flags indicating which features should be written
+     * @param config          configuration of the file
      */
-    public void writeFile(String blockName, boolean[] dxfLayerChooser)
+    public void writeFile(String blockName, DxfFileConfiguration config)
     {
         if (bIsOpen)
         {
@@ -277,7 +277,7 @@ public class DxfFile
             writeDxfLine("70", "0");            // Block flag (see DXF references)
 
             // Add the pattern outline to the block definition
-            if (dxfLayerChooser.length > 1 && dxfLayerChooser[1])
+            if (config.getLayers().contains("checkOutline"))
             {
                 // Start of polyline
                 writeDxfLine("0", "POLYLINE");
@@ -337,8 +337,8 @@ public class DxfFile
 
             /* Add specific annotation text on layer 15 as per the ASTM spec */
             writeAnnotationText("ASTM/D13 Proposal 1 VERSION:10");
-            writeAnnotationText("AUTHOR:JBLOCKCREATOR_" + JBlockCreator.bundle.getString("maj_ver") + "_"
-                                        + JBlockCreator.bundle.getString("min_ver"));
+            writeAnnotationText("AUTHOR:JBLOCKCREATOR_" + ResourceBundle.getBundle("settings").getString("maj_ver") + "_"
+                                        + ResourceBundle.getBundle("settings").getString("min_ver"));
             writeAnnotationText("CREATION DATE:" + new SimpleDateFormat("dd-MM-yyyy").format(dDate));
             writeAnnotationText("CREATION TIME:" + new SimpleDateFormat("hh:mm").format(dDate));
             writeAnnotationText("UNITS:METRIC");
@@ -346,7 +346,7 @@ public class DxfFile
             writeAnnotationText("SAMPLE SIZE:0");
 
             // Write the rest of the information on custom layers
-            if (dxfLayerChooser.length > 4 && dxfLayerChooser[4])
+            if (config.getLayers().contains("checkCon"))
             {
                 // Add construction line entities one at a time
                 for (int i = 0; i < ConX.size() - 1; i++)
@@ -379,7 +379,7 @@ public class DxfFile
                 }
             }
 
-            if (dxfLayerChooser.length > 2 && dxfLayerChooser[2])
+            if (config.getLayers().contains("checkCircles"))
             {
                 // Marks the keypoints used as individual circles on a separate layer
                 for (int i = 0; i < linesX.size(); i++)
@@ -393,7 +393,7 @@ public class DxfFile
                 }
             }
 
-            if (dxfLayerChooser.length > 3 && dxfLayerChooser[3])
+            if (config.getLayers().contains("checkCoord"))
             {
                 // Add point coordinates one at a time
                 for (int i = 0; i < linesX.size() - 1; i++)
@@ -403,7 +403,7 @@ public class DxfFile
                     writeDxfLine("62", "256");              // Colour of line using index colour
                     writeDxfLine("1", "(" + String.format("%.2f", linesX.get(i) * 10.0) + ", " +
                             String.format("%.2f", linesY.get(i) * 10.0) + ")");
-                    writeDxfLine("40", "5.0");              // Text height (i.e size)
+                    writeDxfLine("40", Double.toString(textHeightSmall));         // Text height (i.e size)
                     writeDxfLine("50", "45");               // Text rotation angle
                     writeDxfLine("10", Double.toString(linesX.get(i) * 10.0)); // X coordinate start
                     writeDxfLine("20", Double.toString(linesY.get(i) * 10.0)); // Y coordinate start
@@ -412,7 +412,7 @@ public class DxfFile
                 }
             }
 
-            if (dxfLayerChooser.length > 0 && dxfLayerChooser[0])
+            if (config.getLayers().contains("checkScale"))
             {
                 // Write lines to create a 100 x 100 mm square off to bottom left of pattern
                 float[] scaleSqX = {-50.0f, -50.0f, 50.0f, 50.0f};
@@ -501,6 +501,4 @@ public class DxfFile
         writeDxfLine("1", text);
         currentBaseline -= baselineSkip;     // Decrement the text vertical position by the baseline skip
     }
-
-
 }

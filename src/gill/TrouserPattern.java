@@ -1,12 +1,7 @@
 package gill;
 
-import jblockenums.EGarment;
-import jblockenums.EMethod;
-import jblockexceptions.MeasurementNotFoundException;
-import jblockmain.Block;
-import jblockmain.Measurements;
-import jblockmain.Pattern;
-import jblockmain.easeMeasurement;
+import jblockenums.EPattern;
+import jblockmain.*;
 import mathcontainers.Vector2D;
 
 import java.util.ArrayList;
@@ -14,153 +9,75 @@ import java.util.ArrayList;
 public class TrouserPattern
         extends Pattern
 {
-    protected static ArrayList<easeMeasurement> easeMeasurements = new ArrayList<>();
-    /* Pattern-specific Measurements */
-    private double a_WaistToHip;            // Measurement [015]
-    private double b_ThighCircR;            // Measurement [017]
-    private double c_KneeCircR;             // Measurement [018]
-    private double d_AnkleCircleR;          // Measurement [019]
-    private double e_FrWaistArc;            // Measurement [026]
-    private double f_BkWaistArc;            // Measurement [027]
-    private double g_BkSeatArc;             // Measurement [030]
-    private double h_FrHipArc;              // Measurement [031]
-    private double i_BkHipArc;              // Measurement [032]
-    private double j_WaistToSeat;           // Measurement [034]
-    private double k_BodyRise;              // Measurement [038]
-    private double l_AnkleCRHeight;         // Measurement [041]
-    private double m_KneeCRHeight;          // Measurement [042]
-    private double n_CrotchHeight;          // Measurement [043]
-    private double o_HipCHeight;            // Measurement [044]
-    private double p_SeatCHeight;           // Measurement [045]
-    private double q_FrSeatArc;             // Measurement [046]
-    private double r_CrotchZ;               // Measurement [047]
-    private double s_HipFrZ;                // Measurement [048]
-    private double t_HipBkZ;                // Measurement [049]
-    private double u_SeatFrZ;               // Measurement [050]
-    private double v_SeatBkZ;               // Measurement [051]
-    private double w_WaistFrZ;              // Measurement [052]
-    private double x_WaistBkZ;              // Measurement [053]
-    private double y_FrCrotchLength;        // Measurement [054]
-
-    /* Arbitrary Measurements */
-    private double z_BkCrotchLength;        // Measurement [055]
-    // Arb measurement for 2 inches in centimetres
-    private double Arb_TwoInches;
-    // Arb measurement for the crotch
-    private double Arb_CrotchPointFive;
-    // Arb measurement for back hem drop
-    private double Arb_BkHemDrop;
-    // Arb measurement for the crotch reduction
-    private double Arb_CrotchReduction;
-    // Arb measurements for the back dart
-    private double Arb_BackDartWidth;
-    private double Arb_BackDartLength;
-    // Arb measurements for the back dart
-    private double Arb_FrontDartWidth;
-    private double Arb_FrontDartLength;
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    /* Methods */
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    public TrouserPattern(Measurements dataStore)
+    public TrouserPattern(String userName, InputFileData dataStore, MeasurementSet template)
     {
-        if (!readMeasurements(dataStore)) return;
-        addEasement();
-
-        // Populate arbitrary measurements
-        Arb_TwoInches = 5.08;
-        Arb_CrotchPointFive = 0.5;
-        Arb_BkHemDrop = 1.0;
-        Arb_CrotchReduction = 5.0;
-
-        // Create the blocks
-        createBlocks();
-    }
-
-    public static void populateEaseMeasurements()
-    {
-        // Check to see it hasn't already been populated / it is empty
-        if (easeMeasurements.size() > 0)
-        {
-            return;
-        }
-    }
-
-    public static ArrayList<easeMeasurement> getEaseMeasurement()
-    {
-        return easeMeasurements;
+        super(userName, dataStore, template);
     }
 
     /* Implement abstract methods from super class */
     @Override
-    protected EMethod assignMethod()
+    protected EPattern assignPattern()
     {
-        return EMethod.GILL;
+        return EPattern.GILL_TROUSER;
     }
 
     @Override
-    protected EGarment assignGarment()
+    protected void defineRequiredMeasurements() throws Exception
     {
-        return EGarment.TROUSER;
-    }
-
-    @Override
-    protected void addEasement()
-    {
-        // No easement needed
-    }
-
-    @Override
-    protected boolean readMeasurements(Measurements dataStore)
-    {
-        try
-        {
-            // Based on measurements for this pattern we can read the following from the scan
-            a_WaistToHip = dataStore.getMeasurement("A15").value;            // Measurement [015]
-            b_ThighCircR = dataStore.getMeasurement("A17").value;            // Measurement [017]
-            c_KneeCircR = dataStore.getMeasurement("A18").value;             // Measurement [018]
-            d_AnkleCircleR = dataStore.getMeasurement("A19").value;          // Measurement [019]
-            e_FrWaistArc = dataStore.getMeasurement("A26").value;            // Measurement [026]
-            f_BkWaistArc = dataStore.getMeasurement("A27").value;            // Measurement [027]
-            g_BkSeatArc = dataStore.getMeasurement("A30").value;             // Measurement [030]
-            h_FrHipArc = dataStore.getMeasurement("A31").value;              // Measurement [031]
-            i_BkHipArc = dataStore.getMeasurement("A32").value;              // Measurement [032]
-            j_WaistToSeat = dataStore.getMeasurement("A34").value;           // Measurement [034]
-            k_BodyRise = dataStore.getMeasurement("A38").value;              // Measurement [038]
-            l_AnkleCRHeight = dataStore.getMeasurement("A41").value;         // Measurement [041]
-            m_KneeCRHeight = dataStore.getMeasurement("A42").value;          // Measurement [042]
-            n_CrotchHeight = dataStore.getMeasurement("A43").value;          // Measurement [043]
-            o_HipCHeight = dataStore.getMeasurement("A44").value;            // Measurement [044]
-            p_SeatCHeight = dataStore.getMeasurement("A45").value;           // Measurement [045]
-            q_FrSeatArc = dataStore.getMeasurement("A46").value;             // Measurement [046]
-            r_CrotchZ = dataStore.getMeasurement("A47").value;               // Measurement [047]
-            s_HipFrZ = dataStore.getMeasurement("A48").value;                // Measurement [048]
-            t_HipBkZ = dataStore.getMeasurement("A49").value;                // Measurement [049]
-            u_SeatFrZ = dataStore.getMeasurement("A50").value;               // Measurement [050]
-            v_SeatBkZ = dataStore.getMeasurement("A51").value;               // Measurement [051]
-            w_WaistFrZ = dataStore.getMeasurement("A52").value;              // Measurement [052]
-            x_WaistBkZ = dataStore.getMeasurement("A53").value;              // Measurement [053]
-            y_FrCrotchLength = dataStore.getMeasurement("A54").value;        // Measurement [054]
-            z_BkCrotchLength = dataStore.getMeasurement("A55").value;        // Measurement [055]
-
-            // Get name
-            userName = dataStore.getName();
-
-            return true;
-        }
-        catch (MeasurementNotFoundException e)
-        {
-            addMissingMeasurement(dataStore.getName(), e.getMeasurementId());
-            return false;
-        }
+        measurements.addMeasurement(new Measurement("c_KneeCircR", "A18"));
+        measurements.addMeasurement(new Measurement("d_AnkleCircleR", "A19"));
+        measurements.addMeasurement(new Measurement("e_FrWaistArc", "A26"));
+        measurements.addMeasurement(new Measurement("f_BkWaistArc", "A27"));
+        measurements.addMeasurement(new Measurement("g_BkSeatArc", "A30"));
+        measurements.addMeasurement(new Measurement("h_FrHipArc", "A31"));
+        measurements.addMeasurement(new Measurement("i_BkHipArc", "A32"));
+        measurements.addMeasurement(new Measurement("j_WaistToSeat", "A34"));
+        measurements.addMeasurement(new Measurement("k_BodyRise", "A38"));
+        measurements.addMeasurement(new Measurement("l_AnkleCRHeight", "A41"));
+        measurements.addMeasurement(new Measurement("m_KneeCRHeight", "A42"));
+        measurements.addMeasurement(new Measurement("n_CrotchHeight", "A43"));
+        measurements.addMeasurement(new Measurement("o_HipCHeight", "A44"));
+        measurements.addMeasurement(new Measurement("p_SeatCHeight", "A45"));
+        measurements.addMeasurement(new Measurement("q_FrSeatArc", "A46"));
+        measurements.addMeasurement(new Measurement("r_CrotchZ", "A47"));
+        measurements.addMeasurement(new Measurement("s_HipFrZ", "A48"));
+        measurements.addMeasurement(new Measurement("t_HipBkZ", "A49"));
+        measurements.addMeasurement(new Measurement("u_SeatFrZ", "A50"));
+        measurements.addMeasurement(new Measurement("v_SeatBkZ", "A51"));
+        measurements.addMeasurement(new Measurement("w_WaistFrZ", "A52"));
+        measurements.addMeasurement(new Measurement("x_WaistBkZ", "A53"));
     }
 
     /**
      * The actual block creation process following the drafting method of Gill.
      */
     @Override
-    protected void createBlocks()
+    public void createBlocks()
     {
+        // Pull from store
+        var c_KneeCircR = get("c_KneeCircR");
+        var d_AnkleCircleR = get("d_AnkleCircleR");
+        var e_FrWaistArc = get("e_FrWaistArc");
+        var f_BkWaistArc = get("f_BkWaistArc");
+        var g_BkSeatArc = get("g_BkSeatArc");
+        var h_FrHipArc = get("h_FrHipArc");
+        var i_BkHipArc = get("i_BkHipArc");
+        var j_WaistToSeat = get("j_WaistToSeat");
+        var k_BodyRise = get("k_BodyRise");
+        var l_AnkleCRHeight = get("l_AnkleCRHeight");
+        var m_KneeCRHeight = get("m_KneeCRHeight");
+        var n_CrotchHeight = get("n_CrotchHeight");
+        var o_HipCHeight = get("o_HipCHeight");
+        var p_SeatCHeight = get("p_SeatCHeight");
+        var q_FrSeatArc = get("q_FrSeatArc");
+        var r_CrotchZ = get("r_CrotchZ");
+        var s_HipFrZ = get("s_HipFrZ");
+        var t_HipBkZ = get("t_HipBkZ");
+        var u_SeatFrZ = get("u_SeatFrZ");
+        var v_SeatBkZ = get("v_SeatBkZ");
+        var w_WaistFrZ = get("w_WaistFrZ");
+        var x_WaistBkZ = get("x_WaistBkZ");
+
         // Points that make up the shape are listed in a strict anti-clockwise order to maintain correct connectivity for
         // plotting. The crotch point is the origin
 
@@ -308,27 +225,27 @@ public class TrouserPattern
                                            point1.getY() + ((point2.getY() - point1.getY()) * 0.75));
 
         // A bunch of curves
-        fullBlock.addDirectedCurve(
+        fullBlock.addDirectedCubicSpline(
                 point1, point2,
                 new Vector2D(point1and2.subtract(point1)),
                 new Vector2D(point3.subtract(point2)),
                 new double[]{0.0, 0.0});
 
-        fullBlock.addCircularCurve(point3, point5, 1.0, true);
+        fullBlock.addCircularArc(point3, point5, 1.0, true);
 
-        fullBlock.addDirectedCurve(
+        fullBlock.addDirectedCubicSpline(
                 point6, point7,
                 new Vector2D(point6.subtract(point5)),
                 new Vector2D(point8.subtract(point7)),
                 new double[]{0.0, 0.0});
 
-        fullBlock.addCircularCurve(
+        fullBlock.addCircularArc(
                 point9, point10,
                 (point10.getY() - (new Vector2D(point9.add(point10.subtract(point9).divide(2.0)))).getY()) / 2.0,
                 false);
 
-        Arb_BackDartWidth = (0.32 * (((h_FrHipArc + i_BkHipArc) / 2.0) - ((e_FrWaistArc + f_BkWaistArc) / 2.0)));
-        Arb_BackDartLength = j_WaistToSeat - 5.0;
+        var Arb_BackDartWidth = (0.32 * (((h_FrHipArc + i_BkHipArc) / 2.0) - ((e_FrWaistArc + f_BkWaistArc) / 2.0)));
+        var Arb_BackDartLength = j_WaistToSeat - 5.0;
         ArrayList<Vector2D> dartPoints = fullBlock.addDart(
                 point10, point11,
                 0.5,
@@ -340,18 +257,18 @@ public class TrouserPattern
         fullBlock.addRightAngleCurve(point10, dartPoints.get(0));
         fullBlock.addRightAngleCurve(dartPoints.get(2), point11);
 
-        fullBlock.addDirectedCurve(
+        fullBlock.addDirectedCubicSpline(
                 point13, point1,
                 new Vector2D(point12.subtract(point11)),
                 new Vector2D(point1and2.subtract(point1)),
                 new double[]{0.0, 90.0});
 
-        fullBlock.addCircularCurve(
+        fullBlock.addCircularArc(
                 point19, point20,
                 (point20.getY() - (new Vector2D(point19.add(point20.subtract(point19).divide(2.0)))).getY()) / 2.0,
                 false);
 
-        fullBlock.addDirectedCurve(
+        fullBlock.addDirectedCubicSpline(
                 point22, point23,
                 new Vector2D(1.0, 0.0),
                 new Vector2D(point24.subtract(point23)), new double[]{0.0, 0.0});
@@ -361,23 +278,23 @@ public class TrouserPattern
         Vector2D point26and15 = new Vector2D((point15.getX() + (point26.getX()
                 - point15.getX())) / 3.0, point15.getY() + ((point26.getY() - point15.getY()) * 0.75));
 
-        fullBlock.addDirectedCurve(
+        fullBlock.addDirectedCubicSpline(
                 point26, point15,
                 new Vector2D(point26.subtract(point25)),
                 new Vector2D(point15.subtract(point26and15)), new double[]{0.0, 0.0});
 
-        fullBlock.addDirectedCurve(
+        fullBlock.addDirectedCubicSpline(
                 point15, point16,
                 new Vector2D(point15.subtract(point26and15)),
                 new Vector2D(point18.subtract(point16)), new double[]{90.0, 0.0});
 
-        Arb_FrontDartWidth = (0.18 * (((h_FrHipArc + i_BkHipArc) / 2.0) - ((e_FrWaistArc + f_BkWaistArc) / 2.0)));
-        Arb_FrontDartLength = j_WaistToSeat - 1.5;
+        var Arb_FrontDartWidth = (0.18 * (((h_FrHipArc + i_BkHipArc) / 2.0) - ((e_FrWaistArc + f_BkWaistArc) / 2.0)));
+        var Arb_FrontDartLength = j_WaistToSeat - 1.5;
         ArrayList<Vector2D> dartPoints2 = fullBlock.addDart(
                 point18, point19,
                 0.3,
-                Arb_BackDartWidth,
-                Arb_BackDartLength,
+                Arb_FrontDartWidth,
+                Arb_FrontDartLength,
                 true, false);
 
         fullBlock.addRightAngleCurve(point18, dartPoints2.get(0));

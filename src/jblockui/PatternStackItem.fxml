@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+
+<GridPane alignment="CENTER" hgap="10.0" vgap="10.0" xmlns="http://javafx.com/javafx/14" xmlns:fx="http://javafx.com/fxml/1" fx:controller="jblockui.PatternStackItemController">
+  <columnConstraints>
+      <ColumnConstraints halignment="LEFT" minWidth="10.0" percentWidth="40" />
+      <ColumnConstraints halignment="LEFT" minWidth="10.0" percentWidth="40" hgrow="ALWAYS" />
+      <ColumnConstraints halignment="RIGHT" minWidth="10.0" percentWidth="20" />
+  </columnConstraints>
+    <CheckBox fx:id="checkInclude" mnemonicParsing="false" text="&lt;PatternName&gt;" />
+    <Label fx:id="statusLabel" text="&lt;Status&gt;" GridPane.columnIndex="1" />
+  <Button fx:id="measurementButton" mnemonicParsing="false" text="Set Measurements" wrapText="true" GridPane.columnIndex="2" />
+   <padding>
+      <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+   </padding>
+</GridPane>

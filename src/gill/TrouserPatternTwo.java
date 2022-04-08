@@ -1,12 +1,7 @@
 package gill;
 
-import jblockenums.EGarment;
-import jblockenums.EMethod;
-import jblockexceptions.MeasurementNotFoundException;
-import jblockmain.Block;
-import jblockmain.Measurements;
-import jblockmain.Pattern;
-import jblockmain.easeMeasurement;
+import jblockenums.EPattern;
+import jblockmain.*;
 import mathcontainers.Vector2D;
 
 import java.util.ArrayList;
@@ -15,145 +10,92 @@ import java.util.Collections;
 public class TrouserPatternTwo
         extends Pattern
 {
-
-    protected static ArrayList<easeMeasurement> easeMeasurements = new ArrayList<>();
-    private double optSmallofBackWaist;        // Measurement [A02]
-    private double hipCircum;                  // Measurement [A03]
-    private double waistToHipLength;           // Measurement [A15]
-    private double kneeCircumR;                // Measurement [A18]
-    private double ankleCircumR;               // Measurement [A19]
-    private double frontWaistArc;              // Measurement [A26]
-    private double backWaistArc;               // Measurement [A27]
-    private double frontAbdomenArc;            // Measurement [A28]
-    private double backSeatArc;                // Measurement [A30]
-    private double frontHipArc;               // Measurement [A31]
-    private double backHipArc;                 // Measurement [A32]
-    private double waistToAbdomen;             // Measurement [A33]
-    private double waistToSeat;                // Measurement [A34]
-    private double sideStreamUpliftR;          // Measurement [A37]
-    private double bodyRise;                   // Measurement [A38]
-    private double seatDepth;                  // Measurement [A39]
-    private double hipDepth;                   // Measurement [A40]
-    private double ankleCircumHeightR;         // Measurement [A41]
-    private double kneeCircumHeightR;          // Measurement [A42]
-    private double crotchHeight;               // Measurement [A43]
-    private double frontSeatArc;               // Measurement [A46]
-    private double seatBKZ;                    // Measurement [A51]
-    private double frontWaistZ;                // Measurement [A52]
-    private double backWaistZ;                 // Measurement [A53]
-    private double waistWidth;                 // Measurement [A59]
-    private double hipWidth;                   // Measurement [A60]
-    private double frontAbdomenZ;              // Measurement [A61]
-    private double fullCrotchLength;           // Measurement [A62]
-    private double waistEase;
-    private double seatEase;
-    private double hipEase;
-    private double kneeEase;
-    private double ankleEase;
-
-    public TrouserPatternTwo(Measurements dataStore)
+    public TrouserPatternTwo(String userName, InputFileData dataStore, MeasurementSet template)
     {
-        if (!readMeasurements(dataStore)) return;
-        addEasement();
-
-        // Create the blocks
-        createBlocks();
-    }
-
-    public static void populateEaseMeasurements()
-    {
-        // Check to see it hasn't already been populated / it is empty so as to not re-write
-        if (easeMeasurements.size() > 0)
-        {
-            return;
-        }
-        // Add all the ease measurements to the array list with initial values
-        easeMeasurements.add(new easeMeasurement("Waist Ease", 2.0));
-        easeMeasurements.add(new easeMeasurement("Seat Ease", 6.0));
-        easeMeasurements.add(new easeMeasurement("Hip Ease", 6.0));
-        easeMeasurements.add(new easeMeasurement("Knee Ease", 15.0));
-        easeMeasurements.add(new easeMeasurement("Ankle Ease", 22.0));
-    }
-
-    public static ArrayList<easeMeasurement> getEaseMeasurement()
-    {
-        return easeMeasurements;
+        super(userName, dataStore, template);
     }
 
     /* Implement abstract methods from super class */
     @Override
-    protected EMethod assignMethod()
+    protected EPattern assignPattern()
     {
-        return EMethod.GILL;
+        return EPattern.GILL_TROUSER2;
     }
 
     @Override
-    protected EGarment assignGarment()
+    protected void defineRequiredMeasurements() throws Exception
     {
-        return EGarment.TROUSER;
+        measurements.addMeasurement(new Measurement("waistToHipLength", "A15"));
+        measurements.addMeasurement(new Measurement("kneeCircumR", "A18"));
+        measurements.addMeasurement(new Measurement("ankleCircumR", "A19"));
+        measurements.addMeasurement(new Measurement("frontWaistArc", "A26"));
+        measurements.addMeasurement(new Measurement("backWaistArc", "A27"));
+        measurements.addMeasurement(new Measurement("frontAbdomenArc", "A28"));
+        measurements.addMeasurement(new Measurement("backSeatArc", "A30"));
+        measurements.addMeasurement(new Measurement("frontHipArc", "A31"));
+        measurements.addMeasurement(new Measurement("backHipArc", "A32"));
+        measurements.addMeasurement(new Measurement("waistToAbdomen", "A33"));
+        measurements.addMeasurement(new Measurement("waistToSeat", "A34"));
+        measurements.addMeasurement(new Measurement("sideStreamUpliftR", "A37"));
+        measurements.addMeasurement(new Measurement("bodyRise", "A38"));
+        measurements.addMeasurement(new Measurement("seatDepth", "A39"));
+        measurements.addMeasurement(new Measurement("hipDepth", "A40"));
+        measurements.addMeasurement(new Measurement("ankleCircumHeightR", "A41"));
+        measurements.addMeasurement(new Measurement("kneeCircumHeightR", "A42"));
+        measurements.addMeasurement(new Measurement("crotchHeight", "A43"));
+        measurements.addMeasurement(new Measurement("frontSeatArc", "A46"));
+        measurements.addMeasurement(new Measurement("seatBKZ", "A51"));
+        measurements.addMeasurement(new Measurement("frontWaistZ", "A52"));
+        measurements.addMeasurement(new Measurement("backWaistZ", "A53"));
+        measurements.addMeasurement(new Measurement("waistWidth", "A59"));
+        measurements.addMeasurement(new Measurement("hipWidth", "A60"));
+        measurements.addMeasurement(new Measurement("frontAbdomenZ", "A61"));
+        measurements.addMeasurement(new Measurement("fullCrotchLength", "A62"));
+
+        // Ease
+        measurements.addMeasurement(new Measurement("waistEase", 2.0));
+        measurements.addMeasurement(new Measurement("seatEase", 6.0));
+        measurements.addMeasurement(new Measurement("hipEase", 6.0));
+        measurements.addMeasurement(new Measurement("kneeEase", 15.0));
+        measurements.addMeasurement(new Measurement("ankleEase", 22.0));
     }
 
     @Override
-    protected void addEasement() throws IndexOutOfBoundsException
+    public void createBlocks()
     {
-        // Ease values
-        waistEase = easeMeasurements.get(0).getValue();
-        seatEase = easeMeasurements.get(1).getValue();
-        hipEase = easeMeasurements.get(2).getValue();
-        kneeEase = easeMeasurements.get(3).getValue();
-        ankleEase = easeMeasurements.get(4).getValue();
-    }
-
-    @Override
-    protected boolean readMeasurements(Measurements dataStore)
-    {
-        try
-        {
-            // Based on measurements for this pattern we can read the following from the scan
-            optSmallofBackWaist = dataStore.getMeasurement("A02").value;
-            hipCircum = dataStore.getMeasurement("A03").value;
-            waistToHipLength = dataStore.getMeasurement("A15").value;
-            kneeCircumR = dataStore.getMeasurement("A18").value;
-            ankleCircumR = dataStore.getMeasurement("A19").value;
-            frontWaistArc = dataStore.getMeasurement("A26").value;
-            backWaistArc = dataStore.getMeasurement("A27").value;
-            frontAbdomenArc = dataStore.getMeasurement("A28").value;
-            backSeatArc = dataStore.getMeasurement("A30").value;
-            frontHipArc = dataStore.getMeasurement("A31").value;
-            backHipArc = dataStore.getMeasurement("A32").value;
-            waistToAbdomen = dataStore.getMeasurement("A33").value;
-            waistToSeat = dataStore.getMeasurement("A34").value;
-            sideStreamUpliftR = dataStore.getMeasurement("A37").value;
-            bodyRise = dataStore.getMeasurement("A38").value;
-            seatDepth = dataStore.getMeasurement("A39").value;
-            hipDepth = dataStore.getMeasurement("A40").value;
-            ankleCircumHeightR = dataStore.getMeasurement("A41").value;
-            kneeCircumHeightR = dataStore.getMeasurement("A42").value;
-            crotchHeight = dataStore.getMeasurement("A43").value;
-            frontSeatArc = dataStore.getMeasurement("A46").value;
-            seatBKZ = dataStore.getMeasurement("A51").value;
-            frontWaistZ = dataStore.getMeasurement("A52").value;
-            backWaistZ = dataStore.getMeasurement("A53").value;
-            waistWidth = dataStore.getMeasurement("A59").value;
-            hipWidth = dataStore.getMeasurement("A60").value;
-            frontAbdomenZ = dataStore.getMeasurement("A61").value;
-            fullCrotchLength = dataStore.getMeasurement("A62").value;
-
-            // Get name
-            userName = dataStore.getName();
-
-            return true;
-        }
-        catch (MeasurementNotFoundException e)
-        {
-            addMissingMeasurement(dataStore.getName(), e.getMeasurementId());
-            return false;
-        }
-    }
-
-    @Override
-    protected void createBlocks()
-    {
+        // Pull from store
+        var waistToHipLength= get("waistToHipLength");
+        var kneeCircumR= get("kneeCircumR");
+        var ankleCircumR= get("ankleCircumR");
+        var frontWaistArc= get("frontWaistArc");
+        var backWaistArc= get("backWaistArc");
+        var frontAbdomenArc= get("frontAbdomenArc");
+        var backSeatArc= get("backSeatArc");
+        var frontHipArc= get("frontHipArc");
+        var backHipArc= get("backHipArc");
+        var waistToAbdomen= get("waistToAbdomen");
+        var waistToSeat= get("waistToSeat");
+        var sideStreamUpliftR= get("sideStreamUpliftR");
+        var bodyRise= get("bodyRise");
+        var seatDepth= get("seatDepth");
+        var hipDepth= get("hipDepth");
+        var ankleCircumHeightR= get("ankleCircumHeightR");
+        var kneeCircumHeightR= get("kneeCircumHeightR");
+        var crotchHeight= get("crotchHeight");
+        var frontSeatArc= get("frontSeatArc");
+        var seatBKZ= get("seatBKZ");
+        var frontWaistZ= get("frontWaistZ");
+        var backWaistZ= get("backWaistZ");
+        var waistWidth= get("waistWidth");
+        var hipWidth= get("hipWidth");
+        var frontAbdomenZ= get("frontAbdomenZ");
+        var fullCrotchLength= get("fullCrotchLength");
+        var waistEase= get("waistEase");
+        var seatEase= get("seatEase");
+        var hipEase= get("hipEase");
+        var kneeEase= get("kneeEase");
+        var ankleEase= get("ankleEase");
+        
         Block frontBlock = new Block(userName + "_Gill_FrontBlock");
         blocks.add(frontBlock);
 
@@ -230,7 +172,7 @@ public class TrouserPatternTwo
         Vector2D point1and2 = new Vector2D((point1.getX() + ((point2.getX() - point1.getX())) / 3.0),
                                            point1.getY() + ((point2.getY() - point1.getY()) * 0.75) + centreYpoint);
 
-        frontBlock.addDirectedCurve(point1, point2, new Vector2D(point1and2.subtract(point1)),
+        frontBlock.addDirectedCubicSpline(point1, point2, new Vector2D(point1and2.subtract(point1)),
                                     new Vector2D(point3.subtract(point2)), new double[]{0.0, 0.0});
 
         // Point 3,4,5,6,7
@@ -241,7 +183,7 @@ public class TrouserPatternTwo
         frontBlock.addKeypoint(point7);
 
         // Curve between point 5 and 6 keeping angles at start and end 0 deg with respect to preceding and proceeding curves
-        frontBlock.addDirectedCurve(point5, point6, new Vector2D(point5.subtract(point4)),
+        frontBlock.addDirectedCubicSpline(point5, point6, new Vector2D(point5.subtract(point4)),
                                     new Vector2D(point7.subtract(point6)), new double[]{0.0, 0.0});
 
         // Point 8 and 9
@@ -249,11 +191,11 @@ public class TrouserPatternTwo
         frontBlock.addKeypoint(point9);
 
         // Circular curve between 8 and 9 making sure apex is lower than height of point 8
-        frontBlock.addCircularCurve(point8, point9, (point9.getY()
+        frontBlock.addCircularArc(point8, point9, (point9.getY()
                 - (new Vector2D(point8.add(point9.subtract(point8).divide(2.0)))).getY()) / 2.0, false);
 
         // Curve that connect point 7 and 8 together as a circular curve
-        frontBlock.addCircularCurve(point7, point8, (point8.getY()
+        frontBlock.addCircularArc(point7, point8, (point8.getY()
                 - (new Vector2D(point7.add(point8.subtract(point7).divide(2.0)))).getY()) / 2.0, true);
 
         // Point 10
@@ -281,7 +223,7 @@ public class TrouserPatternTwo
         frontBlock.addKeypoint(point11);
 
         // Final steep curve that connects to crotch point point 12 not added as a keypoint but through curve function
-        frontBlock.addDirectedCurve(point11, point1, point12, 0.0);
+        frontBlock.addDirectedCubicSpline(point11, point1, point12, 0.0);
 
         // Get the max and min y with a small additional buffer of 5cm for the construction lines
         double maxFrontY = Collections.max(frontBlock.getPlottableKeypointsY()) + 5.0;
@@ -357,21 +299,21 @@ public class TrouserPatternTwo
         backBlock.addKeypoint(point18);
 
         // Curve between 17 and 18
-        backBlock.addCircularCurve(point17, point18, (point18.getY()
+        backBlock.addCircularArc(point17, point18, (point18.getY()
                 - (new Vector2D(point17.add(point18.subtract(point17).divide(2.0)))).getY()) / 2.0, false);
 
         backBlock.addKeypoint(point19);
         backBlock.addKeypoint(point20);
         backBlock.addKeypoint(point21);
 
-        backBlock.addDirectedCurve(point20, point21, new Vector2D(point20.subtract(point19)),
+        backBlock.addDirectedCubicSpline(point20, point21, new Vector2D(point20.subtract(point19)),
                                    new Vector2D(point22.subtract(point21)), new double[]{0.0, 0.0});
 
         backBlock.addKeypoint(point22);
         backBlock.addKeypoint(point24);
 
         // Circular curve with height 1 to ensure keypoint 23 is added
-        backBlock.addCircularCurve(point22, point24, 1.0, true);
+        backBlock.addCircularArc(point22, point24, 1.0, true);
 
         backBlock.addKeypoint(point25);
         backBlock.addKeypoint(point13);
@@ -380,13 +322,13 @@ public class TrouserPatternTwo
         Vector2D point25and13 = new Vector2D(point13.getX() + ((point25.getX() - point13.getX()) / 3.0),
                                              point13.getY() + ((point25.getY() - point13.getY()) * 0.75));
 
-        backBlock.addDirectedCurve(point25, point13, new Vector2D(point25.subtract(point24)),
+        backBlock.addDirectedCubicSpline(point25, point13, new Vector2D(point25.subtract(point24)),
                                    new Vector2D(point25and13.subtract(point13)), new double[]{0.0, 0.0});
 
         backBlock.addKeypoint(point14);
         backBlock.addKeypoint(point15);
 
-        backBlock.addDirectedCurve(point13, point14, new Vector2D(point13.subtract(point25and13)),
+        backBlock.addDirectedCubicSpline(point13, point14, new Vector2D(point13.subtract(point25and13)),
                                    new Vector2D(point16Temp.subtract(point15)), new double[]{90.0, 0.0});
 
         // Calculate length point 16 needs to be moved in the -x direction by to keep overall crotch length constant
@@ -441,4 +383,3 @@ public class TrouserPatternTwo
     }
 
 }
-

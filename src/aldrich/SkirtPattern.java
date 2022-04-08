@@ -1,11 +1,8 @@
 package aldrich;
 
-import jblockenums.EGarment;
-import jblockenums.EMethod;
-import jblockexceptions.MeasurementNotFoundException;
-import jblockmain.Block;
-import jblockmain.Measurements;
-import jblockmain.Pattern;
+import jblockenums.EPattern;
+import jblockenums.EUnitType;
+import jblockmain.*;
 import mathcontainers.Vector2D;
 
 import java.util.ArrayList;
@@ -13,136 +10,72 @@ import java.util.ArrayList;
 public class SkirtPattern
         extends Pattern
 {
-    /* Skirt pattern block is constructed to fit on the 'natural waistline' */
-
-    /* Measurement file name */
-    String inputFileName;
-
-    /* Pattern-specific Measurements */
-    private double a_Waist = 68.0;
-    private double b_Hips = 94.0;
-    private double c_WaistToHip = 20.6;
-    private double d_SkirtLength = 71.5;
-    // d_SkirtLength is affected by fashion so could realistically be anything
-    // Set the same as the default for the Gill pattern
-
-    /* Arbitrary Measurements */
-
-    // Apparent adjustment for setting waistline
-    private double Arb_HipAdjustment;
-
-    // Waist curve adjustment
-    private double Arb_WaistCurve;
-
-    /* Back Arbs */
-
-    // Back hip adjustment
-    private double Arb_BackHipAdjustment;
-
-    // 'Natural waist' adjustment
-    private double Arb_BackNaturalWaist;
-
-    // Back dart depths
-    private double Arb_BackDartOneDepth;
-    private double Arb_BackDartTwoDepth;
-
-    // Back dart width
-    private double Arb_BackDartWidth;
-
-    /* Front Arbs */
-
-    // 'Natural waist' adjustment
-    private double Arb_FrontNaturalWaist;
-
-    // Front dart depth
-    private double Arb_FrontDartDepth;
-
-    // Front dart width
-    private double Arb_FrontDartWidth;
-
-    // Dart placement
-    private double Arb_FrontDartPlacement;
-    private double Arb_BackDartPlacement;
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    /* Methods */
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    public SkirtPattern(Measurements dataStore)
+    public SkirtPattern(String userName, InputFileData dataStore, MeasurementSet template)
     {
-        if (!readMeasurements(dataStore)) return;
-        addEasement();
-
-        // Populate arbitrary measurements
-        Arb_HipAdjustment = 1.5;
-        Arb_WaistCurve = -1.25;
-        Arb_BackHipAdjustment = 1.5;
-        Arb_BackNaturalWaist = 4.0;
-        Arb_BackDartOneDepth = 14.0;
-        Arb_BackDartTwoDepth = 13.0;
-        Arb_BackDartWidth = 2.0;
-        Arb_FrontNaturalWaist = 2.5;
-        Arb_FrontDartDepth = 12.0;
-        Arb_FrontDartWidth = 2.5;
-        Arb_FrontDartPlacement = 2.0 / 3.0;
-        Arb_BackDartPlacement = 1.0 / 3.0;
-
-        // Create the blocks
-        createBlocks();
+        super(userName, dataStore, template);
     }
 
     /* Implement abstract methods from super class */
     @Override
-    protected EMethod assignMethod()
+    protected EPattern assignPattern()
     {
-        return EMethod.ALDRICH;
+        return EPattern.ALDRICH_SKIRT;
     }
 
     @Override
-    protected EGarment assignGarment()
+    protected void defineRequiredMeasurements() throws Exception
     {
-        return EGarment.SKIRT;
-    }
+        measurements.addMeasurement(new Measurement("a_WaistFrontArc", "A26"));
+        measurements.addMeasurement(new Measurement("a_WaistBackArc", "A27"));
+        measurements.addMeasurement(new Measurement("b_HipsFrontArc", "A31"));
+        measurements.addMeasurement(new Measurement("b_HipsBackArc", "A32"));
+        measurements.addMeasurement(new Measurement("c_WaistToHip", "A15"));
+        measurements.addMeasurement(new Measurement("d_SkirtLength", "A14"));
 
-    @Override
-    protected void addEasement()
-    {
-        //no easement needed
-    }
-
-    @Override
-    protected boolean readMeasurements(Measurements dataStore)
-    {
-        try
-        {
-            // Based on measurements for this pattern we can read the following from the scan:
-            a_Waist = dataStore.getMeasurement("A26").value + dataStore.getMeasurement("A27").value;
-            b_Hips = dataStore.getMeasurement("A31").value + dataStore.getMeasurement("A32").value;
-            c_WaistToHip = dataStore.getMeasurement("A15").value;
-            d_SkirtLength = dataStore.getMeasurement("A14").value;
-
-            // Get name
-            inputFileName = dataStore.getName();
-
-            return true;
-        }
-        catch (MeasurementNotFoundException e)
-        {
-            addMissingMeasurement(dataStore.getName(), e.getMeasurementId());
-            return false;
-        }
+        // Arbitrary
+        measurements.addMeasurement(new Measurement("Arb_HipAdjustment", 1.5));
+        measurements.addMeasurement(new Measurement("Arb_WaistCurve", -1.25));
+        measurements.addMeasurement(new Measurement("Arb_BackHipAdjustment", 1.5));
+        measurements.addMeasurement(new Measurement("Arb_BackNaturalWaist", 4.0));
+        measurements.addMeasurement(new Measurement("Arb_BackDartOneDepth", 14.0));
+        measurements.addMeasurement(new Measurement("Arb_BackDartTwoDepth", 13.0));
+        measurements.addMeasurement(new Measurement("Arb_BackDartWidth", 2.0));
+        measurements.addMeasurement(new Measurement("Arb_FrontNaturalWaist", 2.5));
+        measurements.addMeasurement(new Measurement("Arb_FrontDartDepth", 12.0));
+        measurements.addMeasurement(new Measurement("Arb_FrontDartWidth", 2.5));
+        measurements.addMeasurement(new Measurement("Arb_FrontDartPlacement", 66, EUnitType.PERCENTAGE));
+        measurements.addMeasurement(new Measurement("Arb_BackDartPlacement", 33, EUnitType.PERCENTAGE));
     }
 
     /**
      * The actual block creation process following the drafting method of Gill.
      */
     @Override
-    protected void createBlocks()
+    public void createBlocks()
     {
+        // Pull from store
+        var a_Waist = get("a_WaistFrontArc") + get("a_WaistBackArc");
+        var b_Hips = get("b_HipsFrontArc") + get("b_HipsBackArc");
+        var c_WaistToHip = get("c_WaistToHip");
+        var d_SkirtLength = get("d_SkirtLength");
+        var Arb_HipAdjustment = get("Arb_HipAdjustment");
+        var Arb_WaistCurve = get("Arb_WaistCurve");
+        var Arb_BackHipAdjustment = get("Arb_BackHipAdjustment");
+        var Arb_BackNaturalWaist = get("Arb_BackNaturalWaist");
+        var Arb_BackDartOneDepth = get("Arb_BackDartOneDepth");
+        var Arb_BackDartTwoDepth = get("Arb_BackDartTwoDepth");
+        var Arb_BackDartWidth = get("Arb_BackDartWidth");
+        var Arb_FrontNaturalWaist = get("Arb_FrontNaturalWaist");
+        var Arb_FrontDartDepth = get("Arb_FrontDartDepth");
+        var Arb_FrontDartWidth = get("Arb_FrontDartWidth");
+        var Arb_FrontDartPlacement = get("Arb_FrontDartPlacement") / 100.0;
+        var Arb_BackDartPlacement = get("Arb_BackDartPlacement") / 100.0;
+        
         // Points that make up the shape are listed in a strict anti-clockwise order to maintain correct connectivity for
         // plotting. The bottom left corner of the space to be the origin.
 
         // Create component representing half back of skirt folded in half.
-        blocks.add(new Block(inputFileName + "_Aldrich_Skirt_Block"));
+        blocks.add(new Block(userName + "_Aldrich_Skirt_Block"));
         Block fullBlock = blocks.get(0);
 
         // Add all the fixed points to the block that coincide with the basic rectangle. These points do not move
@@ -168,13 +101,13 @@ public class SkirtPattern
         fullBlock.addKeypoint(new Vector2D(Arb_WaistCurve, a_Waist / 4.0 + Arb_BackNaturalWaist));
 
         // Adding the two side seam curves
-        fullBlock.addCircularCurve(new Vector2D(Arb_WaistCurve,
+        fullBlock.addCircularArc(new Vector2D(Arb_WaistCurve,
                                                 (b_Hips / 2.0 + Arb_BackHipAdjustment) - (a_Waist / 4.0 + Arb_FrontNaturalWaist)),
                                    new Vector2D(c_WaistToHip, b_Hips / 4.0 + Arb_HipAdjustment),
                                    1.0,
                                    true);
 
-        fullBlock.addCircularCurve(new Vector2D(c_WaistToHip, b_Hips / 4.0 + Arb_HipAdjustment),
+        fullBlock.addCircularArc(new Vector2D(c_WaistToHip, b_Hips / 4.0 + Arb_HipAdjustment),
                                    new Vector2D(Arb_WaistCurve, a_Waist / 4.0 + Arb_BackNaturalWaist),
                                    1.0,
                                    true);

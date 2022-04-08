@@ -5,5 +5,5 @@ package jblockenums;
  */
 public enum EAnalysis
 {
-    RECTANGLEPLOT
+    RECTANGLE_PLOT
 }

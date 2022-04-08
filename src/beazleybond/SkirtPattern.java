@@ -1,13 +1,9 @@
 package beazleybond;
 
-import jblockenums.EGarment;
-import jblockenums.EMethod;
+import jblockenums.EPattern;
 import jblockenums.EPosition;
-import jblockexceptions.MeasurementNotFoundException;
-import jblockmain.Block;
-import jblockmain.Measurements;
-import jblockmain.Pattern;
-import jblockmain.easeMeasurement;
+import jblockenums.EUnitType;
+import jblockmain.*;
 import mathcontainers.Vector2D;
 
 import java.util.ArrayList;
@@ -18,144 +14,66 @@ import java.util.ArrayList;
 public class SkirtPattern
         extends Pattern
 {
-    protected static ArrayList<easeMeasurement> easeMeasurements = new ArrayList<>();
-    /* Pattern-specific Measurements */
-    private double a_Waist = 70.0;
-    private double b_UpperHip = 90.0;
-    private double c_Hip = 96.0;
-    private double d_CentreBack = 60.0;
-    private double e_SideSeam = 61.0;
-
-    /* Arbitrary Measurements */
-    // Some of the following can be inferred from body scan information but for now assume that these follow the
-    // empirically driven values.
-    private double f_CentreFront = 60.0;
-    // Ensures the waistline drops by 1cm to allow it to curve round the body. This can be informed from the body scan.
-    private double Arb_WaistLevel;
-    // Generic assumption that can in future be informed from the body scan.
-    private double Arb_UpperHipLevel;
-    // Generic assumption that can in future be informed from the body scan.
-    private double Arb_HipLevel;
-    // Waist suppression process required calculation of a front and back dart by dividing up the circumference of the
-    // waist. For now we assume a fixed percentage is assigned to each although this could be adjusted in future.
-    private double Arb_BackDartPercent;
-    private double Arb_FrontDartPercent;
-    private double Arb_SideSeamPercent;
-    // Dart length is arbitrary but can be inferred from body scan data.
-    private double Arb_BackDartLength;
-    private double Arb_FrontDartLength;
-    // Dart placement is also arbitrary and is specified as a percentage of quarter waist as measured from the start
-    // point of the waist (using strict connectivity order)
-    private double Arb_BackDartPlacement;
-    private double Arb_FrontDartPlacement;
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    /* Methods */
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    public SkirtPattern(Measurements dataStore)
+    public SkirtPattern(String userName, InputFileData dataStore, MeasurementSet template)
     {
-        if (!readMeasurements(dataStore)) return;
-        addEasement();
-
-        // Populate arbitrary measurements
-        Arb_WaistLevel = 1.0;
-        Arb_UpperHipLevel = 10.0;
-        Arb_HipLevel = 20.0;
-        Arb_BackDartPercent = 0.35;
-        Arb_FrontDartPercent = 0.20;
-        Arb_SideSeamPercent = 0.45;
-        Arb_BackDartLength = 14.0;
-        Arb_FrontDartLength = 8.0;
-        Arb_BackDartPlacement = 0.5;
-        Arb_FrontDartPlacement = 1.0 / 3.0;
-
-        // Create the blocks
-        createBlocks();
-    }
-
-    public static void populateEaseMeasurements()
-    {
-        // Check to see it hasn't already been populated / it is empty
-        if (easeMeasurements.size() > 0)
-        {
-            return;
-        }
-        easeMeasurements.add(new easeMeasurement("Waist Ease", 2.0));
-        easeMeasurements.add(new easeMeasurement("Upper Hip Ease", 4.0));
-        easeMeasurements.add(new easeMeasurement("Hip Ease", 4.0));
-        easeMeasurements.add(new easeMeasurement("SideSeam Ease", 6.8));
-    }
-
-    public static ArrayList<easeMeasurement> getEaseMeasurement()
-    {
-        return easeMeasurements;
+        super(userName, dataStore, template);
     }
 
     /* Implement abstract methods from super class */
     @Override
-    protected EMethod assignMethod()
+    protected EPattern assignPattern()
     {
-        return EMethod.BEAZLEYBOND;
+        return EPattern.BEAZLEYBOND_SKIRT;
     }
 
     @Override
-    protected EGarment assignGarment()
+    protected void defineRequiredMeasurements() throws Exception
     {
-        return EGarment.SKIRT;
-    }
+        measurements.addMeasurement(new Measurement("a_Waist", "A02"));
+        measurements.addMeasurement(new Measurement("b_UpperHip", "A13"));
+        measurements.addMeasurement(new Measurement("c_Hip", "A03"));
+        measurements.addMeasurement(new Measurement("d_CentreBack", "A16"));
+        measurements.addMeasurement(new Measurement("g_HipLevel", "A15"));
 
-    @Override
-    protected void addEasement() throws IndexOutOfBoundsException
-    {
-        try
-        {
-            a_Waist += easeMeasurements.get(0).getValue();
-            b_UpperHip += easeMeasurements.get(1).getValue();
-            c_Hip += easeMeasurements.get(2).getValue();
-            e_SideSeam += easeMeasurements.get(3).getValue();
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-            System.out.println("Ease array out of bounds");
-        }
-    }
+        // Arbitrary
+        measurements.addMeasurement(new Measurement("Arb_WaistLevel", 1.0));
+        measurements.addMeasurement(new Measurement("Arb_UpperHipLevel", 10.0));
+        measurements.addMeasurement(new Measurement("Arb_BackDartPercent", 35, EUnitType.PERCENTAGE));
+        measurements.addMeasurement(new Measurement("Arb_FrontDartPercent", 20, EUnitType.PERCENTAGE));
+        measurements.addMeasurement(new Measurement("Arb_SideSeamPercent", 45, EUnitType.PERCENTAGE));
+        measurements.addMeasurement(new Measurement("Arb_BackDartLength", 14.0));
+        measurements.addMeasurement(new Measurement("Arb_FrontDartLength", 8.0));
+        measurements.addMeasurement(new Measurement("Arb_BackDartPlacement", 50, EUnitType.PERCENTAGE));
+        measurements.addMeasurement(new Measurement("Arb_FrontDartPlacement", 33, EUnitType.PERCENTAGE));
 
-    @Override
-    protected boolean readMeasurements(Measurements dataStore)
-    {
-        try
-        {
-            // Based on measurements for this pattern we can read the following from the scan:
-            a_Waist = dataStore.getMeasurement("A02").value;
-            b_UpperHip = dataStore.getMeasurement("A13").value;
-            c_Hip = dataStore.getMeasurement("A03").value;
-            d_CentreBack = dataStore.getMeasurement("A16").value;
-            e_SideSeam = dataStore.getMeasurement("A16").value;
-            f_CentreFront = dataStore.getMeasurement("A16").value;
-
-            // Others
-            Arb_HipLevel = dataStore.getMeasurement("A15").value;
-
-            // Get name of user
-            userName = dataStore.getName();
-
-            return true;
-        }
-        catch (MeasurementNotFoundException e)
-        {
-            addMissingMeasurement(dataStore.getName(), e.getMeasurementId());
-            return false;
-        }
-
+        // Ease
+        measurements.addMeasurement(new Measurement("WaistEase", 2.0));
+        measurements.addMeasurement(new Measurement("UpperHipEase", 4.0));
+        measurements.addMeasurement(new Measurement("HipEase", 4.0));
     }
 
     /**
      * The actual block creation process following the drafting method of Beazley and Bond.
      */
     @Override
-    protected void createBlocks()
+    public void createBlocks()
     {
+        // Pull from store
+        var a_Waist = get("a_Waist") + get("WaistEase");
+        var b_UpperHip = get("b_UpperHip") + get("UpperHipEase");
+        var c_Hip = get("c_Hip") + get("HipEase");
+        var d_CentreBack = get("d_CentreBack");
+        var g_HipLevel = get("g_HipLevel");
+        var Arb_WaistLevel = get("Arb_WaistLevel");
+        var Arb_UpperHipLevel = get("Arb_UpperHipLevel");
+        var Arb_BackDartPercent = get("Arb_BackDartPercent") / 100.0;
+        var Arb_FrontDartPercent = get("Arb_FrontDartPercent") / 100.0;
+        var Arb_SideSeamPercent = get("Arb_SideSeamPercent") / 100.0;
+        var Arb_BackDartLength = get("Arb_BackDartLength");
+        var Arb_FrontDartLength = get("Arb_FrontDartLength");
+        var Arb_BackDartPlacement = get("Arb_BackDartPlacement") / 100.0;
+        var Arb_FrontDartPlacement = get("Arb_FrontDartPlacement") / 100.0;
+
         // Points that make up the shape are listed in a strict anti-clockwise order to maintain correct connectivity for
         // plotting. The bottom left corner of the space to be the origin.
 
@@ -167,7 +85,7 @@ public class SkirtPattern
         // throughout the drafting process.
         backBlock.addKeypoint(new Vector2D(d_CentreBack, 0.0));
         backBlock.addKeypoint(new Vector2D(d_CentreBack, c_Hip / 4.0));
-        backBlock.addKeypoint(new Vector2D(Arb_HipLevel, c_Hip / 4.0));
+        backBlock.addKeypoint(new Vector2D(g_HipLevel, c_Hip / 4.0));
 
         // Compute the waistline suppression by finding the difference between the waist measurement and half the hip
         // measurement and then divide by 4 for a quarter distance.
@@ -189,7 +107,7 @@ public class SkirtPattern
 
         // Add curve between waist point and hip point (rather than upper-hip as stipulated in BB).
         // Assume for now, in the absence of vary form curve that this is a curve defined by a circle.
-        backBlock.addCircularCurve(new Vector2D(Arb_HipLevel, c_Hip / 4.0),
+        backBlock.addCircularArc(new Vector2D(g_HipLevel, c_Hip / 4.0),
                                    new Vector2D(0.0, Int_SuppressedSS), 0.5, true);
 
 
@@ -199,8 +117,8 @@ public class SkirtPattern
                                        "Upper Hip");
 
         // Add construction keypoints for Hip Level
-        backBlock.addConstructionPoint(new Vector2D((Arb_HipLevel), 0.0 - Arb_Con),
-                                       new Vector2D((Arb_HipLevel), c_Hip / 4 + Arb_Con),
+        backBlock.addConstructionPoint(new Vector2D((g_HipLevel), 0.0 - Arb_Con),
+                                       new Vector2D((g_HipLevel), c_Hip / 4 + Arb_Con),
                                        "Hip");
 
         // Trace off block

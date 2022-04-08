@@ -1,12 +1,7 @@
 package beazleybond;
 
-import jblockenums.EGarment;
-import jblockenums.EMethod;
-import jblockexceptions.MeasurementNotFoundException;
-import jblockmain.Block;
-import jblockmain.Measurements;
-import jblockmain.Pattern;
-import jblockmain.easeMeasurement;
+import jblockenums.EPattern;
+import jblockmain.*;
 import mathcontainers.Vector2D;
 
 import java.util.ArrayList;
@@ -18,177 +13,95 @@ import java.util.ArrayList;
 public class TrouserPattern
         extends Pattern
 {
-    protected static ArrayList<easeMeasurement> easeMeasurements = new ArrayList<>();
-    /* Pattern-specific Measurements */
-    // In future will be simply extracted from the Measurements object.
-    private double a_Waist = 70.0;
-    private double a_WaistBand = 70.0;
-    private double b_UpperHip = 90.0;
-    private double c_Hip = 96.0;
-    private double d_Thigh = 57.0;
-    private double e_KneeStraight = 37.0;
-    private double e_KneeSlim = 37.0;
-    private double f_Ankle = 25.0;
-    private double g_UpperHip = 10.0;
-    private double h_Hip = 20.0;
-    private double i_Crutch = 28.0;
-    private double j_Knee = 60.0;
-    private double k_OutsideLegToAnkle = 100.0;
-
-    /* Arbitrary Measurements */
-    // Some initialised after ease has been applied
-    private double l_InsideLegToAnkle = 72.0;
-    // Crutch shaping
-    private double Arb_CrutchCentreFrontOffset = 0.5;
-    private double Arb_FrontCrutchCurveBisect = 2.5;
-    private double Arb_BackCrutchCurveBisect = 3.0;
-    // Waist Shaping
-    private double Arb_FrontDartSuppression = 4.0;
-    private double Arb_FrontDartLength = 10.0;
-    private double Arb_FrontDartWidth = Arb_FrontDartSuppression / 2.0;
-    private double Arb_BackDartSuppression = 5.0;
-    private double Arb_BackDartWidth = Arb_BackDartSuppression / 2.0;
-    private double Arb_BackDartLengthShort = 13.0;
-    private double Arb_BackDartLengthLong = 15.0;
-    // Width of starting rectangle
-    private double Arb_FrontCrutchFork;
-    private double Arb_BackCrutchFork;
-    private double Arb_FrontWidthOfBlock;
-    private double Arb_BackWidthOfBlock;
-    // Centre front and back lines
-    private double Arb_CentreFrontFromInsideLeg;
-    private double Arb_CentreBackFromInsideLeg;
-    // Trouser crease line
-    private double Arb_FrontCreaseLineFromInsideLeg;
-    private double Arb_BackCreaseLineFromInsideLeg;
-    // Knee
-    private double Arb_FrontHalfKneeWidth;
-    private double Arb_BackHalfKneeWidth;
-    // Arb Measurement for construction lines
-    private double Arb_UpperHipLevel;
-    private double Arb_HipLevel;
-    private double Arb_CrutchLevel;
-    private double Arb_Knee;
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    /* Methods */
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    public TrouserPattern(Measurements dataStore)
+    public TrouserPattern(String userName, InputFileData dataStore, MeasurementSet template)
     {
-        if (!readMeasurements(dataStore)) return;
-        addEasement();
-
-        // Initialise dependent quantities (arbitrary measurements)
-        Arb_FrontCrutchFork = (c_Hip / 20.0) + 0.5;
-        Arb_BackCrutchFork = (c_Hip / 10.0) + 1.5;
-        Arb_FrontWidthOfBlock = (c_Hip / 4.0) - 1.0 + Arb_FrontCrutchFork;
-        Arb_BackWidthOfBlock = (c_Hip / 4.0) + 1.0 + Arb_BackCrutchFork;
-        Arb_CentreFrontFromInsideLeg = Arb_FrontWidthOfBlock - ((c_Hip / 4.0) - 1.0);
-        Arb_CentreBackFromInsideLeg = Arb_BackWidthOfBlock - ((c_Hip / 4.0) + 1.0);
-        Arb_FrontCreaseLineFromInsideLeg = Arb_CentreFrontFromInsideLeg + (c_Hip / 10.0);
-        Arb_BackCreaseLineFromInsideLeg = Arb_CentreBackFromInsideLeg + (c_Hip / 10.0) - 1.0;
-        Arb_FrontHalfKneeWidth = (e_KneeStraight / 4.0) - 1.0;
-        Arb_BackHalfKneeWidth = (e_KneeStraight / 4.0) + 1.0;
-
-        // Arb Measurement for construction lines
-        Arb_UpperHipLevel = 10.0;
-        Arb_HipLevel = 20.0;
-        Arb_CrutchLevel = 29.0;
-        Arb_Knee = 60.0;
-
-        // Create the blocks
-        createBlocks();
-    }
-
-    public static void populateEaseMeasurements()
-    {
-        // Check to see it hasn't already been populated / it is empty
-        if (easeMeasurements.size() > 0)
-        {
-            return;
-        }
-        easeMeasurements.add(new easeMeasurement("Waist Ease", 4.0));
-        easeMeasurements.add(new easeMeasurement("Waist Band Ease", 2.0));
-        easeMeasurements.add(new easeMeasurement("Upper Hip Ease", 4.0));
-        easeMeasurements.add(new easeMeasurement("Hip Ease", 4.0));
-        easeMeasurements.add(new easeMeasurement("Thigh Ease", 10.0));
-        easeMeasurements.add(new easeMeasurement("Straight Knee Ease", 15.0));
-        easeMeasurements.add(new easeMeasurement("Slim Knee Ease", 9.0));
-        easeMeasurements.add(new easeMeasurement("Ankle Ease", 9.0));
-        easeMeasurements.add(new easeMeasurement("Crutch Ease", 1.0));
-        easeMeasurements.add(new easeMeasurement("Inside Leg To Ankle Ease", 1.0));
-    }
-
-    public static ArrayList<easeMeasurement> getEaseMeasurement()
-    {
-        return easeMeasurements;
+        super(userName, dataStore, template);
     }
 
     /* Implement abstract methods from super class */
     @Override
-    protected EMethod assignMethod()
+    protected EPattern assignPattern()
     {
-        return EMethod.BEAZLEYBOND;
+        return EPattern.BEAZLEYBOND_TROUSER;
     }
 
     @Override
-    protected EGarment assignGarment()
+    protected void defineRequiredMeasurements() throws Exception
     {
-        return EGarment.TROUSER;
-    }
+        measurements.addMeasurement(new Measurement("a_Waist", "A02"));
+        measurements.addMeasurement(new Measurement("b_UpperHip", "A13"));
+        measurements.addMeasurement(new Measurement("c_Hip", "A03"));
+        measurements.addMeasurement(new Measurement("d_Thigh", "A17"));
+        measurements.addMeasurement(new Measurement("e_KneeStraight", "A18"));
+        measurements.addMeasurement(new Measurement("f_Ankle", "A19"));
+        measurements.addMeasurement(new Measurement("h_Hip", "A15"));
+        measurements.addMeasurement(new Measurement("i_Crutch", "A20"));
+        measurements.addMeasurement(new Measurement("j_Knee", "A14"));
+        measurements.addMeasurement(new Measurement("k_OutsideLegToAnkle", "A21"));
+        measurements.addMeasurement(new Measurement("l_InsideLegToAnkle", "A22"));
 
-    @Override
-    protected void addEasement() throws IndexOutOfBoundsException
-    {
-        // Size 12 for now
-        a_Waist += easeMeasurements.get(0).getValue();
-        a_WaistBand += easeMeasurements.get(1).getValue();
-        b_UpperHip += easeMeasurements.get(2).getValue();
-        c_Hip += easeMeasurements.get(3).getValue();
-        d_Thigh += easeMeasurements.get(4).getValue();
-        e_KneeStraight += easeMeasurements.get(5).getValue();
-        e_KneeSlim += easeMeasurements.get(6).getValue();
-        f_Ankle += easeMeasurements.get(7).getValue();
-        i_Crutch += easeMeasurements.get(8).getValue();
-        l_InsideLegToAnkle -= easeMeasurements.get(8).getValue();
-    }
+        // Arbitrary
+        measurements.addMeasurement(new Measurement("Arb_UpperHipLevel", 10.0));
+        measurements.addMeasurement(new Measurement("Arb_UpperHip", 10.0));
+        measurements.addMeasurement(new Measurement("Arb_CrutchCentreFrontOffset", 0.5));
+        measurements.addMeasurement(new Measurement("Arb_FrontCrutchCurveBisect", 2.5));
+        measurements.addMeasurement(new Measurement("Arb_BackCrutchCurveBisect", 3.0));
+        measurements.addMeasurement(new Measurement("Arb_FrontDartSuppression", 4.0));
+        measurements.addMeasurement(new Measurement("Arb_FrontDartLength", 10.0));
+        measurements.addMeasurement(new Measurement("Arb_BackDartSuppression", 5.0));
+        measurements.addMeasurement(new Measurement("Arb_BackDartLengthShort", 13.0));
+        measurements.addMeasurement(new Measurement("Arb_BackDartLengthLong", 15.0));
 
-    @Override
-    protected boolean readMeasurements(Measurements dataStore)
-    {
-        try
-        {
-            // Get measurements from the scan data store
-            a_Waist = dataStore.getMeasurement("A02").value;
-            b_UpperHip = dataStore.getMeasurement("A13").value;
-            c_Hip = dataStore.getMeasurement("A03").value;
-            d_Thigh = dataStore.getMeasurement("A17").value;
-            e_KneeStraight = dataStore.getMeasurement("A18").value;
-            f_Ankle = dataStore.getMeasurement("A19").value;
-            h_Hip = dataStore.getMeasurement("A15").value;
-            i_Crutch = dataStore.getMeasurement("A20").value;
-            j_Knee = dataStore.getMeasurement("A14").value;
-            k_OutsideLegToAnkle = dataStore.getMeasurement("A21").value;
-            l_InsideLegToAnkle = dataStore.getMeasurement("A22").value;
-
-            // Get name
-            userName = dataStore.getName();
-
-            return true;
-        }
-        catch (MeasurementNotFoundException e)
-        {
-            addMissingMeasurement(dataStore.getName(), e.getMeasurementId());
-            return false;
-        }
+        // Ease
+        measurements.addMeasurement(new Measurement("WaistEase", 4.0));
+        measurements.addMeasurement(new Measurement("HipEase", 4.0));
+        measurements.addMeasurement(new Measurement("StraightKneeEase", 15.0));
+        measurements.addMeasurement(new Measurement("CrutchEase", 1.0));
     }
 
     /**
      * The actual block creation process following the drafting method of Beazley and Bond.
      */
     @Override
-    protected void createBlocks()
+    public void createBlocks()
     {
+        // Pull from store
+        var a_Waist = get("a_Waist") + get("WaistEase");
+        var b_UpperHip = get("b_UpperHip");
+        var c_Hip = get("c_Hip") + get("HipEase");
+        var d_Thigh = get("d_Thigh");
+        var e_KneeStraight = get("e_KneeStraight") + get("StraightKneeEase");
+        var f_Ankle = get("f_Ankle");
+        var h_Hip = get("h_Hip");
+        var i_Crutch = get("i_Crutch") + get("CrutchEase");
+        var j_Knee = get("j_Knee");
+        var k_OutsideLegToAnkle = get("k_OutsideLegToAnkle");
+        var l_InsideLegToAnkle = get("l_InsideLegToAnkle");
+
+        // Initialise driven arbitrary values
+        var Arb_FrontCrutchFork = (c_Hip / 20.0) + 0.5;
+        var Arb_BackCrutchFork = (c_Hip / 10.0) + 1.5;
+        var Arb_FrontWidthOfBlock = (c_Hip / 4.0) - 1.0 + Arb_FrontCrutchFork;
+        var Arb_BackWidthOfBlock = (c_Hip / 4.0) + 1.0 + Arb_BackCrutchFork;
+        var Arb_CentreFrontFromInsideLeg = Arb_FrontWidthOfBlock - ((c_Hip / 4.0) - 1.0);
+        var Arb_CentreBackFromInsideLeg = Arb_BackWidthOfBlock - ((c_Hip / 4.0) + 1.0);
+        var Arb_FrontCreaseLineFromInsideLeg = Arb_CentreFrontFromInsideLeg + (c_Hip / 10.0);
+        var Arb_BackCreaseLineFromInsideLeg = Arb_CentreBackFromInsideLeg + (c_Hip / 10.0) - 1.0;
+        var Arb_FrontHalfKneeWidth = (e_KneeStraight / 4.0) - 1.0;
+        var Arb_BackHalfKneeWidth = (e_KneeStraight / 4.0) + 1.0;
+        var Arb_UpperHipLevel = get("Arb_UpperHipLevel");
+        var Arb_UpperHip = get("Arb_UpperHip");
+        var Arb_CrutchCentreFrontOffset = get("Arb_CrutchCentreFrontOffset");
+        var Arb_FrontCrutchCurveBisect = get("Arb_FrontCrutchCurveBisect");
+        var Arb_BackCrutchCurveBisect = get("Arb_BackCrutchCurveBisect");
+        var Arb_FrontDartSuppression = get("Arb_FrontDartSuppression");
+        var Arb_FrontDartLength = get("Arb_FrontDartLength");
+        var Arb_BackDartSuppression = get("Arb_BackDartSuppression");
+        var Arb_BackDartLengthShort = get("Arb_BackDartLengthShort");
+        var Arb_BackDartLengthLong = get("Arb_BackDartLengthLong");
+        var Arb_FrontDartWidth = Arb_FrontDartSuppression / 2.0;
+        var Arb_BackDartWidth = Arb_BackDartSuppression / 2.0;
+
         // Points that make up the shape are listed in a strict anti-clockwise order to maintain correct connectivity
         // for plotting. The bottom left corner of the space to be the origin.
 
@@ -233,13 +146,13 @@ public class TrouserPattern
                 new Vector2D(0.0, Arb_CentreFrontFromInsideLeg + (a_Waist / 4.0) + Arb_FrontDartSuppression));
 
         // Insert the inside leg curve -- circular curve will do the job rather than something more complicated
-        frontBlock.addCircularCurve(new Vector2D(i_Crutch, 0.0),
+        frontBlock.addCircularArc(new Vector2D(i_Crutch, 0.0),
                                     new Vector2D(j_Knee, Arb_FrontCreaseLineFromInsideLeg - Arb_FrontHalfKneeWidth),
                                     0.5,
                                     false);
 
         // Insert crutch curve
-        frontBlock.addDirectedCurveWithApexTangent(
+        frontBlock.addDirectedCubicSplineWithApexTangent(
                 new Vector2D(h_Hip, Arb_CentreFrontFromInsideLeg),
                 new Vector2D(i_Crutch, 0.0),
                 new Vector2D(i_Crutch, Arb_CentreFrontFromInsideLeg),
@@ -279,12 +192,12 @@ public class TrouserPattern
                                                  Arb_CentreFrontFromInsideLeg + (a_Waist / 4.0) + Arb_FrontDartSuppression);
         double frontHipWaistY = (frontHipWaistStart.getY() - frontHipWaistEnd.getY()) / 2.0;
         Vector2D frontHipWaistInt = new Vector2D(Arb_UpperHipLevel, frontHipWaistEnd.getY() + frontHipWaistY);
-        frontBlock.addDirectedCurve(frontHipWaistStart, frontHipWaistEnd, frontHipWaistInt, 0.0);
+        frontBlock.addDirectedCubicSpline(frontHipWaistStart, frontHipWaistEnd, frontHipWaistInt, 0.0);
 
 
         // Add construction keypoints for Upper Hip Level
-        frontBlock.addConstructionPoint(new Vector2D((g_UpperHip), 0.0 - Arb_Con),
-                                        new Vector2D((g_UpperHip), c_Hip / 4 - 1.0 + Arb_FrontCrutchFork + Arb_Con),
+        frontBlock.addConstructionPoint(new Vector2D((Arb_UpperHip), 0.0 - Arb_Con),
+                                        new Vector2D((Arb_UpperHip), c_Hip / 4 - 1.0 + Arb_FrontCrutchFork + Arb_Con),
                                         "Upper Hip");
 
         // Add construction keypoints for Hip Level
@@ -378,14 +291,14 @@ public class TrouserPattern
                           true, false);
 
         // Add inside leg curve -- again as we don't really have much information try a circular curve for now
-        backBlock.addCircularCurve(new Vector2D(i_Crutch + 1.0, 0.0),
+        backBlock.addCircularArc(new Vector2D(i_Crutch + 1.0, 0.0),
                                    new Vector2D(j_Knee, Arb_BackCreaseLineFromInsideLeg - Arb_BackHalfKneeWidth),
                                    1.5,
                                    false);
 
 
         // Add crutch curve -- approximate angle between inside leg curve as it looks less than 90 degrees.
-        backBlock.addDirectedCurveWithApexTangent(
+        backBlock.addDirectedCubicSplineWithApexTangent(
                 new Vector2D(h_Hip, Arb_CentreBackFromInsideLeg),
                 new Vector2D(i_Crutch + 1.0, 0.0),
                 new Vector2D(i_Crutch, Arb_CentreBackFromInsideLeg),
@@ -399,11 +312,11 @@ public class TrouserPattern
         Vector2D backHipWaistEnd = new Vector2D(0.0, Arb_CentreBackFromInsideLeg + 2.0 + yOffset);
         double backHipWaistY = (backHipWaistStart.getY() - backHipWaistEnd.getY()) / 2.0;
         Vector2D backHipWaistInt = new Vector2D(Arb_UpperHipLevel, backHipWaistEnd.getY() + backHipWaistY);
-        backBlock.addDirectedCurve(backHipWaistStart, backHipWaistEnd, backHipWaistInt, 0.0);
+        backBlock.addDirectedCubicSpline(backHipWaistStart, backHipWaistEnd, backHipWaistInt, 0.0);
 
         // Add construction keypoints for Upper Hip Level
-        backBlock.addConstructionPoint(new Vector2D((g_UpperHip), 0.0 - Arb_Con),
-                                       new Vector2D((g_UpperHip), c_Hip / 4 + 1.0 + Arb_BackCrutchFork + Arb_Con),
+        backBlock.addConstructionPoint(new Vector2D((Arb_UpperHip), 0.0 - Arb_Con),
+                                       new Vector2D((Arb_UpperHip), c_Hip / 4 + 1.0 + Arb_BackCrutchFork + Arb_Con),
                                        "Upper Hip");
 
         // Add construction keypoints for Hip Level
