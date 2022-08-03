@@ -33,6 +33,11 @@ public class TrouserPattern
 
         // Arbitrary measurement
         measurements.addMeasurement(new Measurement("Arb_HemWidth", 22.0));
+        measurements.addMeasurement(new Measurement("Arb_FrontDartWidth", 2.0));
+        measurements.addMeasurement(new Measurement("Arb_FrontDartLength", 10.0));
+        measurements.addMeasurement(new Measurement("Arb_BackDartWidth", 2.0));
+        measurements.addMeasurement(new Measurement("Arb_BackDartLength1", 10.0));
+        measurements.addMeasurement(new Measurement("Arb_BackDartLength2", 12.0));
     }
 
     /**
@@ -54,6 +59,11 @@ public class TrouserPattern
         var Arb_HemWidth = get("Arb_HemWidth");
         var Arb_FrontDartWidth = get("Arb_FrontDartWidth");
         var Arb_FrontDartLength = get("Arb_FrontDartLength");
+        var Arb_BackDartWidth = get("Arb_BackDartWidth");
+        var Arb_BackDartLength1 = get("Arb_BackDartLength1");
+        var Arb_BackDartLength2 = get("Arb_BackDartLength2");
+
+
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         /* Front Half Block */
@@ -99,8 +109,6 @@ public class TrouserPattern
         Vector2D startSegment = new Vector2D(0.0, ((b_Hips / 4.0) + 1.0) - ((b_Hips / 12.0) + 2));
         Vector2D endSegment = new Vector2D(0.0, (-((b_Hips / 12.0) + 2.0) - 1.0));
         double positionTopDart = 0.5;
-        Arb_FrontDartWidth = 2.0;
-        Arb_FrontDartLength = 10.0;
         ArrayList<Vector2D> dartPoints = frontblock.addDart(startSegment,
                                                             endSegment,
                                                             positionTopDart,
@@ -211,13 +219,11 @@ public class TrouserPattern
                                               ((b_Hips / 4.0) - ((b_Hips / 12.0) + 2.0) - (((b_Hips / 12.0) + 2.0) / 4.0)));
         Vector2D endSegment2 = new Vector2D(-2.0, (-(((b_Hips / 12.0) + 2.0) - (((b_Hips / 12.0) + 2.0) / 4.0) - 2)));
         double positionTopDart2 = 1.0 / 3.0;
-        Arb_FrontDartWidth = 2.0;
-        Arb_FrontDartLength = 10.0;
         ArrayList<Vector2D> dartPoints2 = backblock.addDart(startSegment2,
                                                             endSegment2,
                                                             positionTopDart2,
-                                                            Arb_FrontDartWidth,
-                                                            Arb_FrontDartLength,
+                                                            Arb_BackDartWidth,
+                                                            Arb_BackDartLength1,
                                                             true,
                                                             false
         );
@@ -226,13 +232,11 @@ public class TrouserPattern
         Vector2D startSegment3 = dartPoints2.get(2);
         Vector2D endSegment3 = new Vector2D(-2.0, (-(((b_Hips / 12.0) + 2.0) - (((b_Hips / 12.0) + 2.0) / 4.0) - 2)));
         double positionTopDart3 = 1.0 / 2.0;
-        Arb_FrontDartWidth = 2.0;
-        Arb_FrontDartLength = 12.0;
         ArrayList<Vector2D> dartPoints3 = backblock.addDart(startSegment3,
                                                             endSegment3,
                                                             positionTopDart3,
-                                                            Arb_FrontDartWidth,
-                                                            Arb_FrontDartLength,
+                                                            Arb_BackDartWidth,
+                                                            Arb_BackDartLength2,
                                                             true,
                                                             false
         );
