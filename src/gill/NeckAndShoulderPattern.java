@@ -25,14 +25,12 @@ public class NeckAndShoulderPattern extends Pattern
         measurements.addMeasurement(new Measurement("shoulderLengthRight", "A11"));
         measurements.addMeasurement(new Measurement("frontNeckDiagonal", "A73"));
         measurements.addMeasurement(new Measurement("backNeckDiagonal", "A74"));
-
-        // TODO: Daniel to finish
-        measurements.addMeasurement(new Measurement("NeckBaseWidth", "A93"));
-        measurements.addMeasurement(new Measurement("ShoulderLengthLeft", "A94"));
-        measurements.addMeasurement(new Measurement("LShoulderPointZ", "A95"));
-        measurements.addMeasurement(new Measurement("RShoulderPointZ", "A96"));
-        measurements.addMeasurement(new Measurement("LSideNeckPointZ", "A97"));
-        measurements.addMeasurement(new Measurement("RSideNeckPointZ", "A98"));
+        measurements.addMeasurement(new Measurement("neckBaseWidth", "A93"));
+        measurements.addMeasurement(new Measurement("shoulderLengthLeft", "A94"));
+        measurements.addMeasurement(new Measurement("leftShoulderPointZ", "A95"));
+        measurements.addMeasurement(new Measurement("rightShoulderPointZ", "A96"));
+        measurements.addMeasurement(new Measurement("leftSideNeckPointZ", "A97"));
+        measurements.addMeasurement(new Measurement("rightSideNeckPointZ", "A98"));
     }
 
     @Override
@@ -42,32 +40,28 @@ public class NeckAndShoulderPattern extends Pattern
         var shoulderLengthRight = get("shoulderLengthRight");
         var frontNeckDiagonal = get("frontNeckDiagonal");
         var backNeckDiagonal = get("backNeckDiagonal");
-
-        // TODO: Daniel to finish parsing measurements into local variables
-        var NeckBaseWidth = get("NeckBaseWidth");
-        var ShoulderLengthLeft = get("ShoulderLengthLeft");
-        var LShoulderPointZ = get("LShoulderPointZ");
-        var RShoulderPointZ = get("RShoulderPointZ");
-        var LSideNeckPointZ = get("LSideNeckPointZ");
-        var RSideNeckPointZ = get("RSideNeckPointZ");
+        var neckBaseWidth = get("NeckBaseWidth");
+        var shoulderLengthLeft = get("shoulderLengthLeft");
+        var leftShoulderPointZ = get("leftShoulderPointZ");
+        var rightShoulderPointZ = get("rightShoulderPointZ");
+        var leftSideNeckPointZ = get("leftSideNeckPointZ");
+        var rightSideNeckPointZ = get("rightSideNeckPointZ");
 
         // Build block
         Block fullBlock = new Block(userName + "_Gill_NeckShoulder");
         blocks.add(fullBlock);
 
         //If conditions
-        double Rsidepoint = ((RSideNeckPointZ < 0 &&  RShoulderPointZ < 0) || (RSideNeckPointZ > 0 &&  RShoulderPointZ < 0)) ? abs(RSideNeckPointZ - RShoulderPointZ) : -abs(RSideNeckPointZ - RShoulderPointZ);
-        double Lsidepoint = ((LSideNeckPointZ < 0 &&  LShoulderPointZ < 0) || (LSideNeckPointZ > 0 &&  LShoulderPointZ < 0)) ? abs(LSideNeckPointZ - LShoulderPointZ) : -abs(LSideNeckPointZ - LShoulderPointZ);
+        double sidePointRight = ((rightSideNeckPointZ < 0 &&  rightShoulderPointZ < 0) || (rightSideNeckPointZ > 0 &&  rightShoulderPointZ < 0)) ? abs(rightSideNeckPointZ - rightShoulderPointZ) : -abs(rightSideNeckPointZ - rightShoulderPointZ);
+        double sidePointLeft = ((leftSideNeckPointZ < 0 &&  leftShoulderPointZ < 0) || (leftSideNeckPointZ > 0 &&  leftShoulderPointZ < 0)) ? abs(leftSideNeckPointZ - leftShoulderPointZ) : -abs(leftSideNeckPointZ- leftShoulderPointZ);
 
         // Defining each point
         var point1 = new Vector2D(0, backNeckDiagonal);
-
-        // TODO: Daniel to finish
         var point2 = new Vector2D(0, -frontNeckDiagonal);
-        var point3 = new Vector2D(-(NeckBaseWidth*0.5), 0);
-        var point4 = new Vector2D(-(NeckBaseWidth*0.5 + shoulderLengthRight), Rsidepoint);
-        var point5 = new Vector2D(NeckBaseWidth*0.5, 0);
-        var point6 = new Vector2D(NeckBaseWidth*0.5 + ShoulderLengthLeft, Lsidepoint);
+        var point3 = new Vector2D(-(neckBaseWidth * 0.5), 0);
+        var point4 = new Vector2D(-(neckBaseWidth * 0.5 + shoulderLengthRight), sidePointRight);
+        var point5 = new Vector2D(neckBaseWidth * 0.5, 0);
+        var point6 = new Vector2D(neckBaseWidth * 0.5 + shoulderLengthLeft, sidePointLeft);
 
 
         // All the keypoints/vectors added
