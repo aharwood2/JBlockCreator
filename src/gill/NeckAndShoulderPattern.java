@@ -40,7 +40,7 @@ public class NeckAndShoulderPattern extends Pattern
         var shoulderLengthRight = get("shoulderLengthRight");
         var frontNeckDiagonal = get("frontNeckDiagonal");
         var backNeckDiagonal = get("backNeckDiagonal");
-        var neckBaseWidth = get("NeckBaseWidth");
+        var neckBaseWidth = get("neckBaseWidth");
         var shoulderLengthLeft = get("shoulderLengthLeft");
         var leftShoulderPointZ = get("leftShoulderPointZ");
         var rightShoulderPointZ = get("rightShoulderPointZ");
