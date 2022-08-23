@@ -51,9 +51,9 @@ public class NeckAndShoulderPattern extends Pattern
         Block fullBlock = new Block(userName + "_Gill_NeckShoulder");
         blocks.add(fullBlock);
 
-        //If conditions
-        double sidePointRight = ((rightSideNeckPointZ < 0 &&  rightShoulderPointZ < 0) || (rightSideNeckPointZ > 0 &&  rightShoulderPointZ < 0)) ? abs(rightSideNeckPointZ - rightShoulderPointZ) : -abs(rightSideNeckPointZ - rightShoulderPointZ);
-        double sidePointLeft = ((leftSideNeckPointZ < 0 &&  leftShoulderPointZ < 0) || (leftSideNeckPointZ > 0 &&  leftShoulderPointZ < 0)) ? abs(leftSideNeckPointZ - leftShoulderPointZ) : -abs(leftSideNeckPointZ- leftShoulderPointZ);
+        // Define side point as either positive or negative
+        double sidePointRight = ((rightSideNeckPointZ < 0 && rightShoulderPointZ < 0) || (rightSideNeckPointZ > 0 && rightShoulderPointZ < 0)) ? abs(rightSideNeckPointZ - rightShoulderPointZ) : -abs(rightSideNeckPointZ - rightShoulderPointZ);
+        double sidePointLeft = ((leftSideNeckPointZ < 0 && leftShoulderPointZ < 0) || (leftSideNeckPointZ > 0 && leftShoulderPointZ < 0)) ? abs(leftSideNeckPointZ - leftShoulderPointZ) : -abs(leftSideNeckPointZ - leftShoulderPointZ);
 
         // Defining each point
         var point1 = new Vector2D(0, backNeckDiagonal);
@@ -62,7 +62,6 @@ public class NeckAndShoulderPattern extends Pattern
         var point4 = new Vector2D(-(neckBaseWidth * 0.5 + shoulderLengthRight), sidePointRight);
         var point5 = new Vector2D(neckBaseWidth * 0.5, 0);
         var point6 = new Vector2D(neckBaseWidth * 0.5 + shoulderLengthLeft, sidePointLeft);
-
 
         // All the keypoints/vectors added
         fullBlock.addKeypoint(point1);
