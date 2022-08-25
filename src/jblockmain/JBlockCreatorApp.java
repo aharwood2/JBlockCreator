@@ -21,7 +21,7 @@ public class JBlockCreatorApp extends Application
 
         // Display the scene
         var bundle = ResourceBundle.getBundle("settings");
-        var title = bundle.getString("app_name") + " - v" + bundle.getString("maj_ver") + "." + bundle.getString("min_ver");
+        var title = bundle.getString("app_name") + " - v" + bundle.getString("maj_ver") + "." + bundle.getString("min_ver") + "." + bundle.getString("pat_ver");
         Scene scene = new Scene(root,
                 Double.parseDouble(bundle.getString("prefWidth")),
                 Double.parseDouble(bundle.getString("prefHeight")));

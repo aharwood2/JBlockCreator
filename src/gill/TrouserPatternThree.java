@@ -134,8 +134,14 @@ public class TrouserPatternThree
         frontBlock.addKeypoint(new Vector2D(kneeCircumR * arbFrontLegPercent, kneeLevel)); // Point 18
         frontBlock.addKeypoint(new Vector2D(midThighCircumR * arbFrontLegPercent, midThighLevel)); // Point 19
         frontBlock.addKeypoint(new Vector2D(thighCircumR * arbFrontLegPercent, upperThighLevel)); // Point 20
-        frontBlock.addKeypoint(new Vector2D(point1X, crotchLevel)); // Point 21
-        frontBlock.addKeypoint(new Vector2D(point22X, crotchLevel)); // Point 22
+        if (point22X > point1X)
+        {
+            frontBlock.addKeypoint(new Vector2D(point22X, crotchLevel)); // Point 22
+        }
+        else
+        {
+            frontBlock.addKeypoint(new Vector2D(point1X, crotchLevel)); // Point 21
+        }
 
         // Add construction lines
         var xMin = frontBlock.getMinimumX() - Arb_Con;
@@ -180,8 +186,14 @@ public class TrouserPatternThree
         backBlock.addKeypoint(new Vector2D(-kneeCircumR * arbBackLegPercent, kneeLevel)); // Point 18
         backBlock.addKeypoint(new Vector2D(-midThighCircumR * arbBackLegPercent, midThighLevel)); // Point 19
         backBlock.addKeypoint(new Vector2D(-thighCircumR * arbBackLegPercent, upperThighLevel)); // Point 20
-        backBlock.addKeypoint(new Vector2D(-point1X, crotchLevel)); // Point 21
-        backBlock.addKeypoint(new Vector2D(-point22X, crotchLevel)); // Point 22
+        if (point22X > point1X)
+        {
+            backBlock.addKeypoint(new Vector2D(-point22X, crotchLevel)); // Point 22
+        }
+        else
+        {
+            backBlock.addKeypoint(new Vector2D(-point1X, crotchLevel)); // Point 21
+        }
 
         // Add construction lines
         xMin = backBlock.getMinimumX() - Arb_Con;

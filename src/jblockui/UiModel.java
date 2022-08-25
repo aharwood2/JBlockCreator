@@ -24,12 +24,18 @@ public class UiModel
     private static UiModel instance;
     private boolean isRunning;
 
-    private UiModel(){}
+    private UiModel()
+    {
+    }
 
-    public static UiModel getInstance(){
-        if(instance == null){
-            synchronized (UiModel.class) {
-                if(instance == null){
+    public static UiModel getInstance()
+    {
+        if (instance == null)
+        {
+            synchronized (UiModel.class)
+            {
+                if (instance == null)
+                {
                     instance = new UiModel();
                 }
             }
@@ -55,6 +61,7 @@ public class UiModel
 
     /**
      * Initialise the scene and pre-load all views
+     *
      * @return Scene root
      */
     public AnchorPane Initialise()
@@ -81,19 +88,21 @@ public class UiModel
 
     /**
      * Loads in the sub views
+     *
      * @param name name of subview file
      * @throws IOException if resource not found
      */
     private void loadSubView(String name) throws IOException
     {
         var loader = new FXMLLoader(Objects.requireNonNull(getClass().getResource("/jblockui/" + name + ".fxml")));
-        var view = (VBox)loader.load();
+        var view = (VBox) loader.load();
         subViews.put(name, view);
         controllers.put(name, loader.getController());
     }
 
     /**
      * Sets the content of the container
+     *
      * @param key sub view key
      * @return the controller for the view
      */
@@ -114,6 +123,7 @@ public class UiModel
 
     /**
      * Calls onDisplayed for the controller matching the key
+     *
      * @param key sub view key
      */
     public void onDisplayed(String key)
@@ -130,7 +140,8 @@ public class UiModel
 
     /**
      * Stores the master measurement set generated on pattern enable
-     * @param key the pattern
+     *
+     * @param key   the pattern
      * @param value the measurement set
      */
     public void storeMeasurementTemplate(EPattern key, MeasurementSet value)
@@ -140,6 +151,7 @@ public class UiModel
 
     /**
      * Remove a master measurement set when pattern is disabled
+     *
      * @param key the pattern
      */
     public void removeMeasurementTemplate(EPattern key)
@@ -149,6 +161,7 @@ public class UiModel
 
     /**
      * Gets the stored master measurement set generated on pattern enable
+     *
      * @param key the pattern
      * @return the measurement set
      */
@@ -165,7 +178,7 @@ public class UiModel
         if (!isRunning)
         {
             isRunning = true;
-            var ctrl = (OutputsController)controllers.get("Outputs");
+            var ctrl = (OutputsController) controllers.get("Outputs");
             double i = 0;
 
             try
@@ -244,7 +257,8 @@ public class UiModel
 
     /**
      * Set the state of the checkboxes
-     * @param key the name of the checkbox
+     *
+     * @param key    the name of the checkbox
      * @param newVal its state
      */
     public void setCheck(String key, Boolean newVal)

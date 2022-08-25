@@ -16,7 +16,8 @@ public enum EPattern
     GILL_SWEATSHIRT("Gill Sweatshirt"),
     GILL_TROUSER("Gill Trouser"),
     GILL_TROUSER2("Gill Trouser 2"),
-    GILL_TROUSER3("Gill Trouser 3");
+    GILL_TROUSER3("Gill Trouser 3"),
+    GILL_NECK_SHOULDER("Gill Neck and Shoulder");
 
     EPattern(String s)
     {
